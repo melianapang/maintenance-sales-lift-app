@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/login/login_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class LoginView extends StatefulWidget {
@@ -101,9 +105,23 @@ class _LoginViewState extends State<LoginView> {
                             pwdController.text,
                           );
                           if (result == false) {
-                            // _showErrorDialog(context);
+                            showErrorDialog(context);
                             return;
                           }
+                          Navigator.popAndPushNamed(
+                            context,
+                            Routes.home,
+                            arguments: ProfileData(
+                              username: unameController.text,
+                              firstName: 'Taylor',
+                              lastName: 'Swift',
+                              notelp: '0812345678910',
+                              email: 'admin123@gmail.com',
+                              address: 'Jalan Mangga 2134',
+                              city: 'Surabaya',
+                              role: Role.Admin,
+                            ),
+                          );
                         }
                       : null,
                 ),

@@ -199,3 +199,30 @@ void showDialogWidget(BuildContext context,
     },
   );
 }
+
+void showErrorDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Material(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.error,
+              ),
+              Spacings.vert(4),
+              const Text(
+                "Wrong Username or Password",
+                style: TextStyle(
+                  fontFamily: "dmsans",
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
