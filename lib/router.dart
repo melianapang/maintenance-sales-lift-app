@@ -4,6 +4,8 @@ import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/home_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/splash_screen_view.dart';
 
 final RouteObserver<PageRoute<dynamic>> routeObserver =
@@ -48,6 +50,26 @@ class AppRouter {
           builder: (_) => HomeView(
             profileData: param,
           ),
+        );
+      case Routes.editProfile:
+        final ProfileData param = settings.arguments is ProfileData
+            ? settings.arguments as ProfileData
+            : ProfileData(
+                username: '',
+                firstName: '',
+                lastName: '',
+                notelp: '',
+                email: '',
+                address: '',
+                city: '',
+                role: Role.Admin,
+              );
+        return buildRoute(
+          builder: (_) => EditProfileView(profileData: param),
+        );
+      case Routes.changePassword:
+        return buildRoute(
+          builder: (_) => const ChangePasswordView(),
         );
     }
   }
