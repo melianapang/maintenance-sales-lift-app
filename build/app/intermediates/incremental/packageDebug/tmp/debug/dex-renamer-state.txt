@@ -1,0 +1,4 @@
+#Sat Mar 18 20:55:51 WIB 2023
+base.0=/Users/engineering/flutter/rejo_jaya_sakti_apps/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
