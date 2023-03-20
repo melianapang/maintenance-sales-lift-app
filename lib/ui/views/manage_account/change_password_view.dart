@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/change_password/change_password_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -36,6 +37,14 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
           ),
           bottomNavigationBar: ButtonWidget.bottomSingleButton(
             buttonType: ButtonType.primary,
+            padding: EdgeInsets.only(
+              bottom: PaddingUtils.getBottomPadding(
+                context,
+                defaultPadding: 12,
+              ),
+              left: 24.0,
+              right: 24.0,
+            ),
             onTap: () {},
             text: 'Simpan',
           ),

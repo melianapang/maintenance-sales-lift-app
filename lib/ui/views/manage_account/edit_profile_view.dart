@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -31,6 +32,14 @@ class _EditProfileViewState extends State<EditProfileView> {
       ),
       bottomNavigationBar: ButtonWidget.bottomSingleButton(
         buttonType: ButtonType.primary,
+        padding: EdgeInsets.only(
+          bottom: PaddingUtils.getBottomPadding(
+            context,
+            defaultPadding: 12,
+          ),
+          left: 24.0,
+          right: 24.0,
+        ),
         onTap: () {},
         text: 'Simpan',
       ),
