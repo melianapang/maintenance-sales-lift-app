@@ -51,8 +51,22 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                       "Apakahh anda yakin ingin menolak permintaan ini?",
                   positiveLabel: "Iya",
                   negativeLabel: "Tidak",
-                  positiveCallback: () {},
-                  negativeCallback: () {},
+                  positiveCallback: () async {
+                    await Navigator.maybePop(context);
+
+                    showDialogWidget(
+                      context,
+                      title: "Menolak Permohonan",
+                      description: "Permintaan telah ditolak.",
+                      positiveLabel: "OK",
+                      positiveCallback: () {
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                  negativeCallback: () {
+                    Navigator.maybePop(context);
+                  },
                 );
               },
             ),
@@ -75,8 +89,22 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                       "Apakahh anda yakin ingin menyetujui permintaan ini?",
                   positiveLabel: "Iya",
                   negativeLabel: "Tidak",
-                  positiveCallback: () {},
-                  negativeCallback: () {},
+                  positiveCallback: () async {
+                    await Navigator.maybePop(context);
+
+                    showDialogWidget(
+                      context,
+                      title: "Menyetujui Permohonan",
+                      description: "Permintaan telah disetujui.",
+                      positiveLabel: "OK",
+                      positiveCallback: () {
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                  negativeCallback: () {
+                    Navigator.maybePop(context);
+                  },
                 );
               },
             ),
