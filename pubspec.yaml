@@ -41,6 +41,7 @@ dependencies:
   phosphor_flutter: ^1.4.0
   flutter_localizations:
     sdk: flutter
+  calendar_date_picker2: ^0.4.5
 
 dev_dependencies:
   flutter_test:
