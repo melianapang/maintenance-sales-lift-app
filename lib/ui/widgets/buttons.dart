@@ -141,17 +141,16 @@ extension ButtonSizeExt on ButtonSize {
 }
 
 class ButtonWidget extends StatelessWidget {
-  factory ButtonWidget.bottomSingleButton(
-      {required VoidCallback onTap,
-      required String text,
-      required ButtonType buttonType}) {
+  factory ButtonWidget.bottomSingleButton({
+    required VoidCallback onTap,
+    required String text,
+    required ButtonType buttonType,
+    required EdgeInsets padding,
+  }) {
     return ButtonWidget(
       buttonType: buttonType,
       text: text,
-      padding: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 24.0,
-      ),
+      padding: padding,
       onTap: onTap,
     );
   }
