@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/home_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
@@ -70,6 +72,14 @@ class AppRouter {
       case Routes.changePassword:
         return buildRoute(
           builder: (_) => const ChangePasswordView(),
+        );
+      case Routes.listApproval:
+        return buildRoute(
+          builder: (_) => const ListApprovalView(),
+        );
+      case Routes.detailApproval:
+        return buildRoute(
+          builder: (_) => const DetailApprovalView(),
         );
     }
   }
