@@ -22,12 +22,28 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     Routes.listApproval,
   ),
   HomeItemModel(
-    "Peta",
-    PhosphorIcons.compassBold,
+    "Sales",
+    PhosphorIcons.usersBold,
     <Role>[
       Role.Admin,
     ],
-    Routes.map,
+    Routes.listSales,
+  ),
+  HomeItemModel(
+    "Unit",
+    PhosphorIcons.monitor,
+    <Role>[
+      Role.Admin,
+    ],
+    Routes.listUnits,
+  ),
+  HomeItemModel(
+    "Unit",
+    PhosphorIcons.usersBold,
+    <Role>[
+      Role.Admin,
+    ],
+    Routes.listUnits,
   ),
   HomeItemModel(
     "Log",
