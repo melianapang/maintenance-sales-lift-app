@@ -5,6 +5,8 @@ import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/home_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/log/detail_log_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/log/list_log_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
@@ -80,6 +82,14 @@ class AppRouter {
       case Routes.detailApproval:
         return buildRoute(
           builder: (_) => const DetailApprovalView(),
+        );
+      case Routes.listLog:
+        return buildRoute(
+          builder: (_) => const ListLogView(),
+        );
+      case Routes.detailLog:
+        return buildRoute(
+          builder: (_) => const DetailLogView(),
         );
     }
   }
