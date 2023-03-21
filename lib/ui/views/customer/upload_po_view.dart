@@ -18,6 +18,7 @@ class UploadPOView extends StatefulWidget {
 }
 
 class _UploadPOViewState extends State<UploadPOView> {
+  final ScrollController buktiFotoController = ScrollController();
   List<GalleryData> galleryData = [
     GalleryData(
       filepath:
@@ -94,6 +95,7 @@ class _UploadPOViewState extends State<UploadPOView> {
             ),
             AddGalleryThumbnailWidget(
               galleryData: galleryData,
+              scrollController: buktiFotoController,
               callbackGalleryPath: (path) {
                 galleryData.add(
                   GalleryData(
@@ -103,6 +105,15 @@ class _UploadPOViewState extends State<UploadPOView> {
                   ),
                 );
                 setState(() {});
+
+                //scroll to last index of bukti foto
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => buktiFotoController.animateTo(
+                    buktiFotoController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.easeOut,
+                  ),
+                );
               },
               callbackDeleteAddedGallery: (data) {
                 galleryData.remove(data);

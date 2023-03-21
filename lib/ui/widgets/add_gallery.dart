@@ -10,12 +10,14 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 class AddGalleryThumbnailWidget extends StatelessWidget {
   AddGalleryThumbnailWidget({
     required this.galleryData,
+    this.scrollController,
     required this.callbackGalleryPath,
     required this.callbackDeleteAddedGallery,
     super.key,
   });
 
   final List<GalleryData> galleryData;
+  final ScrollController? scrollController;
   final void Function(String path) callbackGalleryPath;
   final void Function(GalleryData data) callbackDeleteAddedGallery;
 
@@ -137,6 +139,7 @@ class AddGalleryThumbnailWidget extends StatelessWidget {
       height: 120,
       width: double.infinity,
       child: ListView.builder(
+        controller: scrollController,
         itemCount: galleryData.length + 1,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
