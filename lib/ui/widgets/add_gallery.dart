@@ -93,7 +93,7 @@ class AddGalleryThumbnailWidget extends StatelessWidget {
       final ImagePicker _picker = ImagePicker();
       // Pick an image
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      callback(image?.path ?? "");
+      if (image != null) callback(image.path);
       // // Capture a photo
       // final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
       // // Pick multiple images
