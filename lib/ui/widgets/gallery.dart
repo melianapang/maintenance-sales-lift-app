@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/app_constants/colors.dart';
-import 'package:flutter_application_1/core/app_constants/routes.dart';
-import 'package:flutter_application_1/core/models/gallery_data_model.dart';
-import 'package:flutter_application_1/core/utilities/text_styles.dart';
-import 'package:flutter_application_1/ui/views/image_detail_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/image_detail_view.dart';
 
 class GalleryThumbnailWidget extends StatelessWidget {
   GalleryThumbnailWidget({
