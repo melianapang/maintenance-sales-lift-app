@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'PT REJO JAYA SAKTI',
             theme: getThemeData(),
+            builder: BotToastInit(),
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             supportedLocales: const [
               Locale('id', ''),
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
             navigatorKey: Provider.of<NavigationService>(context).navigatorKey,
             navigatorObservers: <NavigatorObserver>[
               routeObserver,
+              BotToastNavigatorObserver()
             ],
           );
         },
