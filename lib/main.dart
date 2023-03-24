@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return MaterialApp(
-            title: 'Project',
+            title: 'PT REJO JAYA SAKTI',
             theme: getThemeData(),
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             supportedLocales: const [
