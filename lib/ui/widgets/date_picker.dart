@@ -1,10 +1,10 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/app_constants/colors.dart';
-import 'package:flutter_application_1/core/utilities/text_styles.dart';
-import 'package:flutter_application_1/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class DatePickerWidget extends StatefulWidget {
   const DatePickerWidget({

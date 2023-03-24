@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/app_constants/colors.dart';
-import 'package:flutter_application_1/core/utilities/text_styles.dart';
-import 'package:flutter_application_1/ui/shared/spacings.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
 enum StatusCardType {
   Pending,

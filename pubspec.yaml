@@ -42,7 +42,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   calendar_date_picker2: ^0.4.5
+  timeline_tile: ^2.0.0
   image_picker: ^0.8.7
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_test:

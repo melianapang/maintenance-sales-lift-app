@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/app_constants/colors.dart';
-import 'package:flutter_application_1/core/utilities/text_styles.dart';
-import 'package:flutter_application_1/core/viewmodels/customer/add_customer_view_model.dart';
-import 'package:flutter_application_1/core/viewmodels/customer/edit_customer_view_model.dart';
-import 'package:flutter_application_1/ui/shared/spacings.dart';
-import 'package:flutter_application_1/ui/widgets/buttons.dart';
-import 'package:flutter_application_1/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class FilterOption {
   final String title;
