@@ -1,7 +1,9 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/form_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -21,8 +23,6 @@ class FormMaintenanceView extends StatefulWidget {
 }
 
 class _FormMaintenanceViewState extends State<FormMaintenanceView> {
-  final TextEditingController noteController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
   final ScrollController buktiFotoController = ScrollController();
   final ScrollController buktiVideoController = ScrollController();
 
@@ -53,6 +53,8 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
       galleryType: GalleryType.PHOTO,
     ),
   ];
+
+  List<GalleryData> videoData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +127,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                 GalleryThumbnailWidget(
                   galleryData: galleryData,
                   scrollController: buktiFotoController,
+                  galleryType: GalleryType.PHOTO,
                   isCRUD: model.isEdit,
                   callbackGalleryPath: (path) {
                     galleryData.add(
@@ -164,11 +167,18 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   ),
                 ),
                 GalleryThumbnailWidget(
-                  galleryData: galleryData,
+                  galleryData: videoData,
                   scrollController: buktiVideoController,
+                  galleryType: GalleryType.VIDEO,
                   isCRUD: model.isEdit,
                   callbackGalleryPath: (path) {
-                    galleryData.add(
+                    if (videoData.isNotEmpty) {
+                      SnackbarUtils.showSimpleSnackbar(
+                          text: 'Anda hanya bisa menambahkan 1 video saja');
+                      return;
+                    }
+
+                    videoData.add(
                       GalleryData(
                         filepath: path,
                         galleryType: GalleryType.PHOTO,

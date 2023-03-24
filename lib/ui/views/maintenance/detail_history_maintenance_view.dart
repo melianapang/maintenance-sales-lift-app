@@ -50,6 +50,19 @@ class _DetailHistoryMaintenanceViewState
     ),
   ];
 
+  List<GalleryData> videoData = [
+    GalleryData(
+      filepath:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      galleryType: GalleryType.VIDEO,
+    ),
+    GalleryData(
+      filepath:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      galleryType: GalleryType.VIDEO,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +133,7 @@ class _DetailHistoryMaintenanceViewState
               GalleryThumbnailWidget(
                 isCRUD: false,
                 galleryData: galleryData,
+                galleryType: GalleryType.PHOTO,
                 callbackGalleryPath: (path) {
                   galleryData.add(
                     GalleryData(
@@ -151,12 +165,13 @@ class _DetailHistoryMaintenanceViewState
               Spacings.vert(8),
               GalleryThumbnailWidget(
                 isCRUD: false,
-                galleryData: galleryData,
+                galleryData: videoData,
+                galleryType: GalleryType.VIDEO,
                 callbackGalleryPath: (path) {
                   galleryData.add(
                     GalleryData(
                       filepath: path,
-                      galleryType: GalleryType.PHOTO,
+                      galleryType: GalleryType.VIDEO,
                       isGalleryPicked: true,
                     ),
                   );

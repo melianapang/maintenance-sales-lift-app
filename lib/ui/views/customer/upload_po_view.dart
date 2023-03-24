@@ -95,6 +95,7 @@ class _UploadPOViewState extends State<UploadPOView> {
             ),
             GalleryThumbnailWidget(
               galleryData: galleryData,
+              galleryType: GalleryType.PHOTO,
               scrollController: buktiFotoController,
               callbackGalleryPath: (path) {
                 galleryData.add(

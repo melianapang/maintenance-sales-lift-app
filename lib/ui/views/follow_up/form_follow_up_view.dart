@@ -97,6 +97,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 ),
                 GalleryThumbnailWidget(
                   galleryData: galleryData,
+                  galleryType: GalleryType.PHOTO,
                   scrollController: buktiFotoController,
                   callbackGalleryPath: (path) {
                     galleryData.add(
