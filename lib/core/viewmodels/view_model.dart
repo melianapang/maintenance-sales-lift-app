@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ViewModel<T extends BaseViewModel> extends StatefulWidget {
   const ViewModel({
