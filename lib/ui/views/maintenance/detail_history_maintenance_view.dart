@@ -19,6 +19,9 @@ class DetailHistoryMaintenanceView extends StatefulWidget {
 class _DetailHistoryMaintenanceViewState
     extends State<DetailHistoryMaintenanceView> {
   final ScrollController scrollController = ScrollController();
+  String nama = "Aldo AldoAldoo";
+  String notelp = "081234567890";
+
   List<GalleryData> galleryData = [
     GalleryData(
       filepath:
@@ -93,7 +96,13 @@ class _DetailHistoryMaintenanceViewState
               ),
               Spacings.vert(24),
               TextInput.disabled(
+                label: "Hasil Pemeliharaan",
+              ),
+              Spacings.vert(24),
+              TextInput.disabled(
                 label: "Catatan",
+                text:
+                    "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
               ),
               Spacings.vert(24),
               Align(
@@ -158,6 +167,31 @@ class _DetailHistoryMaintenanceViewState
 
                   setState(() {});
                 },
+              ),
+              Spacings.vert(32),
+              const Divider(
+                thickness: 0.5,
+                color: MyColors.lightBlack02,
+              ),
+              Spacings.vert(32),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Dirawat oleh",
+                  style: buildTextStyle(
+                    fontSize: 18,
+                    fontColor: MyColors.lightBlack02,
+                    fontWeight: 600,
+                  ),
+                ),
+              ),
+              Spacings.vert(12),
+              TextInput.disabled(
+                label: "Nama Teknisi:",
+              ),
+              Spacings.vert(24),
+              TextInput.disabled(
+                label: "No Telepon:",
               ),
             ],
           ),

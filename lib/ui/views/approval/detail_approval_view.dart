@@ -148,82 +148,29 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                 label: "Email",
               ),
               Spacings.vert(32),
-              Card(
-                elevation: 2,
-                color: MyColors.darkBlack02,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    19.0,
+              const Divider(
+                thickness: 0.5,
+                color: MyColors.lightBlack02,
+              ),
+              Spacings.vert(32),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Dirawat oleh",
+                  style: buildTextStyle(
+                    fontSize: 18,
+                    fontColor: MyColors.lightBlack02,
+                    fontWeight: 600,
                   ),
                 ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 14.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Diminta oleh:",
-                            style: buildTextStyle(
-                              fontColor: MyColors.lightBlack02,
-                              fontSize: 16,
-                              fontWeight: 800,
-                            ),
-                          ),
-                          Spacings.vert(8),
-                          Row(
-                            children: [
-                              Text(
-                                "Nama          :",
-                                style: buildTextStyle(
-                                  fontColor: MyColors.lightBlack02,
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                ),
-                              ),
-                              Spacings.horz(6),
-                              Text(
-                                nama,
-                                style: buildTextStyle(
-                                  fontColor: MyColors.lightBlack02,
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Spacings.vert(4),
-                          Row(
-                            children: [
-                              Text(
-                                "No Telepon :",
-                                style: buildTextStyle(
-                                  fontColor: MyColors.lightBlack02,
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                ),
-                              ),
-                              Spacings.horz(6),
-                              Text(
-                                notelp,
-                                style: buildTextStyle(
-                                  fontColor: MyColors.lightBlack02,
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              ),
+              Spacings.vert(12),
+              TextInput.disabled(
+                label: "Nama Teknisi:",
+              ),
+              Spacings.vert(24),
+              TextInput.disabled(
+                label: "No Telepon:",
               ),
             ],
           ),
