@@ -21,7 +21,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.lightGreyBackground,
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Data Pelanggan",
@@ -37,7 +37,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               ),
               child: Icon(
                 PhosphorIcons.pencilSimpleLineBold,
-                color: MyColors.darkBlue01,
+                color: MyColors.lightBlack02,
                 size: 16,
               ),
             ),
@@ -54,7 +54,9 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.listReminder);
+            },
             text: 'Daftar Pengingat',
           ),
           ButtonWidget(
@@ -64,7 +66,9 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.uploadPO);
+            },
             text: 'Unggah Berkas PO',
           ),
           ButtonWidget(
@@ -77,7 +81,9 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.detailFollowUp);
+            },
             text: 'Riwayat Konfirmasi',
           ),
         ],
@@ -97,7 +103,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                 style: buildTextStyle(
                   fontSize: 32,
                   fontWeight: 800,
-                  fontColor: MyColors.lightBlue01,
+                  fontColor: MyColors.yellow01,
                 ),
               ),
               Text(
@@ -105,7 +111,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                 style: buildTextStyle(
                   fontSize: 20,
                   fontWeight: 400,
-                  fontColor: MyColors.lightBlue01,
+                  fontColor: MyColors.lightBlack02,
                 ),
               ),
               Spacings.vert(32),

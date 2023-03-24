@@ -5,9 +5,9 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/add_gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class UploadPOView extends StatefulWidget {
@@ -35,7 +35,7 @@ class _UploadPOViewState extends State<UploadPOView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.lightGreyBackground,
+      backgroundColor: MyColors.darkGreyBackground,
       appBar: buildDefaultAppBar(
         context,
         title: "Form Unggah Berkas PO",
@@ -93,7 +93,7 @@ class _UploadPOViewState extends State<UploadPOView> {
                 ),
               ),
             ),
-            AddGalleryThumbnailWidget(
+            GalleryThumbnailWidget(
               galleryData: galleryData,
               scrollController: buktiFotoController,
               callbackGalleryPath: (path) {
@@ -124,7 +124,7 @@ class _UploadPOViewState extends State<UploadPOView> {
             Spacings.vert(24),
             TextInput.multiline(
               onChangedListener: (text) {},
-              label: "Alamat",
+              label: "Catatan",
               minLines: 5,
               maxLines: 5,
               hintText: "Tulis keterangan disini...",

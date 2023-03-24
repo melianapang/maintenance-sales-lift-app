@@ -46,6 +46,12 @@ class ListCustomerViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {}
 
+  void search(String text) {
+    setBusy(true);
+
+    setBusy(false);
+  }
+
   void terapkanFilter({
     required int selectedPelanggan,
     required int selectedSumberData,

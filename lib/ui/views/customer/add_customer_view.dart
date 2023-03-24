@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/edit_customer_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/add_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
-import '../../shared/app_bars.dart';
-
-class EditCustomerView extends StatefulWidget {
-  const EditCustomerView({super.key});
+class AddCustomerView extends StatefulWidget {
+  const AddCustomerView({super.key});
 
   @override
-  State<EditCustomerView> createState() => _EditCustomerViewState();
+  State<AddCustomerView> createState() => _AddCustomerViewState();
 }
 
-class _EditCustomerViewState extends State<EditCustomerView> {
-  void _showBottomDialog(
+class _AddCustomerViewState extends State<AddCustomerView> {
+  void _showSumberDataBottomDialog(
     BuildContext context,
-    EditCustomerViewModel model, {
+    AddCustomerViewModel model, {
     required List<FilterOption> listMenu,
     required int selectedMenu,
     required void Function({
@@ -80,13 +79,12 @@ class _EditCustomerViewState extends State<EditCustomerView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: EditCustomerViewModel(),
+      model: AddCustomerViewModel(),
       builder: (context, model, _) {
         return Scaffold(
-          backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
-            title: "Edit Data Pelanggan",
+            title: "Tambah Pelanggan",
             isBackEnabled: true,
           ),
           bottomNavigationBar: ButtonWidget.bottomSingleButton(
@@ -111,7 +109,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      _showBottomDialog(
+                      _showSumberDataBottomDialog(
                         context,
                         model,
                         listMenu: model.sumberDataOptions,
@@ -134,7 +132,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   Spacings.vert(24),
                   GestureDetector(
                     onTap: () {
-                      _showBottomDialog(
+                      _showSumberDataBottomDialog(
                         context,
                         model,
                         listMenu: model.tipePelangganOptions,
@@ -177,15 +175,13 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   ],
                   GestureDetector(
                     onTap: () {
-                      _showBottomDialog(
+                      _showSumberDataBottomDialog(
                         context,
                         model,
                         listMenu: model.kebutuhanPelangganOptions,
                         selectedMenu: model.selectedKebutuhanPelangganOption,
                         setSelectedMenu: model.setSelectedKebutuhanPelanggan,
                       );
-
-                      setState(() {});
                     },
                     child: TextInput.disabled(
                       label: "Kebutuhan Pelangggan",
@@ -201,15 +197,15 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
-                    label: "Nomor Telepon",
-                    hintText: "081xxxxxxxxxx",
-                    keyboardType: TextInputType.number,
+                    label: "Kota",
+                    hintText: "Kota",
                     onChangedListener: (text) {},
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
-                    label: "Kota",
-                    hintText: "Kota",
+                    label: "No Telepon",
+                    hintText: "081xxxxxxxxxxx",
+                    keyboardType: TextInputType.number,
                     onChangedListener: (text) {},
                   ),
                   Spacings.vert(24),
@@ -218,6 +214,14 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                     hintText: "pelanggan@gmail.com",
                     keyboardType: TextInputType.emailAddress,
                     onChangedListener: (text) {},
+                  ),
+                  Spacings.vert(24),
+                  TextInput.multiline(
+                    label: "Catatan",
+                    hintText: "Tulis catatan disini...",
+                    onChangedListener: (text) {},
+                    minLines: 5,
+                    maxLines: 5,
                   ),
                 ],
               ),

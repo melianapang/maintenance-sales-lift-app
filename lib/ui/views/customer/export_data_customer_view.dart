@@ -21,13 +21,13 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Export Data",
         isBackEnabled: true,
       ),
       bottomNavigationBar: ButtonWidget.bottomSingleButton(
-        buttonType: ButtonType.primary,
         padding: EdgeInsets.only(
           bottom: PaddingUtils.getBottomPadding(
             context,
@@ -36,6 +36,7 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
           left: 24.0,
           right: 24.0,
         ),
+        buttonType: ButtonType.primary,
         onTap: () {},
         text: 'Simpan',
       ),
