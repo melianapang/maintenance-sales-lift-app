@@ -4,13 +4,43 @@ import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/add_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/export_data_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/list_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_po_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/list_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/home_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/image_detail_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/log/detail_log_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/log/list_log_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_history_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/export_data_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/add_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/list_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/after_set_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/detail_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/list_reminders_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/splash_screen_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/add_user_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/edit_user_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/list_user_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/set_password_user_view.dart';
 
 final RouteObserver<PageRoute<dynamic>> routeObserver =
     RouteObserver<PageRoute<dynamic>>();
@@ -55,6 +85,10 @@ class AppRouter {
             profileData: param,
           ),
         );
+      case Routes.afterSetReminder:
+        return buildRoute(
+          builder: (_) => const AfterSetReminderView(),
+        );
       case Routes.editProfile:
         final ProfileData param = settings.arguments is ProfileData
             ? settings.arguments as ProfileData
@@ -83,6 +117,30 @@ class AppRouter {
         return buildRoute(
           builder: (_) => const DetailApprovalView(),
         );
+      case Routes.listCustomer:
+        return buildRoute(
+          builder: (_) => const ListCustomerView(),
+        );
+      case Routes.detailCustomer:
+        return buildRoute(
+          builder: (_) => const DetailCustomerView(),
+        );
+      case Routes.addCustomer:
+        return buildRoute(
+          builder: (_) => const AddCustomerView(),
+        );
+      case Routes.editCustomer:
+        return buildRoute(
+          builder: (_) => const EditCustomerView(),
+        );
+      case Routes.exportCustomer:
+        return buildRoute(
+          builder: (_) => const ExportDataCustomerView(),
+        );
+      case Routes.uploadPO:
+        return buildRoute(
+          builder: (_) => const UploadPOView(),
+        );
       case Routes.listLog:
         return buildRoute(
           builder: (_) => const ListLogView(),
@@ -91,6 +149,129 @@ class AppRouter {
         return buildRoute(
           builder: (_) => const DetailLogView(),
         );
+      case Routes.listFollowUp:
+        return buildRoute(
+          builder: (_) => const ListFollowUpView(),
+        );
+      case Routes.detailFollowUp:
+        return buildRoute(
+          builder: (_) => const DetailFollowUpView(),
+        );
+      case Routes.detailHistoryFollowUp:
+        return buildRoute(
+          builder: (_) => const DetailHistoryFollowUpView(),
+        );
+      case Routes.formFollowUp:
+        return buildRoute(
+          builder: (_) => const FormFollowUpView(),
+        );
+      case Routes.listMaintenance:
+        return buildRoute(
+          builder: (_) => const ListMaintenanceView(),
+        );
+      case Routes.detailMaintenance:
+        return buildRoute(
+          builder: (_) => const DetailMaintenanceView(),
+        );
+      case Routes.detailHistoryMaintenance:
+        return buildRoute(
+          builder: (_) => const DetailHistoryMaintenanceView(),
+        );
+      case Routes.exportMaintenance:
+        return buildRoute(
+          builder: (_) => const ExportDataMaintenanceView(),
+        );
+      case Routes.formMaintenance:
+        return buildRoute(
+          builder: (_) => const FormMaintenanceView(),
+        );
+      case Routes.listReminder:
+        return buildRoute(
+          builder: (_) => const ListRemindersView(),
+        );
+      case Routes.formSetReminder:
+        return buildRoute(
+          builder: (_) => const FormSetReminderView(),
+        );
+      case Routes.detailReminder:
+        return buildRoute(
+          builder: (_) => const DetailReminderView(),
+        );
+      case Routes.map:
+        return buildRoute(
+          builder: (_) => const MapView(),
+        );
+      case Routes.listUser:
+        return buildRoute(
+          builder: (_) => const ListUserView(),
+        );
+      case Routes.addUser:
+        return buildRoute(
+          builder: (_) => const AddUserView(),
+        );
+      case Routes.editUser:
+        return buildRoute(
+          builder: (_) => const EditUserView(),
+        );
+      case Routes.detailUser:
+        return buildRoute(
+          builder: (_) => DetailUserView(
+            profileData: ProfileData(
+              username: "",
+              firstName: "",
+              lastName: "",
+              address: "",
+              city: "",
+              notelp: "",
+              email: "",
+              role: Role.Admin,
+            ),
+          ),
+        );
+      case Routes.setPasswordUser:
+        return buildRoute(
+          builder: (_) => const SetPasswordUserView(),
+        );
+      case Routes.listProjects:
+        return buildRoute(
+          builder: (_) => const ListProjectView(),
+        );
+      case Routes.addProject:
+        return buildRoute(
+          builder: (_) => const AddProjectView(),
+        );
+      case Routes.editProject:
+        return buildRoute(
+          builder: (_) => const EditProjectView(),
+        );
+      case Routes.detailProject:
+        return buildRoute(
+          builder: (_) => DetailProjectView(
+            profileData: ProfileData(
+              username: "",
+              firstName: "",
+              lastName: "",
+              address: "",
+              city: "",
+              notelp: "",
+              email: "",
+              role: Role.Admin,
+            ),
+          ),
+        );
+
+      // Gallery
+      case Routes.imageDetail:
+        final ImageDetailViewParam param =
+            settings.arguments is ImageDetailViewParam
+                ? settings.arguments as ImageDetailViewParam
+                : ImageDetailViewParam();
+        return buildRoute(
+          builder: (_) => ImageDetailView(param: param),
+        );
+
+      default:
+        return null;
     }
   }
 }
