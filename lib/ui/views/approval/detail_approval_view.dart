@@ -23,6 +23,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Detail Permohonan",
@@ -149,8 +150,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
               Spacings.vert(32),
               Card(
                 elevation: 2,
-                shadowColor: MyColors.greyColor,
-                color: MyColors.white,
+                color: MyColors.darkBlack02,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                     19.0,
@@ -170,7 +170,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                           Text(
                             "Diminta oleh:",
                             style: buildTextStyle(
-                              fontColor: MyColors.darkBlue01,
+                              fontColor: MyColors.lightBlack02,
                               fontSize: 16,
                               fontWeight: 800,
                             ),
@@ -181,7 +181,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                               Text(
                                 "Nama          :",
                                 style: buildTextStyle(
-                                  fontColor: MyColors.darkBlue01,
+                                  fontColor: MyColors.lightBlack02,
                                   fontSize: 16,
                                   fontWeight: 400,
                                 ),
@@ -190,7 +190,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                               Text(
                                 nama,
                                 style: buildTextStyle(
-                                  fontColor: MyColors.darkBlue01,
+                                  fontColor: MyColors.lightBlack02,
                                   fontSize: 16,
                                   fontWeight: 400,
                                 ),
@@ -203,7 +203,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                               Text(
                                 "No Telepon :",
                                 style: buildTextStyle(
-                                  fontColor: MyColors.darkBlue01,
+                                  fontColor: MyColors.lightBlack02,
                                   fontSize: 16,
                                   fontWeight: 400,
                                 ),
@@ -212,7 +212,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                               Text(
                                 notelp,
                                 style: buildTextStyle(
-                                  fontColor: MyColors.darkBlue01,
+                                  fontColor: MyColors.lightBlack02,
                                   fontSize: 16,
                                   fontWeight: 400,
                                 ),

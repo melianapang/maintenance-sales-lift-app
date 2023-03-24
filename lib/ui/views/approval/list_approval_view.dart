@@ -14,11 +14,10 @@ class ListApprovalView extends StatefulWidget {
 }
 
 class _ListApprovalViewState extends State<ListApprovalView> {
-  final TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Daftar Permohonan",
@@ -28,9 +27,9 @@ class _ListApprovalViewState extends State<ListApprovalView> {
         children: [
           buildSearchBar(
             context,
-            controller: searchController,
             isFilterShown: false,
-            onTap: () {},
+            textSearchOnChanged: (text) {},
+            onTapFilter: () {},
           ),
           Spacings.vert(12),
           Expanded(
@@ -55,6 +54,7 @@ class _ListApprovalViewState extends State<ListApprovalView> {
               },
             ),
           ),
+          Spacings.vert(16),
         ],
       ),
     );
