@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/home_item_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/manage_profile_item_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -26,8 +27,8 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildProfileCard(ProfileData userData) {
     return Card(
         elevation: 2,
-        shadowColor: MyColors.greyColor,
-        color: MyColors.white,
+        shadowColor: MyColors.darkBlack02,
+        color: MyColors.darkBlack02,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             20.0,
@@ -56,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
                       userData.username,
                       style: buildTextStyle(
                         fontSize: 16,
-                        fontColor: MyColors.lightBlue01,
+                        fontColor: MyColors.yellow01,
                       ),
                     ),
                     Row(
@@ -64,13 +65,14 @@ class _HomeViewState extends State<HomeView> {
                         const Icon(
                           PhosphorIcons.phone,
                           size: 12,
+                          color: MyColors.lightBlack02,
                         ),
                         Spacings.horz(6),
                         Text(
                           userData.notelp,
                           style: buildTextStyle(
                             fontSize: 14,
-                            fontColor: MyColors.darkBlue01,
+                            fontColor: MyColors.lightBlack02,
                           ),
                         ),
                       ],
@@ -80,13 +82,14 @@ class _HomeViewState extends State<HomeView> {
                         const Icon(
                           PhosphorIcons.envelopeSimple,
                           size: 12,
+                          color: MyColors.lightBlack02,
                         ),
                         Spacings.horz(6),
                         Text(
                           userData.email,
                           style: buildTextStyle(
                             fontSize: 14,
-                            fontColor: MyColors.darkBlue01,
+                            fontColor: MyColors.lightBlack02,
                           ),
                         ),
                       ],
@@ -105,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
                 },
                 child: const Icon(
                   PhosphorIcons.pencilSimpleLineBold,
-                  color: MyColors.lightBlue01,
+                  color: MyColors.yellow01,
                   size: 20,
                 ),
               )
@@ -149,11 +152,9 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       extendBody: true,
+      backgroundColor: MyColors.darkBlack01,
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24.0,
-          vertical: 32.0,
-        ),
+        padding: PaddingUtils.getPadding(context, defaultPadding: 24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,11 +165,10 @@ class _HomeViewState extends State<HomeView> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Menu Utama",
-                  style: TextStyle(
+                  style: buildTextStyle(
                     fontSize: 24,
-                    fontFamily: "dmsans",
-                    fontWeight: weightToObject[300],
-                    color: MyColors.darkBlue01,
+                    fontColor: MyColors.yellow01,
+                    fontWeight: 300,
                   ),
                 ),
               ),
@@ -178,7 +178,8 @@ class _HomeViewState extends State<HomeView> {
                     .toList(),
                 true,
               ),
-              if (widget.profileData.role == Role.Admin) ...[
+              if (widget.profileData.role == Role.Admin ||
+                  widget.profileData.role == Role.SuperAdmin) ...[
                 Spacings.vert(24),
                 Align(
                   alignment: Alignment.topLeft,
@@ -186,7 +187,7 @@ class _HomeViewState extends State<HomeView> {
                     'Sales',
                     style: buildTextStyle(
                       fontSize: 18,
-                      fontColor: MyColors.lightBlue01,
+                      fontColor: MyColors.yellow01,
                       fontWeight: 300,
                     ),
                   ),
@@ -206,7 +207,7 @@ class _HomeViewState extends State<HomeView> {
                     'Maintenance',
                     style: buildTextStyle(
                       fontSize: 18,
-                      fontColor: MyColors.lightBlue01,
+                      fontColor: MyColors.yellow01,
                       fontWeight: 300,
                     ),
                   ),
@@ -228,7 +229,7 @@ class _HomeViewState extends State<HomeView> {
                   style: buildTextStyle(
                     fontSize: 24,
                     fontWeight: 300,
-                    fontColor: MyColors.darkBlue01,
+                    fontColor: MyColors.yellow01,
                   ),
                 ),
               ),
@@ -252,9 +253,9 @@ class _HomeViewState extends State<HomeView> {
                     icon: manageProfileMenu[index].icon,
                     onTap: () {
                       if (manageProfileMenu[index].callback != null) {
-                        // manageProfileMenu[index].callback!(
-                        // context: context,
-                        // );
+                        manageProfileMenu[index].callback!(
+                          context: context,
+                        );
                       } else if (manageProfileMenu[index].route != null) {
                         Navigator.pushNamed(context,
                             manageProfileMenu[index].route ?? Routes.home);
