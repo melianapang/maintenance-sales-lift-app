@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MyColors {
+  static const Color darkBlack01 = Color(0xFF171719);
+  static const Color darkBlack02 = Color(0xFF222126);
+  static const Color lightBlack01 = Color(0xFF5A5A5A);
+  static const Color lightBlack02 = Color(0xFFCECCCC);
+  static const Color secondaryLightBlack = Color(0xFF49494A);
+  static const Color yellow01 = Color(0xFFE2E397);
+  static const Color yellow02 = Color(0xFFA2A368);
+  static const Color blueLihatSelengkapnya = Color(0xFF347ee6);
+
   static const Color darkBlue01 = Color(0xFF172631);
   static const Color darkBlue02 = Color(0xFF1764A7);
   static const Color lightBlue01 = Color(0xFF3174AC);
@@ -8,7 +17,7 @@ class MyColors {
   static const Color lightBlue03 = Color(0xFF84A4CB);
   static const Color lightGrey = Color(0xFFEBEBEB);
 
-  static const Color lightGreyBackground = Color(0xFFF4F4F4);
+  static const Color darkGreyBackground = Color(0xFF2B2B2B);
   static const Color greyButtonBorder = Color(0xFF9F9F9F);
 
   static const Color greenFontStatusCard = Color(0xFF6AAE5E);
