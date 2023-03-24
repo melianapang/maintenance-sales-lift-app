@@ -20,10 +20,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final TextEditingController unameController =
-      TextEditingController(text: "admin");
-  final TextEditingController pwdController =
-      TextEditingController(text: "admin");
   @override
   Widget build(BuildContext context) {
     return ViewModel<LoginViewModel>(
@@ -33,11 +29,18 @@ class _LoginViewState extends State<LoginView> {
       },
       builder: (_, model, __) {
         return Scaffold(
+          backgroundColor: MyColors.darkBlack01,
           body: Padding(
             padding: const EdgeInsets.all(30.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset(
+                  'assets/images/logo_pt_rejo.png',
+                  width: 150,
+                  height: 150,
+                ),
+                Spacings.vert(32),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
@@ -45,49 +48,59 @@ class _LoginViewState extends State<LoginView> {
                     style: buildTextStyle(
                       fontSize: 42,
                       fontWeight: 800,
-                      fontColor: MyColors.darkBlue01,
+                      fontColor: MyColors.lightBlack02,
                     ),
                   ),
                 ),
                 Spacings.vert(10),
-                TextInput(
-                  controller: unameController,
-                  borderColor: MyColors.darkBlue01,
-                  hintText: 'Username',
+                TextInput.editable(
+                  text: model.inputUser,
+                  onChangedListener: (text) {
+                    model.setInputUser(inputUser: text);
+                  },
+                  borderColor: MyColors.secondaryLightBlack,
+                  hintText: 'Username/Email',
                   prefixIcon: Icon(
                     Icons.person,
                     color: model.isValid == false
                         ? Colors.redAccent
-                        : MyColors.darkBlue01,
+                        : MyColors.yellow01,
                   ),
                   errorText:
                       model.isValid == false ? "Your username is wrong" : null,
                 ),
                 Spacings.vert(24),
-                TextInput(
-                  controller: pwdController,
+                TextInput.editable(
+                  text: model.password,
+                  onChangedListener: (text) {
+                    model.setPassword(password: text);
+                  },
+                  maxLines: 1,
                   isPassword: !model.showPassword,
                   prefixIcon: Icon(
                     Icons.lock,
                     color: model.isValid == false
                         ? Colors.redAccent
-                        : MyColors.darkBlue01,
+                        : MyColors.yellow01,
                   ),
                   suffixIcon: GestureDetector(
-                    onTap: () => model.setShowPassword(!model.showPassword),
+                    onTap: () {
+                      model.setShowPassword(!model.showPassword);
+                    },
                     child: Icon(
                       model.showPassword
                           ? PhosphorIcons.eyeClosed
                           : PhosphorIcons.eye,
                       color: model.isValid == false
                           ? Colors.redAccent
-                          : MyColors.greyColor,
+                          : MyColors.yellow01,
                     ),
                   ),
                   hintText: "Password",
-                  borderColor: MyColors.darkBlue01,
-                  errorText:
-                      model.isValid == false ? "Your username is wrong" : null,
+                  borderColor: MyColors.secondaryLightBlack,
+                  errorText: model.isValid == false
+                      ? "Username / email anda salah"
+                      : null,
                 ),
                 Spacings.vert(24),
                 ButtonWidget(
@@ -95,32 +108,29 @@ class _LoginViewState extends State<LoginView> {
                   text: "Login",
                   textStyle: buildTextStyle(
                     fontSize: 18,
-                    fontColor: Colors.white,
+                    fontColor: MyColors.yellow01,
                     fontWeight: 500,
                   ),
                   onTap: !model.busy
                       ? () async {
-                          final bool? result = await model.requestLogin(
-                            unameController.text,
-                            pwdController.text,
-                          );
-                          if (result == false) {
-                            showErrorDialog(context);
-                            return;
-                          }
+                          final bool result = await model.requestLogin();
+                          // if (result == false) {
+                          //   showErrorDialog(context);
+                          //   return;
+                          // }
+
                           Navigator.popAndPushNamed(
                             context,
                             Routes.home,
                             arguments: ProfileData(
-                              username: unameController.text,
-                              firstName: 'Taylor',
-                              lastName: 'Swift',
-                              notelp: '0812345678910',
-                              email: 'admin123@gmail.com',
-                              address: 'Jalan Mangga 2134',
-                              city: 'Surabaya',
-                              role: Role.Admin,
-                            ),
+                                username: model.inputUser,
+                                firstName: 'Taylor',
+                                lastName: 'Swift',
+                                notelp: '0812345678910',
+                                email: 'admin123@gmail.com',
+                                address: 'Jalan Mangga 2134',
+                                city: 'Surabaya',
+                                role: Role.Admin),
                           );
                         }
                       : null,

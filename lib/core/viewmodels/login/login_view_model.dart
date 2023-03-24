@@ -9,6 +9,12 @@ class LoginViewModel extends BaseViewModel {
   bool _showPassword = false;
   bool get showPassword => _showPassword;
 
+  String _inputUser = "Indra1999@email.com";
+  String get inputUser => _inputUser;
+
+  String _password = "Hello6789";
+  String get password => _password;
+
   @override
   Future<void> initModel() async {
     // setBusy(true);
@@ -20,12 +26,19 @@ class LoginViewModel extends BaseViewModel {
   //   await Future<void>.delayed(const Duration(seconds: 2));
   // }
 
-  Future<bool?> requestLogin(String username, String password) async {
+  void setInputUser({required String inputUser}) {
+    _inputUser = inputUser;
+  }
+
+  void setPassword({required String password}) {
+    _password = password;
+  }
+
+  Future<bool> requestLogin() async {
     setBusy(true);
-    await Future<void>.delayed(const Duration(seconds: 2));
-    _isValid = username == "admin" && password == "admin";
+
     setBusy(false);
-    return _isValid;
+    return true;
   }
 
   void setShowPassword(bool value) {
