@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
@@ -17,7 +18,7 @@ class _DetailLogViewState extends State<DetailLogView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.lightGreyBackground,
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Detail Log",
@@ -48,7 +49,7 @@ class _DetailLogViewState extends State<DetailLogView> {
               Spacings.vert(32),
               const Divider(
                 thickness: 2,
-                color: MyColors.darkBlue01,
+                color: MyColors.yellow,
               ),
               Spacings.vert(10),
               Align(
@@ -57,7 +58,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   "Data yang diubah",
                   style: buildTextStyle(
                     fontSize: 20,
-                    fontColor: MyColors.darkBlue01,
+                    fontColor: MyColors.yellow01,
                     fontWeight: 800,
                   ),
                 ),

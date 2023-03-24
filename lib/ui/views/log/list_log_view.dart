@@ -14,11 +14,10 @@ class ListLogView extends StatefulWidget {
 }
 
 class _ListLogViewState extends State<ListLogView> {
-  final TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Log",
@@ -28,9 +27,9 @@ class _ListLogViewState extends State<ListLogView> {
         children: [
           buildSearchBar(
             context,
-            controller: searchController,
+            textSearchOnChanged: (text) {},
             isFilterShown: false,
-            onTap: () {},
+            onTapFilter: () {},
           ),
           Spacings.vert(12),
           Expanded(
