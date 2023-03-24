@@ -71,6 +71,9 @@ class _GallerySliderState extends State<GallerySlider> {
   Widget _buildImage(String url) {
     return PhotoView(
       imageProvider: NetworkImage(url),
+      backgroundDecoration: const BoxDecoration(
+        color: MyColors.darkBlack01,
+      ),
     );
   }
 }
