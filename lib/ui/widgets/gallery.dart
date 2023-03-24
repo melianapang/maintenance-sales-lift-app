@@ -7,11 +7,13 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/thumbnail_video_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/image_detail_view.dart';
 
 class GalleryThumbnailWidget extends StatelessWidget {
-  GalleryThumbnailWidget({
+  const GalleryThumbnailWidget({
     required this.galleryData,
+    required this.galleryType,
     this.scrollController,
     required this.callbackGalleryPath,
     required this.callbackDeleteAddedGallery,
@@ -21,11 +23,32 @@ class GalleryThumbnailWidget extends StatelessWidget {
   });
 
   final List<GalleryData> galleryData;
+  final GalleryType galleryType;
   final ScrollController? scrollController;
   final void Function(String path) callbackGalleryPath;
   final void Function(GalleryData data) callbackDeleteAddedGallery;
   final int initialIndex;
   final bool isCRUD;
+
+  Widget _showPhotoThumbnail(GalleryData data) {
+    return !data.isGalleryPicked
+        ? Image.network(
+            data.filepath,
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          )
+        : Image.file(
+            File(data.filepath),
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          );
+  }
+
+  FutureBuilder<ThumbnailResult> _showVideoThumbnail(GalleryData data) {
+    return ThumbnailVideoUtils.showThumbnailVideo(data);
+  }
 
   Widget _buildGalleryThumbnail(
     GalleryData data, {
@@ -54,19 +77,9 @@ class GalleryThumbnailWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 15,
               ),
-              child: !data.isGalleryPicked
-                  ? Image.network(
-                      data.filepath,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.file(
-                      File(data.filepath),
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
+              child: galleryType == GalleryType.PHOTO
+                  ? _showPhotoThumbnail(data)
+                  : _showVideoThumbnail(data),
             ),
           ),
           if (isCRUD)
@@ -127,21 +140,26 @@ class GalleryThumbnailWidget extends StatelessWidget {
 
   Future<void> _onTapAddGallery(
     BuildContext context, {
+    required bool isPhoto,
     required void Function(String path) callback,
   }) async {
     final ImagePicker _picker = ImagePicker();
-    // Pick an image
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) callback(image.path);
-    // // Capture a photo
-    // final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    // // Pick multiple images
-    // final List<XFile>? images = await _picker.pickMultiImage();
+    final XFile? file;
+    if (isPhoto) {
+      file = await _picker.pickImage(source: ImageSource.gallery);
+      // // Capture a photo
+      // final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    } else {
+      file = await _picker.pickVideo(source: ImageSource.gallery);
+    }
+    if (file != null) callback(file.path);
   }
 
   Widget _buildAddGallery(BuildContext context) {
     return GestureDetector(
-      onTap: () => _onTapAddGallery(context, callback: callbackGalleryPath),
+      onTap: () => _onTapAddGallery(context,
+          isPhoto: galleryType == GalleryType.PHOTO,
+          callback: callbackGalleryPath),
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.only(
@@ -191,7 +209,8 @@ class GalleryThumbnailWidget extends StatelessWidget {
                     context,
                     Routes.imageDetail,
                     arguments: ImageDetailViewParam(
-                      imageURLs: galleryData.map((e) => e.filepath).toList(),
+                      urls: galleryData.map((e) => e.filepath).toList(),
+                      galleryType: galleryType,
                       initialIndex: index,
                     ),
                   );
@@ -214,7 +233,8 @@ class GalleryThumbnailWidget extends StatelessWidget {
                   context,
                   Routes.imageDetail,
                   arguments: ImageDetailViewParam(
-                    imageURLs: galleryData.map((e) => e.filepath).toList(),
+                    urls: galleryData.map((e) => e.filepath).toList(),
+                    galleryType: galleryType,
                     initialIndex: index,
                   ),
                 );
@@ -230,7 +250,8 @@ class GalleryThumbnailWidget extends StatelessWidget {
                 context,
                 Routes.imageDetail,
                 arguments: ImageDetailViewParam(
-                  imageURLs: galleryData.map((e) => e.filepath).toList(),
+                  urls: galleryData.map((e) => e.filepath).toList(),
+                  galleryType: galleryType,
                   initialIndex: index,
                 ),
               );

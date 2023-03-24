@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/image_detail_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery_slider.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/video_player_widget.dart';
 
 class ImageDetailViewParam {
   ImageDetailViewParam({
     this.initialIndex = 0,
-    this.imageURLs,
+    this.galleryType = GalleryType.PHOTO,
+    this.urls,
   });
 
   final int initialIndex;
-  final List<String>? imageURLs;
+  final GalleryType galleryType;
+  final List<String>? urls;
 }
 
 class ImageDetailView extends StatelessWidget {
@@ -32,23 +37,25 @@ class ImageDetailView extends StatelessWidget {
         return Scaffold(
           appBar: buildDefaultAppBar(
             context,
-            title: 'Image Detail',
+            title: param.galleryType == GalleryType.PHOTO
+                ? 'Image Detail'
+                : 'Video Detail',
             isBackEnabled: true,
           ),
-          body: model.busy
-              ? _buildLoadingPage()
-              : GallerySlider(
-                  urls: param.imageURLs ?? [],
-                  pageController: model.pageController,
-                ),
+          body: model.busy ? buildLoadingPage() : _buildDetailMedia(model),
         );
       },
     );
   }
 
-  Widget _buildLoadingPage() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
+  Widget _buildDetailMedia(ImageDetailViewModel model) {
+    if (param.galleryType == GalleryType.PHOTO) {
+      return GallerySlider(
+        urls: param.urls ?? [],
+        pageController: model.pageController,
+      );
+    }
+
+    return VideoPlayerWidget(url: param.urls?.first ?? "");
   }
 }
