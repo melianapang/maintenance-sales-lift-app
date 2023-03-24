@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class PlusFloatingButtonWidget extends StatelessWidget {
   const PlusFloatingButtonWidget({
@@ -14,14 +14,14 @@ class PlusFloatingButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: onTap,
-      backgroundColor: MyColors.lightBlue01,
-      foregroundColor: MyColors.white,
+      backgroundColor: MyColors.lightBlack01,
+      foregroundColor: MyColors.yellow01,
       shape: const CircleBorder(
         side: BorderSide.none,
       ),
       child: const Icon(
         PhosphorIcons.plusBold,
-        color: MyColors.white,
+        color: MyColors.yellow01,
         size: 18,
       ),
     );

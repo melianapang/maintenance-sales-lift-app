@@ -15,12 +15,12 @@ PreferredSizeWidget buildDefaultAppBar(
     title: Text(
       title,
       style: buildTextStyle(
-        fontSize: 16.0,
+        fontSize: 16,
         fontWeight: 500,
-        fontColor: MyColors.darkBlue01,
+        fontColor: MyColors.yellow01,
       ),
     ),
-    backgroundColor: MyColors.white,
+    backgroundColor: MyColors.darkBlack02,
     centerTitle: centerTitle,
     elevation: 1,
     automaticallyImplyLeading: isBackEnabled,
@@ -31,8 +31,8 @@ PreferredSizeWidget buildDefaultAppBar(
             },
             child: const Icon(
               PhosphorIcons.caretLeftBold,
-              color: MyColors.darkBlue01,
-              size: 16,
+              color: MyColors.lightBlack02,
+              size: 20,
             ),
           )
         : null,

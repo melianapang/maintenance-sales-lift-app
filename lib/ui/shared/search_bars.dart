@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 Widget buildSearchBar(BuildContext context,
-    {required TextEditingController controller,
-    required bool isFilterShown,
-    VoidCallback? onTap}) {
+    {required bool isFilterShown,
+    required void Function(String) textSearchOnChanged,
+    VoidCallback? onTapFilter}) {
   return Container(
     margin: const EdgeInsets.all(20),
     child: Row(
       children: [
         Expanded(
-          child: TextInput(
-            controller: controller,
-            enabled: true,
+          child: TextInput.editable(
+            onChangedListener: textSearchOnChanged,
             hintText: "Search",
             prefixIcon: const Icon(
               PhosphorIcons.magnifyingGlassBold,
+              color: MyColors.lightBlack02,
             ),
-            backgroundColor: MyColors.white,
           ),
         ),
         if (isFilterShown) ...[
           GestureDetector(
-            onTap: onTap,
+            onTap: onTapFilter,
             child: Container(
               margin: const EdgeInsets.only(left: 5),
               padding: const EdgeInsets.symmetric(
                 vertical: 15,
               ),
               decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.circular(5)),
+                  color: MyColors.darkBlack02,
+                  borderRadius: BorderRadius.circular(10)),
               width: 50,
               child: const Icon(
                 PhosphorIcons.slidersBold,
-                color: MyColors.lightGrey,
+                color: MyColors.lightBlack02,
               ),
             ),
           ),
