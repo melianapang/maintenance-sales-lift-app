@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -24,7 +25,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.lightGreyBackground,
+      backgroundColor: MyColors.darkBlack01,
       appBar: buildDefaultAppBar(
         context,
         title: "Edit Profile",
@@ -54,8 +55,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                 label: "Nama",
                 text:
                     "${widget.profileData.firstName} ${widget.profileData.lastName}",
-                hintText: "Abc",
+                hintText: "Nama Lengkap",
                 keyboardType: TextInputType.name,
+                onChangedListener: (text) {
+                  print(text);
+                },
+              ),
+              Spacings.vert(24),
+              TextInput.editable(
+                label: "Peran",
+                text: mappingRole(widget.profileData.role),
+                hintText: "Admin/Sales/Teknisi",
+                keyboardType: TextInputType.number,
                 onChangedListener: (text) {
                   print(text);
                 },
@@ -74,7 +85,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               TextInput.editable(
                 label: "Alamat",
                 text: widget.profileData.address,
-                hintText: "Jalan abcd",
+                hintText: "Alamat Lengkap",
                 keyboardType: TextInputType.streetAddress,
                 onChangedListener: (text) {
                   print(text);
@@ -84,7 +95,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               TextInput.editable(
                 label: "Kota",
                 text: widget.profileData.city,
-                hintText: "Abcdef",
+                hintText: "Kota",
                 keyboardType: TextInputType.text,
                 onChangedListener: (text) {
                   print(text);

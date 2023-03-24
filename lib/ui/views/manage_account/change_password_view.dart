@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/change_password/change_password_view_model.dart';
@@ -8,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key});
@@ -29,7 +29,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
       },
       builder: (_, model, __) {
         return Scaffold(
-          backgroundColor: MyColors.lightGreyBackground,
+          backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
             title: "Ubah Kata Sandi",
@@ -59,6 +59,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     label: "Kata Sandi Lama",
                     onChangedListener: (text) {},
                     isPassword: !model.showOldPassword,
+                    maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () =>
                           model.setShowOldPassword(!model.showOldPassword),
@@ -73,7 +74,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     ),
                     hintText: "Masukkan kata sandi lama anda",
                     errorText: model.isValid == false
-                        ? "Your username is wrong"
+                        ? "Kata sandi lama anda salah."
                         : null,
                   ),
                   Spacings.vert(24),
@@ -81,6 +82,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     label: "Kata Sandi Baru",
                     onChangedListener: (text) {},
                     isPassword: !model.showNewPassword,
+                    maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () =>
                           model.setShowNewPassword(!model.showNewPassword),
@@ -95,7 +97,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     ),
                     hintText: "Masukkan kata sandi baru anda",
                     errorText: model.isValid == false
-                        ? "Your username is wrong"
+                        ? "Kata sandi anda tidak valid."
                         : null,
                   ),
                   Spacings.vert(24),
@@ -103,6 +105,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     onChangedListener: (text) {},
                     label: "Konfirmasi Kata Sandi Baru",
                     isPassword: !model.showConfirmNewPassword,
+                    maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () => model.setShowConfirmNewPassword(
                           !model.showConfirmNewPassword),
@@ -117,7 +120,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     ),
                     hintText: "Masukkan kata sandi baru anda",
                     errorText: model.isValid == false
-                        ? "Your username is wrong"
+                        ? "Kaya sandi anda tidak sama."
                         : null,
                   ),
                 ],
