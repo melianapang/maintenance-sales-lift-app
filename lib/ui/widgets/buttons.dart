@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:flutter_application_1/core/app_constants/colors.dart';
+import 'package:flutter_application_1/core/utilities/text_styles.dart';
 
 enum ButtonType { primary, secondary, negative, canceled, filterButton }
 
@@ -8,8 +8,8 @@ enum ButtonSize { large, medium, small }
 
 extension ButtonTypeExt on ButtonType {
   static Map<ButtonType, Color> backgroundColors = <ButtonType, Color>{
-    ButtonType.primary: MyColors.lightBlue01,
-    ButtonType.secondary: MyColors.lightBlue03,
+    ButtonType.primary: MyColors.yellow01,
+    ButtonType.secondary: MyColors.secondaryLightBlack,
     ButtonType.negative: MyColors.red001,
     ButtonType.canceled: MyColors.lightGrey,
     ButtonType.filterButton: MyColors.lightGrey,
@@ -18,7 +18,7 @@ extension ButtonTypeExt on ButtonType {
 
   static const Map<ButtonType, Color> backgroundDisabledColors =
       <ButtonType, Color>{
-    ButtonType.primary: MyColors.lightGrey,
+    ButtonType.primary: MyColors.lightBlack01,
     ButtonType.secondary: MyColors.lightGrey,
     ButtonType.negative: MyColors.lightBlack002,
     ButtonType.filterButton: MyColors.lightGrey,
@@ -27,8 +27,8 @@ extension ButtonTypeExt on ButtonType {
 
   static const Map<ButtonType, Color> backgroundPressedColors =
       <ButtonType, Color>{
-    ButtonType.primary: MyColors.darkBlue02,
-    ButtonType.secondary: MyColors.lightBlue02,
+    ButtonType.primary: MyColors.yellow02,
+    ButtonType.secondary: MyColors.lightBlack02,
     ButtonType.negative: MyColors.negativeColor,
     ButtonType.filterButton: MyColors.lightBlue01,
   };
@@ -52,16 +52,16 @@ extension ButtonTypeExt on ButtonType {
   Color get foregroundPressedColor => foregroundPressedColors[this]!;
 
   static const Map<ButtonType, Color> textColors = <ButtonType, Color>{
-    ButtonType.primary: MyColors.white,
-    ButtonType.secondary: MyColors.white,
+    ButtonType.primary: MyColors.darkBlack01,
+    ButtonType.secondary: MyColors.yellow01,
     ButtonType.negative: MyColors.white,
     ButtonType.filterButton: MyColors.white,
   };
   Color? get textColor => textColors[this];
 
   static const Map<ButtonType, Color> disabledTextColors = <ButtonType, Color>{
-    ButtonType.primary: MyColors.black002,
-    ButtonType.secondary: MyColors.black002,
+    ButtonType.primary: MyColors.lightBlack02,
+    ButtonType.secondary: MyColors.secondaryLightBlack,
     ButtonType.negative: MyColors.white,
     ButtonType.filterButton: MyColors.black,
   };
@@ -69,7 +69,7 @@ extension ButtonTypeExt on ButtonType {
 
   static const Map<ButtonType, Color> borderColors = <ButtonType, Color>{
     ButtonType.negative: MyColors.lightBlack002,
-    ButtonType.filterButton: MyColors.greyButtonBorder
+    ButtonType.filterButton: MyColors.yellow
   };
   Color? get borderColor => borderColors[this];
 
@@ -82,8 +82,8 @@ extension ButtonTypeExt on ButtonType {
   FontWeight? get fontWeight => fontWeights[this];
 
   static const Map<ButtonType, Color> borderPressedColors = <ButtonType, Color>{
-    ButtonType.primary: MyColors.darkBlue01,
-    ButtonType.secondary: MyColors.lightBlue01,
+    ButtonType.primary: MyColors.darkBlack02,
+    ButtonType.secondary: MyColors.secondaryLightBlack,
     ButtonType.filterButton: MyColors.transparent
   };
   Color? get borderPressedColor => borderPressedColors[this];
@@ -141,12 +141,11 @@ extension ButtonSizeExt on ButtonSize {
 }
 
 class ButtonWidget extends StatelessWidget {
-  factory ButtonWidget.bottomSingleButton({
-    required VoidCallback onTap,
-    required String text,
-    required ButtonType buttonType,
-    required EdgeInsets padding,
-  }) {
+  factory ButtonWidget.bottomSingleButton(
+      {required VoidCallback onTap,
+      required String text,
+      required ButtonType buttonType,
+      required EdgeInsets padding}) {
     return ButtonWidget(
       buttonType: buttonType,
       text: text,

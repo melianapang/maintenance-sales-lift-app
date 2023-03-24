@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:flutter_application_1/core/app_constants/colors.dart';
+import 'package:flutter_application_1/core/utilities/text_styles.dart';
+import 'package:flutter_application_1/ui/shared/spacings.dart';
 
 class TextInput extends StatelessWidget {
   factory TextInput.disabled({
@@ -10,7 +10,7 @@ class TextInput extends StatelessWidget {
     String hintText = '',
     Widget? prefixIcon,
     Widget? suffixIcon,
-    Color? backgroundColor = MyColors.white,
+    Color? backgroundColor = MyColors.darkBlack02,
   }) {
     final controller = TextEditingController();
     controller.text = text ?? '';
@@ -33,8 +33,9 @@ class TextInput extends StatelessWidget {
     Widget? suffixIcon,
     bool isPassword = false,
     String hintText = '',
+    int? maxLines,
     Color? borderColor,
-    Color? backgroundColor = MyColors.white,
+    Color? backgroundColor = MyColors.darkBlack02,
     String? errorText,
     TextInputType keyboardType = TextInputType.text,
   }) {
@@ -46,6 +47,7 @@ class TextInput extends StatelessWidget {
       backgroundColor: backgroundColor,
       borderColor: borderColor,
       label: label,
+      maxLines: maxLines,
       enabled: true,
       hintText: hintText,
       errorText: errorText,
@@ -61,7 +63,7 @@ class TextInput extends StatelessWidget {
     required String label,
     required int minLines,
     required int maxLines,
-    Color backgroundColor = MyColors.white,
+    Color backgroundColor = MyColors.darkBlack02,
     String? hintText,
   }) {
     final controller = TextEditingController(text: '');
@@ -73,6 +75,27 @@ class TextInput extends StatelessWidget {
       maxLines: maxLines,
       label: label,
       enabled: true,
+      hintText: hintText,
+      keyboardType: TextInputType.multiline,
+    );
+  }
+
+  factory TextInput.disabledMultiline({
+    required String label,
+    required String text,
+    required int minLines,
+    required int maxLines,
+    Color backgroundColor = MyColors.darkBlack02,
+    String? hintText,
+  }) {
+    final controller = TextEditingController();
+    controller.text = text;
+    return TextInput(
+      controller: controller,
+      backgroundColor: backgroundColor,
+      maxLines: null,
+      label: label,
+      enabled: false,
       hintText: hintText,
       keyboardType: TextInputType.multiline,
     );
@@ -119,15 +142,24 @@ class TextInput extends StatelessWidget {
         if (label != null) ...[
           Text(
             label ?? "",
+            style: buildTextStyle(
+              fontSize: 14,
+              fontColor: MyColors.lightBlack02,
+            ),
           ),
           Spacings.vert(8),
         ],
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
-          minLines: minLines ?? 1,
-          maxLines: maxLines ?? 1,
+          minLines: minLines,
+          maxLines: maxLines,
           onChanged: onChangedListener,
+          style: buildTextStyle(
+            fontSize: 14,
+            fontColor: MyColors.white,
+            fontWeight: 400,
+          ),
           decoration: InputDecoration(
             enabled: enabled,
             hintText: hintText,
@@ -162,7 +194,7 @@ class TextInput extends StatelessWidget {
                 Radius.circular(20.0),
               ),
               borderSide: BorderSide(
-                color: borderColor ?? MyColors.darkBlue01,
+                color: borderColor ?? MyColors.darkBlack01,
               ),
             ),
             errorBorder: const OutlineInputBorder(

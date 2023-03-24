@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:flutter_application_1/core/app_constants/colors.dart';
+import 'package:flutter_application_1/core/utilities/text_styles.dart';
+import 'package:flutter_application_1/core/viewmodels/customer/add_customer_view_model.dart';
+import 'package:flutter_application_1/core/viewmodels/customer/edit_customer_view_model.dart';
+import 'package:flutter_application_1/ui/shared/spacings.dart';
+import 'package:flutter_application_1/ui/widgets/buttons.dart';
+import 'package:flutter_application_1/ui/widgets/dialogs.dart';
 
 class FilterOption {
   final String title;
@@ -39,20 +41,22 @@ Widget buildFilterOption(FilterOption menu, void Function() callback) {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          width: 0.3,
-          color: MyColors.greyButtonBorder,
+          width: 0.6,
+          color: !menu.isSelected ? MyColors.transparent : MyColors.yellow01,
         ),
         borderRadius: BorderRadius.circular(
           10,
         ),
-        color: !menu.isSelected ? MyColors.lightGrey : MyColors.lightBlue01,
+        color: !menu.isSelected
+            ? MyColors.lightBlack01
+            : MyColors.darkGreyBackground,
       ),
       child: Text(
         menu.title,
         style: buildTextStyle(
           fontSize: 13,
           fontWeight: 600,
-          fontColor: !menu.isSelected ? MyColors.darkBlue01 : MyColors.white,
+          fontColor: !menu.isSelected ? MyColors.white : MyColors.yellow01,
         ),
       ),
     ),
@@ -79,18 +83,18 @@ void showCustomerFilterMenu(
       terapkanCallback,
 }) {
   final List<FilterOption> tipePelangganLocal =
-      _convertToNewList(listPelangganMenu);
+      convertToNewList(listPelangganMenu);
   int tipePelanggan = selectedPelanggan;
 
   final List<FilterOption> sumberDataLocal =
-      _convertToNewList(listSumberDataMenu);
+      convertToNewList(listSumberDataMenu);
   int sumberData = selectedSumberData;
 
   final List<FilterOption> tahapKonfirmasiLocal =
-      _convertToNewList(listTahapKonfirmasiMenu);
+      convertToNewList(listTahapKonfirmasiMenu);
   int tahapKonfirmasi = selectedTahapKonfirmasi;
 
-  final List<FilterOption> sortLocal = _convertToNewList(listSortMenu);
+  final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
   int sort = selectedSort;
 
   showGeneralBottomSheet(
@@ -108,7 +112,7 @@ void showCustomerFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -133,7 +137,7 @@ void showCustomerFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -158,7 +162,7 @@ void showCustomerFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -183,7 +187,7 @@ void showCustomerFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -237,11 +241,10 @@ void showMaintenanceFilterMenu(
   })
       terapkanCallback,
 }) {
-  final List<FilterOption> handledByLocal =
-      _convertToNewList(listHandledByMenu);
+  final List<FilterOption> handledByLocal = convertToNewList(listHandledByMenu);
   int handledBy = selectedHandledBy;
 
-  final List<FilterOption> sortLocal = _convertToNewList(listSortMenu);
+  final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
   int sort = selectedSort;
 
   showGeneralBottomSheet(
@@ -259,7 +262,7 @@ void showMaintenanceFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -284,7 +287,7 @@ void showMaintenanceFilterMenu(
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
-                fontColor: MyColors.darkBlue01,
+                fontColor: MyColors.lightBlack02,
               ),
             ),
             Spacings.vert(8),
@@ -341,7 +344,7 @@ Widget buildMenuChoices(
 
 //just to convert the list to map to list again
 //basically just make the copy.
-List<FilterOption> _convertToNewList(List<FilterOption> data) {
+List<FilterOption> convertToNewList(List<FilterOption> data) {
   return data
       .map(
         (e) => FilterOption(

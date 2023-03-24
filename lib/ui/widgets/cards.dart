@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:flutter_application_1/core/utilities/text_styles.dart';
+import 'package:flutter_application_1/ui/shared/spacings.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../core/app_constants/colors.dart';
 
@@ -8,8 +9,8 @@ enum CardType { menu, list }
 
 extension CardTypeStyleExt on CardType {
   static Map<CardType, Color> fontColors = <CardType, Color>{
-    CardType.menu: MyColors.darkBlue02,
-    CardType.list: MyColors.darkBlue01,
+    CardType.menu: MyColors.lightBlack02,
+    CardType.list: MyColors.lightBlack02,
   };
   Color get fontColor => fontColors[this] ?? Colors.transparent;
 }
@@ -41,8 +42,7 @@ class CustomCardWidget extends StatelessWidget {
   Card _buildMenuCard() {
     return Card(
       elevation: 2,
-      shadowColor: MyColors.greyColor,
-      color: MyColors.white,
+      color: MyColors.darkBlack02,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           20.0,
@@ -91,8 +91,7 @@ class CustomCardWidget extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       elevation: 2,
-      shadowColor: MyColors.greyColor,
-      color: MyColors.white,
+      color: MyColors.darkBlack02,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           19.0,
@@ -102,8 +101,8 @@ class CustomCardWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(
             left: 24.0,
-            top: 4,
-            bottom: 4,
+            top: 14,
+            bottom: 14,
           ),
           child: Row(
             children: [
@@ -145,14 +144,25 @@ class CustomCardWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const Align(
+              Align(
                 alignment: Alignment.center,
-                child: Image(
-                  image: AssetImage(
-                    'assets/images/arrow_list.png',
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 6,
                   ),
-                  width: 80,
-                  height: 80,
+                  margin: const EdgeInsets.only(
+                    right: 18,
+                  ),
+                  decoration: BoxDecoration(
+                    color: MyColors.yellow01,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Icon(
+                    PhosphorIcons.caretRightBold,
+                    color: MyColors.darkBlack02,
+                    size: 12,
+                  ),
                 ),
               )
             ],

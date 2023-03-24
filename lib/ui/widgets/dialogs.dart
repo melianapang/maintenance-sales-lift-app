@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:flutter_application_1/core/app_constants/colors.dart';
+import 'package:flutter_application_1/core/utilities/text_styles.dart';
+import 'package:flutter_application_1/ui/shared/spacings.dart';
+import 'package:flutter_application_1/ui/widgets/buttons.dart';
 
 Future<dynamic> showGeneralBottomSheet({
   required BuildContext context,
@@ -50,7 +50,7 @@ Future<dynamic> showGeneralBottomSheet({
                 0,
               ),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: MyColors.darkBlack01,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
@@ -74,7 +74,7 @@ Future<dynamic> showGeneralBottomSheet({
                             style: buildTextStyle(
                               fontSize: 24,
                               fontWeight: 600,
-                              fontColor: Colors.black,
+                              fontColor: MyColors.lightBlack02,
                             ),
                           ),
                         ),
@@ -165,6 +165,7 @@ void showDialogWidget(BuildContext context,
                 style: buildTextStyle(
                   fontSize: 20,
                   fontWeight: 500,
+                  fontColor: MyColors.darkBlack02,
                 ),
               ),
               Spacings.vert(20),
@@ -173,6 +174,7 @@ void showDialogWidget(BuildContext context,
                 textAlign: TextAlign.center,
                 style: buildTextStyle(
                   fontSize: 16,
+                  fontColor: MyColors.darkBlack02,
                 ),
               ),
               Spacings.vert(38),
