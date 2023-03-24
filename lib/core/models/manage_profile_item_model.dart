@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ManageProfileItemModel {
   final String title;
@@ -30,10 +30,14 @@ List<ManageProfileItemModel> manageProfileMenu = <ManageProfileItemModel>[
         context,
         title: 'Keluar',
         description: 'Anda yakin ingin Keluar?',
-        positiveLabel: 'Iya',
-        negativeLabel: 'Tidak',
-        positiveCallback: () {},
-        negativeCallback: () {},
+        positiveLabel: "Iya",
+        negativeLabel: "Tidak",
+        positiveCallback: () {
+          Navigator.maybePop(context);
+        },
+        negativeCallback: () {
+          Navigator.maybePop(context);
+        },
       );
     },
   ),
