@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/providers.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return MaterialApp(
-            title: 'PT REJO JAYA SAKTI',
+            title: 'Project',
+            theme: getThemeData(),
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             supportedLocales: const [
               Locale('id', ''),
@@ -36,4 +38,10 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+ThemeData getThemeData() {
+  return ThemeData(
+    scaffoldBackgroundColor: MyColors.darkBlack01,
+  );
 }
