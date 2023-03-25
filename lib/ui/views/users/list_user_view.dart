@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/plus_floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -24,7 +24,7 @@ class _ListUserViewState extends State<ListUserView> {
         title: "User",
         isBackEnabled: true,
       ),
-      floatingActionButton: PlusFloatingButtonWidget(onTap: () {
+      floatingActionButton: FloatingButtonWidget(onTap: () {
         Navigator.pushNamed(context, Routes.addUser);
       }),
       body: Column(

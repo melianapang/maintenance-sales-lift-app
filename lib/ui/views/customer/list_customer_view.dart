@@ -5,7 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/list_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/plus_floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -26,7 +26,7 @@ class _ListCustomerViewState extends State<ListCustomerView> {
       builder: (context, model, _) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
-          floatingActionButton: PlusFloatingButtonWidget(
+          floatingActionButton: FloatingButtonWidget(
             onTap: () {
               Navigator.pushNamed(context, Routes.addCustomer);
             },
