@@ -34,7 +34,7 @@ class _AfterSetReminderViewState extends State<AfterSetReminderView> {
           right: 24.0,
         ),
         onTap: () {
-          Navigator.pushNamed(context, Routes.listReminder);
+          Navigator.maybePop(context);
         },
         text: 'OK',
       ),
