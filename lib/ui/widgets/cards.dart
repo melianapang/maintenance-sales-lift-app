@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -69,10 +70,13 @@ class CustomCardWidget extends StatelessWidget {
             ),
             Expanded(
               child: Center(
-                child: Text(
+                child: AutoSizeText(
                   title,
-                  maxLines: 2,
+                  maxLines: 3,
                   textAlign: TextAlign.center,
+                  minFontSize: 10,
+                  maxFontSize: 14,
+                  overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontColor: cardType.fontColor,
                     fontSize: titleSize ?? 10,
