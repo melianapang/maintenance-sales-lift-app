@@ -63,6 +63,7 @@ class TextInput extends StatelessWidget {
     required String label,
     required int minLines,
     required int maxLines,
+    String? note,
     Color backgroundColor = MyColors.darkBlack02,
     String? hintText,
   }) {
@@ -74,6 +75,7 @@ class TextInput extends StatelessWidget {
       minLines: minLines,
       maxLines: maxLines,
       label: label,
+      note: note,
       enabled: true,
       hintText: hintText,
       keyboardType: TextInputType.multiline,
@@ -105,6 +107,7 @@ class TextInput extends StatelessWidget {
     this.controller,
     this.enabled = true,
     this.label,
+    this.note,
     this.minLines,
     this.maxLines,
     this.hintText,
@@ -123,6 +126,7 @@ class TextInput extends StatelessWidget {
   final void Function(String)? onChangedListener;
   final bool enabled;
   final String? label;
+  final String? note;
   final int? minLines;
   final int? maxLines;
   final String? hintText;
@@ -208,6 +212,15 @@ class TextInput extends StatelessWidget {
           ),
           obscureText: isPassword,
         ),
+        if (note != null) ...[
+          Text(
+            note ?? "",
+            style: buildTextStyle(
+              fontSize: 12,
+              fontColor: MyColors.lightBlack01,
+            ),
+          ),
+        ],
       ],
     );
   }
