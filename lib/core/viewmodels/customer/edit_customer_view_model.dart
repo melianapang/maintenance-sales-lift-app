@@ -1,8 +1,19 @@
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditCustomerViewModel extends BaseViewModel {
-  EditCustomerViewModel();
+  EditCustomerViewModel({
+    required DioService dioService,
+  }) : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        );
+
+  final ApiService _apiService;
 
   // Dropdown related
   int _selectedSumberDataOption = 0;
@@ -77,5 +88,14 @@ class EditCustomerViewModel extends BaseViewModel {
     }
 
     notifyListeners();
+  }
+
+  Future<bool> requestUpdateCustomer() async {
+    setBusy(true);
+
+    final response = await _apiService.requestUpdateCustomer();
+
+    setBusy(false);
+    return response != null;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/edit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -80,7 +82,12 @@ class _EditCustomerViewState extends State<EditCustomerView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: EditCustomerViewModel(),
+      model: EditCustomerViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
+      onModelReady: (EditCustomerViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, _) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
@@ -99,7 +106,14 @@ class _EditCustomerViewState extends State<EditCustomerView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {},
+            onTap: () async {
+              final bool result = await model.requestUpdateCustomer();
+
+              if (result == false) {
+                showErrorDialog(context);
+                return;
+              }
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
