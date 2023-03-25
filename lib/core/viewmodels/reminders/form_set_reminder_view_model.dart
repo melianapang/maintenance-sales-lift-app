@@ -19,6 +19,14 @@ class FormSetReminderViewModel extends BaseViewModel {
   List<FilterOption> get setReminderForOption => _setReminderForOption;
   // End of filter related
 
+  DateTime _selectedTime = DateTime.now();
+  DateTime get selectedTime => _selectedTime;
+
+  List<DateTime> _selectedDates = [
+    DateTime.now(),
+  ];
+  List<DateTime> get selectedDates => _selectedDates;
+
   @override
   Future<void> initModel() async {}
 
@@ -31,6 +39,16 @@ class FormSetReminderViewModel extends BaseViewModel {
       }
       _setReminderForOption[i].isSelected = false;
     }
+    notifyListeners();
+  }
+
+  void setSelectedTime(DateTime value) {
+    _selectedTime = value;
+    notifyListeners();
+  }
+
+  void setSelectedDates(List<DateTime> value) {
+    _selectedDates = value;
     notifyListeners();
   }
 }

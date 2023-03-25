@@ -1,17 +1,14 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
 class FormSetReminderView extends StatefulWidget {
   const FormSetReminderView({super.key});
@@ -21,9 +18,6 @@ class FormSetReminderView extends StatefulWidget {
 }
 
 class _FormSetReminderViewState extends State<FormSetReminderView> {
-  final TextEditingController noteController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormSetReminderViewModel>(
@@ -48,7 +42,9 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               right: 24.0,
             ),
             onTap: () {
-              Navigator.pushNamed(context, Routes.afterSetReminder);
+              print(
+                  "save: ${model.selectedTime.toString()} -- ${model.selectedDates.toString()}");
+              // Navigator.pushNamed(context, Routes.afterSetReminder);
             },
             text: 'Simpan',
           ),
@@ -79,29 +75,30 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                 DatePickerWidget(
                   label: "Tanggal Pengingat",
                   isRangeCalendar: false,
+                  selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
                     print('$start $end');
+                    model.setSelectedDates([start]);
                   },
                 ),
                 Spacings.vert(24),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Jadwalkan Pengingat untuk",
-                    style: buildTextStyle(
-                      fontSize: 14,
-                      fontWeight: 400,
-                      fontColor: MyColors.white,
-                    ),
-                  ),
-                ),
-                Spacings.vert(6),
-                buildMenuChoices(
-                  model.setReminderForOption,
-                  (int value) {
-                    model.setHasilKonfirmasi(value);
-                    setState(() {});
+                TimePickerWidget(
+                  label: "Waktu Pengingat",
+                  selectedDateTime: model.selectedTime,
+                  onSelectedTime: (DateTime time) {
+                    print('$time');
+                    model.setSelectedTime(time);
                   },
+                ),
+                Spacings.vert(24),
+                TextInput.multiline(
+                  onChangedListener: (text) {},
+                  label: "Deskripsi Pengingat",
+                  hintText: "Mengingatkan untuk konfirmasi harga..",
+                  note:
+                      "NB: Deskripsi ini akan ditampilkan pada notifikasi pengingat.",
+                  maxLines: 2,
+                  minLines: 2,
                 ),
                 Spacings.vert(24),
                 TextInput.multiline(
