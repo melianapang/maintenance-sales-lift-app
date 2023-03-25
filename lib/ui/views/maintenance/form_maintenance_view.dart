@@ -90,8 +90,10 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                 DatePickerWidget(
                   label: "Tanggal Pengingat",
                   isRangeCalendar: false,
+                  selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
                     print('$start $end');
+                    model.setSelectedDates([start]);
                   },
                 ),
                 Spacings.vert(24),
@@ -178,7 +180,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                       return;
                     }
 
-                    videoData.add(
+                    galleryData.add(
                       GalleryData(
                         filepath: path,
                         galleryType: GalleryType.PHOTO,

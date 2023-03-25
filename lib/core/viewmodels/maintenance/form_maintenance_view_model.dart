@@ -17,6 +17,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
   bool get isEdit => true;
 
+  List<DateTime> _selectedDates = [
+    DateTime.now(),
+  ];
+  List<DateTime> get selectedDates => _selectedDates;
+
   @override
   Future<void> initModel() async {}
 
@@ -29,6 +34,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
       }
       _hasilMaintenanceOption[i].isSelected = false;
     }
+    notifyListeners();
+  }
+
+  void setSelectedDates(List<DateTime> value) {
+    _selectedDates = value;
     notifyListeners();
   }
 }
