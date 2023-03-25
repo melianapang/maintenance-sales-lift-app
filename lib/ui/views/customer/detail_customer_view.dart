@@ -9,7 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/plus_floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -125,15 +125,9 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
       childPadding: const EdgeInsets.all(5),
       spaceBetweenChildren: 4,
       dialRoot: (ctx, open, toggleChildren) {
-        return FloatingActionButton(
-          onPressed: toggleChildren,
-          backgroundColor: MyColors.lightBlack01,
-          foregroundColor: MyColors.yellow01,
-          child: const Icon(
-            PhosphorIcons.folderOpenBold,
-            color: MyColors.yellow01,
-            size: 18,
-          ),
+        return FloatingButtonWidget(
+          onTap: toggleChildren,
+          icon: PhosphorIcons.folderOpenBold,
         );
       },
       buttonSize: const Size(56.0, 56.0),

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class PlusFloatingButtonWidget extends StatelessWidget {
-  const PlusFloatingButtonWidget({
+class FloatingButtonWidget extends StatelessWidget {
+  const FloatingButtonWidget({
     required this.onTap,
+    this.icon = PhosphorIcons.plusBold,
     super.key,
   });
 
   final VoidCallback onTap;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,8 @@ class PlusFloatingButtonWidget extends StatelessWidget {
       shape: const CircleBorder(
         side: BorderSide.none,
       ),
-      child: const Icon(
-        PhosphorIcons.plusBold,
+      child: Icon(
+        icon,
         color: MyColors.yellow01,
         size: 18,
       ),
