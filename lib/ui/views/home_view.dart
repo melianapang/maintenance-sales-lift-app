@@ -128,6 +128,7 @@ class _HomeViewState extends State<HomeView> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         mainAxisExtent: 130,
       ),
       itemBuilder: (context, index) {
