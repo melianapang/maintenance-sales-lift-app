@@ -37,6 +37,14 @@ class SharedPreferencesService {
         final Map<String, dynamic> result = json.decode(raw);
         return '';
       // return LoginResponse.fromJson(result);
+      case SharedPrefKeys.authenticationToken:
+        final String? raw = _sharedPreferences.getString(
+          SharedPrefKeys.authenticationToken.label,
+        );
+        if (raw == null) {
+          return null;
+        }
+        return json.decode(raw);
     }
   }
 

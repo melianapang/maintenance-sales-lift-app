@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 
 class ApisService {
   ApisService({
     // add sharedprefservice dependency
     required NavigationService navigationService,
-  }) : _navigationService = navigationService;
+    required SharedPreferencesService sharedPreferencesService,
+  })  : _navigationService = navigationService,
+        _sharedPreferencesService = sharedPreferencesService;
 
   final NavigationService _navigationService;
+  final SharedPreferencesService _sharedPreferencesService;
 
   Future<bool> isLoggedIn() async {
     // get token from sharedpref, if token is not null, return true
@@ -29,7 +33,9 @@ class ApisService {
 
   Future<String?> getJwtToken() async {
     // get token from sharedpref
-    final String? token = 'use_shared_pref';
+    final String? token =
+        await _sharedPreferencesService.get(SharedPrefKeys.authenticationToken);
+
     // Below this is optional, check with backend how does token validity work.
 
     if (token != null) {

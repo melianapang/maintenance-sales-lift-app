@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/login/login_dto.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -14,6 +15,11 @@ abstract class Api {
   @POST('/project-lift/api/0/Auth/login')
   Future<HttpResponse<dynamic>> requestLogin(
     @Body() LoginRequest request,
+  );
+
+  @PUT('/project-lift/api/0/Customer/update_customer/3')
+  Future<HttpResponse<dynamic>> requestUpdateCustomer(
+    @Body() UpdateCustomerRequest request,
   );
 }
 
@@ -31,14 +37,41 @@ class ApiService {
       final HttpResponse<dynamic> response = await api.requestLogin(payload);
 
       if (response.response.statusCode == 200) {
-        LoginResponse loginResponse =
-            LoginResponse.fromJson(response.response.extra);
+        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+
         return loginResponse.data.token;
       }
       return null;
     } catch (e) {
-      log("Sequence number error");
+      log("Sequence number error; ${e.toString()}");
       return null;
+    }
+  }
+
+  Future<bool> requestUpdateCustomer() async {
+    try {
+      final payload = UpdateCustomerRequest(
+        customerName: "Nama",
+        customerNumber: "DFnsajd",
+        customerType: 0,
+        email: "abc@gmail.com",
+        phoneNumber: "081223423424",
+        city: "Surabaya",
+        companyName: "PT ABC",
+        note: "Catatan",
+        dataSource: 1,
+        status: 0,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestUpdateCustomer(payload);
+
+      if (response.response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      log("Sequence number error");
+      return false;
     }
   }
 }

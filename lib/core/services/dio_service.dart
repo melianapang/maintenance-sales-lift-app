@@ -11,9 +11,9 @@ import 'package:rxdart/subjects.dart';
 class DioService {
   DioService({
     required AliceCore aliceCore,
-    required ApisService authenticationService,
+    required ApisService apisService,
   })  : _aliceCore = aliceCore,
-        _authenticationService = authenticationService;
+        _apisService = apisService;
 
   static CancelToken _cancelToken = CancelToken();
   static const int _timeOut = 10000;
@@ -25,12 +25,13 @@ class DioService {
   }
 
   final AliceCore _aliceCore;
-  final ApisService _authenticationService;
+  final ApisService _apisService;
 
   Dio _makeBaseDio() {
     return Dio()
       ..options.baseUrl = EnvConstants.baseURL
       ..options.connectTimeout = _timeOut
+      // ..options.responseType = ResponseType.json
       ..interceptors.addAll(<Interceptor>[
         PrettyDioLogger(
           requestHeader: true,
@@ -82,7 +83,7 @@ class DioService {
             RequestOptions option,
             RequestInterceptorHandler handler,
           ) async {
-            final String? jwtToken = await _authenticationService.getJwtToken();
+            final String? jwtToken = await _apisService.getJwtToken();
 
             option.cancelToken = _cancelToken;
 
