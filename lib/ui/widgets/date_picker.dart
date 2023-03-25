@@ -10,12 +10,14 @@ class DatePickerWidget extends StatefulWidget {
   const DatePickerWidget({
     required this.label,
     required this.isRangeCalendar,
+    required this.selectedDates,
     required this.onSelectedDates,
     super.key,
   });
 
   final String label;
   final bool isRangeCalendar;
+  final List<DateTime> selectedDates;
 
   /// Left `DateTime` is used for single calendar picker OR start date for range calendar picker. Right `DateTime` is used for end date for range calendar picker.
   final void Function(DateTime, DateTime?) onSelectedDates;
@@ -25,14 +27,13 @@ class DatePickerWidget extends StatefulWidget {
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
+  List<DateTime?> _selectedDates = [];
+
   TextStyle get dayTextStyle => buildTextStyle(
-        fontColor: MyColors.darkBlue01,
+        fontColor: MyColors.lightBlack02,
         fontWeight: 700,
         fontSize: 14,
       );
-  List<DateTime?> _selectedDates = [
-    DateTime.now(),
-  ];
 
   String? _getText(CalendarDatePicker2WithActionButtonsConfig config) {
     if (_selectedDates.isEmpty) return null;
@@ -41,7 +42,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   void initState() {
-    if (widget.isRangeCalendar) {
+    _selectedDates = widget.selectedDates;
+
+    if (widget.isRangeCalendar && _selectedDates.length == 1) {
       _selectedDates.add(
         DateTime.now().add(
           const Duration(
@@ -60,23 +63,25 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       calendarType: widget.isRangeCalendar
           ? CalendarDatePicker2Type.range
           : CalendarDatePicker2Type.single,
-      selectedDayHighlightColor: MyColors.lightBlue01,
+      selectedDayHighlightColor: MyColors.yellow01,
       closeDialogOnCancelTapped: true,
       firstDayOfWeek: 1,
       weekdayLabels: ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
       weekdayLabelTextStyle: buildTextStyle(
         fontSize: 14,
-        fontColor: MyColors.darkBlue01,
+        fontColor: MyColors.lightBlack02,
         fontWeight: 800,
       ),
       controlsTextStyle: buildTextStyle(
         fontSize: 14,
-        fontColor: MyColors.darkBlue01,
+        fontColor: MyColors.lightBlack02,
         fontWeight: 800,
       ),
       centerAlignModePickerButton: true,
       customModePickerButtonIcon: const SizedBox(),
-      selectedDayTextStyle: dayTextStyle.copyWith(color: MyColors.white),
+      selectedDayTextStyle: dayTextStyle.copyWith(
+        color: MyColors.darkBlack01,
+      ),
       yearBuilder: ({
         required year,
         decoration,
@@ -107,7 +112,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                         margin: const EdgeInsets.only(left: 5),
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: MyColors.lightBlue03,
+                          color: MyColors.yellow01,
                         ),
                       ),
                   ],
@@ -136,7 +141,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               dialogSize: const Size(325, 400),
               borderRadius: BorderRadius.circular(15),
               initialValue: _selectedDates,
-              dialogBackgroundColor: Colors.white,
+              dialogBackgroundColor: MyColors.lightBlack01,
             );
             if (values != null) {
               _selectedDates = values;
