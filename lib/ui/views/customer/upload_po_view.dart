@@ -35,7 +35,6 @@ class _UploadPOViewState extends State<UploadPOView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.darkGreyBackground,
       appBar: buildDefaultAppBar(
         context,
         title: "Form Unggah Berkas PO",
