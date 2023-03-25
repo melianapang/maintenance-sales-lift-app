@@ -21,8 +21,6 @@ class FormFollowUpView extends StatefulWidget {
 }
 
 class _FormFollowUpViewState extends State<FormFollowUpView> {
-  final TextEditingController noteController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
   final ScrollController buktiFotoController = ScrollController();
 
   List<GalleryData> galleryData = [];
@@ -61,8 +59,10 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 DatePickerWidget(
                   label: "Tanggal Pengingat",
                   isRangeCalendar: false,
+                  selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
                     print('$start $end');
+                    model.setSelectedDates([start]);
                   },
                 ),
                 Spacings.vert(24),

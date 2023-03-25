@@ -19,6 +19,11 @@ class FormFollowUpViewModel extends BaseViewModel {
   List<FilterOption> get hasilKonfirmasiOption => _hasilKonfirmasiOption;
   // End of filter related
 
+  List<DateTime> _selectedDates = [
+    DateTime.now(),
+  ];
+  List<DateTime> get selectedDates => _selectedDates;
+
   @override
   Future<void> initModel() async {}
 
@@ -31,6 +36,11 @@ class FormFollowUpViewModel extends BaseViewModel {
       }
       _hasilKonfirmasiOption[i].isSelected = false;
     }
+    notifyListeners();
+  }
+
+  void setSelectedDates(List<DateTime> value) {
+    _selectedDates = value;
     notifyListeners();
   }
 }
