@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
 class ListRemindersView extends StatefulWidget {
@@ -26,7 +27,11 @@ class _ListRemindersViewState extends State<ListRemindersView> {
       ),
       floatingActionButton: FloatingButtonWidget(
         onTap: () {
-          Navigator.pushNamed(context, Routes.formSetReminder);
+          Navigator.pushNamed(
+            context,
+            Routes.formSetReminder,
+            arguments: FormSetReminderSource.ListReminderPage,
+          );
         },
       ),
       body: Column(

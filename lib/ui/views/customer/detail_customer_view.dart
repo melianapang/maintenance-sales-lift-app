@@ -11,6 +11,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
@@ -146,7 +147,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
       children: [
         SpeedDialChild(
           child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.foldersBold)
+              ? const Icon(PhosphorIcons.listBulletsBold)
               : null,
           backgroundColor: MyColors.yellow02,
           foregroundColor: MyColors.white,
@@ -192,11 +193,11 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
         ),
         SpeedDialChild(
           child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.listBulletsBold)
+              ? const Icon(PhosphorIcons.bellBold)
               : null,
           backgroundColor: MyColors.yellow02,
           foregroundColor: MyColors.white,
-          label: 'Daftar Pengingat',
+          label: 'Jadwalkan Pengingat',
           labelBackgroundColor: MyColors.lightBlack01,
           labelShadow: [
             const BoxShadow(
@@ -206,7 +207,11 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           labelStyle: buildTextStyle(
               fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
           onTap: () {
-            Navigator.pushNamed(context, Routes.listReminder);
+            Navigator.pushNamed(
+              context,
+              Routes.formSetReminder,
+              arguments: FormSetReminderSource.CustomerPage,
+            );
 
             setState() {
               model.setDialChildrenVisible();

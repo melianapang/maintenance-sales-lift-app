@@ -190,8 +190,14 @@ class AppRouter {
           builder: (_) => const ListRemindersView(),
         );
       case Routes.formSetReminder:
+        final FormSetReminderSource param =
+            settings.arguments is FormSetReminderSource
+                ? settings.arguments as FormSetReminderSource
+                : FormSetReminderSource.ListReminderPage;
         return buildRoute(
-          builder: (_) => const FormSetReminderView(),
+          builder: (_) => FormSetReminderView(
+            source: param,
+          ),
         );
       case Routes.detailReminder:
         return buildRoute(

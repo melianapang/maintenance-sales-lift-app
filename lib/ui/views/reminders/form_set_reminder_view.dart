@@ -11,8 +11,15 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
+enum FormSetReminderSource { ListReminderPage, CustomerPage, ProjectPage }
+
 class FormSetReminderView extends StatefulWidget {
-  const FormSetReminderView({super.key});
+  const FormSetReminderView({
+    required this.source,
+    super.key,
+  });
+
+  final FormSetReminderSource source;
 
   @override
   State<FormSetReminderView> createState() => _FormSetReminderViewState();
@@ -55,24 +62,27 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
             ),
             child: Column(
               children: [
-                TextInput.editable(
-                  onChangedListener: (text) {},
-                  label: "Nomor Pelanggan",
-                  hintText: "Nomor Pelanggan",
-                ),
-                Spacings.vert(24),
-                TextInput.editable(
-                  onChangedListener: (text) {},
-                  label: "Nama Pelanggan",
-                  hintText: "Nama Pelanggan",
-                ),
-                Spacings.vert(24),
-                TextInput.editable(
-                  onChangedListener: (text) {},
-                  label: "Nama Perusahaan",
-                  hintText: "Nama Perusahaan",
-                ),
-                Spacings.vert(24),
+                if (widget.source !=
+                    FormSetReminderSource.ListReminderPage) ...[
+                  TextInput.editable(
+                    onChangedListener: (text) {},
+                    label: "Nomor Pelanggan",
+                    hintText: "Nomor Pelanggan",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    onChangedListener: (text) {},
+                    label: "Nama Pelanggan",
+                    hintText: "Nama Pelanggan",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    onChangedListener: (text) {},
+                    label: "Nama Perusahaan",
+                    hintText: "Nama Perusahaan",
+                  ),
+                  Spacings.vert(24),
+                ],
                 DatePickerWidget(
                   label: "Tanggal Pengingat",
                   isRangeCalendar: false,
