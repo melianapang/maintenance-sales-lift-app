@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../../../core/app_constants/routes.dart';
 
 class AfterSetReminderView extends StatefulWidget {
   const AfterSetReminderView({
@@ -50,18 +49,20 @@ class _AfterSetReminderViewState extends State<AfterSetReminderView> {
               "Tetapkan Pengingat Berhasil.",
               textAlign: TextAlign.center,
               style: buildTextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: 400,
                 fontColor: MyColors.lightBlack01,
               ),
             ),
-            Spacings.vert(32),
-            const Icon(
-              PhosphorIcons.checkCircleBold,
-              size: 150,
-              color: MyColors.yellow01,
+            Spacings.vert(24),
+            LottieBuilder.asset(
+              'assets/lotties/success.json',
+              repeat: true,
+              width: 200,
+              height: 200,
+              alignment: Alignment.center,
             ),
-            Spacings.vert(32),
+            Spacings.vert(24),
             Text(
               "Anda akan menerima notifikasi pada hari tersebut.",
               textAlign: TextAlign.center,
