@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class EditUserView extends StatefulWidget {
@@ -34,7 +35,26 @@ class _EditUserViewState extends State<EditUserView> {
           right: 24.0,
         ),
         onTap: () {
-          Navigator.maybePop(context);
+          showDialogWidget(
+            context,
+            title: "Mengubahh Data User",
+            description: "Apakah anda yakin ingin mengubah data user ini?",
+            positiveLabel: "Iya",
+            negativeLabel: "Tidak",
+            negativeCallback: () {
+              Navigator.maybePop(context);
+            },
+            positiveCallback: () async {
+              await Navigator.maybePop(context);
+
+              showDialogWidget(
+                context,
+                title: "Ubah Data User",
+                description: "Perubahan data user berhasil disimpan",
+                isSuccessDialog: true,
+              );
+            },
+          );
         },
         text: 'Simpan',
       ),

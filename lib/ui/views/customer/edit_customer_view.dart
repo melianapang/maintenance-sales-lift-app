@@ -107,12 +107,36 @@ class _EditCustomerViewState extends State<EditCustomerView> {
             ),
             buttonType: ButtonType.primary,
             onTap: () async {
-              final bool result = await model.requestUpdateCustomer();
+              showDialogWidget(
+                context,
+                title: "Mengubahh Data User",
+                description: "Apakah anda yakin ingin mengubah data user ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                negativeCallback: () {
+                  Navigator.maybePop(context);
+                },
+                positiveCallback: () async {
+                  final bool result = await model.requestUpdateCustomer();
+                  if (result == false) {
+                    showDialogWidget(
+                      context,
+                      title: "Ubah Data User",
+                      description: "Perubahan data user gagal.",
+                      isSuccessDialog: false,
+                    );
+                    return;
+                  }
 
-              if (result == false) {
-                showErrorDialog(context);
-                return;
-              }
+                  await Navigator.maybePop(context);
+                  showDialogWidget(
+                    context,
+                    title: "Ubah Data User",
+                    description: "Perubahan data user berhasil disimpan",
+                    isSuccessDialog: true,
+                  );
+                },
+              );
             },
             text: 'Simpan',
           ),

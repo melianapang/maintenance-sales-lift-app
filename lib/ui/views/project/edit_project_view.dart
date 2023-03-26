@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class EditProjectView extends StatefulWidget {
@@ -34,7 +35,26 @@ class _EditProjectViewState extends State<EditProjectView> {
           right: 24.0,
         ),
         onTap: () {
-          Navigator.maybePop(context);
+          showDialogWidget(
+            context,
+            title: "Mengubahh Data Proyek",
+            description: "Apakah anda yakin ingin mengubah data proyek ini?",
+            positiveLabel: "Iya",
+            negativeLabel: "Tidak",
+            negativeCallback: () {
+              Navigator.maybePop(context);
+            },
+            positiveCallback: () async {
+              await Navigator.maybePop(context);
+
+              showDialogWidget(
+                context,
+                title: "Ubah Data Proyek",
+                description: "Perubahan data proyek berhasil disimpan",
+                isSuccessDialog: true,
+              );
+            },
+          );
         },
         text: 'Simpan',
       ),
