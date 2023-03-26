@@ -6,6 +6,15 @@ class ChangePasswordViewModel extends BaseViewModel {
   bool? _isValid;
   bool? get isValid => _isValid;
 
+  String _oldPassword = "";
+  String get oldPassword => _oldPassword;
+
+  String _newPassword = "";
+  String get newPassword => _newPassword;
+
+  String _confirmNewPassword = "";
+  String get confirmNewPassword => _confirmNewPassword;
+
   bool _showOldPassword = false;
   bool get showOldPassword => _showOldPassword;
 
@@ -31,5 +40,17 @@ class ChangePasswordViewModel extends BaseViewModel {
   void setShowConfirmNewPassword(bool value) {
     _showConfirmNewPassword = value;
     notifyListeners();
+  }
+
+  void setOldPassword({required String password}) {
+    _oldPassword = password;
+  }
+
+  void setNewPassword({required String password}) {
+    _newPassword = password;
+  }
+
+  void setConfirmNewPassword({required String password}) {
+    _confirmNewPassword = password;
   }
 }

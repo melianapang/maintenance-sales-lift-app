@@ -17,9 +17,6 @@ class ChangePasswordView extends StatefulWidget {
 }
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
-  final TextEditingController oldPwdController = TextEditingController();
-  final TextEditingController newPwdController = TextEditingController();
-  final TextEditingController confirmNewPwdController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return ViewModel<ChangePasswordViewModel>(
@@ -57,7 +54,10 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 children: [
                   TextInput.editable(
                     label: "Kata Sandi Lama",
-                    onChangedListener: (text) {},
+                    text: model.oldPassword,
+                    onChangedListener: (text) {
+                      model.setOldPassword(password: text);
+                    },
                     isPassword: !model.showOldPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
@@ -80,7 +80,10 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Kata Sandi Baru",
-                    onChangedListener: (text) {},
+                    text: model.newPassword,
+                    onChangedListener: (text) {
+                      model.setNewPassword(password: text);
+                    },
                     isPassword: !model.showNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
@@ -102,8 +105,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
-                    onChangedListener: (text) {},
                     label: "Konfirmasi Kata Sandi Baru",
+                    text: model.confirmNewPassword,
+                    onChangedListener: (text) {
+                      model.setConfirmNewPassword(password: text);
+                    },
                     isPassword: !model.showConfirmNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
