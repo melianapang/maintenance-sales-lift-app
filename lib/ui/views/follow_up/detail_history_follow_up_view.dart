@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/detail_history_follow_up_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
@@ -17,59 +19,66 @@ class DetailHistoryFollowUpView extends StatefulWidget {
 class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.darkBlack01,
-      appBar: buildDefaultAppBar(
-        context,
-        title: "Detail Riwayat Konfirmasi",
-        isBackEnabled: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          right: 24.0,
-          bottom: 24.0,
-          left: 24.0,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Spacings.vert(20),
-              Text(
-                "Nadia Ang",
-                style: buildTextStyle(
-                  fontSize: 32,
-                  fontWeight: 800,
-                  fontColor: MyColors.yellow01,
+    return ViewModel(
+        model: DetailHistoryFollowUpViewModel(),
+        onModelReady: (DetailHistoryFollowUpViewModel model) async {
+          await model.initModel();
+        },
+        builder: (context, model, child) {
+          return Scaffold(
+            backgroundColor: MyColors.darkBlack01,
+            appBar: buildDefaultAppBar(
+              context,
+              title: "Detail Riwayat Konfirmasi",
+              isBackEnabled: true,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(
+                right: 24.0,
+                bottom: 24.0,
+                left: 24.0,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Spacings.vert(20),
+                    Text(
+                      "Nadia Ang",
+                      style: buildTextStyle(
+                        fontSize: 32,
+                        fontWeight: 800,
+                        fontColor: MyColors.yellow01,
+                      ),
+                    ),
+                    Text(
+                      "PT ABC JAYA",
+                      style: buildTextStyle(
+                        fontSize: 20,
+                        fontWeight: 400,
+                        fontColor: MyColors.lightBlack02,
+                      ),
+                    ),
+                    Spacings.vert(35),
+                    StatusCardWidget(
+                      cardType: StatusCardType.Pending,
+                      onTap: () {},
+                    ),
+                    Spacings.vert(35),
+                    TextInput.disabled(
+                      label: "Tanggal",
+                    ),
+                    Spacings.vert(24),
+                    TextInput.disabledMultiline(
+                      label: "Catatan",
+                      text:
+                          "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
+                    ),
+                    Spacings.vert(24),
+                  ],
                 ),
               ),
-              Text(
-                "PT ABC JAYA",
-                style: buildTextStyle(
-                  fontSize: 20,
-                  fontWeight: 400,
-                  fontColor: MyColors.lightBlack02,
-                ),
-              ),
-              Spacings.vert(35),
-              StatusCardWidget(
-                cardType: StatusCardType.Pending,
-                onTap: () {},
-              ),
-              Spacings.vert(35),
-              TextInput.disabled(
-                label: "Tanggal",
-              ),
-              Spacings.vert(24),
-              TextInput.disabledMultiline(
-                label: "Catatan",
-                text:
-                    "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
-              ),
-              Spacings.vert(24),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

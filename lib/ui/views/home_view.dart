@@ -6,6 +6,8 @@ import 'package:rejo_jaya_sakti_apps/core/models/manage_profile_item_model.dart'
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/home_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import '../../core/app_constants/colors.dart';
@@ -151,126 +153,135 @@ class _HomeViewState extends State<HomeView> {
         .where((element) => element.role.contains(widget.profileData.role))
         .toList();
 
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: MyColors.darkBlack01,
-      body: Padding(
-        padding: PaddingUtils.getPadding(context, defaultPadding: 24),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildProfileCard(widget.profileData),
-              Spacings.vert(32),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Menu Utama",
-                  style: buildTextStyle(
-                    fontSize: 24,
-                    fontColor: MyColors.yellow01,
-                    fontWeight: 300,
-                  ),
-                ),
-              ),
-              _buildGridListMenu(
-                homeMenu
-                    .where((element) => element.role.contains(Role.Admin))
-                    .toList(),
-                true,
-              ),
-              if (widget.profileData.role == Role.Admin ||
-                  widget.profileData.role == Role.SuperAdmin) ...[
-                Spacings.vert(24),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Sales',
-                    style: buildTextStyle(
-                      fontSize: 18,
-                      fontColor: MyColors.yellow01,
-                      fontWeight: 300,
+    return ViewModel(
+      model: HomeViewModel(),
+      onModelReady: (HomeViewModel model) async {
+        await model.initModel();
+      },
+      builder: (context, model, child) {
+        return Scaffold(
+          extendBody: true,
+          backgroundColor: MyColors.darkBlack01,
+          body: Padding(
+            padding: PaddingUtils.getPadding(context, defaultPadding: 24),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProfileCard(widget.profileData),
+                  Spacings.vert(32),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Menu Utama",
+                      style: buildTextStyle(
+                        fontSize: 24,
+                        fontColor: MyColors.yellow01,
+                        fontWeight: 300,
+                      ),
                     ),
                   ),
-                ),
-                _buildGridListMenu(
-                  homeMenu
-                      .where((element) =>
-                          element.role.contains(Role.Sales) &&
-                          !element.role.contains(Role.Admin))
-                      .toList(),
-                  false,
-                ),
-                Spacings.vert(24),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Maintenance',
-                    style: buildTextStyle(
-                      fontSize: 18,
-                      fontColor: MyColors.yellow01,
-                      fontWeight: 300,
+                  _buildGridListMenu(
+                    homeMenu
+                        .where((element) => element.role.contains(Role.Admin))
+                        .toList(),
+                    true,
+                  ),
+                  if (widget.profileData.role == Role.Admin ||
+                      widget.profileData.role == Role.SuperAdmin) ...[
+                    Spacings.vert(24),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Sales',
+                        style: buildTextStyle(
+                          fontSize: 18,
+                          fontColor: MyColors.yellow01,
+                          fontWeight: 300,
+                        ),
+                      ),
+                    ),
+                    _buildGridListMenu(
+                      homeMenu
+                          .where((element) =>
+                              element.role.contains(Role.Sales) &&
+                              !element.role.contains(Role.Admin))
+                          .toList(),
+                      false,
+                    ),
+                    Spacings.vert(24),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Maintenance',
+                        style: buildTextStyle(
+                          fontSize: 18,
+                          fontColor: MyColors.yellow01,
+                          fontWeight: 300,
+                        ),
+                      ),
+                    ),
+                    _buildGridListMenu(
+                      homeMenu
+                          .where((element) =>
+                              element.role.contains(Role.Engineers) &&
+                              !element.role.contains(Role.Admin))
+                          .toList(),
+                      false,
+                    ),
+                  ],
+                  Spacings.vert(32),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Kelola Akun",
+                      style: buildTextStyle(
+                        fontSize: 24,
+                        fontWeight: 300,
+                        fontColor: MyColors.yellow01,
+                      ),
                     ),
                   ),
-                ),
-                _buildGridListMenu(
-                  homeMenu
-                      .where((element) =>
-                          element.role.contains(Role.Engineers) &&
-                          !element.role.contains(Role.Admin))
-                      .toList(),
-                  false,
-                ),
-              ],
-              Spacings.vert(32),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Kelola Akun",
-                  style: buildTextStyle(
-                    fontSize: 24,
-                    fontWeight: 300,
-                    fontColor: MyColors.yellow01,
-                  ),
-                ),
-              ),
-              GridView.builder(
-                padding: const EdgeInsets.only(
-                  top: 18,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: manageProfileMenu.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 12,
-                  mainAxisExtent: 130,
-                ),
-                itemBuilder: (context, index) {
-                  return CustomCardWidget(
-                    cardType: CardType.menu,
-                    title: manageProfileMenu[index].title,
-                    titleSize: 12,
-                    icon: manageProfileMenu[index].icon,
-                    onTap: () {
-                      if (manageProfileMenu[index].callback != null) {
-                        manageProfileMenu[index].callback!(
-                          context: context,
-                        );
-                      } else if (manageProfileMenu[index].route != null) {
-                        Navigator.pushNamed(context,
-                            manageProfileMenu[index].route ?? Routes.home);
-                      } else {
-                        null;
-                      }
+                  GridView.builder(
+                    padding: const EdgeInsets.only(
+                      top: 18,
+                    ),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: manageProfileMenu.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 12,
+                      mainAxisExtent: 130,
+                    ),
+                    itemBuilder: (context, index) {
+                      return CustomCardWidget(
+                        cardType: CardType.menu,
+                        title: manageProfileMenu[index].title,
+                        titleSize: 12,
+                        icon: manageProfileMenu[index].icon,
+                        onTap: () {
+                          if (manageProfileMenu[index].callback != null) {
+                            manageProfileMenu[index].callback!(
+                              context: context,
+                            );
+                          } else if (manageProfileMenu[index].route != null) {
+                            Navigator.pushNamed(context,
+                                manageProfileMenu[index].route ?? Routes.home);
+                          } else {
+                            null;
+                          }
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

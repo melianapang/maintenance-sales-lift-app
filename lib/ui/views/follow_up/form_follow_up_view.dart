@@ -29,6 +29,9 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
   Widget build(BuildContext context) {
     return ViewModel<FormFollowUpViewModel>(
       model: FormFollowUpViewModel(),
+      onModelReady: (FormFollowUpViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,

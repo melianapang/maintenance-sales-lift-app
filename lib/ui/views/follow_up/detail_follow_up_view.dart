@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/detail_follow_up_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -48,63 +50,71 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
       ),
     ];
 
-    return Scaffold(
-      backgroundColor: MyColors.darkBlack01,
-      appBar: buildDefaultAppBar(
-        context,
-        title: "Riwayat Konfitmasi",
-        isBackEnabled: true,
-      ),
-      floatingActionButton: FloatingButtonWidget(
-        onTap: () {
-          Navigator.pushNamed(context, Routes.formFollowUp);
-        },
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Nadia Ang",
-                style: buildTextStyle(
-                  fontSize: 26,
-                  fontWeight: 800,
-                  fontColor: MyColors.yellow01,
+    return ViewModel(
+      model: DetailFollowUpViewModel(),
+      onModelReady: (DetailFollowUpViewModel model) async {
+        await model.initModel();
+      },
+      builder: (context, model, child) {
+        return Scaffold(
+          backgroundColor: MyColors.darkBlack01,
+          appBar: buildDefaultAppBar(
+            context,
+            title: "Riwayat Konfitmasi",
+            isBackEnabled: true,
+          ),
+          floatingActionButton: FloatingButtonWidget(
+            onTap: () {
+              Navigator.pushNamed(context, Routes.formFollowUp);
+            },
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Nadia Ang",
+                    style: buildTextStyle(
+                      fontSize: 26,
+                      fontWeight: 800,
+                      fontColor: MyColors.yellow01,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Spacings.vert(10),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "PT ABC JAYA",
-                style: buildTextStyle(
-                  fontSize: 20,
-                  fontWeight: 400,
-                  fontColor: MyColors.lightBlack02,
+                Spacings.vert(10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "PT ABC JAYA",
+                    style: buildTextStyle(
+                      fontSize: 20,
+                      fontWeight: 400,
+                      fontColor: MyColors.lightBlack02,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Spacings.vert(38),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Konfirmasi Terakhir",
-                style: buildTextStyle(
-                  fontSize: 16,
-                  fontColor: MyColors.yellow01,
-                  fontWeight: 400,
+                Spacings.vert(38),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Konfirmasi Terakhir",
+                    style: buildTextStyle(
+                      fontSize: 16,
+                      fontColor: MyColors.yellow01,
+                      fontWeight: 400,
+                    ),
+                  ),
                 ),
-              ),
+                TimelineWidget(
+                  listTimeline: list1,
+                ),
+              ],
             ),
-            TimelineWidget(
-              listTimeline: list1,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

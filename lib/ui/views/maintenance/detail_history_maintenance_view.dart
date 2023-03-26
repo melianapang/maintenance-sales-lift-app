@@ -4,6 +4,8 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_history_maintenance_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -68,168 +70,176 @@ class _DetailHistoryMaintenanceViewState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.darkBlack01,
-      appBar: buildDefaultAppBar(
-        context,
-        title: "Riwayat Pemeliharaan",
-        isBackEnabled: true,
-      ),
-      bottomNavigationBar: ButtonWidget.bottomSingleButton(
-        padding: EdgeInsets.only(
-          bottom: PaddingUtils.getBottomPadding(
+    return ViewModel(
+      model: DetailHistoryMaintenanceViewModel(),
+      onModelReady: (DetailHistoryMaintenanceViewModel model) async {
+        await model.initModel();
+      },
+      builder: (context, model, child) {
+        return Scaffold(
+          backgroundColor: MyColors.darkBlack01,
+          appBar: buildDefaultAppBar(
             context,
-            defaultPadding: 12,
+            title: "Riwayat Pemeliharaan",
+            isBackEnabled: true,
           ),
-          left: 24.0,
-          right: 24.0,
-        ),
-        buttonType: ButtonType.primary,
-        onTap: () {
-          Navigator.pushNamed(context, Routes.map);
-        },
-        text: 'Lihat Lokasi di Peta',
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          right: 24.0,
-          bottom: 24.0,
-          left: 24.0,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Spacings.vert(20),
-              Text(
-                "KA-23243",
-                style: buildTextStyle(
-                  fontSize: 32,
-                  fontWeight: 800,
-                  fontColor: MyColors.yellow01,
-                ),
+          bottomNavigationBar: ButtonWidget.bottomSingleButton(
+            padding: EdgeInsets.only(
+              bottom: PaddingUtils.getBottomPadding(
+                context,
+                defaultPadding: 12,
               ),
-              Text(
-                "PT ABC JAYA",
-                style: buildTextStyle(
-                  fontSize: 20,
-                  fontWeight: 400,
-                  fontColor: MyColors.lightBlack02,
-                ),
-              ),
-              Spacings.vert(35),
-              StatusCardWidget(
-                cardType: StatusCardType.Confirmed,
-                onTap: () {},
-              ),
-              Spacings.vert(35),
-              TextInput.disabled(
-                label: "Tanggal",
-              ),
-              Spacings.vert(24),
-              TextInput.disabled(
-                label: "Hasil Pemeliharaan",
-              ),
-              Spacings.vert(24),
-              TextInput.disabled(
-                label: "Catatan",
-                text:
-                    "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
-              ),
-              Spacings.vert(24),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Foto",
-                  style: buildTextStyle(
-                    fontSize: 14,
-                    fontWeight: 400,
-                    fontColor: MyColors.lightBlack02,
-                  ),
-                ),
-              ),
-              Spacings.vert(8),
-              GalleryThumbnailWidget(
-                isCRUD: false,
-                galleryData: galleryData,
-                galleryType: GalleryType.PHOTO,
-                callbackGalleryPath: (path) {
-                  galleryData.add(
-                    GalleryData(
-                      filepath: path,
-                      galleryType: GalleryType.PHOTO,
-                      isGalleryPicked: true,
-                    ),
-                  );
-                  setState(() {});
-                },
-                callbackDeleteAddedGallery: (data) {
-                  galleryData.remove(data);
-
-                  setState(() {});
-                },
-              ),
-              Spacings.vert(24),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Video",
-                  style: buildTextStyle(
-                    fontSize: 14,
-                    fontWeight: 400,
-                    fontColor: MyColors.lightBlack02,
-                  ),
-                ),
-              ),
-              Spacings.vert(8),
-              GalleryThumbnailWidget(
-                isCRUD: false,
-                galleryData: videoData,
-                galleryType: GalleryType.VIDEO,
-                callbackGalleryPath: (path) {
-                  galleryData.add(
-                    GalleryData(
-                      filepath: path,
-                      galleryType: GalleryType.VIDEO,
-                      isGalleryPicked: true,
-                    ),
-                  );
-                  setState(() {});
-                },
-                callbackDeleteAddedGallery: (data) {
-                  galleryData.remove(data);
-
-                  setState(() {});
-                },
-              ),
-              Spacings.vert(32),
-              const Divider(
-                thickness: 0.5,
-                color: MyColors.lightBlack02,
-              ),
-              Spacings.vert(32),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Dirawat oleh",
-                  style: buildTextStyle(
-                    fontSize: 18,
-                    fontColor: MyColors.lightBlack02,
-                    fontWeight: 600,
-                  ),
-                ),
-              ),
-              Spacings.vert(12),
-              TextInput.disabled(
-                label: "Nama Teknisi:",
-              ),
-              Spacings.vert(24),
-              TextInput.disabled(
-                label: "No Telepon:",
-              ),
-            ],
+              left: 24.0,
+              right: 24.0,
+            ),
+            buttonType: ButtonType.primary,
+            onTap: () {
+              Navigator.pushNamed(context, Routes.map);
+            },
+            text: 'Lihat Lokasi di Peta',
           ),
-        ),
-      ),
+          body: Padding(
+            padding: const EdgeInsets.only(
+              right: 24.0,
+              bottom: 24.0,
+              left: 24.0,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Spacings.vert(20),
+                  Text(
+                    "KA-23243",
+                    style: buildTextStyle(
+                      fontSize: 32,
+                      fontWeight: 800,
+                      fontColor: MyColors.yellow01,
+                    ),
+                  ),
+                  Text(
+                    "PT ABC JAYA",
+                    style: buildTextStyle(
+                      fontSize: 20,
+                      fontWeight: 400,
+                      fontColor: MyColors.lightBlack02,
+                    ),
+                  ),
+                  Spacings.vert(35),
+                  StatusCardWidget(
+                    cardType: StatusCardType.Confirmed,
+                    onTap: () {},
+                  ),
+                  Spacings.vert(35),
+                  TextInput.disabled(
+                    label: "Tanggal",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Hasil Pemeliharaan",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Catatan",
+                    text:
+                        "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
+                  ),
+                  Spacings.vert(24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Foto",
+                      style: buildTextStyle(
+                        fontSize: 14,
+                        fontWeight: 400,
+                        fontColor: MyColors.lightBlack02,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(8),
+                  GalleryThumbnailWidget(
+                    isCRUD: false,
+                    galleryData: galleryData,
+                    galleryType: GalleryType.PHOTO,
+                    callbackGalleryPath: (path) {
+                      galleryData.add(
+                        GalleryData(
+                          filepath: path,
+                          galleryType: GalleryType.PHOTO,
+                          isGalleryPicked: true,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    callbackDeleteAddedGallery: (data) {
+                      galleryData.remove(data);
+
+                      setState(() {});
+                    },
+                  ),
+                  Spacings.vert(24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Video",
+                      style: buildTextStyle(
+                        fontSize: 14,
+                        fontWeight: 400,
+                        fontColor: MyColors.lightBlack02,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(8),
+                  GalleryThumbnailWidget(
+                    isCRUD: false,
+                    galleryData: videoData,
+                    galleryType: GalleryType.VIDEO,
+                    callbackGalleryPath: (path) {
+                      galleryData.add(
+                        GalleryData(
+                          filepath: path,
+                          galleryType: GalleryType.VIDEO,
+                          isGalleryPicked: true,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    callbackDeleteAddedGallery: (data) {
+                      galleryData.remove(data);
+
+                      setState(() {});
+                    },
+                  ),
+                  Spacings.vert(32),
+                  const Divider(
+                    thickness: 0.5,
+                    color: MyColors.lightBlack02,
+                  ),
+                  Spacings.vert(32),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Dirawat oleh",
+                      style: buildTextStyle(
+                        fontSize: 18,
+                        fontColor: MyColors.lightBlack02,
+                        fontWeight: 600,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(12),
+                  TextInput.disabled(
+                    label: "Nama Teknisi:",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "No Telepon:",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

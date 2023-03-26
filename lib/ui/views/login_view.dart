@@ -7,7 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/login/login_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/login_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -71,8 +71,9 @@ class _LoginViewState extends State<LoginView> {
                         ? Colors.redAccent
                         : MyColors.yellow01,
                   ),
-                  errorText:
-                      model.isValid == false ? "Your username is wrong" : null,
+                  errorText: model.isValid == false
+                      ? "Username / email anda salah"
+                      : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
@@ -103,9 +104,8 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   hintText: "Password",
                   borderColor: MyColors.secondaryLightBlack,
-                  errorText: model.isValid == false
-                      ? "Username / email anda salah"
-                      : null,
+                  errorText:
+                      model.isValid == false ? "Kata sandi anda salah" : null,
                 ),
                 Spacings.vert(24),
                 ButtonWidget(
