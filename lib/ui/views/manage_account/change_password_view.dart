@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -42,7 +43,29 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {},
+            onTap: () {
+              showDialogWidget(
+                context,
+                title: "Ubah Kata Sandi",
+                description:
+                    "Apakah anda yakin ingin mengubah kata sandi anda?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                negativeCallback: () {
+                  Navigator.maybePop(context);
+                },
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Ubah Kata Sandi",
+                    description: "Perubahan kata sandi berhasil disimpan",
+                    isSuccessDialog: true,
+                  );
+                },
+              );
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
