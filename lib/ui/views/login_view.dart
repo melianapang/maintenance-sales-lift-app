@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/login/login_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -117,7 +118,11 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   onTap: !model.busy
                       ? () async {
+                          buildLoadingDialog(context);
+
                           final bool result = await model.requestLogin();
+                          Navigator.pop(context);
+
                           if (result == false) {
                             showErrorDialog(context);
                             return;
