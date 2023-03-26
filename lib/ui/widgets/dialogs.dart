@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -145,6 +148,7 @@ Future<dynamic> showGeneralBottomSheet({
 void showDialogWidget(BuildContext context,
     {required String title,
     required String description,
+    bool? isSuccessDialog,
     String? positiveLabel,
     String? negativeLabel,
     VoidCallback? positiveCallback,
@@ -160,6 +164,19 @@ void showDialogWidget(BuildContext context,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (isSuccessDialog != null) ...[
+                Spacings.vert(10),
+                LottieBuilder.asset(
+                  isSuccessDialog
+                      ? 'assets/lotties/success.json'
+                      : 'assets/lotties/lottieflow-failed.json',
+                  repeat: true,
+                  width: 80,
+                  height: 80,
+                  alignment: Alignment.center,
+                ),
+              ],
+              Spacings.vert(12),
               Text(
                 title,
                 style: buildTextStyle(
@@ -168,7 +185,7 @@ void showDialogWidget(BuildContext context,
                   fontColor: MyColors.darkBlack02,
                 ),
               ),
-              Spacings.vert(20),
+              Spacings.vert(12),
               Text(
                 description,
                 textAlign: TextAlign.center,
@@ -177,7 +194,7 @@ void showDialogWidget(BuildContext context,
                   fontColor: MyColors.darkBlack02,
                 ),
               ),
-              Spacings.vert(38),
+              Spacings.vert(26),
               if (negativeLabel != null) ...[
                 Spacings.vert(10),
                 ButtonWidget(
