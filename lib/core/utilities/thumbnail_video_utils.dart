@@ -39,7 +39,7 @@ class ThumbnailVideoUtils {
             ),
           );
         } else {
-          return buildLoadingPage();
+          return buildLoadingSymbol();
         }
       },
     );
