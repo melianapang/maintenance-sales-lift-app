@@ -34,26 +34,27 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
           Spacings.vert(12),
           Expanded(
             child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: 10,
-                separatorBuilder: (context, index) => const Divider(
-                      color: MyColors.transparent,
-                      height: 20,
-                    ),
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomCardWidget(
-                    cardType: CardType.list,
-                    title: "Nadia Ang",
-                    description: "PT ABC JAYA",
-                    description2: "12 March 2023",
-                    titleSize: 20,
-                    descSize: 16,
-                    desc2Size: 12,
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.detailFollowUp);
-                    },
-                  );
-                }),
+              shrinkWrap: true,
+              itemCount: 10,
+              separatorBuilder: (context, index) => const Divider(
+                color: MyColors.transparent,
+                height: 20,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return CustomCardWidget(
+                  cardType: CardType.list,
+                  title: "Nadia Ang",
+                  description: "PT ABC JAYA",
+                  description2: "12 March 2023",
+                  titleSize: 20,
+                  descSize: 16,
+                  desc2Size: 12,
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.detailFollowUp);
+                  },
+                );
+              },
+            ),
           ),
           Spacings.vert(16),
         ],
