@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -29,8 +30,8 @@ void buildLoadingDialog(BuildContext context) {
               LottieBuilder.asset(
                 'assets/lotties/lottieflow-loading.json',
                 repeat: true,
-                width: 100,
-                height: 100,
+                width: 80,
+                height: 80,
                 alignment: Alignment.center,
               ),
               Spacings.vert(12),
