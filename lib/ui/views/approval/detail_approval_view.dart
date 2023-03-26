@@ -158,7 +158,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "Dirawat oleh",
+                  "Diajukan oleh",
                   style: buildTextStyle(
                     fontSize: 18,
                     fontColor: MyColors.lightBlack02,
