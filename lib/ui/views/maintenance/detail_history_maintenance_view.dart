@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -71,6 +74,21 @@ class _DetailHistoryMaintenanceViewState
         context,
         title: "Riwayat Pemeliharaan",
         isBackEnabled: true,
+      ),
+      bottomNavigationBar: ButtonWidget.bottomSingleButton(
+        padding: EdgeInsets.only(
+          bottom: PaddingUtils.getBottomPadding(
+            context,
+            defaultPadding: 12,
+          ),
+          left: 24.0,
+          right: 24.0,
+        ),
+        buttonType: ButtonType.primary,
+        onTap: () {
+          Navigator.pushNamed(context, Routes.map);
+        },
+        text: 'Lihat Lokasi di Peta',
       ),
       body: Padding(
         padding: const EdgeInsets.only(
