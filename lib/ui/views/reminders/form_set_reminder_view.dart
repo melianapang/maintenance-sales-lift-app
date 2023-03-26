@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -44,7 +45,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
             onTap: () {
               print(
                   "save: ${model.selectedTime.toString()} -- ${model.selectedDates.toString()}");
-              // Navigator.pushNamed(context, Routes.afterSetReminder);
+              Navigator.pushNamed(context, Routes.afterSetReminder);
             },
             text: 'Simpan',
           ),
