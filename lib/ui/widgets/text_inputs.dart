@@ -85,8 +85,6 @@ class TextInput extends StatelessWidget {
   factory TextInput.disabledMultiline({
     required String label,
     required String text,
-    required int minLines,
-    required int maxLines,
     Color backgroundColor = MyColors.darkBlack02,
     String? hintText,
   }) {

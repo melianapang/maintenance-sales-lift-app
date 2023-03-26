@@ -49,11 +49,14 @@ class _DetailReminderViewState extends State<DetailReminderView> {
                 label: "Tanggal",
               ),
               Spacings.vert(24),
+              TextInput.disabled(
+                label: "Waktu Pengingat",
+              ),
+              Spacings.vert(24),
               TextInput.disabledMultiline(
                 label: "Catatan",
-                text: "Catatan",
-                minLines: 5,
-                maxLines: 5,
+                text:
+                    "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
               ),
               Spacings.vert(24),
             ],
