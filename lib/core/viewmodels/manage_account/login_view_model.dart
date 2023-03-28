@@ -1,4 +1,5 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -6,15 +7,18 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 class LoginViewModel extends BaseViewModel {
   LoginViewModel({
     required DioService dioService,
+    required AuthenticationService authenticationService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDio(),
           ),
         ),
-        _sharedPreferencesService = SharedPreferencesService();
+        _sharedPreferencesService = SharedPreferencesService(),
+        _authenticationService = authenticationService;
 
   final ApiService _apiService;
   final SharedPreferencesService _sharedPreferencesService;
+  final AuthenticationService _authenticationService;
 
   bool? _isValid;
   bool? get isValid => _isValid;
@@ -28,15 +32,11 @@ class LoginViewModel extends BaseViewModel {
   String _password = "Hello6789";
   String get password => _password;
 
-  @override
-  Future<void> initModel() async {
-    // setBusy(true);
-    // await _fetchData();
-    // setBusy(false);
-  }
-
-  // Future<void> _fetchData() async {
-  //   await Future<void>.delayed(const Duration(seconds: 2));
+  // @override
+  // Future<void> initModel() async {
+  //   setBusy(true);
+  //   await _fetchDataHasLogin();
+  //   setBusy(false);
   // }
 
   void setInputUser({required String inputUser}) {
@@ -54,8 +54,7 @@ class LoginViewModel extends BaseViewModel {
       password: _password,
     );
 
-    await _sharedPreferencesService.set(
-        SharedPrefKeys.authenticationToken, response);
+    if (response != null) await _authenticationService.setLogin(response);
 
     setBusy(false);
     return response != null;

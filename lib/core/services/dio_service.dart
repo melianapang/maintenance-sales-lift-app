@@ -4,16 +4,16 @@ import 'package:alice_lightweight/core/alice_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/apis_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:rxdart/subjects.dart';
 
 class DioService {
   DioService({
     required AliceCore aliceCore,
-    required ApisService apisService,
+    required AuthenticationService authenticationService,
   })  : _aliceCore = aliceCore,
-        _apisService = apisService;
+        _authenticationService = authenticationService;
 
   static CancelToken _cancelToken = CancelToken();
   static const int _timeOut = 10000;
@@ -25,7 +25,7 @@ class DioService {
   }
 
   final AliceCore _aliceCore;
-  final ApisService _apisService;
+  final AuthenticationService _authenticationService;
 
   Dio _makeBaseDio() {
     return Dio()
@@ -83,7 +83,7 @@ class DioService {
             RequestOptions option,
             RequestInterceptorHandler handler,
           ) async {
-            final String? jwtToken = await _apisService.getJwtToken();
+            final String? jwtToken = await _authenticationService.getJwtToken();
 
             option.cancelToken = _cancelToken;
 

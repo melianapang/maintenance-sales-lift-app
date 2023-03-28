@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/add_customer_view.dart';
@@ -81,29 +81,19 @@ class AppRouter {
                 role: Role.Admin,
               );
         return buildRoute(
-          builder: (_) => HomeView(
-            profileData: param,
-          ),
+          builder: (_) => const HomeView(),
         );
       case Routes.afterSetReminder:
         return buildRoute(
           builder: (_) => const AfterSetReminderView(),
         );
       case Routes.editProfile:
-        final ProfileData param = settings.arguments is ProfileData
-            ? settings.arguments as ProfileData
-            : ProfileData(
-                username: '',
-                firstName: '',
-                lastName: '',
-                notelp: '',
-                email: '',
-                address: '',
-                city: '',
-                role: Role.Admin,
-              );
+        final EditProfileViewParam param =
+            settings.arguments is EditProfileViewParam
+                ? settings.arguments as EditProfileViewParam
+                : EditProfileViewParam();
         return buildRoute(
-          builder: (_) => EditProfileView(profileData: param),
+          builder: (_) => EditProfileView(param: param),
         );
       case Routes.changePassword:
         return buildRoute(

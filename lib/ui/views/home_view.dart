@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/home_item_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/manage_profile_item_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/home_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import '../../core/app_constants/colors.dart';
-import '../../core/models/profile_data_model.dart';
+import '../../core/models/profile/profile_data_model.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({
-    required this.profileData,
     super.key,
   });
-
-  final ProfileData profileData;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -105,7 +108,9 @@ class _HomeViewState extends State<HomeView> {
                   Navigator.pushNamed(
                     context,
                     Routes.editProfile,
-                    arguments: widget.profileData,
+                    arguments: EditProfileViewParam(
+                      profileData: userData,
+                    ),
                   );
                 },
                 child: const Icon(
@@ -149,12 +154,12 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    List<HomeItemModel> userMenus = homeMenu
-        .where((element) => element.role.contains(widget.profileData.role))
-        .toList();
-
     return ViewModel(
-      model: HomeViewModel(),
+      model: HomeViewModel(
+        authenticationService: Provider.of<AuthenticationService>(context),
+        sharedPreferencesService:
+            Provider.of<SharedPreferencesService>(context),
+      ),
       onModelReady: (HomeViewModel model) async {
         await model.initModel();
       },
@@ -168,7 +173,7 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildProfileCard(widget.profileData),
+                  _buildProfileCard(model.profileData),
                   Spacings.vert(32),
                   Align(
                     alignment: Alignment.topLeft,
@@ -182,13 +187,11 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   _buildGridListMenu(
-                    homeMenu
-                        .where((element) => element.role.contains(Role.Admin))
-                        .toList(),
+                    model.getUserMenu(),
                     true,
                   ),
-                  if (widget.profileData.role == Role.Admin ||
-                      widget.profileData.role == Role.SuperAdmin) ...[
+                  if (model.profileData.role == Role.Admin ||
+                      model.profileData.role == Role.SuperAdmin) ...[
                     Spacings.vert(24),
                     Align(
                       alignment: Alignment.topLeft,
@@ -263,8 +266,19 @@ class _HomeViewState extends State<HomeView> {
                         icon: manageProfileMenu[index].icon,
                         onTap: () {
                           if (manageProfileMenu[index].callback != null) {
-                            manageProfileMenu[index].callback!(
-                              context: context,
+                            showDialogWidget(
+                              context,
+                              title: 'Keluar',
+                              description: 'Anda yakin ingin Keluar?',
+                              positiveLabel: "Iya",
+                              negativeLabel: "Tidak",
+                              positiveCallback: () async {
+                                buildLoadingDialog(context);
+                                await model.logout();
+                              },
+                              negativeCallback: () {
+                                Navigator.maybePop(context);
+                              },
                             );
                           } else if (manageProfileMenu[index].route != null) {
                             Navigator.pushNamed(context,

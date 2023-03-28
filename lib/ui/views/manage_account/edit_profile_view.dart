@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/edit_profile_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -11,13 +11,20 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
 
+class EditProfileViewParam {
+  EditProfileViewParam({
+    this.profileData,
+  });
+  final ProfileData? profileData;
+}
+
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
-    required this.profileData,
+    required this.param,
     super.key,
   });
 
-  final ProfileData profileData;
+  final EditProfileViewParam param;
 
   @override
   State<EditProfileView> createState() => _EditProfileViewState();
@@ -62,7 +69,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   TextInput.editable(
                     label: "Nama",
                     text:
-                        "${widget.profileData.firstName} ${widget.profileData.lastName}",
+                        "${widget.param.profileData?.firstName} ${widget.param.profileData?.lastName}",
                     hintText: "Nama Lengkap",
                     keyboardType: TextInputType.name,
                     onChangedListener: (text) {
@@ -72,7 +79,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Peran",
-                    text: mappingRole(widget.profileData.role),
+                    text: mappingRole(
+                      widget.param.profileData?.role ?? Role.Admin,
+                    ),
                     hintText: "Admin/Sales/Teknisi",
                     keyboardType: TextInputType.number,
                     onChangedListener: (text) {
@@ -82,7 +91,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Nomor Telepon",
-                    text: widget.profileData.notelp,
+                    text: widget.param.profileData?.notelp,
                     hintText: "081xxxxxxxxxx",
                     keyboardType: TextInputType.number,
                     onChangedListener: (text) {
@@ -92,7 +101,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Alamat",
-                    text: widget.profileData.address,
+                    text: widget.param.profileData?.address,
                     hintText: "Alamat Lengkap",
                     keyboardType: TextInputType.streetAddress,
                     onChangedListener: (text) {
@@ -102,7 +111,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Kota",
-                    text: widget.profileData.city,
+                    text: widget.param.profileData?.city,
                     hintText: "Kota",
                     keyboardType: TextInputType.text,
                     onChangedListener: (text) {
@@ -112,7 +121,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Email",
-                    text: widget.profileData.email,
+                    text: widget.param.profileData?.email,
                     hintText: "abc@gmail.com",
                     keyboardType: TextInputType.emailAddress,
                     onChangedListener: (text) {

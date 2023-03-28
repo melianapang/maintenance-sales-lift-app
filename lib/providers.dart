@@ -1,9 +1,10 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/alice_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/apis_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 
 List<SingleChildWidget> providers = [
@@ -17,6 +18,9 @@ List<SingleChildWidget> independentProviders = [
   ),
   Provider<SharedPreferencesService>(
     create: (_) => SharedPreferencesService(),
+  ),
+  Provider<OneSignalService>(
+    create: (_) => OneSignalService(),
   ),
 ];
 
@@ -32,30 +36,31 @@ List<SingleChildWidget> dependentProviders = [
           navigationService.navigatorKey,
         ),
   ),
-  ProxyProvider2<NavigationService, SharedPreferencesService, ApisService>(
+  ProxyProvider2<NavigationService, SharedPreferencesService,
+      AuthenticationService>(
     update: (
       _,
       NavigationService navigationService,
       SharedPreferencesService sharedPreferencesService,
-      ApisService? authService,
+      AuthenticationService? authService,
     ) =>
         authService ??
-        ApisService(
+        AuthenticationService(
           navigationService: navigationService,
           sharedPreferencesService: sharedPreferencesService,
         ),
   ),
-  ProxyProvider2<ApisService, AliceService, DioService>(
+  ProxyProvider2<AuthenticationService, AliceService, DioService>(
     update: (
       _,
-      ApisService authService,
+      AuthenticationService authService,
       AliceService aliceService,
       DioService? dioService,
     ) =>
         dioService ??
         DioService(
           aliceCore: aliceService.aliceCore,
-          apisService: authService,
+          authenticationService: authService,
         ),
   ),
 ];

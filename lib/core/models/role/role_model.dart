@@ -1,4 +1,15 @@
-enum Role { SuperAdmin, Admin, Sales, Engineers }
+import 'package:json_annotation/json_annotation.dart';
+
+enum Role {
+  @JsonValue('super_admin')
+  SuperAdmin,
+  @JsonValue('admin')
+  Admin,
+  @JsonValue('sales')
+  Sales,
+  @JsonValue('engineers')
+  Engineers,
+}
 
 String mappingRole(Role role) {
   switch (role) {

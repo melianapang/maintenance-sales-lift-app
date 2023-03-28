@@ -1,13 +1,19 @@
 import 'dart:convert';
 
+import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum SharedPrefKeys { loginData, authenticationToken }
+enum SharedPrefKeys {
+  profileData,
+  authenticationToken,
+  userId,
+}
 
 extension SharedPrefKeysExt on SharedPrefKeys {
   static const Map<SharedPrefKeys, String> _labels = <SharedPrefKeys, String>{
-    SharedPrefKeys.loginData: 'login_data',
+    SharedPrefKeys.profileData: 'profile_data',
     SharedPrefKeys.authenticationToken: 'authentication_token',
+    SharedPrefKeys.userId: "user_id",
   };
 
   String get label => _labels[this] ?? '';
@@ -27,19 +33,26 @@ class SharedPreferencesService {
   Future<dynamic> get(SharedPrefKeys key) async {
     await _getSharedPreferences();
     switch (key) {
-      case SharedPrefKeys.loginData:
+      case SharedPrefKeys.profileData:
         final String? raw = _sharedPreferences.getString(
-          SharedPrefKeys.loginData.label,
+          SharedPrefKeys.profileData.label,
         );
         if (raw == null) {
           return null;
         }
         final Map<String, dynamic> result = json.decode(raw);
-        return '';
-      // return LoginResponse.fromJson(result);
+        return ProfileData.fromJson(result);
       case SharedPrefKeys.authenticationToken:
         final String? raw = _sharedPreferences.getString(
           SharedPrefKeys.authenticationToken.label,
+        );
+        if (raw == null) {
+          return null;
+        }
+        return json.decode(raw);
+      case SharedPrefKeys.userId:
+        final String? raw = _sharedPreferences.getString(
+          SharedPrefKeys.userId.label,
         );
         if (raw == null) {
           return null;
@@ -53,6 +66,11 @@ class SharedPreferencesService {
     final String jsonString = json.encode(value);
 
     await _sharedPreferences.setString(key.label, jsonString);
+  }
+
+  Future<void> remove(SharedPrefKeys key) async {
+    await _getSharedPreferences();
+    await _sharedPreferences.remove(key.label);
   }
 
   Future<void> clearStorage() async {

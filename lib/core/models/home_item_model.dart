@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'role_model.dart';
+import 'role/role_model.dart';
 import '../app_constants/routes.dart';
 
 class HomeItemModel {
