@@ -1,11 +1,20 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/open_notification_reminder_view.dart';
 
 class OneSignalService {
-  OneSignalService();
+  OneSignalService({
+    required NavigationService navigationService,
+  }) : _navigationService = navigationService;
+
+  final NavigationService _navigationService;
 
   Future<void> initOneSignal() async {
     await OneSignal.shared.setAppId("5819ec6f-0196-4e71-b042-49478c0ed81e");
@@ -88,15 +97,32 @@ class OneSignalService {
       print('NOTIFICATION OPENED HANDLER CALLED WITH: ${result}');
       print("ID BUTTON ACTIONS: ${result.action?.actionId}");
 
-      OSNotificationActionType? type = result.action?.type;
-      switch (type) {
+      Map<String, dynamic>? data = result.notification.additionalData;
+      switch (result.action?.type) {
         case OSNotificationActionType.opened:
+          _openNotificationHandler(data);
+          break;
+
         case OSNotificationActionType.actionTaken:
+          switch (result.action?.actionId) {
+            case "positiveButton":
+              _openNotificationHandler(data);
+              break;
+
+            case "negativeButton":
+              _setSnoozeReminder(data);
+              break;
+          }
       }
     });
   }
 
-  Future<void> postNotification() async {
+  Future<void> postNotification({
+    required String description,
+    required String time,
+    required DateTime date,
+    required String note,
+  }) async {
     /// Get the Onesignal userId and update that into the firebase.
     /// So, that it can be used to send Notifications to users later.̥
     var deviceState = await OneSignal.shared.getDeviceState();
@@ -105,28 +131,35 @@ class OneSignalService {
 
     var playerId = deviceState.userId!;
 
-    var imgUrlString =
-        "http://cdn1-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-2.jpg";
+    var imgUrlString = "assets/images/logo_pt_rejo.png";
+    // "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg";
 
     var notification = OSCreateNotification(
         playerIds: [playerId],
-        content: "this is a test from OneSignal's Flutter SDK",
-        heading: "Test Notification",
-        androidLargeIcon: imgUrlString,
-        bigPicture: imgUrlString,
+        heading: "PT REJO JAYA SAKTI Post Notification",
+        content: "Mengingatkan anda untuk $description",
+        androidSmallIcon: imgUrlString,
+        additionalData: {
+          "date": DateTimeUtils.convertDateToString(
+            date: date,
+            formatter: DateFormat('dd MMM yyyy'),
+          ),
+          "time": time,
+          "note": note,
+          "description": description,
+        },
+        sendAfter: date.toUtc(),
         buttons: [
-          OSActionButton(text: "test1", id: "id1"),
-          OSActionButton(text: "test2", id: "id2")
+          OSActionButton(id: "positiveButton", text: "Ya, buka Catatan."),
+          OSActionButton(id: "negativeButton", text: "Lewatkan")
         ]);
     var response = await OneSignal.shared.postNotification(notification);
   }
 
   Future<void> postScheduledNotification({
     required String description,
-    required DateTime date,
+    required String date,
   }) async {
-    //   await OneSignal.shared.setRequiresUserPrivacyConsent(false);
-
     /// Get the Onesignal userId and update that into the firebase.
     /// So, that it can be used to send Notifications to users later.̥
     var deviceState = await OneSignal.shared.getDeviceState();
@@ -137,8 +170,6 @@ class OneSignalService {
 
     var imgUrlString =
         "http://cdn1-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-2.jpg";
-
-    String dateStr = _convertDateTimeNotification(date);
 
     Map<String, dynamic> notification = {
       "app_id": "5819ec6f-0196-4e71-b042-49478c0ed81e",
@@ -146,7 +177,8 @@ class OneSignalService {
       "headings": {"en": "PT REJO JAYA SAKTI"},
       "data": {"foo": "bar"},
       "contents": {"en": "Mengingatkan anda untuk $description"},
-      "send_after": "2023-03-29 00:32:00 GMT+0700",
+      // "send_after": "2023-03-29 00:32:00 GMT+0700",
+      "send_after": date,
       "buttons": [
         {"id": "1", "text": "button1"},
         {"id": "2", "text": "button2"}
@@ -171,8 +203,31 @@ class OneSignalService {
     }
   }
 
-  String _convertDateTimeNotification(DateTime dateTime) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-    return formatter.format(dateTime.toUtc()) + " GMT";
+  void _openNotificationHandler(Map<String, dynamic>? data) {
+    _navigationService.popAllAndNavigateTo(
+      Routes.openNotificationReminder,
+      arguments: OpenNotificationReminderViewParam(
+        date: data?["date"],
+        time: data?["time"],
+        description: data?["description"],
+        note: data?["note"],
+      ),
+    );
+  }
+
+  void _setSnoozeReminder(Map<String, dynamic>? data) async {
+    final DateTime snoozeUntil =
+        DateTime.parse("${data?["date"]} ${data?["time"]}").add(
+      Duration(
+        days: 14,
+      ),
+    );
+
+    await postNotification(
+      description: data?["description"],
+      time: data?["time"],
+      date: snoozeUntil,
+      note: data?["note"],
+    );
   }
 }

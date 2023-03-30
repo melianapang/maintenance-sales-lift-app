@@ -36,6 +36,7 @@ class Routes {
   static const String setPasswordUser = 'set-password-user';
   static const String uploadPO = 'form-upload-po';
   static const String afterSetReminder = "after-set-reminder";
+  static const String openNotificationReminder = "open-notification-reminder";
   static const String exportCustomer = 'export-customer-data';
   static const String exportMaintenance = 'export-maintenance-data';
 

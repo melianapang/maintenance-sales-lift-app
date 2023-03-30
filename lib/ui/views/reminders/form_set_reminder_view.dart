@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
@@ -29,7 +32,12 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormSetReminderViewModel>(
-      model: FormSetReminderViewModel(),
+      model: FormSetReminderViewModel(
+        oneSignalService: Provider.of<OneSignalService>(context),
+      ),
+      onModelReady: (FormSetReminderViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
@@ -49,10 +57,13 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {
+            onTap: () async {
               print(
                   "save: ${model.selectedTime.toString()} -- ${model.selectedDates.toString()}");
-              Navigator.pushNamed(context, Routes.afterSetReminder);
+
+              buildLoadingDialog(context);
+              await model.requestSetReminder();
+              Navigator.pushReplacementNamed(context, Routes.afterSetReminder);
             },
             text: 'Simpan',
           ),
@@ -102,20 +113,25 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                   },
                 ),
                 Spacings.vert(24),
-                TextInput.multiline(
-                  onChangedListener: (text) {},
+                TextInput.editable(
                   label: "Deskripsi Pengingat",
                   hintText: "Mengingatkan untuk konfirmasi harga..",
+                  text: model.notificationDescription,
+                  onChangedListener: (text) {
+                    model.setDescriptionNotification(text);
+                  },
                   note:
-                      "NB: Deskripsi ini akan ditampilkan pada notifikasi pengingat.",
-                  maxLines: 2,
-                  minLines: 2,
+                      "NB: Deskripsi ini akan ditampilkan pada notifikasi pengingat. (Max. 100 karakter)",
+                  maxLength: 100,
                 ),
                 Spacings.vert(24),
                 TextInput.multiline(
-                  onChangedListener: (text) {},
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
+                  text: model.reminderNote,
+                  onChangedListener: (text) {
+                    model.setReminderNote(text);
+                  },
                   maxLines: 5,
                   minLines: 5,
                 ),

@@ -22,10 +22,10 @@ abstract class Api {
     @Body() UpdateCustomerRequest request,
   );
 
-  // @GET('project-lift/api/0/Customer/get_all_customers/')
-  // Future<HttpResponse<dynamic>> requestGetAllCustomer(
-  //   @Query("page") int page,
-  // );
+  @GET('/project-lift/api/0/Customer/get_all_customers/')
+  Future<HttpResponse<dynamic>> requestGetAllCustomer(
+      // @Query("page") int page,
+      );
 }
 
 class ApiService {
@@ -53,18 +53,28 @@ class ApiService {
     }
   }
 
-  Future<bool> requestUpdateCustomer() async {
+  Future<bool> requestUpdateCustomer({
+    required String nama,
+    required String customerNumber,
+    required int customerType,
+    required String email,
+    required String companyName,
+    required String phoneNumber,
+    required String note,
+    required int dataSource,
+    required String city,
+  }) async {
     try {
       final payload = UpdateCustomerRequest(
-        customerName: "Nama",
-        customerNumber: "DFnsajd",
-        customerType: 0,
-        email: "abc@gmail.com",
-        phoneNumber: "081223423424",
-        city: "Surabaya",
-        companyName: "PT ABC",
-        note: "Catatan",
-        dataSource: 1,
+        customerName: nama,
+        customerNumber: customerNumber,
+        customerType: customerType,
+        email: email,
+        phoneNumber: phoneNumber,
+        city: city,
+        companyName: companyName,
+        note: note,
+        dataSource: dataSource,
         status: 0,
       );
       final HttpResponse<dynamic> response =
@@ -80,29 +90,19 @@ class ApiService {
     }
   }
 
-  // Future<void> getAllCustomer() async {
-  //   try {
-  //     // final payload = UpdateCustomerRequest(
-  //     //   customerName: "Nama",
-  //     //   customerNumber: "DFnsajd",
-  //     //   customerType: 0,
-  //     //   email: "abc@gmail.com",
-  //     //   phoneNumber: "081223423424",
-  //     //   city: "Surabaya",
-  //     //   companyName: "PT ABC",
-  //     //   note: "Catatan",
-  //     //   dataSource: 1,
-  //     //   status: 0,
-  //     // );
-  //     // final HttpResponse<dynamic> response =
-  //     //     await api.requestGetAllCustomer(payload);
+  Future<List<CustomerData>?> getAllCustomer() async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllCustomer();
 
-  //     // if (response.response.statusCode == 200) {
-  //     //   return true;
-  //     // }
-  //     // return false;
-  //   } catch (e) {
-  //     log("Sequence number error");
-  //   }
-  // }
+      if (response.response.statusCode == 200) {
+        GetAllCustomerResponse getAllResponse =
+            GetAllCustomerResponse.fromJson(response.data);
+
+        return getAllResponse.data.result;
+      }
+      return null;
+    } catch (e) {
+      log("Sequence number error");
+    }
+  }
 }

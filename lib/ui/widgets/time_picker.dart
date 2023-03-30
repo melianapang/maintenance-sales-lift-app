@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
@@ -34,12 +35,15 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: TextInput.disabled(
             label: widget.label,
             hintText: "Pilih waktu sesuai keinginan",
-            text: _dateTime != null ? convertTimeToString(_dateTime!) : "",
+            text: _dateTime != null
+                ? DateTimeUtils.convertHmsTimeToString(_dateTime!)
+                : "",
           ),
         ),
         GestureDetector(
@@ -77,31 +81,26 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
               locale: LocaleType.id,
             );
           },
-          child: Align(
-            child: Container(
-              margin: const EdgeInsets.only(
-                left: 5,
-                top: 25,
-              ),
-              decoration: BoxDecoration(
-                color: MyColors.darkBlack02,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              width: 60,
-              height: 60,
-              child: const Icon(
-                PhosphorIcons.timerBold,
-                color: MyColors.yellow01,
-              ),
+          child: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(
+              left: 5,
+              top: 25,
+            ),
+            decoration: BoxDecoration(
+              color: MyColors.darkBlack02,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            width: 60,
+            height: 60,
+            child: const Icon(
+              PhosphorIcons.timerBold,
+              color: MyColors.yellow01,
             ),
           ),
         ),
       ],
     );
-  }
-
-  String convertTimeToString(DateTime pickedTime) {
-    return DateFormat.Hm().format(pickedTime);
   }
 }
 

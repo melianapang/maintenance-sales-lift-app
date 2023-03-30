@@ -19,9 +19,6 @@ List<SingleChildWidget> independentProviders = [
   Provider<SharedPreferencesService>(
     create: (_) => SharedPreferencesService(),
   ),
-  Provider<OneSignalService>(
-    create: (_) => OneSignalService(),
-  ),
 ];
 
 List<SingleChildWidget> dependentProviders = [
@@ -34,6 +31,17 @@ List<SingleChildWidget> dependentProviders = [
         aliceService ??
         AliceService(
           navigationService.navigatorKey,
+        ),
+  ),
+  ProxyProvider<NavigationService, OneSignalService>(
+    update: (
+      _,
+      NavigationService navigationService,
+      OneSignalService? oneSignalService,
+    ) =>
+        oneSignalService ??
+        OneSignalService(
+          navigationService: navigationService,
         ),
   ),
   ProxyProvider2<NavigationService, SharedPreferencesService,

@@ -1,8 +1,15 @@
+import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
+import 'package:intl/intl.dart';
 
 class FormSetReminderViewModel extends BaseViewModel {
-  FormSetReminderViewModel();
+  FormSetReminderViewModel({
+    required OneSignalService oneSignalService,
+  }) : _oneSignalService = oneSignalService;
+
+  final OneSignalService _oneSignalService;
 
   // Filter related
   int _selectedSetReminderForOption = 0;
@@ -18,6 +25,12 @@ class FormSetReminderViewModel extends BaseViewModel {
   ];
   List<FilterOption> get setReminderForOption => _setReminderForOption;
   // End of filter related
+
+  String _notificationDescription = "";
+  String get notificationDescription => _notificationDescription;
+
+  String _reminderNote = "";
+  String get reminderNote => _reminderNote;
 
   DateTime _selectedTime = DateTime.now();
   DateTime get selectedTime => _selectedTime;
@@ -42,6 +55,14 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setDescriptionNotification(String value) {
+    _notificationDescription = value;
+  }
+
+  void setReminderNote(String value) {
+    _reminderNote = value;
+  }
+
   void setSelectedTime(DateTime value) {
     _selectedTime = value;
     notifyListeners();
@@ -50,5 +71,23 @@ class FormSetReminderViewModel extends BaseViewModel {
   void setSelectedDates(List<DateTime> value) {
     _selectedDates = value;
     notifyListeners();
+  }
+
+  Future<void> requestSetReminder() async {
+    String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
+    // timeStr = "$timeStr GMT+0700";
+
+    String dateStr = DateTimeUtils.convertDateToString(
+      date: selectedDates.first,
+      formatter: DateFormat('yyyy-MM-dd'),
+    );
+
+    final DateTime reminderSetAt = DateTime.parse("$dateStr $timeStr");
+
+    await _oneSignalService.postNotification(
+        description: _notificationDescription,
+        note: _reminderNote,
+        date: reminderSetAt,
+        time: timeStr);
   }
 }
