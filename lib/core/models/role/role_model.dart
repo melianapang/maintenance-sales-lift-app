@@ -11,7 +11,7 @@ enum Role {
   Engineers,
 }
 
-String mappingRole(Role role) {
+String mappingRoleToString(Role role) {
   switch (role) {
     case Role.SuperAdmin:
       return "Super Admin";
@@ -21,5 +21,18 @@ String mappingRole(Role role) {
       return "Sales";
     case Role.Engineers:
       return "Teknisi";
+  }
+}
+
+Role mappingStringToRole(String role) {
+  switch (role) {
+    case "1":
+      return Role.Sales;
+    case "2":
+      return Role.Engineers;
+    case "3":
+      return Role.Admin;
+    default:
+      return Role.Admin;
   }
 }

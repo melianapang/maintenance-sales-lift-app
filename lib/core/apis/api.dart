@@ -17,8 +17,9 @@ abstract class Api {
     @Body() LoginRequest request,
   );
 
-  @PUT('/project-lift/api/0/Customer/update_customer/3')
+  @PUT('/project-lift/api/0/Customer/update_customer/{customer_id}')
   Future<HttpResponse<dynamic>> requestUpdateCustomer(
+    @Path("customer_id") int customerId,
     @Body() UpdateCustomerRequest request,
   );
 
@@ -57,6 +58,8 @@ class ApiService {
     required String nama,
     required String customerNumber,
     required int customerType,
+    required int customerId,
+    required String customerNeed,
     required String email,
     required String companyName,
     required String phoneNumber,
@@ -69,6 +72,7 @@ class ApiService {
         customerName: nama,
         customerNumber: customerNumber,
         customerType: customerType,
+        customerNeed: customerNeed,
         email: email,
         phoneNumber: phoneNumber,
         city: city,
@@ -77,8 +81,10 @@ class ApiService {
         dataSource: dataSource,
         status: 0,
       );
-      final HttpResponse<dynamic> response =
-          await api.requestUpdateCustomer(payload);
+      final HttpResponse<dynamic> response = await api.requestUpdateCustomer(
+        customerId,
+        payload,
+      );
 
       if (response.response.statusCode == 200) {
         return true;

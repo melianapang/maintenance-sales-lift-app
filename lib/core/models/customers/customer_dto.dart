@@ -9,6 +9,7 @@ class UpdateCustomerRequest {
     required this.customerName,
     required this.customerType,
     required this.customerNumber,
+    required this.customerNeed,
     required this.email,
     required this.phoneNumber,
     required this.city,
@@ -31,6 +32,9 @@ class UpdateCustomerRequest {
 
   @JsonKey(name: "customer_number")
   final String customerNumber;
+
+  @JsonKey(name: "customer_need")
+  final String customerNeed;
 
   @JsonKey(name: "email")
   final String email;
@@ -124,6 +128,7 @@ class CustomerData {
     required this.customerType,
     required this.customerName,
     required this.companyName,
+    required this.customerNeed,
     required this.dataSource,
     required this.city,
     required this.phoneNumber,
@@ -156,6 +161,9 @@ class CustomerData {
 
   @JsonKey(name: "company_name")
   final String companyName;
+
+  @JsonKey(name: "customer_need")
+  final String customerNeed;
 
   @JsonKey(name: "data_source")
   final String dataSource;

@@ -21,12 +21,12 @@ class ProfileData {
 
   Map<String, dynamic> toJson() => _$ProfileDataToJson(this);
 
-  final String username;
-  final String firstName;
-  final String lastName;
-  final String address;
-  final String city;
-  final String phoneNumber;
-  final String email;
-  final Role role;
+  String username;
+  String firstName;
+  String lastName;
+  String address;
+  String city;
+  String phoneNumber;
+  String email;
+  Role role;
 }

@@ -49,7 +49,7 @@ class AuthenticationService {
         address: payload['address'],
         phoneNumber: payload['phone_number'],
         email: payload['email'],
-        role: _mappingRole(
+        role: mappingStringToRole(
           payload['id_role'],
         ),
       );
@@ -93,18 +93,5 @@ class AuthenticationService {
       return token;
     }
     return null;
-  }
-
-  Role _mappingRole(String role) {
-    switch (role) {
-      case "1":
-        return Role.Sales;
-      case "2":
-        return Role.Engineers;
-      case "3":
-        return Role.Admin;
-      default:
-        return Role.Admin;
-    }
   }
 }

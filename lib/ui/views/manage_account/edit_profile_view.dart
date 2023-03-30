@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/edit_profile_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -34,7 +36,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: EditProfileViewModel(),
+      model: EditProfileViewModel(
+        dioService: Provider.of<DioService>(context),
+        profileData: widget.param.profileData,
+      ),
       onModelReady: (EditProfileViewModel model) async {
         await model.initModel();
       },
@@ -68,63 +73,63 @@ class _EditProfileViewState extends State<EditProfileView> {
                 children: [
                   TextInput.editable(
                     label: "Nama",
-                    text: "${widget.param.profileData?.username}",
+                    text: model.profileData?.username,
                     hintText: "Nama Lengkap",
                     keyboardType: TextInputType.name,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setUsername(text);
                     },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Peran",
-                    text: mappingRole(
-                      widget.param.profileData?.role ?? Role.Admin,
+                    text: mappingRoleToString(
+                      model.profileData?.role ?? Role.Admin,
                     ),
                     hintText: "Admin/Sales/Teknisi",
                     keyboardType: TextInputType.number,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setRole(text);
                     },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Nomor Telepon",
-                    text: widget.param.profileData?.phoneNumber,
+                    text: model.profileData?.phoneNumber,
                     hintText: "081xxxxxxxxxx",
                     keyboardType: TextInputType.number,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setPhoneNumber(text);
                     },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Alamat",
-                    text: widget.param.profileData?.address,
+                    text: model.profileData?.address,
                     hintText: "Alamat Lengkap",
                     keyboardType: TextInputType.streetAddress,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setAddress(text);
                     },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Kota",
-                    text: widget.param.profileData?.city,
+                    text: model.profileData?.city,
                     hintText: "Kota",
                     keyboardType: TextInputType.text,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setCity(text);
                     },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Email",
-                    text: widget.param.profileData?.email,
+                    text: model.profileData?.email,
                     hintText: "abc@gmail.com",
                     keyboardType: TextInputType.emailAddress,
                     onChangedListener: (text) {
-                      print(text);
+                      model.setEmail(text);
                     },
                   ),
                 ],

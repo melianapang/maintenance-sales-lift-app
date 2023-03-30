@@ -1,8 +1,10 @@
 class Customer {
   Customer({
+    required this.customerId,
     required this.customerName,
     required this.customerType,
     required this.customerNumber,
+    required this.customerNeed,
     required this.email,
     required this.phoneNumber,
     required this.city,
@@ -12,9 +14,11 @@ class Customer {
     required this.status,
   });
 
+  int customerId;
   String customerName;
   int customerType;
   String customerNumber;
+  String customerNeed;
   String email;
   String phoneNumber;
   String city;

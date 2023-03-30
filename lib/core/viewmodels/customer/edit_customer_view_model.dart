@@ -65,7 +65,8 @@ class EditCustomerViewModel extends BaseViewModel {
         int.parse(_customerData?.customerType ?? "0") > 1
             ? 1
             : int.parse(_customerData?.customerType ?? "0");
-    // _selectedKebutuhanPelangganOption = int.parse(_customerData?.dataSource ?? "0");
+    _selectedKebutuhanPelangganOption =
+        int.parse(_customerData?.customerNeed ?? "0");
 
     setSelectedTipePelanggan(
       selectedMenu: int.parse(_customerData?.customerType ?? "0"),
@@ -73,9 +74,9 @@ class EditCustomerViewModel extends BaseViewModel {
     setSelectedSumberData(
       selectedMenu: int.parse(_customerData?.dataSource ?? "0"),
     );
-    // setSelectedKebutuhanPelanggan(
-    //   selectedMenu: int.parse(_customerData?.dataSource ?? "0"),
-    // );
+    setSelectedKebutuhanPelanggan(
+      selectedMenu: int.parse(_customerData?.customerNeed ?? "0"),
+    );
 
     setBusy(false);
   }
@@ -152,8 +153,10 @@ class EditCustomerViewModel extends BaseViewModel {
   Future<bool> requestUpdateCustomer() async {
     setBusy(true);
     final response = await _apiService.requestUpdateCustomer(
+      customerId: _customer?.customerId ?? 0,
       nama: _customer?.customerName ?? "",
       customerNumber: _customer?.customerNumber ?? "",
+      customerNeed: _customer?.customerNeed ?? "",
       email: _customer?.email ?? "",
       phoneNumber: _customer?.phoneNumber ?? "",
       city: _customer?.city ?? "",
@@ -172,11 +175,13 @@ class EditCustomerViewModel extends BaseViewModel {
 
   Customer _mappingCustomerDataToCustomerModel(CustomerData data) {
     return Customer(
+      customerId: int.parse(data.customerId),
       customerName: data.customerName,
       customerType:
           int.parse(data.customerType) > 1 ? 1 : int.parse(data.customerType),
       customerNumber: data.customerNumber,
       companyName: data.companyName,
+      customerNeed: data.customerNeed,
       city: data.city,
       dataSource: int.parse(data.dataSource),
       phoneNumber: data.phoneNumber,
