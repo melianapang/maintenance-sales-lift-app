@@ -38,7 +38,9 @@ class _ListRemindersViewState extends State<ListRemindersView> {
               Navigator.pushNamed(
                 context,
                 Routes.formSetReminder,
-                arguments: FormSetReminderSource.ListReminderPage,
+                arguments: FormSetReminderViewParam(
+                  source: FormSetReminderSource.ListReminderPage,
+                ),
               );
             },
           ),

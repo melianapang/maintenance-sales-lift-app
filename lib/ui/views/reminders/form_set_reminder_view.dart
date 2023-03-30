@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -16,13 +18,23 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
 enum FormSetReminderSource { ListReminderPage, CustomerPage, ProjectPage }
 
-class FormSetReminderView extends StatefulWidget {
-  const FormSetReminderView({
+class FormSetReminderViewParam {
+  FormSetReminderViewParam({
     required this.source,
-    super.key,
+    this.customerData,
   });
 
   final FormSetReminderSource source;
+  CustomerData? customerData;
+}
+
+class FormSetReminderView extends StatefulWidget {
+  const FormSetReminderView({
+    required this.param,
+    super.key,
+  });
+
+  final FormSetReminderViewParam param;
 
   @override
   State<FormSetReminderView> createState() => _FormSetReminderViewState();
@@ -34,6 +46,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
     return ViewModel<FormSetReminderViewModel>(
       model: FormSetReminderViewModel(
         oneSignalService: Provider.of<OneSignalService>(context),
+        customerData: widget.param.customerData,
       ),
       onModelReady: (FormSetReminderViewModel model) async {
         await model.initModel();
@@ -73,24 +86,27 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
             ),
             child: Column(
               children: [
-                if (widget.source !=
+                if (widget.param.source !=
                     FormSetReminderSource.ListReminderPage) ...[
                   TextInput.editable(
                     onChangedListener: (text) {},
                     label: "Nomor Pelanggan",
                     hintText: "Nomor Pelanggan",
+                    text: model.customerData?.customerNumber,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     onChangedListener: (text) {},
                     label: "Nama Pelanggan",
                     hintText: "Nama Pelanggan",
+                    text: model.customerData?.customerName,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
                     onChangedListener: (text) {},
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
+                    text: model.customerData?.companyName,
                   ),
                   Spacings.vert(24),
                 ],

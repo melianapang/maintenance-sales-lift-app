@@ -235,7 +235,10 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
             Navigator.pushNamed(
               context,
               Routes.formSetReminder,
-              arguments: FormSetReminderSource.CustomerPage,
+              arguments: FormSetReminderViewParam(
+                source: FormSetReminderSource.CustomerPage,
+                customerData: widget.param.customerData,
+              ),
             );
 
             setState() {

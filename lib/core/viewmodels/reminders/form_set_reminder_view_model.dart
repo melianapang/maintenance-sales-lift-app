@@ -1,3 +1,4 @@
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -7,9 +8,14 @@ import 'package:intl/intl.dart';
 class FormSetReminderViewModel extends BaseViewModel {
   FormSetReminderViewModel({
     required OneSignalService oneSignalService,
-  }) : _oneSignalService = oneSignalService;
+    CustomerData? customerData,
+  })  : _oneSignalService = oneSignalService,
+        _customerData = customerData;
 
   final OneSignalService _oneSignalService;
+
+  final CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
 
   // Filter related
   int _selectedSetReminderForOption = 0;
