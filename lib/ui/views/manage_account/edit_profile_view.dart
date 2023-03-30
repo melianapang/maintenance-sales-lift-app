@@ -68,8 +68,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 children: [
                   TextInput.editable(
                     label: "Nama",
-                    text:
-                        "${widget.param.profileData?.firstName} ${widget.param.profileData?.lastName}",
+                    text: "${widget.param.profileData?.username}",
                     hintText: "Nama Lengkap",
                     keyboardType: TextInputType.name,
                     onChangedListener: (text) {
@@ -91,7 +90,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   Spacings.vert(24),
                   TextInput.editable(
                     label: "Nomor Telepon",
-                    text: widget.param.profileData?.notelp,
+                    text: widget.param.profileData?.phoneNumber,
                     hintText: "081xxxxxxxxxx",
                     keyboardType: TextInputType.number,
                     onChangedListener: (text) {

@@ -15,8 +15,8 @@ class HomeViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService;
   final SharedPreferencesService _sharedPreferencesService;
 
-  late ProfileData _profileData;
-  ProfileData get profileData => _profileData;
+  ProfileData? _profileData;
+  ProfileData? get profileData => _profileData;
 
   @override
   Future<void> initModel() async {
@@ -31,7 +31,7 @@ class HomeViewModel extends BaseViewModel {
     return homeMenu
         .where(
           (element) => element.role.contains(
-            _profileData.role,
+            _profileData?.role ?? Role.Admin,
           ),
         )
         .toList();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -34,6 +35,8 @@ class TextInput extends StatelessWidget {
     bool isPassword = false,
     String hintText = '',
     int? maxLines,
+    int? maxLength,
+    String? note,
     Color? borderColor,
     Color? backgroundColor = MyColors.darkBlack02,
     String? errorText,
@@ -47,6 +50,8 @@ class TextInput extends StatelessWidget {
       backgroundColor: backgroundColor,
       borderColor: borderColor,
       label: label,
+      note: note,
+      maxLength: maxLength,
       maxLines: maxLines,
       enabled: true,
       hintText: hintText,
@@ -61,19 +66,23 @@ class TextInput extends StatelessWidget {
   factory TextInput.multiline({
     required void Function(String text) onChangedListener,
     required String label,
+    String? text,
     required int minLines,
     required int maxLines,
+    int? maxLength,
     String? note,
     Color backgroundColor = MyColors.darkBlack02,
     String? hintText,
   }) {
-    final controller = TextEditingController(text: '');
+    final controller = TextEditingController();
+    controller.text = text ?? '';
     return TextInput(
       controller: controller,
       onChangedListener: onChangedListener,
       backgroundColor: backgroundColor,
       minLines: minLines,
       maxLines: maxLines,
+      maxLength: maxLength,
       label: label,
       note: note,
       enabled: true,
@@ -108,6 +117,7 @@ class TextInput extends StatelessWidget {
     this.note,
     this.minLines,
     this.maxLines,
+    this.maxLength,
     this.hintText,
     this.prefixIcon,
     this.suffixIcon,
@@ -127,6 +137,7 @@ class TextInput extends StatelessWidget {
   final String? note;
   final int? minLines;
   final int? maxLines;
+  final int? maxLength;
   final String? hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -156,6 +167,11 @@ class TextInput extends StatelessWidget {
           keyboardType: keyboardType,
           minLines: minLines,
           maxLines: maxLines,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(
+              maxLength,
+            ),
+          ],
           onChanged: onChangedListener,
           style: buildTextStyle(
             fontSize: 14,

@@ -29,7 +29,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  Widget _buildProfileCard(ProfileData userData) {
+  Widget _buildProfileCard(ProfileData? userData) {
     return Card(
         elevation: 2,
         shadowColor: MyColors.darkBlack02,
@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userData.username,
+                      userData?.username ?? "",
                       style: buildTextStyle(
                         fontSize: 16,
                         fontColor: MyColors.yellow01,
@@ -74,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         Spacings.horz(6),
                         Text(
-                          userData.notelp,
+                          userData?.phoneNumber ?? "",
                           style: buildTextStyle(
                             fontSize: 14,
                             fontColor: MyColors.lightBlack02,
@@ -91,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         Spacings.horz(6),
                         Text(
-                          userData.email,
+                          userData?.email ?? "",
                           style: buildTextStyle(
                             fontSize: 14,
                             fontColor: MyColors.lightBlack02,
@@ -167,133 +167,138 @@ class _HomeViewState extends State<HomeView> {
         return Scaffold(
           extendBody: true,
           backgroundColor: MyColors.darkBlack01,
-          body: Padding(
-            padding: PaddingUtils.getPadding(context, defaultPadding: 24),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProfileCard(model.profileData),
-                  Spacings.vert(32),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Menu Utama",
-                      style: buildTextStyle(
-                        fontSize: 24,
-                        fontColor: MyColors.yellow01,
-                        fontWeight: 300,
-                      ),
-                    ),
-                  ),
-                  _buildGridListMenu(
-                    model.getUserMenu(),
-                    true,
-                  ),
-                  if (model.profileData.role == Role.Admin ||
-                      model.profileData.role == Role.SuperAdmin) ...[
-                    Spacings.vert(24),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Sales',
-                        style: buildTextStyle(
-                          fontSize: 18,
-                          fontColor: MyColors.yellow01,
-                          fontWeight: 300,
+          body: !model.busy
+              ? Padding(
+                  padding: PaddingUtils.getPadding(context, defaultPadding: 24),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildProfileCard(model.profileData),
+                        Spacings.vert(32),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Menu Utama",
+                            style: buildTextStyle(
+                              fontSize: 24,
+                              fontColor: MyColors.yellow01,
+                              fontWeight: 300,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    _buildGridListMenu(
-                      homeMenu
-                          .where((element) =>
-                              element.role.contains(Role.Sales) &&
-                              !element.role.contains(Role.Admin))
-                          .toList(),
-                      false,
-                    ),
-                    Spacings.vert(24),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Maintenance',
-                        style: buildTextStyle(
-                          fontSize: 18,
-                          fontColor: MyColors.yellow01,
-                          fontWeight: 300,
+                        _buildGridListMenu(
+                          model.getUserMenu(),
+                          true,
                         ),
-                      ),
-                    ),
-                    _buildGridListMenu(
-                      homeMenu
-                          .where((element) =>
-                              element.role.contains(Role.Engineers) &&
-                              !element.role.contains(Role.Admin))
-                          .toList(),
-                      false,
-                    ),
-                  ],
-                  Spacings.vert(32),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Kelola Akun",
-                      style: buildTextStyle(
-                        fontSize: 24,
-                        fontWeight: 300,
-                        fontColor: MyColors.yellow01,
-                      ),
-                    ),
-                  ),
-                  GridView.builder(
-                    padding: const EdgeInsets.only(
-                      top: 18,
-                    ),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: manageProfileMenu.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisExtent: 130,
-                    ),
-                    itemBuilder: (context, index) {
-                      return CustomCardWidget(
-                        cardType: CardType.menu,
-                        title: manageProfileMenu[index].title,
-                        titleSize: 12,
-                        icon: manageProfileMenu[index].icon,
-                        onTap: () {
-                          if (manageProfileMenu[index].callback != null) {
-                            showDialogWidget(
-                              context,
-                              title: 'Keluar',
-                              description: 'Anda yakin ingin Keluar?',
-                              positiveLabel: "Iya",
-                              negativeLabel: "Tidak",
-                              positiveCallback: () async {
-                                buildLoadingDialog(context);
-                                await model.logout();
-                              },
-                              negativeCallback: () {
-                                Navigator.maybePop(context);
+                        if (model.profileData?.role == Role.Admin ||
+                            model.profileData?.role == Role.SuperAdmin) ...[
+                          Spacings.vert(24),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Sales',
+                              style: buildTextStyle(
+                                fontSize: 18,
+                                fontColor: MyColors.yellow01,
+                                fontWeight: 300,
+                              ),
+                            ),
+                          ),
+                          _buildGridListMenu(
+                            homeMenu
+                                .where((element) =>
+                                    element.role.contains(Role.Sales) &&
+                                    !element.role.contains(Role.Admin))
+                                .toList(),
+                            false,
+                          ),
+                          Spacings.vert(24),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Maintenance',
+                              style: buildTextStyle(
+                                fontSize: 18,
+                                fontColor: MyColors.yellow01,
+                                fontWeight: 300,
+                              ),
+                            ),
+                          ),
+                          _buildGridListMenu(
+                            homeMenu
+                                .where((element) =>
+                                    element.role.contains(Role.Engineers) &&
+                                    !element.role.contains(Role.Admin))
+                                .toList(),
+                            false,
+                          ),
+                        ],
+                        Spacings.vert(32),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Kelola Akun",
+                            style: buildTextStyle(
+                              fontSize: 24,
+                              fontWeight: 300,
+                              fontColor: MyColors.yellow01,
+                            ),
+                          ),
+                        ),
+                        GridView.builder(
+                          padding: const EdgeInsets.only(
+                            top: 18,
+                          ),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: manageProfileMenu.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 12,
+                            mainAxisExtent: 130,
+                          ),
+                          itemBuilder: (context, index) {
+                            return CustomCardWidget(
+                              cardType: CardType.menu,
+                              title: manageProfileMenu[index].title,
+                              titleSize: 12,
+                              icon: manageProfileMenu[index].icon,
+                              onTap: () {
+                                if (manageProfileMenu[index].callback != null) {
+                                  showDialogWidget(
+                                    context,
+                                    title: 'Keluar',
+                                    description: 'Anda yakin ingin Keluar?',
+                                    positiveLabel: "Iya",
+                                    negativeLabel: "Tidak",
+                                    positiveCallback: () async {
+                                      buildLoadingDialog(context);
+                                      await model.logout();
+                                    },
+                                    negativeCallback: () {
+                                      Navigator.maybePop(context);
+                                    },
+                                  );
+                                } else if (manageProfileMenu[index].route !=
+                                    null) {
+                                  Navigator.pushNamed(
+                                      context,
+                                      manageProfileMenu[index].route ??
+                                          Routes.home);
+                                } else {
+                                  null;
+                                }
                               },
                             );
-                          } else if (manageProfileMenu[index].route != null) {
-                            Navigator.pushNamed(context,
-                                manageProfileMenu[index].route ?? Routes.home);
-                          } else {
-                            null;
-                          }
-                        },
-                      );
-                    },
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : buildLoadingSymbol(),
         );
       },
     );

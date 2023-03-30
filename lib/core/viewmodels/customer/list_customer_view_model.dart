@@ -1,8 +1,22 @@
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class ListCustomerViewModel extends BaseViewModel {
-  ListCustomerViewModel();
+  ListCustomerViewModel({
+    required DioService dioService,
+  }) : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        );
+
+  final ApiService _apiService;
+
+  List<CustomerData>? _listCustomer;
+  List<CustomerData>? get listCustomer => _listCustomer;
 
   // Filter related
   int _selectedTipePelangganOption = 0;
@@ -44,11 +58,19 @@ class ListCustomerViewModel extends BaseViewModel {
   // End of filter related
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    await requestGetAllCustomer();
+  }
 
   void search(String text) {
     setBusy(true);
 
+    setBusy(false);
+  }
+
+  Future<void> requestGetAllCustomer() async {
+    setBusy(true);
+    _listCustomer = await _apiService.getAllCustomer();
     setBusy(false);
   }
 

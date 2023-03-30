@@ -15,6 +15,30 @@ class EditCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  String _nama = "";
+  String get nama => _nama;
+
+  String _custNumber = "";
+  String get custNumber => _custNumber;
+
+  String _email = "";
+  String get email => _email;
+
+  String _phoneNumber = "";
+  String get phoneNumber => _phoneNumber;
+
+  String _city = "";
+  String get city => _city;
+
+  String _companyName = "Hello789";
+  String get companyName => _companyName;
+
+  String _dataSource = "Hello789";
+  String get dataSource => _dataSource;
+
+  String _note = "Uname22";
+  String get note => _note;
+
   // Dropdown related
   int _selectedSumberDataOption = 0;
   int get selectedSumberDataOption => _selectedSumberDataOption;
@@ -92,8 +116,17 @@ class EditCustomerViewModel extends BaseViewModel {
 
   Future<bool> requestUpdateCustomer() async {
     setBusy(true);
-
-    final response = await _apiService.requestUpdateCustomer();
+    final response = await _apiService.requestUpdateCustomer(
+      nama: _nama,
+      customerNumber: _custNumber,
+      email: _email,
+      phoneNumber: _phoneNumber,
+      city: _city,
+      note: _note,
+      companyName: _companyName,
+      dataSource: _selectedSumberDataOption,
+      customerType: _selectedTipePelangganOption,
+    );
 
     setBusy(false);
     return response != null;

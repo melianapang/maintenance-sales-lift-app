@@ -11,7 +11,7 @@ class ProfileData {
     this.lastName = "",
     this.address = "",
     this.city = "",
-    this.notelp = "",
+    this.phoneNumber = "",
     required this.email,
     required this.role,
   });
@@ -26,7 +26,7 @@ class ProfileData {
   final String lastName;
   final String address;
   final String city;
-  final String notelp;
+  final String phoneNumber;
   final String email;
   final Role role;
 }

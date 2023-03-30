@@ -35,6 +35,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/reminders/after_set_reminder_view.
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/detail_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/list_reminders_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/open_notification_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/splash_screen_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/add_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
@@ -74,7 +75,7 @@ class AppRouter {
                 username: '',
                 firstName: '',
                 lastName: '',
-                notelp: '',
+                phoneNumber: '',
                 email: '',
                 address: '',
                 city: '',
@@ -86,6 +87,16 @@ class AppRouter {
       case Routes.afterSetReminder:
         return buildRoute(
           builder: (_) => const AfterSetReminderView(),
+        );
+      case Routes.openNotificationReminder:
+        final OpenNotificationReminderViewParam param =
+            settings.arguments is OpenNotificationReminderViewParam
+                ? settings.arguments as OpenNotificationReminderViewParam
+                : OpenNotificationReminderViewParam();
+        return buildRoute(
+          builder: (_) => OpenNotificationReminderView(
+            param: param,
+          ),
         );
       case Routes.editProfile:
         final EditProfileViewParam param =
@@ -112,8 +123,14 @@ class AppRouter {
           builder: (_) => const ListCustomerView(),
         );
       case Routes.detailCustomer:
+        final DetailCustomerViewParam param =
+            settings.arguments is DetailCustomerViewParam
+                ? settings.arguments as DetailCustomerViewParam
+                : DetailCustomerViewParam();
         return buildRoute(
-          builder: (_) => const DetailCustomerView(),
+          builder: (_) => DetailCustomerView(
+            param: param,
+          ),
         );
       case Routes.addCustomer:
         return buildRoute(
@@ -218,7 +235,7 @@ class AppRouter {
               lastName: "",
               address: "",
               city: "",
-              notelp: "",
+              phoneNumber: "",
               email: "",
               role: Role.Admin,
             ),
@@ -249,7 +266,7 @@ class AppRouter {
               lastName: "",
               address: "",
               city: "",
-              notelp: "",
+              phoneNumber: "",
               email: "",
               role: Role.Admin,
             ),

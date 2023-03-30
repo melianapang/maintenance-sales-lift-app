@@ -45,6 +45,9 @@ class AuthenticationService {
       print("payload: $payload");
       ProfileData profileData = ProfileData(
         username: payload['username'],
+        city: payload['city'],
+        address: payload['address'],
+        phoneNumber: payload['phone_number'],
         email: payload['email'],
         role: _mappingRole(
           payload['id_role'],
@@ -95,11 +98,11 @@ class AuthenticationService {
   Role _mappingRole(String role) {
     switch (role) {
       case "1":
-        return Role.Admin;
+        return Role.Sales;
       case "2":
         return Role.Engineers;
       case "3":
-        return Role.Sales;
+        return Role.Admin;
       default:
         return Role.Admin;
     }

@@ -26,10 +26,10 @@ class LoginViewModel extends BaseViewModel {
   bool _showPassword = false;
   bool get showPassword => _showPassword;
 
-  String _inputUser = "Indra1999@email.com";
+  String _inputUser = "Uname22";
   String get inputUser => _inputUser;
 
-  String _password = "Hello6789";
+  String _password = "Hello789";
   String get password => _password;
 
   // @override

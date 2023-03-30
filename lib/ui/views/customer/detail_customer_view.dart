@@ -4,7 +4,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -15,8 +17,21 @@ import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.d
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class DetailCustomerViewParam {
+  DetailCustomerViewParam({
+    this.customerData,
+  });
+
+  final CustomerData? customerData;
+}
+
 class DetailCustomerView extends StatefulWidget {
-  const DetailCustomerView({super.key});
+  const DetailCustomerView({
+    required this.param,
+    super.key,
+  });
+
+  final DetailCustomerViewParam param;
 
   @override
   State<DetailCustomerView> createState() => _DetailCustomerViewState();
@@ -30,6 +45,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
     return ViewModel(
       model: DetailCustomerViewModel(
         dioService: Provider.of<DioService>(context),
+        customerData: widget.param.customerData,
       ),
       onModelReady: (DetailCustomerViewModel model) async {
         await model.initModel();
@@ -71,15 +87,20 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                 children: [
                   Spacings.vert(40),
                   Text(
-                    "Nadia Ang",
+                    StringUtils.removeZeroWidthSpaces(
+                      model.customerData?.customerName ?? "",
+                    ),
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
                       fontColor: MyColors.yellow01,
                     ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "PT ABC JAYA",
+                    model.customerData?.companyName ?? "",
                     style: buildTextStyle(
                       fontSize: 20,
                       fontWeight: 400,
@@ -88,24 +109,28 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                   ),
                   Spacings.vert(32),
                   StatusCardWidget(
-                    cardType: StatusCardType.Confirmed,
+                    cardType: model.customerStatusCardType,
                     onTap: () {},
                   ),
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Nomor Customer",
+                    text: model.customerData?.customerNumber,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Kota",
+                    text: model.customerData?.city,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon",
+                    text: model.customerData?.phoneNumber,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Email",
+                    text: model.customerData?.email,
                   ),
                 ],
               ),
