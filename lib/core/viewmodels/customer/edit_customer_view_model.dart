@@ -1,4 +1,6 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -6,38 +8,22 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditCustomerViewModel extends BaseViewModel {
   EditCustomerViewModel({
+    CustomerData? customerData,
     required DioService dioService,
-  }) : _apiService = ApiService(
+  })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
-        );
+        ),
+        _customerData = customerData;
 
   final ApiService _apiService;
 
-  String _nama = "";
-  String get nama => _nama;
+  CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
 
-  String _custNumber = "";
-  String get custNumber => _custNumber;
-
-  String _email = "";
-  String get email => _email;
-
-  String _phoneNumber = "";
-  String get phoneNumber => _phoneNumber;
-
-  String _city = "";
-  String get city => _city;
-
-  String _companyName = "Hello789";
-  String get companyName => _companyName;
-
-  String _dataSource = "Hello789";
-  String get dataSource => _dataSource;
-
-  String _note = "Uname22";
-  String get note => _note;
+  Customer? _customer;
+  Customer? get customer => _customer;
 
   // Dropdown related
   int _selectedSumberDataOption = 0;
@@ -67,7 +53,32 @@ class EditCustomerViewModel extends BaseViewModel {
   // End of Dropdown related
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+
+    if (_customerData != null) {
+      _customer = _mappingCustomerDataToCustomerModel(_customerData!);
+    }
+
+    _selectedSumberDataOption = int.parse(_customerData?.dataSource ?? "0");
+    _selectedTipePelangganOption =
+        int.parse(_customerData?.customerType ?? "0") > 1
+            ? 1
+            : int.parse(_customerData?.customerType ?? "0");
+    // _selectedKebutuhanPelangganOption = int.parse(_customerData?.dataSource ?? "0");
+
+    setSelectedTipePelanggan(
+      selectedMenu: int.parse(_customerData?.customerType ?? "0"),
+    );
+    setSelectedSumberData(
+      selectedMenu: int.parse(_customerData?.dataSource ?? "0"),
+    );
+    // setSelectedKebutuhanPelanggan(
+    //   selectedMenu: int.parse(_customerData?.dataSource ?? "0"),
+    // );
+
+    setBusy(false);
+  }
 
   void setSelectedSumberData({
     required int selectedMenu,
@@ -114,21 +125,64 @@ class EditCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setCustomerNumber(String value) {
+    _customer?.customerNumber = value;
+  }
+
+  void setCustomerName(String value) {
+    _customer?.customerName = value;
+  }
+
+  void setCompanyName(String value) {
+    _customer?.companyName = value;
+  }
+
+  void setCity(String value) {
+    _customer?.city = value;
+  }
+
+  void setEmail(String value) {
+    _customer?.email = value;
+  }
+
+  void setPhoneNumber(String value) {
+    _customer?.phoneNumber = value;
+  }
+
   Future<bool> requestUpdateCustomer() async {
     setBusy(true);
     final response = await _apiService.requestUpdateCustomer(
-      nama: _nama,
-      customerNumber: _custNumber,
-      email: _email,
-      phoneNumber: _phoneNumber,
-      city: _city,
-      note: _note,
-      companyName: _companyName,
+      nama: _customer?.customerName ?? "",
+      customerNumber: _customer?.customerNumber ?? "",
+      email: _customer?.email ?? "",
+      phoneNumber: _customer?.phoneNumber ?? "",
+      city: _customer?.city ?? "",
+      note: _customer?.note ?? "",
+      companyName: _customer?.companyName ?? "",
       dataSource: _selectedSumberDataOption,
       customerType: _selectedTipePelangganOption,
     );
 
+    print(
+        "edit data: ${_customer?.customerName};  ${_customer?.customerType};  ${_customer?.dataSource};  ${_customer?.email};  ${_customer?.phoneNumber};  ${_customer?.companyName}; ");
+
     setBusy(false);
     return response != null;
+  }
+
+  Customer _mappingCustomerDataToCustomerModel(CustomerData data) {
+    return Customer(
+      customerName: data.customerName,
+      customerType:
+          int.parse(data.customerType) > 1 ? 1 : int.parse(data.customerType),
+      customerNumber: data.customerNumber,
+      companyName: data.companyName,
+      city: data.city,
+      dataSource: int.parse(data.dataSource),
+      phoneNumber: data.phoneNumber,
+      note: data.note,
+      status: int.parse(data.status),
+      email: data.email,
+    );
   }
 }

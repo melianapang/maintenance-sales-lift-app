@@ -13,6 +13,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -60,7 +61,13 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.editCustomer);
+                  Navigator.pushNamed(
+                    context,
+                    Routes.editCustomer,
+                    arguments: EditCustomerViewParam(
+                      customerData: model.customerData,
+                    ),
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(

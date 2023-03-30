@@ -137,8 +137,14 @@ class AppRouter {
           builder: (_) => const AddCustomerView(),
         );
       case Routes.editCustomer:
+        final EditCustomerViewParam param =
+            settings.arguments is EditCustomerViewParam
+                ? settings.arguments as EditCustomerViewParam
+                : EditCustomerViewParam();
         return buildRoute(
-          builder: (_) => const EditCustomerView(),
+          builder: (_) => EditCustomerView(
+            param: param,
+          ),
         );
       case Routes.exportCustomer:
         return buildRoute(

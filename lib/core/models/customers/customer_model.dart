@@ -4,27 +4,22 @@ class Customer {
     required this.customerType,
     required this.customerNumber,
     required this.email,
-    this.phoneNumber,
-    this.city,
-    this.dataSource = DataSource.Leads,
-    this.note,
-    this.companyName,
-    this.status,
+    required this.phoneNumber,
+    required this.city,
+    required this.dataSource,
+    required this.note,
+    required this.companyName,
+    required this.status,
   });
 
-  final String customerName;
-  final int customerType;
-  final String customerNumber;
-  final String email;
-  final String? phoneNumber;
-  final String? city;
-  final DataSource dataSource;
-  final String? note;
-  final String? companyName;
-  final int? status;
-}
-
-enum DataSource {
-  Leads,
-  NonLeads,
+  String customerName;
+  int customerType;
+  String customerNumber;
+  String email;
+  String phoneNumber;
+  String city;
+  int dataSource;
+  String note;
+  String companyName;
+  int? status;
 }
