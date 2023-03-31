@@ -27,11 +27,13 @@ String mappingRoleToString(Role role) {
 Role mappingStringToRole(String role) {
   switch (role) {
     case "1":
-      return Role.Sales;
+      return Role.SuperAdmin;
     case "2":
-      return Role.Engineers;
-    case "3":
       return Role.Admin;
+    case "3":
+      return Role.Engineers;
+    case "4":
+      return Role.Sales;
     default:
       return Role.Admin;
   }
