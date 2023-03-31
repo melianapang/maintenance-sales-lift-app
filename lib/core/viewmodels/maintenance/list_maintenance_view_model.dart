@@ -1,8 +1,22 @@
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class ListMaintenanceViewModel extends BaseViewModel {
-  ListMaintenanceViewModel();
+  ListMaintenanceViewModel({
+    required DioService dioService,
+  }) : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        );
+
+  final ApiService _apiService;
+
+  List<MaintenanceData>? _listMaintenance;
+  List<MaintenanceData>? get listMaintenance => _listMaintenance;
 
   // Filter related
   int _selectedHandledByOption = 0;
@@ -23,7 +37,11 @@ class ListMaintenanceViewModel extends BaseViewModel {
   // End of filter related
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    _listMaintenance = await _apiService.requestGetAllMaintenance();
+    setBusy(false);
+  }
 
   void terapkanFilter({
     required int selectedHandledBy,

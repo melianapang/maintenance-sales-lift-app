@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_history_maintenance_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -71,7 +74,9 @@ class _DetailHistoryMaintenanceViewState
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: DetailHistoryMaintenanceViewModel(),
+      model: DetailHistoryMaintenanceViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (DetailHistoryMaintenanceViewModel model) async {
         await model.initModel();
       },

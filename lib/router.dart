@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/custom_base_url_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/add_customer_view.dart';
@@ -168,6 +169,7 @@ class AppRouter {
             param: param,
           ),
         );
+
       case Routes.listFollowUp:
         return buildRoute(
           builder: (_) => const ListFollowUpView(),
@@ -189,8 +191,14 @@ class AppRouter {
           builder: (_) => const ListMaintenanceView(),
         );
       case Routes.detailMaintenance:
+        final DetailMaintenanceViewParam param =
+            settings.arguments is DetailMaintenanceViewParam
+                ? settings.arguments as DetailMaintenanceViewParam
+                : DetailMaintenanceViewParam();
         return buildRoute(
-          builder: (_) => const DetailMaintenanceView(),
+          builder: (_) => DetailMaintenanceView(
+            param: param,
+          ),
         );
       case Routes.detailHistoryMaintenance:
         return buildRoute(
@@ -295,6 +303,12 @@ class AppRouter {
                 : ImageDetailViewParam();
         return buildRoute(
           builder: (_) => ImageDetailView(param: param),
+        );
+
+      // Misc
+      case Routes.customBaseURL:
+        return buildRoute(
+          builder: (_) => const CustomBaseURLView(),
         );
 
       default:
