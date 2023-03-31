@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -43,20 +43,25 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       onModelReady: (SplashScreenViewModel model) async {
         model.initModel();
         final bool isLoggedIn = await model.isLoggedIn();
+
         Future.delayed(
             const Duration(
               seconds: 2,
             ), () {
+          if (kReleaseMode) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              isLoggedIn ? Routes.home : Routes.login,
+              (route) => false,
+            );
+
+            return;
+          }
           Navigator.pushNamedAndRemoveUntil(
             context,
             Routes.customBaseURL,
             (route) => false,
           );
-          // Navigator.pushNamedAndRemoveUntil(
-          //   context,
-          //   isLoggedIn ? Routes.home : Routes.login,
-          //   (route) => false,
-          // );
         });
       },
       builder: (context, model, child) {

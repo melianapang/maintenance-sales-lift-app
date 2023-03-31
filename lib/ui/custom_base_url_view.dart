@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/custom_base_url_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -17,6 +18,7 @@ class CustomBaseURLView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModel<CustomBaseURLViewModel>(
       model: CustomBaseURLViewModel(
+        apisService: Provider.of<AuthenticationService>(context),
         globalConfigService: Provider.of<GlobalConfigService>(context),
       ),
       builder: (_, model, __) {
@@ -46,11 +48,13 @@ class CustomBaseURLView extends StatelessWidget {
                 ButtonWidget(
                   buttonType: ButtonType.primary,
                   text: 'Save',
-                  onTap: () {
+                  onTap: () async {
                     model.baseURL = model.customBaseURLController.text;
+
+                    final bool isLoggedIn = await model.isLoggedIn();
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      Routes.login,
+                      isLoggedIn ? Routes.home : Routes.login,
                       (route) => false,
                     );
                   },
