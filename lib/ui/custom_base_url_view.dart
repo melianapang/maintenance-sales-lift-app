@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/app_constants/colors.dart';
-import 'package:flutter_application_1/core/app_constants/env.dart';
-import 'package:flutter_application_1/core/app_constants/routes.dart';
-import 'package:flutter_application_1/core/services/global_config_service.dart';
-import 'package:flutter_application_1/core/viewmodels/custom_base_url_view_model.dart';
-import 'package:flutter_application_1/core/viewmodels/view_model.dart';
-import 'package:flutter_application_1/ui/shared/spacings.dart';
-import 'package:flutter_application_1/ui/widgets/buttons.dart';
-import 'package:flutter_application_1/ui/widgets/text_inputs.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/custom_base_url_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:provider/provider.dart';
 
 class CustomBaseURLView extends StatelessWidget {
