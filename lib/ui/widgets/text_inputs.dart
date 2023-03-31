@@ -127,6 +127,7 @@ class TextInput extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.onChangedListener,
+    this.fontColor = MyColors.white,
     super.key,
   });
 
@@ -146,6 +147,7 @@ class TextInput extends StatelessWidget {
   final String? errorText;
   final Color? backgroundColor;
   final Color? borderColor;
+  final Color fontColor;
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +177,7 @@ class TextInput extends StatelessWidget {
           onChanged: onChangedListener,
           style: buildTextStyle(
             fontSize: 14,
-            fontColor: MyColors.white,
+            fontColor: fontColor,
             fontWeight: 400,
           ),
           decoration: InputDecoration(

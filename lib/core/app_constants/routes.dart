@@ -42,4 +42,7 @@ class Routes {
 
   // Gallery
   static const String imageDetail = 'image-detail';
+
+  // Misc
+  static const String customBaseURL = 'custom-base-url';
 }

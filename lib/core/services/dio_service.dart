@@ -6,14 +6,17 @@ import 'package:flutter/foundation.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
 import 'package:rxdart/subjects.dart';
 
 class DioService {
   DioService({
     required AliceCore aliceCore,
     required AuthenticationService authenticationService,
+    required GlobalConfigService globalConfigService,
   })  : _aliceCore = aliceCore,
-        _authenticationService = authenticationService;
+        _authenticationService = authenticationService,
+        _globalConfigService = globalConfigService;
 
   static CancelToken _cancelToken = CancelToken();
   static const int _timeOut = 10000;
@@ -26,10 +29,13 @@ class DioService {
 
   final AliceCore _aliceCore;
   final AuthenticationService _authenticationService;
+  final GlobalConfigService _globalConfigService;
+
+  String? get _customBaseURL => _globalConfigService.customBaseURL;
 
   Dio _makeBaseDio() {
     return Dio()
-      ..options.baseUrl = EnvConstants.baseURL
+      ..options.baseUrl = _customBaseURL ?? EnvConstants.baseURL
       ..options.connectTimeout = _timeOut
       // ..options.responseType = ResponseType.json
       ..interceptors.addAll(<Interceptor>[

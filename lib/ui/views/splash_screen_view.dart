@@ -49,9 +49,14 @@ class _SplashScreenViewState extends State<SplashScreenView> {
             ), () {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            isLoggedIn ? Routes.home : Routes.login,
+            Routes.customBaseURL,
             (route) => false,
           );
+          // Navigator.pushNamedAndRemoveUntil(
+          //   context,
+          //   isLoggedIn ? Routes.home : Routes.login,
+          //   (route) => false,
+          // );
         });
       },
       builder: (context, model, child) {

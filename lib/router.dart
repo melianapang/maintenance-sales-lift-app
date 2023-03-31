@@ -159,8 +159,14 @@ class AppRouter {
           builder: (_) => const ListLogView(),
         );
       case Routes.detailLog:
+        final DetailLogViewParam param =
+            settings.arguments is DetailLogViewParam
+                ? settings.arguments as DetailLogViewParam
+                : DetailLogViewParam();
         return buildRoute(
-          builder: (_) => const DetailLogView(),
+          builder: (_) => DetailLogView(
+            param: param,
+          ),
         );
       case Routes.listFollowUp:
         return buildRoute(
