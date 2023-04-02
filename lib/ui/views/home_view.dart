@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/home_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -46,12 +47,17 @@ class _HomeViewState extends State<HomeView> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipOval(
-                child: Image.network(
-                  "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
-                  width: 48,
-                  height: 48,
+              const ClipOval(
+                child: Icon(
+                  PhosphorIcons.userCircle,
+                  color: MyColors.yellow01,
+                  size: 60,
                 ),
+                // child: Image.network(
+                //   "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
+                //   width: 48,
+                //   height: 48,
+                // ),
               ),
               Spacings.horz(10),
               Expanded(
@@ -59,7 +65,11 @@ class _HomeViewState extends State<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userData?.username ?? "",
+                      StringUtils.removeZeroWidthSpaces(
+                        userData?.username ?? "",
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: buildTextStyle(
                         fontSize: 16,
                         fontColor: MyColors.yellow01,
@@ -74,7 +84,11 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         Spacings.horz(6),
                         Text(
-                          userData?.phoneNumber ?? "",
+                          StringUtils.removeZeroWidthSpaces(
+                            userData?.phoneNumber ?? "",
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: buildTextStyle(
                             fontSize: 14,
                             fontColor: MyColors.lightBlack02,
@@ -91,7 +105,11 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         Spacings.horz(6),
                         Text(
-                          userData?.email ?? "",
+                          StringUtils.removeZeroWidthSpaces(
+                            userData?.email ?? "",
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: buildTextStyle(
                             fontSize: 14,
                             fontColor: MyColors.lightBlack02,
