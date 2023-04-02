@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
@@ -22,8 +24,31 @@ class FormMaintenanceViewModel extends BaseViewModel {
   ];
   List<DateTime> get selectedDates => _selectedDates;
 
+  final List<GalleryData> _compressedFiles = [];
+  List<GalleryData> get compressedFiles => _compressedFiles;
+
   @override
   Future<void> initModel() async {}
+
+  List<GalleryData> getPhotosData() {
+    return _compressedFiles
+        .where((element) => element.galleryType == GalleryType.PHOTO)
+        .toList();
+  }
+
+  List<GalleryData> getVideosData() {
+    return _compressedFiles
+        .where((element) => element.galleryType == GalleryType.VIDEO)
+        .toList();
+  }
+
+  void addCompressedFile(GalleryData value) {
+    _compressedFiles.add(value);
+  }
+
+  void removeCompressedFile(GalleryData data) {
+    _compressedFiles.removeWhere((item) => item == data);
+  }
 
   void setHasilKonfirmasi(int index) {
     _selectedHasilMaintenanceOption = index;

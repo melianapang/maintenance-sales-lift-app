@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -8,6 +10,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/form_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -26,40 +29,13 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
   final ScrollController buktiFotoController = ScrollController();
   final ScrollController buktiVideoController = ScrollController();
 
-  List<GalleryData> galleryData = [
-    GalleryData(
-      filepath:
-          "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://www.rollingstone.com/wp-content/uploads/2019/12/TaylorSwiftTimIngham.jpg?w=1581&h=1054&crop=1",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png/220px-191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://i.guim.co.uk/img/media/a48e88b98455a5b118d3c1d34870a1d3aaa1b5c6/0_41_3322_1994/master/3322.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=b95f25e4e31f132166006345fd87b5ae",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-  ];
-
-  List<GalleryData> videoData = [];
-
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormMaintenanceViewModel>(
       model: FormMaintenanceViewModel(),
+      onModelReady: (FormMaintenanceViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, child) {
         return Scaffold(
           appBar: buildDefaultAppBar(
@@ -127,18 +103,20 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   ),
                 ),
                 GalleryThumbnailWidget(
-                  galleryData: galleryData,
+                  galleryData: model.getPhotosData(),
                   scrollController: buktiFotoController,
                   galleryType: GalleryType.PHOTO,
                   isCRUD: model.isEdit,
-                  callbackGalleryPath: (path) {
-                    galleryData.add(
-                      GalleryData(
-                        filepath: path,
-                        galleryType: GalleryType.PHOTO,
-                        isGalleryPicked: true,
-                      ),
-                    );
+                  callbackCompressedFiles: (compressedFile, isCompressing) {
+                    if (isCompressing) {
+                      buildLoadingDialog(context);
+                      return;
+                    }
+
+                    Navigator.pop(context);
+                    if (compressedFile != null) {
+                      model.addCompressedFile(compressedFile);
+                    }
                     setState(() {});
 
                     //scroll to last index of bukti foto
@@ -151,7 +129,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                     );
                   },
                   callbackDeleteAddedGallery: (data) {
-                    galleryData.remove(data);
+                    model.removeCompressedFile(data);
 
                     setState(() {});
                   },
@@ -169,37 +147,39 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   ),
                 ),
                 GalleryThumbnailWidget(
-                  galleryData: videoData,
+                  galleryData: model.getVideosData(),
                   scrollController: buktiVideoController,
                   galleryType: GalleryType.VIDEO,
                   isCRUD: model.isEdit,
-                  callbackGalleryPath: (path) {
-                    if (videoData.isNotEmpty) {
+                  callbackCompressedFiles: (compressedFile, isCompressing) {
+                    if (model.getVideosData().length == 1) {
                       SnackbarUtils.showSimpleSnackbar(
                           text: 'Anda hanya bisa menambahkan 1 video saja');
                       return;
                     }
 
-                    galleryData.add(
-                      GalleryData(
-                        filepath: path,
-                        galleryType: GalleryType.PHOTO,
-                        isGalleryPicked: true,
-                      ),
-                    );
-                    setState(() {});
+                    if (isCompressing) {
+                      buildLoadingDialog(context);
+                      return;
+                    }
 
-                    //scroll to last index of bukti video
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => buktiFotoController.animateTo(
-                        buktiFotoController.position.maxScrollExtent,
-                        duration: const Duration(milliseconds: 100),
-                        curve: Curves.easeOut,
-                      ),
-                    );
+                    Navigator.pop(context);
+                    if (compressedFile != null) {
+                      model.addCompressedFile(compressedFile);
+
+                      setState(() {});
+                      //scroll to last index of bukti video
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => buktiFotoController.animateTo(
+                          buktiFotoController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 100),
+                          curve: Curves.easeOut,
+                        ),
+                      );
+                    }
                   },
                   callbackDeleteAddedGallery: (data) {
-                    galleryData.remove(data);
+                    model.removeCompressedFile(data);
 
                     setState(() {});
                   },
@@ -231,6 +211,17 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   maxLines: 5,
                   minLines: 5,
                 ),
+                Spacings.vert(24),
+                if (model.getPhotosData().length > 0)
+                  Image.file(
+                    File(model.compressedFiles
+                        .where((element) =>
+                            element.galleryType == GalleryType.PHOTO)
+                        .first
+                        .filepath),
+                    width: 500,
+                    height: 500,
+                  )
               ],
             ),
           ),

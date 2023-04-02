@@ -126,7 +126,7 @@ packages:
       name: calendar_date_picker2
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.6"
+    version: "0.4.5"
   characters:
     dependency: transitive
     description:
@@ -441,6 +441,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.1"
+  lecle_flutter_absolute_path:
+    dependency: "direct main"
+    description:
+      name: lecle_flutter_absolute_path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+1"
   lints:
     dependency: transitive
     description:
@@ -943,6 +950,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  video_compress:
+    dependency: "direct main"
+    description:
+      name: video_compress
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.2"
   video_player:
     dependency: "direct main"
     description:
@@ -978,13 +992,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.15"
-  video_thumbnail:
-    dependency: "direct main"
-    description:
-      name: video_thumbnail
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.3"
   watcher:
     dependency: transitive
     description:

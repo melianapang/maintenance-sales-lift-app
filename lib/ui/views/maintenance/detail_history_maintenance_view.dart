@@ -62,11 +62,15 @@ class _DetailHistoryMaintenanceViewState
     GalleryData(
       filepath:
           'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      thumbnailPath:
+          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
       galleryType: GalleryType.VIDEO,
     ),
     GalleryData(
       filepath:
           'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      thumbnailPath:
+          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
       galleryType: GalleryType.VIDEO,
     ),
   ];
@@ -165,21 +169,6 @@ class _DetailHistoryMaintenanceViewState
                     isCRUD: false,
                     galleryData: galleryData,
                     galleryType: GalleryType.PHOTO,
-                    callbackGalleryPath: (path) {
-                      galleryData.add(
-                        GalleryData(
-                          filepath: path,
-                          galleryType: GalleryType.PHOTO,
-                          isGalleryPicked: true,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    callbackDeleteAddedGallery: (data) {
-                      galleryData.remove(data);
-
-                      setState(() {});
-                    },
                   ),
                   Spacings.vert(24),
                   Align(
@@ -198,21 +187,6 @@ class _DetailHistoryMaintenanceViewState
                     isCRUD: false,
                     galleryData: videoData,
                     galleryType: GalleryType.VIDEO,
-                    callbackGalleryPath: (path) {
-                      galleryData.add(
-                        GalleryData(
-                          filepath: path,
-                          galleryType: GalleryType.VIDEO,
-                          isGalleryPicked: true,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    callbackDeleteAddedGallery: (data) {
-                      galleryData.remove(data);
-
-                      setState(() {});
-                    },
                   ),
                   Spacings.vert(32),
                   const Divider(

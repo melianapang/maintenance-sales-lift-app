@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/upload_po_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -104,24 +105,26 @@ class _UploadPOViewState extends State<UploadPOView> {
                   galleryData: galleryData,
                   galleryType: GalleryType.PHOTO,
                   scrollController: buktiFotoController,
-                  callbackGalleryPath: (path) {
-                    galleryData.add(
-                      GalleryData(
-                        filepath: path,
-                        galleryType: GalleryType.PHOTO,
-                        isGalleryPicked: true,
-                      ),
-                    );
-                    setState(() {});
+                  callbackCompressedFiles: (compressedFile, isCompressing) {
+                    if (isCompressing) {
+                      buildLoadingDialog(context);
+                      return;
+                    }
 
-                    //scroll to last index of bukti foto
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => buktiFotoController.animateTo(
-                        buktiFotoController.position.maxScrollExtent,
-                        duration: const Duration(milliseconds: 100),
-                        curve: Curves.easeOut,
-                      ),
-                    );
+                    Navigator.pop(context);
+                    if (compressedFile != null) {
+                      galleryData.add(compressedFile);
+
+                      setState(() {});
+                      //scroll to last index of bukti video
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => buktiFotoController.animateTo(
+                          buktiFotoController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 100),
+                          curve: Curves.easeOut,
+                        ),
+                      );
+                    }
                   },
                   callbackDeleteAddedGallery: (data) {
                     galleryData.remove(data);

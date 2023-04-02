@@ -169,7 +169,6 @@ class AppRouter {
             param: param,
           ),
         );
-
       case Routes.listFollowUp:
         return buildRoute(
           builder: (_) => const ListFollowUpView(),

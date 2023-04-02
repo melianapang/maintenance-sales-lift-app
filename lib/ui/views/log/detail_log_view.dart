@@ -117,9 +117,6 @@ class _DetailLogViewState extends State<DetailLogView> {
                       final Map<String, dynamic> newData =
                           model.logData?.contentsNew ?? {};
 
-                      print(
-                          "halooo: ${oldData.keys.toList()[index]}:${oldData.values.toList()[index]}; ${newData.keys.toList()[index]}:${newData.values.toList()[index]}");
-
                       return _buildBeforeAfterLogItem(
                         StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                           oldData.keys.toList()[index].toString(),
