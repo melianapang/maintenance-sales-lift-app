@@ -138,6 +138,19 @@ class _DetailLogViewState extends State<DetailLogView> {
                       );
                     },
                   ),
+                  Spacings.vert(16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Catatan: data dengan warna kuning adalah data yang diubah.",
+                      textAlign: TextAlign.start,
+                      style: buildTextStyle(
+                        fontSize: 12,
+                        fontColor: MyColors.yellow02,
+                        fontWeight: 500,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
