@@ -6,9 +6,11 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
-Widget buildLoadingSymbol() {
-  return const Center(
-    child: CircularProgressIndicator.adaptive(),
+Widget buildLoadingPage() {
+  return const Expanded(
+    child: Center(
+      child: CircularProgressIndicator.adaptive(),
+    ),
   );
 }
 

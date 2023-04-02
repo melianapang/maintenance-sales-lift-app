@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/list_maintenanc
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
@@ -33,86 +34,86 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
         await model.initModel();
       },
       builder: (context, model, _) {
-        return !model.busy
-            ? Scaffold(
-                backgroundColor: MyColors.darkBlack01,
-                appBar: buildDefaultAppBar(
-                  context,
-                  title: "Jadwal Pemeliharaan",
-                  isBackEnabled: true,
-                  actions: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.exportMaintenance);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(
-                          right: 20.0,
-                        ),
-                        child: Icon(
-                          PhosphorIcons.exportBold,
-                          color: MyColors.lightBlack02,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ],
+        return Scaffold(
+          backgroundColor: MyColors.darkBlack01,
+          appBar: buildDefaultAppBar(
+            context,
+            title: "Jadwal Pemeliharaan",
+            isBackEnabled: true,
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.exportMaintenance);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    right: 20.0,
+                  ),
+                  child: Icon(
+                    PhosphorIcons.exportBold,
+                    color: MyColors.lightBlack02,
+                    size: 18,
+                  ),
                 ),
-                body: Column(
-                  children: [
-                    buildSearchBar(
-                      context,
-                      textSearchOnChanged: (text) {},
-                      isFilterShown: true,
-                      onTapFilter: () {
-                        showMaintenanceFilterMenu(context,
-                            listHandledByMenu: model.handledByOptions,
-                            listSortMenu: model.sortOptions,
-                            selectedHandledBy: model.selectedSumberDataOption,
-                            selectedSort: model.selectedSortOption,
-                            terapkanCallback: model.terapkanFilter);
-                      },
-                    ),
-                    Spacings.vert(12),
-                    Expanded(
-                      child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: model.listMaintenance?.length ?? 0,
-                          separatorBuilder: (context, index) => const Divider(
-                                color: MyColors.transparent,
-                                height: 20,
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              buildSearchBar(
+                context,
+                textSearchOnChanged: (text) {},
+                isFilterShown: true,
+                onTapFilter: () {
+                  showMaintenanceFilterMenu(context,
+                      listHandledByMenu: model.handledByOptions,
+                      listSortMenu: model.sortOptions,
+                      selectedHandledBy: model.selectedSumberDataOption,
+                      selectedSort: model.selectedSortOption,
+                      terapkanCallback: model.terapkanFilter);
+                },
+              ),
+              Spacings.vert(12),
+              if (!model.isShowNoDataFoundPage && !model.busy)
+                Expanded(
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: model.listMaintenance?.length ?? 0,
+                      separatorBuilder: (context, index) => const Divider(
+                            color: MyColors.transparent,
+                            height: 20,
+                          ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCardWidget(
+                          cardType: CardType.list,
+                          // title: "KA-23243",
+                          // description: "PT ABC JAYA",
+                          // description2: "12 March 2023",
+                          title: model.listMaintenance?[index].unitName ?? "",
+                          description: "PT ABC JAYA",
+                          description2:
+                              model.listMaintenance?[index].startMaintenance,
+                          titleSize: 20,
+                          descSize: 16,
+                          desc2Size: 12,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.detailMaintenance,
+                              arguments: DetailMaintenanceViewParam(
+                                maintenanceData: model.listMaintenance?[index],
                               ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return CustomCardWidget(
-                              cardType: CardType.list,
-                              // title: "KA-23243",
-                              // description: "PT ABC JAYA",
-                              // description2: "12 March 2023",
-                              title:
-                                  model.listMaintenance?[index].unitName ?? "",
-                              description: "PT ABC JAYA",
-                              description2: model
-                                  .listMaintenance?[index].startMaintenance,
-                              titleSize: 20,
-                              descSize: 16,
-                              desc2Size: 12,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.detailMaintenance,
-                                  arguments: DetailMaintenanceViewParam(
-                                    maintenanceData:
-                                        model.listMaintenance?[index],
-                                  ),
-                                );
-                              },
                             );
-                          }),
-                    ),
-                  ],
+                          },
+                        );
+                      }),
                 ),
-              )
-            : buildLoadingSymbol();
+              if (model.isShowNoDataFoundPage && !model.busy)
+                buildNoDataFoundPage(),
+              if (model.busy) buildLoadingPage(),
+            ],
+          ),
+        );
       },
     );
   }

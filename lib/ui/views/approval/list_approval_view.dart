@@ -4,6 +4,8 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/approval/list_approval_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -39,30 +41,35 @@ class _ListApprovalViewState extends State<ListApprovalView> {
                 textSearchOnChanged: (text) {},
                 onTapFilter: () {},
               ),
-              Spacings.vert(12),
-              Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  separatorBuilder: (context, index) => const Divider(
-                    color: MyColors.transparent,
-                    height: 20,
+              if (!model.isShowNoDataFoundPage && !model.busy) ...[
+                Spacings.vert(12),
+                Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: MyColors.transparent,
+                      height: 20,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomCardWidget(
+                        cardType: CardType.list,
+                        title: "Nikimia Robertson",
+                        description: "Edit Data Request",
+                        desc2Size: 16,
+                        titleSize: 20,
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.detailApproval);
+                        },
+                      );
+                    },
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomCardWidget(
-                      cardType: CardType.list,
-                      title: "Nikimia Robertson",
-                      description: "Edit Data Request",
-                      desc2Size: 16,
-                      titleSize: 20,
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.detailApproval);
-                      },
-                    );
-                  },
                 ),
-              ),
-              Spacings.vert(16),
+                Spacings.vert(16),
+              ],
+              if (model.isShowNoDataFoundPage && !model.busy)
+                buildNoDataFoundPage(),
+              if (model.busy) buildLoadingPage(),
             ],
           ),
         );

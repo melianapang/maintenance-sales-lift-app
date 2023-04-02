@@ -305,7 +305,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   ),
                 ),
               )
-            : buildLoadingSymbol();
+            : buildLoadingPage();
       },
     );
   }

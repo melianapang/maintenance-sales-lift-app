@@ -18,6 +18,9 @@ class ListCustomerViewModel extends BaseViewModel {
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
+  bool _isShowNoDataFoundPage = false;
+  bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
+
   // Filter related
   int _selectedTipePelangganOption = 0;
   int get selectedTipePelangganOption => _selectedTipePelangganOption;
@@ -60,9 +63,14 @@ class ListCustomerViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     await requestGetAllCustomer();
+    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
   }
 
   void search(String text) {
+    if (busy || _listCustomer?.isEmpty == true || _listCustomer == null) return;
     setBusy(true);
 
     setBusy(false);

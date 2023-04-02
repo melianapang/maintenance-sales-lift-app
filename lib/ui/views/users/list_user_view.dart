@@ -5,6 +5,8 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/list_user_view_model.d
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -43,26 +45,30 @@ class _ListUserViewState extends State<ListUserView> {
                 isFilterShown: false,
               ),
               Spacings.vert(12),
-              Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  separatorBuilder: (_, __) => const Divider(
-                    color: MyColors.transparent,
-                    height: 20,
+              if (!model.isShowNoDataFoundPage && !model.busy)
+                Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    separatorBuilder: (_, __) => const Divider(
+                      color: MyColors.transparent,
+                      height: 20,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomCardWidget(
+                        cardType: CardType.list,
+                        title: "Nadia Ang",
+                        titleSize: 20,
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.detailUser);
+                        },
+                      );
+                    },
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomCardWidget(
-                      cardType: CardType.list,
-                      title: "Nadia Ang",
-                      titleSize: 20,
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.detailUser);
-                      },
-                    );
-                  },
                 ),
-              ),
+              if (model.isShowNoDataFoundPage && !model.busy)
+                buildNoDataFoundPage(),
+              if (model.busy) buildLoadingPage(),
             ],
           ),
         );

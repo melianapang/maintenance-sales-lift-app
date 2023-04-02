@@ -18,6 +18,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
   List<MaintenanceData>? _listMaintenance;
   List<MaintenanceData>? get listMaintenance => _listMaintenance;
 
+  bool _isShowNoDataFoundPage = false;
+  bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
+
   // Filter related
   int _selectedHandledByOption = 0;
   int get selectedSumberDataOption => _selectedHandledByOption;
@@ -40,6 +43,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     _listMaintenance = await _apiService.requestGetAllMaintenance();
+    if (_listMaintenance?.isEmpty == true || _listMaintenance == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
     setBusy(false);
   }
 

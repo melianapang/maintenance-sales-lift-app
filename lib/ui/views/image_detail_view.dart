@@ -42,7 +42,7 @@ class ImageDetailView extends StatelessWidget {
                 : 'Video Detail',
             isBackEnabled: true,
           ),
-          body: model.busy ? buildLoadingSymbol() : _buildDetailMedia(model),
+          body: model.busy ? buildLoadingPage() : _buildDetailMedia(model),
         );
       },
     );

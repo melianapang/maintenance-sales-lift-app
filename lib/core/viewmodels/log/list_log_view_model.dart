@@ -17,10 +17,18 @@ class ListLogViewModel extends BaseViewModel {
   List<LogData>? _listLogData;
   List<LogData>? get listLogData => _listLogData;
 
+  bool _isShowNoDataFoundPage = false;
+  bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
     _listLogData = await _apiService.requestGetAllLog();
+    if (_listLogData?.isEmpty == true || _listLogData == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+
     print("logDataa keys: ${_listLogData?[0].contentsOld.values}");
     print("logDataa entries: ${_listLogData?[0].contentsNew.values}");
     setBusy(false);
