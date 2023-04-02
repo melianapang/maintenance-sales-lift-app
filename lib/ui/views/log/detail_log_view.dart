@@ -61,10 +61,6 @@ class _DetailLogViewState extends State<DetailLogView> {
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
-                    label: "Disetujui oleh",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
                     label: "Jenis Data yang diubah",
                     text: model.logData?.modulenName,
                   ),
@@ -121,22 +117,25 @@ class _DetailLogViewState extends State<DetailLogView> {
                       final Map<String, dynamic> newData =
                           model.logData?.contentsNew ?? {};
 
+                      print(
+                          "halooo: ${oldData.keys.toList()[index]}:${oldData.values.toList()[index]}; ${newData.keys.toList()[index]}:${newData.values.toList()[index]}");
+
                       return _buildBeforeAfterLogItem(
                         StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          oldData.keys.toList()[index],
+                          oldData.keys.toList()[index].toString(),
                         ),
                         StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          oldData.values.toList()[index],
+                          oldData.values.toList()[index].toString(),
                         ),
                         StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          newData.keys.toList()[index],
+                          newData.keys.toList()[index].toString(),
                         ),
                         StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          newData.values.toList()[index],
+                          newData.values.toList()[index].toString(),
                         ),
                         StringUtils.isStringDifferent(
-                          oldData.values.toList()[index],
-                          newData.values.toList()[index],
+                          oldData.values.toList()[index].toString(),
+                          newData.values.toList()[index].toString(),
                         ),
                       );
                     },
@@ -179,7 +178,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   description,
                   maxLines: null,
                   style: buildTextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontColor: MyColors.lightBlack02,
                     fontWeight: 400,
                   ),
@@ -207,7 +206,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   description2,
                   maxLines: null,
                   style: buildTextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontColor:
                         isChanged ? MyColors.yellow01 : MyColors.lightBlack02,
                     fontWeight: 400,
