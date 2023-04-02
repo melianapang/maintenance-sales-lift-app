@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/log/detail_log_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -8,8 +10,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
 
+class DetailLogViewParam {
+  DetailLogViewParam({
+    this.logData,
+  });
+
+  final LogData? logData;
+}
+
 class DetailLogView extends StatefulWidget {
-  const DetailLogView({super.key});
+  const DetailLogView({
+    required this.param,
+    super.key,
+  });
+
+  final DetailLogViewParam param;
 
   @override
   State<DetailLogView> createState() => _DetailLogViewState();
@@ -19,7 +34,9 @@ class _DetailLogViewState extends State<DetailLogView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: DetailLogViewModel(),
+      model: DetailLogViewModel(
+        logData: widget.param.logData,
+      ),
       onModelReady: (DetailLogViewModel model) async {
         await model.initModel();
       },
@@ -40,6 +57,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                 children: [
                   TextInput.disabled(
                     label: "Perubahan data dilakukan oleh",
+                    text: model.logData?.userCreatedId,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
@@ -48,12 +66,14 @@ class _DetailLogViewState extends State<DetailLogView> {
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Jenis Data yang diubah",
+                    text: model.logData?.modulenName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "ID Data",
+                    text: model.logData?.changeId,
                   ),
-                  Spacings.vert(12),
+                  Spacings.vert(24),
                   const Divider(
                     thickness: 0.5,
                     color: MyColors.yellow,
@@ -67,7 +87,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                           textAlign: TextAlign.center,
                           style: buildTextStyle(
                             fontSize: 20,
-                            fontColor: MyColors.yellow01,
+                            fontColor: MyColors.lightBlack02,
                             fontWeight: 800,
                           ),
                         ),
@@ -78,28 +98,46 @@ class _DetailLogViewState extends State<DetailLogView> {
                           textAlign: TextAlign.center,
                           style: buildTextStyle(
                             fontSize: 20,
-                            fontColor: MyColors.yellow01,
+                            fontColor: MyColors.lightBlack02,
                             fontWeight: 800,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  Spacings.vert(16),
+                  Spacings.vert(24),
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 10,
+                    itemCount: model.logData?.contentsNew.length ?? 0,
                     separatorBuilder: (context, index) => const Divider(
                       color: MyColors.lightBlack01,
                       thickness: 0.4,
                     ),
                     itemBuilder: (BuildContext context, int index) {
+                      final Map<String, dynamic> oldData =
+                          model.logData?.contentsOld ?? {};
+
+                      final Map<String, dynamic> newData =
+                          model.logData?.contentsNew ?? {};
+
                       return _buildBeforeAfterLogItem(
-                        "title",
-                        "descriptiondescriptiondescc",
-                        "titletitletitle",
-                        "descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondesc",
+                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          oldData.keys.toList()[index],
+                        ),
+                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          oldData.values.toList()[index],
+                        ),
+                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          newData.keys.toList()[index],
+                        ),
+                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          newData.values.toList()[index],
+                        ),
+                        StringUtils.isStringDifferent(
+                          oldData.values.toList()[index],
+                          newData.values.toList()[index],
+                        ),
                       );
                     },
                   ),
@@ -117,6 +155,7 @@ class _DetailLogViewState extends State<DetailLogView> {
     String description,
     String title2,
     String description2,
+    bool isChanged,
   ) {
     return IntrinsicHeight(
       child: Row(
@@ -130,7 +169,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   title,
                   textAlign: TextAlign.start,
                   style: buildTextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                     fontColor: MyColors.lightBlack02,
                     fontWeight: 700,
                   ),
@@ -157,8 +196,9 @@ class _DetailLogViewState extends State<DetailLogView> {
                   title2,
                   textAlign: TextAlign.start,
                   style: buildTextStyle(
-                    fontSize: 18,
-                    fontColor: MyColors.lightBlack02,
+                    fontSize: 14,
+                    fontColor:
+                        isChanged ? MyColors.yellow01 : MyColors.lightBlack02,
                     fontWeight: 700,
                   ),
                 ),
@@ -168,7 +208,8 @@ class _DetailLogViewState extends State<DetailLogView> {
                   maxLines: null,
                   style: buildTextStyle(
                     fontSize: 16,
-                    fontColor: MyColors.lightBlack02,
+                    fontColor:
+                        isChanged ? MyColors.yellow01 : MyColors.lightBlack02,
                     fontWeight: 400,
                   ),
                 ),

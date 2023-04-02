@@ -85,16 +85,67 @@ class ApiService {
   //region log
   Future<List<LogData>?> requestGetAllLog() async {
     try {
-      final HttpResponse<dynamic> response = await api.requestGetAllLog();
+      // final HttpResponse<dynamic> response = await api.requestGetAllLog();
 
-      if (response.response.statusCode == 200) {
-        GetAllLogResponse getAllLog = GetAllLogResponse.fromJson(response.data);
+      const String data = '''
+          {
+            "Success": true,
+            "Message": "halo",
+            "Data": {
+              "result": [
+                {
+                  "id": "6",
+                  "user_created_id": "4",
+                  "changed_id": "1",
+                  "table_name": "maintanance",
+                  "module_name": "Maintanance/update _maintanance",
+                  "contents_new": {
+                    "end_maintanance": "2023/5/28 12:54:21",
+                    "latitude": "2.67",
+                    "longitude": "2.445",
+                    "maintanance_result": "1",
+                    "schedule_date": "2023/4/21 12:54:29",
+                    "start_maintanance": "2023/3/21 12:54:29",
+                    "status": "1",
+                    "unit_id": "2"
+                  },
+                  "contents_old": {
+                    "end_maintanance": "2023-05-21 12:54:29",
+                    "latitude": "7.67",
+                    "longitude": "2.41245",
+                    "maintanance_result": "1",
+                    "schedule_date": "2023-04-21 12:54:29",
+                    "start_maintanance": "2023-03-21 12:54:29",
+                    "status": "1",
+                    "unit_id": "2"
+                  }
+                }
+              ]
+            }
+          }
+      ''';
+      final Map<String, dynamic> responseJson = jsonDecode(data);
 
-        return getAllLog.data.result;
-      }
+      // if (response.response.statusCode == 200) {
+      GetAllLogResponse getAllLogResponse =
+          GetAllLogResponse.fromJson(responseJson);
+
+      // GetAllLogResponse getAllLog = GetAllLogResponse.fromJson(response.data);
+
+      print(responseJson);
+      print("======");
+      print(getAllLogResponse.data.result.first.contentsNew);
+
+      print(getAllLogResponse.data.result.first.contentsOld);
+
+      return getAllLogResponse.data.result;
+      // }
       return null;
     } catch (e) {
-      log("Sequence number error");
+      if (e is CastError) {
+        print(e.stackTrace);
+      }
+      log(e.toString());
     }
   }
   //endregion
