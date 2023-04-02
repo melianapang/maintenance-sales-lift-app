@@ -60,22 +60,26 @@ class EditCustomerViewModel extends BaseViewModel {
       _customer = _mappingCustomerDataToCustomerModel(_customerData!);
     }
 
-    _selectedSumberDataOption = int.parse(_customerData?.dataSource ?? "0");
+    _selectedSumberDataOption = int.parse(_customerData?.dataSource ?? "0") > 1
+        ? 1
+        : int.parse(_customerData?.dataSource ?? "0");
     _selectedTipePelangganOption =
         int.parse(_customerData?.customerType ?? "0") > 1
             ? 1
             : int.parse(_customerData?.customerType ?? "0");
     _selectedKebutuhanPelangganOption =
-        int.parse(_customerData?.customerNeed ?? "0");
+        int.parse(_customerData?.customerNeed ?? "0") > 1
+            ? 1
+            : int.parse(_customerData?.customerNeed ?? "0");
 
     setSelectedTipePelanggan(
-      selectedMenu: int.parse(_customerData?.customerType ?? "0"),
+      selectedMenu: int.parse(_selectedTipePelangganOption.toString()),
     );
     setSelectedSumberData(
-      selectedMenu: int.parse(_customerData?.dataSource ?? "0"),
+      selectedMenu: int.parse(_selectedSumberDataOption.toString()),
     );
     setSelectedKebutuhanPelanggan(
-      selectedMenu: int.parse(_customerData?.customerNeed ?? "0"),
+      selectedMenu: int.parse(_selectedKebutuhanPelangganOption.toString()),
     );
 
     setBusy(false);
