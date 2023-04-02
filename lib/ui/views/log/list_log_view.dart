@@ -59,8 +59,10 @@ class _ListLogViewState extends State<ListLogView> {
                           itemBuilder: (BuildContext context, int index) {
                             return CustomCardWidget(
                               cardType: CardType.list,
-                              title: StringUtils.capitalize(
-                                  model.listLogData?[index].tableName ?? ""),
+                              title: StringUtils
+                                  .replaceUnderscoreToSpaceAndTitleCase(
+                                      model.listLogData?[index].tableName ??
+                                          ""),
                               description: "Diubah oleh: Olivia North",
                               description2: "12 March 2023",
                               titleSize: 20,
