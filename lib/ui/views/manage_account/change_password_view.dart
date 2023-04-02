@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/change_password_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -21,7 +23,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<ChangePasswordViewModel>(
-      model: ChangePasswordViewModel(),
+      model: ChangePasswordViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (ChangePasswordViewModel model) async {
         await model.initModel();
       },
@@ -56,12 +60,15 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 },
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
+                  bool isSuccess = await model.requrestChangePassword();
 
                   showDialogWidget(
                     context,
                     title: "Ubah Kata Sandi",
-                    description: "Perubahan kata sandi berhasil disimpan",
-                    isSuccessDialog: true,
+                    description: isSuccess
+                        ? "Perubahan kata sandi berhasil disimpan"
+                        : "Perubahan kata sandi gagal disimpan",
+                    isSuccessDialog: isSuccess,
                   );
                 },
               );

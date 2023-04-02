@@ -219,7 +219,10 @@ void showDialogWidget(BuildContext context,
   );
 }
 
-void showErrorDialog(BuildContext context) {
+void showErrorDialog(
+  BuildContext context, {
+  String text = "Gagal memproses permohonan",
+}) {
   showDialog(
     context: context,
     builder: (context) {
@@ -232,10 +235,12 @@ void showErrorDialog(BuildContext context) {
                 Icons.error,
               ),
               Spacings.vert(4),
-              const Text(
-                "Wrong Username or Password",
-                style: TextStyle(
-                  fontFamily: "dmsans",
+              Text(
+                text,
+                style: buildTextStyle(
+                  fontSize: 14,
+                  fontColor: MyColors.darkBlack01,
+                  fontWeight: 500,
                 ),
               ),
             ],

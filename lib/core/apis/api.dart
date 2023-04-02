@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/authentication/login_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/authentication/manage_account_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/login/login_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -18,6 +19,11 @@ abstract class Api {
   @POST('/project-lift/api/0/Auth/login')
   Future<HttpResponse<dynamic>> requestLogin(
     @Body() LoginRequest request,
+  );
+
+  @PUT('/project-lift/api/0/Auth/update_password/')
+  Future<HttpResponse<dynamic>> requestChangePassword(
+    @Body() ChangePasswordRequest request,
   );
   //endregion
 
@@ -78,6 +84,33 @@ class ApiService {
     } catch (e) {
       log("Sequence number error; ${e.toString()}");
       return null;
+    }
+  }
+
+  Future<bool> requestChangePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String passwordConfirmation,
+  }) async {
+    try {
+      final payload = ChangePasswordRequest(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        passwordConfirmation: passwordConfirmation,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestChangePassword(payload);
+
+      if (response.response.statusCode == 200) {
+        ChangePasswordResponse changePasswordResponse =
+            ChangePasswordResponse.fromJson(response.data);
+
+        return changePasswordResponse.isSuccess;
+      }
+      return false;
+    } catch (e) {
+      log("Sequence number error; ${e.toString()}");
+      return false;
     }
   }
   //endregion

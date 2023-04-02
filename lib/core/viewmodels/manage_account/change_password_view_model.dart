@@ -1,7 +1,17 @@
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ChangePasswordViewModel extends BaseViewModel {
-  ChangePasswordViewModel();
+  ChangePasswordViewModel({
+    required DioService dioService,
+  }) : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        );
+
+  final ApiService _apiService;
 
   bool? _isValid;
   bool? get isValid => _isValid;
@@ -52,5 +62,13 @@ class ChangePasswordViewModel extends BaseViewModel {
 
   void setConfirmNewPassword({required String password}) {
     _confirmNewPassword = password;
+  }
+
+  Future<bool> requrestChangePassword() async {
+    return await _apiService.requestChangePassword(
+      oldPassword: _oldPassword,
+      newPassword: _newPassword,
+      passwordConfirmation: _confirmNewPassword,
+    );
   }
 }
