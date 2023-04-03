@@ -200,8 +200,14 @@ class AppRouter {
           ),
         );
       case Routes.detailHistoryMaintenance:
+        final DetailHistoryMaintenanceViewParam param =
+            settings.arguments is DetailHistoryMaintenanceViewParam
+                ? settings.arguments as DetailHistoryMaintenanceViewParam
+                : DetailHistoryMaintenanceViewParam();
         return buildRoute(
-          builder: (_) => const DetailHistoryMaintenanceView(),
+          builder: (_) => DetailHistoryMaintenanceView(
+            param: param,
+          ),
         );
       case Routes.exportMaintenance:
         return buildRoute(
@@ -232,8 +238,13 @@ class AppRouter {
           builder: (_) => const DetailReminderView(),
         );
       case Routes.map:
+        final MapViewParam param = settings.arguments is MapViewParam
+            ? settings.arguments as MapViewParam
+            : MapViewParam();
         return buildRoute(
-          builder: (_) => const MapView(),
+          builder: (_) => MapView(
+            param: param,
+          ),
         );
       case Routes.listUser:
         return buildRoute(

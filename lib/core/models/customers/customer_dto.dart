@@ -133,7 +133,7 @@ class CustomerData {
     required this.city,
     required this.phoneNumber,
     required this.email,
-    required this.note,
+    this.note,
     required this.status,
     required this.statusDeleted,
     required this.createdAt,
@@ -178,7 +178,7 @@ class CustomerData {
   final String email;
 
   @JsonKey(name: "note")
-  final String note;
+  final String? note;
 
   @JsonKey(name: "status")
   final String status;

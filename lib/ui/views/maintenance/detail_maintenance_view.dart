@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -72,6 +73,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
       model: DetailMaintenanceViewModel(
         maintenanceData: widget.param.maintenanceData,
         dioService: Provider.of<DioService>(context),
+        navigationService: Provider.of<NavigationService>(context),
       ),
       onModelReady: (DetailMaintenanceViewModel model) async {
         await model.initModel();
@@ -143,7 +145,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                     ),
                   ),
                   TimelineWidget(
-                    listTimeline: list1,
+                    listTimeline: model.timelineData,
                   ),
                 ],
               ),

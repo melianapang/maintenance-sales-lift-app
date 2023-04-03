@@ -189,7 +189,7 @@ class EditCustomerViewModel extends BaseViewModel {
       city: data.city,
       dataSource: int.parse(data.dataSource),
       phoneNumber: data.phoneNumber,
-      note: data.note,
+      note: data.note ?? "",
       status: int.parse(data.status),
       email: data.email,
     );

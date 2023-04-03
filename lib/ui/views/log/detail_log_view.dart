@@ -45,7 +45,7 @@ class _DetailLogViewState extends State<DetailLogView> {
           backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
-            title: "Detail Log",
+            title: "Detail Log (ID: ${model.logData?.changeId})",
             isBackEnabled: true,
           ),
           body: SingleChildScrollView(
@@ -66,16 +66,28 @@ class _DetailLogViewState extends State<DetailLogView> {
                         model.logData?.modulenName ?? ""),
                   ),
                   Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "ID Data",
-                    text: model.logData?.changeId,
-                  ),
-                  Spacings.vert(24),
                   const Divider(
                     thickness: 0.5,
                     color: MyColors.yellow,
                   ),
-                  Spacings.vert(12),
+                  Spacings.vert(6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      StringUtils.removeZeroWidthSpaces(
+                        "Catatan: data dengan warna kuning adalah data yang diubah.",
+                      ),
+                      textAlign: TextAlign.start,
+                      style: buildTextStyle(
+                        fontSize: 12,
+                        fontColor: MyColors.yellow02,
+                        fontWeight: 500,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Spacings.vert(24),
                   Row(
                     children: [
                       Expanded(
@@ -138,19 +150,6 @@ class _DetailLogViewState extends State<DetailLogView> {
                       );
                     },
                   ),
-                  Spacings.vert(16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Catatan: data dengan warna kuning adalah data yang diubah.",
-                      textAlign: TextAlign.start,
-                      style: buildTextStyle(
-                        fontSize: 12,
-                        fontColor: MyColors.yellow02,
-                        fontWeight: 500,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -175,16 +174,17 @@ class _DetailLogViewState extends State<DetailLogView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Spacings.vert(12),
                 Text(
                   title,
                   textAlign: TextAlign.start,
                   style: buildTextStyle(
                     fontSize: 14,
-                    fontColor: MyColors.lightBlack02,
+                    fontColor: MyColors.lightBlack02.withOpacity(0.5),
                     fontWeight: 700,
                   ),
                 ),
-                Spacings.vert(6),
+                Spacings.vert(4),
                 Text(
                   description,
                   maxLines: null,
@@ -202,17 +202,19 @@ class _DetailLogViewState extends State<DetailLogView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Spacings.vert(12),
                 Text(
                   title2,
                   textAlign: TextAlign.start,
                   style: buildTextStyle(
                     fontSize: 14,
                     fontColor:
-                        isChanged ? MyColors.yellow01 : MyColors.lightBlack02,
+                        (isChanged ? MyColors.yellow01 : MyColors.lightBlack02)
+                            .withOpacity(0.5),
                     fontWeight: 700,
                   ),
                 ),
-                Spacings.vert(6),
+                Spacings.vert(4),
                 Text(
                   description2,
                   maxLines: null,

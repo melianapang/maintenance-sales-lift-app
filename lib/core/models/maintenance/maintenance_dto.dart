@@ -43,23 +43,24 @@ class ListMaintenanceData {
 
 @JsonSerializable()
 class MaintenanceData {
-  MaintenanceData(
-      {required this.maintenanceId,
-      required this.userId,
-      required this.unitId,
-      required this.pic,
-      required this.latitude,
-      required this.longitude,
-      required this.maintenanceResult,
-      required this.startMaintenance,
-      required this.endMaintenance,
-      required this.scheduleDate,
-      required this.status,
-      required this.note,
-      required this.customerId,
-      required this.unitName,
-      required this.unitLocation,
-      required this.statusDeleted});
+  MaintenanceData({
+    required this.maintenanceId,
+    required this.customerName,
+    required this.engineerName,
+    required this.engineerPhoneNumber,
+    required this.pic,
+    required this.latitude,
+    required this.longitude,
+    required this.unitId,
+    required this.maintenanceResult,
+    required this.startMaintenance,
+    required this.endMaintenance,
+    required this.scheduleDate,
+    required this.status,
+    required this.note,
+    required this.unitName,
+    required this.unitLocation,
+  });
 
   factory MaintenanceData.fromJson(Map<String, dynamic> json) =>
       _$MaintenanceDataFromJson(json);
@@ -69,8 +70,14 @@ class MaintenanceData {
   @JsonKey(name: "maintenance_id")
   final String maintenanceId;
 
-  @JsonKey(name: "user_id")
-  final String userId;
+  @JsonKey(name: "customer_name")
+  final String customerName;
+
+  @JsonKey(name: "name")
+  final String engineerName;
+
+  @JsonKey(name: "phone_number")
+  final String engineerPhoneNumber;
 
   @JsonKey(name: "unit_id")
   final String unitId;
@@ -102,17 +109,30 @@ class MaintenanceData {
   @JsonKey(name: "status")
   final String status;
 
-  @JsonKey(name: "customer_id")
-  final String customerId;
-
   @JsonKey(name: "unit_name")
   final String unitName;
 
   @JsonKey(name: "unit_location")
   final String unitLocation;
+}
 
-  @JsonKey(name: "status_deleted")
-  final String statusDeleted;
+@JsonSerializable()
+class MaintenanceFileData {
+  MaintenanceFileData({
+    required this.filePath,
+    required this.fileType,
+  });
+
+  factory MaintenanceFileData.fromJson(Map<String, dynamic> json) =>
+      _$MaintenanceFileDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MaintenanceFileDataToJson(this);
+
+  @JsonKey(name: "file_path")
+  final String filePath;
+
+  @JsonKey(name: "file_type")
+  final String fileType;
 }
 
 @JsonSerializable()
@@ -191,4 +211,45 @@ class UpdateMaintenanceResponse {
 
   @JsonKey(name: "Data")
   final List<String> data;
+}
+
+//get history maintenance
+@JsonSerializable()
+class GetAllHistoryMaintenanceResponse {
+  GetAllHistoryMaintenanceResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetAllHistoryMaintenanceResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$GetAllHistoryMaintenanceResponseFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$GetAllHistoryMaintenanceResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final ListMaintenanceData data;
+}
+
+@JsonSerializable()
+class ListHistoryMaintenanceData {
+  ListHistoryMaintenanceData({
+    required this.result,
+  });
+
+  factory ListHistoryMaintenanceData.fromJson(Map<String, dynamic> json) =>
+      _$ListHistoryMaintenanceDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ListHistoryMaintenanceDataToJson(this);
+
+  @JsonKey(name: "result")
+  final List<MaintenanceData> result;
 }

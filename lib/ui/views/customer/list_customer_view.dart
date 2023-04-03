@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -92,31 +93,35 @@ class _ListCustomerViewState extends State<ListCustomerView> {
               Spacings.vert(12),
               if (!model.isShowNoDataFoundPage && !model.busy) ...[
                 Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: model.listCustomer?.length ?? 0,
-                    separatorBuilder: (_, __) => const Divider(
-                      color: MyColors.transparent,
-                      height: 20,
+                  child: LazyLoadScrollView(
+                    onEndOfPage: () => model.requestGetAllCustomer(),
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: model.listCustomer?.length ?? 0,
+                      separatorBuilder: (_, __) => const Divider(
+                        color: MyColors.transparent,
+                        height: 20,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCardWidget(
+                          cardType: CardType.list,
+                          title: model.listCustomer?[index].customerName ?? "",
+                          description: model.listCustomer?[index].companyName,
+                          desc2Size: 16,
+                          titleSize: 20,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.detailCustomer,
+                              arguments: DetailCustomerViewParam(
+                                customerData: model.listCustomer?[index],
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return CustomCardWidget(
-                        cardType: CardType.list,
-                        title: model.listCustomer?[index].customerName ?? "",
-                        description: model.listCustomer?[index].companyName,
-                        desc2Size: 16,
-                        titleSize: 20,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.detailCustomer,
-                            arguments: DetailCustomerViewParam(
-                              customerData: model.listCustomer?[index],
-                            ),
-                          );
-                        },
-                      );
-                    },
                   ),
                 ),
                 Spacings.vert(16),

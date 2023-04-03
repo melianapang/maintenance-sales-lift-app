@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -76,37 +77,42 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
               Spacings.vert(12),
               if (!model.isShowNoDataFoundPage && !model.busy)
                 Expanded(
-                  child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: model.listMaintenance?.length ?? 0,
-                      separatorBuilder: (context, index) => const Divider(
-                            color: MyColors.transparent,
-                            height: 20,
-                          ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCardWidget(
-                          cardType: CardType.list,
-                          // title: "KA-23243",
-                          // description: "PT ABC JAYA",
-                          // description2: "12 March 2023",
-                          title: model.listMaintenance?[index].unitName ?? "",
-                          description: "PT ABC JAYA",
-                          description2:
-                              model.listMaintenance?[index].startMaintenance,
-                          titleSize: 20,
-                          descSize: 16,
-                          desc2Size: 12,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.detailMaintenance,
-                              arguments: DetailMaintenanceViewParam(
-                                maintenanceData: model.listMaintenance?[index],
-                              ),
-                            );
-                          },
-                        );
-                      }),
+                  child: LazyLoadScrollView(
+                    onEndOfPage: () => model.requestGetAllMaintenance(),
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: model.listMaintenance?.length ?? 0,
+                        separatorBuilder: (context, index) => const Divider(
+                              color: MyColors.transparent,
+                              height: 20,
+                            ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return CustomCardWidget(
+                            cardType: CardType.list,
+                            // title: "KA-23243",
+                            // description: "PT ABC JAYA",
+                            // description2: "12 March 2023",
+                            title: model.listMaintenance?[index].unitName ?? "",
+                            description: "PT ABC JAYA",
+                            description2:
+                                model.listMaintenance?[index].startMaintenance,
+                            titleSize: 20,
+                            descSize: 16,
+                            desc2Size: 12,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.detailMaintenance,
+                                arguments: DetailMaintenanceViewParam(
+                                  maintenanceData:
+                                      model.listMaintenance?[index],
+                                ),
+                              );
+                            },
+                          );
+                        }),
+                  ),
                 ),
               if (model.isShowNoDataFoundPage && !model.busy)
                 buildNoDataFoundPage(),

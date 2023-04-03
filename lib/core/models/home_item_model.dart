@@ -61,6 +61,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     "Pengingat",
     PhosphorIcons.bellBold,
     <Role>[
+      Role.SuperAdmin,
       Role.Admin,
       Role.Sales,
       Role.Engineers,

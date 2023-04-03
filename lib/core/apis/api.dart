@@ -43,15 +43,22 @@ abstract class Api {
 
   @GET('/project-lift/api/0/Customer/get_all_customers/')
   Future<HttpResponse<dynamic>> requestGetAllCustomer(
-      // @Query("page") int page,
-      );
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
   //endregion
 
   //region maintenance
   @GET('/project-lift/api/0/Maintenance/get_all_maintenances/')
   Future<HttpResponse<dynamic>> requestGetAllMaintenance(
-      // @Query("page") int page,
-      );
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/project-lift/api/0/Maintenance/get_history_maintenances/{unit_id}')
+  Future<HttpResponse<dynamic>> requestGetAllHistoryMaintenance(
+    @Path("unit_id") String customerId,
+  );
 
   @PUT('/project-lift/api/0/Customer/update_maintenance/{customer_id}')
   Future<HttpResponse<dynamic>> requestUpdateMaintenance(
@@ -177,9 +184,15 @@ class ApiService {
     }
   }
 
-  Future<List<CustomerData>?> getAllCustomer() async {
+  Future<List<CustomerData>?> getAllCustomer(
+    int currentPage,
+    int pageSize,
+  ) async {
     try {
-      final HttpResponse<dynamic> response = await api.requestGetAllCustomer();
+      final HttpResponse<dynamic> response = await api.requestGetAllCustomer(
+        currentPage,
+        pageSize,
+      );
 
       if (response.response.statusCode == 200) {
         GetAllCustomerResponse getAllResponse =
@@ -195,16 +208,42 @@ class ApiService {
   //endregion
 
   //region maintenance
-  Future<List<MaintenanceData>?> requestGetAllMaintenance() async {
+  Future<List<MaintenanceData>?> requestGetAllMaintenance(
+    int currentPage,
+    int pageSize,
+  ) async {
     try {
-      final HttpResponse<dynamic> response =
-          await api.requestGetAllMaintenance();
+      final HttpResponse<dynamic> response = await api.requestGetAllMaintenance(
+        currentPage,
+        pageSize,
+      );
 
       if (response.response.statusCode == 200) {
         GetAllMaintenanceResponse getAllMaintenanceResponse =
             GetAllMaintenanceResponse.fromJson(response.data);
 
         return getAllMaintenanceResponse.data.result;
+      }
+      return null;
+    } catch (e) {
+      log("Sequence number error");
+    }
+  }
+
+  Future<List<MaintenanceData>?> requestGetAllHistoryMaintenance(
+    String unitId,
+  ) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllHistoryMaintenance(
+        unitId,
+      );
+
+      if (response.response.statusCode == 200) {
+        GetAllHistoryMaintenanceResponse getAllHistoryMaintenanceResponse =
+            GetAllHistoryMaintenanceResponse.fromJson(response.data);
+
+        return getAllHistoryMaintenanceResponse.data.result;
       }
       return null;
     } catch (e) {

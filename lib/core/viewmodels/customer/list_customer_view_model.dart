@@ -1,5 +1,6 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -17,6 +18,9 @@ class ListCustomerViewModel extends BaseViewModel {
 
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
+
+  PaginationControl _paginationControl = PaginationControl();
+  PaginationControl get paginationControl => _paginationControl;
 
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
@@ -62,11 +66,16 @@ class ListCustomerViewModel extends BaseViewModel {
 
   @override
   Future<void> initModel() async {
+    setBusy(true);
+    paginationControl.currentPage = 1;
+
     await requestGetAllCustomer();
     if (_listCustomer?.isEmpty == true || _listCustomer == null) {
       _isShowNoDataFoundPage = true;
       notifyListeners();
     }
+
+    setBusy(false);
   }
 
   void search(String text) {
@@ -77,9 +86,20 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    setBusy(true);
-    _listCustomer = await _apiService.getAllCustomer();
-    setBusy(false);
+    List<CustomerData>? list = await _apiService.getAllCustomer(
+      _paginationControl.currentPage,
+      _paginationControl.pageSize,
+    );
+
+    if (list != null || list?.isNotEmpty == true) {
+      if (_paginationControl.currentPage == 1) {
+        _listCustomer = list;
+      } else {
+        _listCustomer?.addAll(list!);
+      }
+      _paginationControl.currentPage += 1;
+      notifyListeners();
+    }
   }
 
   void terapkanFilter({

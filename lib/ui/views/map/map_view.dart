@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -8,8 +9,23 @@ import 'package:latlong2/latlong.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
+class MapViewParam {
+  MapViewParam({
+    this.longitude,
+    this.latitude,
+  });
+
+  final double? longitude;
+  final double? latitude;
+}
+
 class MapView extends StatefulWidget {
-  const MapView({super.key});
+  const MapView({
+    required this.param,
+    super.key,
+  });
+
+  final MapViewParam param;
 
   @override
   State<MapView> createState() => _MapViewState();
@@ -43,7 +59,10 @@ class _MapViewState extends State<MapView> {
       Marker(
         width: 40,
         height: 40,
-        point: LatLng(-7.250445, 112.768845),
+        point: LatLng(
+          widget.param.latitude ?? 0,
+          widget.param.longitude ?? 0,
+        ),
         builder: (ctx) => GestureDetector(
           onTapDown: (details) {
             _buildInfoCard(
@@ -121,7 +140,8 @@ class _MapViewState extends State<MapView> {
             child: Column(
               children: [
                 Text(
-                  'title',
+                  StringUtils.removeZeroWidthSpaces("title"),
+                  overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontSize: 16,
                     fontColor: MyColors.lightBlack02,
@@ -130,7 +150,8 @@ class _MapViewState extends State<MapView> {
                 ),
                 Spacings.vert(6),
                 Text(
-                  "descriptiondescription",
+                  StringUtils.removeZeroWidthSpaces("descriptiondescription"),
+                  overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontSize: 16,
                     fontColor: MyColors.lightBlack02,

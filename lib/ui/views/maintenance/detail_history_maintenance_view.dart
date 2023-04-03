@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -11,13 +12,27 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintena
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class DetailHistoryMaintenanceViewParam {
+  DetailHistoryMaintenanceViewParam({
+    this.maintenanceData,
+  });
+
+  final MaintenanceData? maintenanceData;
+}
+
 class DetailHistoryMaintenanceView extends StatefulWidget {
-  const DetailHistoryMaintenanceView({super.key});
+  const DetailHistoryMaintenanceView({
+    required this.param,
+    super.key,
+  });
+
+  final DetailHistoryMaintenanceViewParam param;
 
   @override
   State<DetailHistoryMaintenanceView> createState() =>
@@ -79,6 +94,7 @@ class _DetailHistoryMaintenanceViewState
   Widget build(BuildContext context) {
     return ViewModel(
       model: DetailHistoryMaintenanceViewModel(
+        maintenanceData: widget.param?.maintenanceData,
         dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (DetailHistoryMaintenanceViewModel model) async {
@@ -103,7 +119,13 @@ class _DetailHistoryMaintenanceViewState
             ),
             buttonType: ButtonType.primary,
             onTap: () {
-              Navigator.pushNamed(context, Routes.map);
+              Navigator.pushNamed(context, Routes.map,
+                  arguments: MapViewParam(
+                    longitude:
+                        double.parse(model.maintenanceData?.longitude ?? "0"),
+                    latitude:
+                        double.parse(model.maintenanceData?.latitude ?? "0"),
+                  ));
             },
             text: 'Lihat Lokasi di Peta',
           ),
@@ -118,7 +140,7 @@ class _DetailHistoryMaintenanceViewState
                 children: [
                   Spacings.vert(20),
                   Text(
-                    "KA-23243",
+                    model.maintenanceData?.unitName ?? "",
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
@@ -126,7 +148,7 @@ class _DetailHistoryMaintenanceViewState
                     ),
                   ),
                   Text(
-                    "PT ABC JAYA",
+                    model.maintenanceData?.customerName ?? "",
                     style: buildTextStyle(
                       fontSize: 20,
                       fontWeight: 400,
@@ -141,16 +163,17 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Tanggal",
+                    text: model.maintenanceData?.endMaintenance,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Hasil Pemeliharaan",
+                    text: model.maintenanceData?.maintenanceResult,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Catatan",
-                    text:
-                        "CatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatanCatatan",
+                    text: model.maintenanceData?.note,
                   ),
                   Spacings.vert(24),
                   Align(
@@ -208,10 +231,12 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(12),
                   TextInput.disabled(
                     label: "Nama Teknisi:",
+                    text: model.maintenanceData?.engineerName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
+                    text: model.maintenanceData?.engineerPhoneNumber,
                   ),
                 ],
               ),
