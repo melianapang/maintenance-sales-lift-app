@@ -18,6 +18,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     PhosphorIcons.calendarBlankBold,
     <Role>[
       Role.Admin,
+      Role.SuperAdmin,
     ],
     Routes.listApproval,
   ),
@@ -26,6 +27,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     PhosphorIcons.usersBold,
     <Role>[
       Role.Admin,
+      Role.SuperAdmin,
     ],
     Routes.listUser,
   ),
@@ -34,6 +36,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     PhosphorIcons.monitor,
     <Role>[
       Role.Admin,
+      Role.SuperAdmin,
     ],
     Routes.listProjects,
   ),
@@ -42,6 +45,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     PhosphorIcons.folderBold,
     <Role>[
       Role.Admin,
+      Role.SuperAdmin,
     ],
     Routes.listLog,
   ),
