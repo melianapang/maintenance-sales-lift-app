@@ -94,7 +94,7 @@ class _DetailHistoryMaintenanceViewState
   Widget build(BuildContext context) {
     return ViewModel(
       model: DetailHistoryMaintenanceViewModel(
-        maintenanceData: widget.param?.maintenanceData,
+        maintenanceData: widget.param.maintenanceData,
         dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (DetailHistoryMaintenanceViewModel model) async {
