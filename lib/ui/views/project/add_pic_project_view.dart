@@ -73,7 +73,7 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                 TextInput.editable(
                   label: "Nomor Telepon PIC",
                   hintText: "Nomor Telepon PIC",
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.phone,
                   text: model.phoneNumber,
                   onChangedListener: (text) {
                     model.setPhoneNumber(text);

@@ -129,7 +129,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return CustomCardWidget(
-                        cardType: CardType.list,
+                        cardType: CardType.listWithIcon,
                         title: model.listPic[index].name,
                         description: model.listPic[index].phoneNumber,
                         desc2Size: 12,
