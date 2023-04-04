@@ -27,3 +27,10 @@ class Customer {
   String companyName;
   int? status;
 }
+
+enum CustomerStatus {
+  Loss,
+  Win,
+  Hot,
+  In_Progress,
+}
