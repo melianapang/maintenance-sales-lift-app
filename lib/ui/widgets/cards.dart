@@ -7,12 +7,13 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
 import '../../core/app_constants/colors.dart';
 
-enum CardType { menu, list }
+enum CardType { menu, list, listWithIcon }
 
 extension CardTypeStyleExt on CardType {
   static Map<CardType, Color> fontColors = <CardType, Color>{
     CardType.menu: MyColors.lightBlack02,
     CardType.list: MyColors.lightBlack02,
+    CardType.listWithIcon: MyColors.lightBlack02,
   };
   Color get fontColor => fontColors[this] ?? Colors.transparent;
 }
@@ -169,11 +170,20 @@ class CustomCardWidget extends StatelessWidget {
                     color: MyColors.yellow01,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Icon(
-                    icon ?? PhosphorIcons.caretRightBold,
-                    color: MyColors.darkBlack02,
-                    size: 12,
-                  ),
+                  child: cardType == CardType.list
+                      ? const Icon(
+                          PhosphorIcons.caretRightBold,
+                          color: MyColors.darkBlack02,
+                          size: 12,
+                        )
+                      : GestureDetector(
+                          onTap: onTap,
+                          child: Icon(
+                            icon ?? PhosphorIcons.caretRightBold,
+                            color: MyColors.darkBlack02,
+                            size: 12,
+                          ),
+                        ),
                 ),
               )
             ],
@@ -185,6 +195,8 @@ class CustomCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (cardType == CardType.listWithIcon) return _buildListCard();
+
     return GestureDetector(
         onTap: onTap,
         child: cardType == CardType.menu ? _buildMenuCard() : _buildListCard());
