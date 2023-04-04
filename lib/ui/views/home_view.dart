@@ -316,7 +316,11 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                 )
-              : buildLoadingPage(),
+              : Column(
+                  children: [
+                    buildLoadingPage(),
+                  ],
+                ),
         );
       },
     );
