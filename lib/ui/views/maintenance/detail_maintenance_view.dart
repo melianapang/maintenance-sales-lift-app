@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -73,6 +77,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
       model: DetailMaintenanceViewModel(
         maintenanceData: widget.param.maintenanceData,
         dioService: Provider.of<DioService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
         navigationService: Provider.of<NavigationService>(context),
       ),
       onModelReady: (DetailMaintenanceViewModel model) async {
@@ -98,57 +103,87 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               left: 24.0,
             ),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Spacings.vert(20),
-                  Text(
-                    model.maintenanceData?.unitName ?? "",
-                    style: buildTextStyle(
-                      fontSize: 32,
-                      fontWeight: 800,
-                      fontColor: MyColors.yellow01,
-                    ),
-                  ),
-                  Text(
-                    "PT ABC JAYA",
-                    style: buildTextStyle(
-                      fontSize: 20,
-                      fontWeight: 400,
-                      fontColor: MyColors.lightBlack02,
-                    ),
-                  ),
-                  Spacings.vert(35),
-                  StatusCardWidget(
-                    cardType: StatusCardType.Defect,
-                    onTap: () {},
-                  ),
-                  Spacings.vert(35),
-                  TextInput.disabled(
-                    label: "Lokasi",
-                    text: model.maintenanceData?.unitLocation,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "PIC",
-                    text: model.maintenanceData?.pic,
-                  ),
-                  Spacings.vert(24),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Riwayat Pemeliharaan",
-                      style: buildTextStyle(
-                        fontSize: 16,
-                        fontColor: MyColors.yellow01,
-                        fontWeight: 400,
-                      ),
-                    ),
-                  ),
-                  TimelineWidget(
-                    listTimeline: model.timelineData,
-                  ),
-                ],
-              ),
+              child: !model.busy
+                  ? Column(
+                      children: [
+                        Spacings.vert(20),
+                        Text(
+                          model.maintenanceData?.unitName ?? "",
+                          style: buildTextStyle(
+                            fontSize: 32,
+                            fontWeight: 800,
+                            fontColor: MyColors.yellow01,
+                          ),
+                        ),
+                        Text(
+                          "PT ABC JAYA",
+                          style: buildTextStyle(
+                            fontSize: 20,
+                            fontWeight: 400,
+                            fontColor: MyColors.lightBlack02,
+                          ),
+                        ),
+                        Spacings.vert(35),
+                        StatusCardWidget(
+                          cardType: StatusCardType.Defect,
+                          onTap: () {},
+                        ),
+                        Spacings.vert(35),
+                        TextInput.disabled(
+                          label: "Lokasi",
+                          text: model.maintenanceData?.unitLocation,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "PIC",
+                          text: model.maintenanceData?.pic,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Jadwal Pemeliharaan Selanjutnya",
+                          text: model.maintenanceData?.endMaintenance,
+                        ),
+                        if (model.isAllowedToDeleteNextMaintenance) ...[
+                          Spacings.vert(8),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.formDeleteMaintenance,
+                              );
+                            },
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'Hapus data Pemeliharaan selanjutnya',
+                                style: buildTextStyle(
+                                  fontSize: 12,
+                                  fontWeight: 400,
+                                  fontColor: MyColors.blueLihatSelengkapnya,
+                                  isUnderlined: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        Spacings.vert(24),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Riwayat Pemeliharaan",
+                            style: buildTextStyle(
+                              fontSize: 16,
+                              fontColor: MyColors.yellow01,
+                              fontWeight: 400,
+                            ),
+                          ),
+                        ),
+                        TimelineWidget(
+                          listTimeline: model.timelineData,
+                        ),
+                      ],
+                    )
+                  : buildLoadingPage(),
             ),
           ),
         );

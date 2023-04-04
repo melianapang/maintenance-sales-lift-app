@@ -38,6 +38,7 @@ class Routes {
   static const String formFollowUp = 'form-follow-up';
   static const String formMaintenance = 'form-maintenance';
   static const String formSetReminder = 'form-set-reminder';
+  static const String formDeleteMaintenance = 'form-delete-maintenance';
   static const String setPasswordUser = 'set-password-user';
   static const String uploadPO = 'form-upload-po';
   static const String afterSetReminder = "after-set-reminder";

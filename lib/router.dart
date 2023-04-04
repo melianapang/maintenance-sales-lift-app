@@ -24,6 +24,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_history_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/export_data_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
@@ -222,6 +223,10 @@ class AppRouter {
       case Routes.formMaintenance:
         return buildRoute(
           builder: (_) => const FormMaintenanceView(),
+        );
+      case Routes.formDeleteMaintenance:
+        return buildRoute(
+          builder: (_) => const FormDeleteMaintenanceView(),
         );
       case Routes.listReminder:
         return buildRoute(
