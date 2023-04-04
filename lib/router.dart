@@ -28,6 +28,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
@@ -284,6 +285,10 @@ class AppRouter {
       case Routes.addProject:
         return buildRoute(
           builder: (_) => const AddProjectView(),
+        );
+      case Routes.addPicProject:
+        return buildRoute(
+          builder: (_) => const AddPicProjectView(),
         );
       case Routes.editProject:
         return buildRoute(

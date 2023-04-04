@@ -29,6 +29,7 @@ class Routes {
   static const String addUser = 'add-user';
   static const String editUser = 'edit-user';
   static const String addProject = 'add-project';
+  static const String addPicProject = 'add-pic-project';
   static const String editProject = 'edit-project';
   static const String formFollowUp = 'form-follow-up';
   static const String formMaintenance = 'form-maintenance';
