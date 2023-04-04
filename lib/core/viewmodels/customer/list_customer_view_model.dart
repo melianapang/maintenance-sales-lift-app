@@ -1,6 +1,8 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -8,13 +10,16 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 class ListCustomerViewModel extends BaseViewModel {
   ListCustomerViewModel({
     required DioService dioService,
-  }) : _apiService = ApiService(
+    required AuthenticationService authenticationService,
+  })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
-        );
+        ),
+        _authenticationService = authenticationService;
 
   final ApiService _apiService;
+  final AuthenticationService _authenticationService;
 
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
@@ -24,6 +29,9 @@ class ListCustomerViewModel extends BaseViewModel {
 
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
+
+  bool _isAllowedToExportData = false;
+  bool get isAllowedToExportData => _isAllowedToExportData;
 
   // Filter related
   int _selectedTipePelangganOption = 0;
@@ -67,6 +75,7 @@ class ListCustomerViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+
     paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
@@ -74,6 +83,8 @@ class ListCustomerViewModel extends BaseViewModel {
       _isShowNoDataFoundPage = true;
       notifyListeners();
     }
+
+    _isAllowedToExportData = await isUserAllowedToExportData();
 
     setBusy(false);
   }
@@ -100,6 +111,11 @@ class ListCustomerViewModel extends BaseViewModel {
       _paginationControl.currentPage += 1;
       notifyListeners();
     }
+  }
+
+  Future<bool> isUserAllowedToExportData() async {
+    Role role = await _authenticationService.getUserRole();
+    return role == Role.Admin;
   }
 
   void terapkanFilter({

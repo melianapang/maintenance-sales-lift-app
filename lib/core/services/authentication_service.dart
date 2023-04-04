@@ -77,9 +77,18 @@ class AuthenticationService {
     } catch (e) {}
   }
 
-  Future<String?> getAccountId() async {
+  Future<String> getUserId() async {
     // get userID / userGUID from sharedpref
-    return '';
+    return await _sharedPreferencesService.get(
+      SharedPrefKeys.userId,
+    );
+  }
+
+  Future<Role> getUserRole() async {
+    ProfileData profileData = await _sharedPreferencesService.get(
+      SharedPrefKeys.profileData,
+    );
+    return profileData.role;
   }
 
   Future<String?> getJwtToken() async {

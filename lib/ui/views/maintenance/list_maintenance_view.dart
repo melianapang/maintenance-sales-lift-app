@@ -3,6 +3,7 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/list_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -30,6 +31,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
     return ViewModel(
       model: ListMaintenanceViewModel(
         dioService: Provider.of<DioService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (ListMaintenanceViewModel model) async {
         await model.initModel();
@@ -42,21 +44,22 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
             title: "Jadwal Pemeliharaan",
             isBackEnabled: true,
             actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.exportMaintenance);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20.0,
-                  ),
-                  child: Icon(
-                    PhosphorIcons.exportBold,
-                    color: MyColors.lightBlack02,
-                    size: 18,
+              if (model.isAllowedToExportData)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.exportMaintenance);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                      right: 20.0,
+                    ),
+                    child: Icon(
+                      PhosphorIcons.exportBold,
+                      color: MyColors.lightBlack02,
+                      size: 18,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           body: Column(
