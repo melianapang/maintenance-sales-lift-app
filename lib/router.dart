@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/edit_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/custom_base_url_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
@@ -39,6 +40,10 @@ import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.d
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/list_reminders_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/open_notification_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/splash_screen_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/detail_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/add_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/edit_user_view.dart';
@@ -307,6 +312,34 @@ class AppRouter {
               email: "",
               role: Role.Admin,
             ),
+          ),
+        );
+      case Routes.listUnit:
+        return buildRoute(
+          builder: (_) => const ListUnitCustomerView(),
+        );
+      case Routes.detailUnit:
+        final DetailUnitCustomerViewParam param =
+            settings.arguments is DetailUnitCustomerViewParam
+                ? settings.arguments as DetailUnitCustomerViewParam
+                : DetailUnitCustomerViewParam();
+        return buildRoute(
+          builder: (_) => DetailUnitCustomerView(
+            param: param,
+          ),
+        );
+      case Routes.addUnit:
+        return buildRoute(
+          builder: (_) => const AddUnitCustomerView(),
+        );
+      case Routes.editUnit:
+        final EditUnitCustomerViewParam param =
+            settings.arguments is EditUnitCustomerViewParam
+                ? settings.arguments as EditUnitCustomerViewParam
+                : EditUnitCustomerViewParam();
+        return buildRoute(
+          builder: (_) => EditUnitCustomerView(
+            param: param,
           ),
         );
 

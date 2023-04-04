@@ -139,6 +139,25 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                     label: "Email",
                     text: model.customerData?.email,
                   ),
+                  Spacings.vert(24),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.listUnit);
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Lihat Daftar Unit',
+                        textAlign: TextAlign.start,
+                        style: buildTextStyle(
+                          fontSize: 14,
+                          fontWeight: 400,
+                          fontColor: MyColors.blueLihatSelengkapnya,
+                          isUnderlined: true,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
