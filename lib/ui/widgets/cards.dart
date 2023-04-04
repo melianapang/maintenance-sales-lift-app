@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
@@ -116,7 +117,9 @@ class CustomCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      StringUtils.removeZeroWidthSpaces(title),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: buildTextStyle(
                         fontColor: cardType.fontColor,
                         fontSize: titleSize ?? 20,
@@ -126,7 +129,9 @@ class CustomCardWidget extends StatelessWidget {
                     if (description != null) ...[
                       Spacings.vert(2),
                       Text(
-                        description ?? "",
+                        StringUtils.removeZeroWidthSpaces(description ?? ""),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: buildTextStyle(
                           fontColor: cardType.fontColor,
                           fontSize: desc2Size ?? 16,
@@ -137,7 +142,9 @@ class CustomCardWidget extends StatelessWidget {
                     if (description2 != null) ...[
                       Spacings.vert(2),
                       Text(
-                        description2 ?? "",
+                        StringUtils.removeZeroWidthSpaces(description2 ?? ""),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: buildTextStyle(
                           fontColor: cardType.fontColor,
                           fontSize: desc2Size ?? 16,
@@ -162,8 +169,8 @@ class CustomCardWidget extends StatelessWidget {
                     color: MyColors.yellow01,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Icon(
-                    PhosphorIcons.caretRightBold,
+                  child: Icon(
+                    icon ?? PhosphorIcons.caretRightBold,
                     color: MyColors.darkBlack02,
                     size: 12,
                   ),
