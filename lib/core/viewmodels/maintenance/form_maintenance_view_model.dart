@@ -24,6 +24,16 @@ class FormMaintenanceViewModel extends BaseViewModel {
   ];
   List<DateTime> get selectedDates => _selectedDates;
 
+  List<DateTime> _selectedNextMaintenanceDates = [
+    DateTime.now().add(
+      Duration(
+        days: 7,
+      ),
+    ),
+  ];
+  List<DateTime> get selectedNextMaintenanceDates =>
+      _selectedNextMaintenanceDates;
+
   final List<GalleryData> _compressedFiles = [];
   List<GalleryData> get compressedFiles => _compressedFiles;
 
@@ -64,6 +74,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
   void setSelectedDates(List<DateTime> value) {
     _selectedDates = value;
+    notifyListeners();
+  }
+
+  void setSelectedNextMaintenanceDates(List<DateTime> value) {
+    _selectedNextMaintenanceDates = value;
     notifyListeners();
   }
 }

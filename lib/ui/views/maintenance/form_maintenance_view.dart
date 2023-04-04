@@ -64,7 +64,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
             child: Column(
               children: [
                 DatePickerWidget(
-                  label: "Tanggal Pengingat",
+                  label: "Tanggal Pemeliharaan",
                   isRangeCalendar: false,
                   selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
@@ -212,16 +212,16 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   minLines: 5,
                 ),
                 Spacings.vert(24),
-                if (model.getPhotosData().length > 0)
-                  Image.file(
-                    File(model.compressedFiles
-                        .where((element) =>
-                            element.galleryType == GalleryType.PHOTO)
-                        .first
-                        .filepath),
-                    width: 500,
-                    height: 500,
-                  )
+                DatePickerWidget(
+                  label: "Tanggal Pemeliharaan Selanjutnya",
+                  isRangeCalendar: false,
+                  selectedDates: model.selectedNextMaintenanceDates,
+                  onSelectedDates: (DateTime start, DateTime? end) {
+                    print('$start $end');
+                    model.setSelectedDates([start]);
+                  },
+                ),
+                Spacings.vert(24),
               ],
             ),
           ),
