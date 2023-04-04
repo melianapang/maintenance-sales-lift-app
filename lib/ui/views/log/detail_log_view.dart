@@ -114,7 +114,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                       ),
                     ],
                   ),
-                  Spacings.vert(24),
+                  Spacings.vert(12),
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
