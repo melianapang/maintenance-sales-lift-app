@@ -151,7 +151,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                     'Tambahkan PIC Proyek',
                     textAlign: TextAlign.start,
                     style: buildTextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: 400,
                       fontColor: MyColors.blueLihatSelengkapnya,
                       isUnderlined: true,
