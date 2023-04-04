@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/upload_po_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/upload_document_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
-class UploadPOView extends StatefulWidget {
-  const UploadPOView({super.key});
+class UploadDocumentView extends StatefulWidget {
+  const UploadDocumentView({super.key});
 
   @override
-  State<UploadPOView> createState() => _UploadPOViewState();
+  State<UploadDocumentView> createState() => _UploadDocumentViewState();
 }
 
-class _UploadPOViewState extends State<UploadPOView> {
+class _UploadDocumentViewState extends State<UploadDocumentView> {
   final ScrollController buktiFotoController = ScrollController();
   List<GalleryData> galleryData = [
     GalleryData(
@@ -38,15 +40,15 @@ class _UploadPOViewState extends State<UploadPOView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: UploadPOViewModel(),
-      onModelReady: (UploadPOViewModel model) async {
+      model: UploadDocumentViewModel(),
+      onModelReady: (UploadDocumentViewModel model) async {
         await model.initModel();
       },
       builder: (context, model, child) {
         return Scaffold(
           appBar: buildDefaultAppBar(
             context,
-            title: "Form Unggah Berkas PO",
+            title: "Form Unggah Dokumen",
             isBackEnabled: true,
           ),
           bottomNavigationBar: ButtonWidget.bottomSingleButton(
@@ -62,8 +64,8 @@ class _UploadPOViewState extends State<UploadPOView> {
             onTap: () {
               showDialogWidget(
                 context,
-                title: "Tambah Bukti PO",
-                description: "Form Bukti PO telah disimpan!",
+                title: "Unggah Dokumen",
+                description: "Dokumen telah disimpan!",
                 positiveLabel: "OK",
                 positiveCallback: () {
                   Navigator.maybePop(context);
@@ -90,14 +92,37 @@ class _UploadPOViewState extends State<UploadPOView> {
                   hintText: "Nama Pelanggan",
                 ),
                 Spacings.vert(24),
+                GestureDetector(
+                  onTap: () {
+                    _showTipeDokumenBottomDialog(
+                      context,
+                      model,
+                      listMenu: model.tipeDokumentOption,
+                      selectedMenu: model.selectedTipeDokumentOption,
+                      setSelectedMenu: model.setTipeDokumen,
+                    );
+                  },
+                  child: TextInput.disabled(
+                    label: "Sumber Data",
+                    text: model.tipeDokumentOption
+                        .where((element) => element.isSelected)
+                        .first
+                        .title,
+                    suffixIcon: const Icon(
+                      PhosphorIcons.caretDownBold,
+                      color: MyColors.lightBlack02,
+                    ),
+                  ),
+                ),
+                Spacings.vert(24),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Bukti PO",
+                    "Bukti Dokumen",
                     style: buildTextStyle(
                       fontSize: 14,
                       fontWeight: 400,
-                      fontColor: MyColors.darkBlue01,
+                      fontColor: MyColors.lightBlack02,
                     ),
                   ),
                 ),
@@ -146,6 +171,63 @@ class _UploadPOViewState extends State<UploadPOView> {
           ),
         );
       },
+    );
+  }
+
+  void _showTipeDokumenBottomDialog(
+    BuildContext context,
+    UploadDocumentViewModel model, {
+    required List<FilterOption> listMenu,
+    required int selectedMenu,
+    required void Function({
+      required int selectedMenu,
+    })
+        setSelectedMenu,
+  }) {
+    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    int menu = selectedMenu;
+
+    showGeneralBottomSheet(
+      context: context,
+      title: 'Kebutuhan Pelanggan',
+      isFlexible: true,
+      showCloseButton: false,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildMenuChoices(
+                menuLocal,
+                (int selectedIndex) {
+                  menu = selectedIndex;
+                  for (int i = 0; i < menuLocal.length; i++) {
+                    if (i == selectedIndex) {
+                      menuLocal[i].isSelected = true;
+                      continue;
+                    }
+
+                    menuLocal[i].isSelected = false;
+                  }
+                  setState(() {});
+                },
+              ),
+              Spacings.vert(32),
+              ButtonWidget(
+                buttonType: ButtonType.primary,
+                buttonSize: ButtonSize.large,
+                text: "Terapkan",
+                onTap: () {
+                  setSelectedMenu(
+                    selectedMenu: menu,
+                  );
+                  Navigator.maybePop(context);
+                },
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }

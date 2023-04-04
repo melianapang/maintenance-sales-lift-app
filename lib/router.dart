@@ -11,7 +11,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/export_data_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/list_customer_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_po_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
@@ -159,7 +159,7 @@ class AppRouter {
         );
       case Routes.uploadPO:
         return buildRoute(
-          builder: (_) => const UploadPOView(),
+          builder: (_) => const UploadDocumentView(),
         );
       case Routes.listLog:
         return buildRoute(

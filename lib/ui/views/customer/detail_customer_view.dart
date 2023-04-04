@@ -225,7 +225,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               : null,
           backgroundColor: MyColors.yellow02,
           foregroundColor: MyColors.white,
-          label: 'Unggah Berkas PO',
+          label: 'Unggah Dokumen',
           labelBackgroundColor: MyColors.lightBlack01,
           labelShadow: [
             const BoxShadow(
