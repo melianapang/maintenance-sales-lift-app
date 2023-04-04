@@ -6,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
@@ -35,12 +34,6 @@ class _ListApprovalViewState extends State<ListApprovalView> {
           ),
           body: Column(
             children: [
-              buildSearchBar(
-                context,
-                isFilterShown: false,
-                textSearchOnChanged: (text) {},
-                onTapFilter: () {},
-              ),
               if (!model.isShowNoDataFoundPage && !model.busy) ...[
                 Spacings.vert(12),
                 Expanded(
