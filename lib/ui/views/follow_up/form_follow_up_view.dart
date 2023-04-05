@@ -61,7 +61,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
             child: Column(
               children: [
                 DatePickerWidget(
-                  label: "Tanggal Pengingat",
+                  label: "Tanggal Konfirmasi Selanjutnya",
                   isRangeCalendar: false,
                   selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
@@ -69,6 +69,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     model.setSelectedDates([start]);
                   },
                 ),
+                //langsung dpt data dari detail follow up
                 Spacings.vert(24),
                 TextInput.editable(
                   label: "Nomor Pelanggan",
