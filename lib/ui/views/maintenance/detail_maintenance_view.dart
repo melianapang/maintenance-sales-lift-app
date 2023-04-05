@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -7,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dar
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -15,6 +13,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
@@ -125,7 +124,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                         ),
                         Spacings.vert(35),
                         StatusCardWidget(
-                          cardType: StatusCardType.Defect,
+                          cardType: model.statusCardType,
                           onTap: () {},
                         ),
                         Spacings.vert(35),
@@ -156,6 +155,32 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 'Hapus data Pemeliharaan selanjutnya',
+                                style: buildTextStyle(
+                                  fontSize: 12,
+                                  fontWeight: 400,
+                                  fontColor: MyColors.blueLihatSelengkapnya,
+                                  isUnderlined: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        if (model.isAllowedToChangeNextMaintenanceDate) ...[
+                          Spacings.vert(8),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.formChangeMaintenanceDate,
+                                arguments: FormChangeMaintenanceDateViewParam(
+                                  maintenanceData: model.maintenanceData,
+                                ),
+                              );
+                            },
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'Ganti Tanggal Pemeliharaan selanjutnya',
                                 style: buildTextStyle(
                                   fontSize: 12,
                                   fontWeight: 400,

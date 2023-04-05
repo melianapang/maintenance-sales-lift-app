@@ -1,13 +1,14 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_history_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailMaintenanceViewModel extends BaseViewModel {
@@ -33,8 +34,15 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   bool get isAllowedToDeleteNextMaintenance =>
       _isAllowedToDeleteNextMaintenance;
 
+  bool _isAllowedToChangeNextMaintenanceDate = false;
+  bool get isAllowedToChangeNextMaintenanceDate =>
+      _isAllowedToChangeNextMaintenanceDate;
+
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
+
+  StatusCardType _statusCardType = StatusCardType.Normal;
+  StatusCardType get statusCardType => _statusCardType;
 
   List<MaintenanceData>? _historyData;
   List<MaintenanceData>? get historyData => _historyData;
@@ -47,15 +55,45 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     setBusy(true);
     await requestGetHistoryMaintenance();
     await isUserAllowedToDeleteNextMaintenance();
+    await isUserAllowedToChangeNextMaintenanceDate();
+    setStatusCard();
     setBusy(false);
+  }
+
+  void setStatusCard() {
+    MaintenanceStatus status = mappingStringtoMaintenanceStatus(
+        _maintenanceData?.maintenanceResult ?? "0");
+    switch (status) {
+      case MaintenanceStatus.NOT_MAINTENANCED:
+        _statusCardType = StatusCardType.Pending;
+        break;
+      case MaintenanceStatus.DONE:
+        _statusCardType = StatusCardType.Normal;
+        break;
+      case MaintenanceStatus.DELETED:
+        _statusCardType = StatusCardType.Canceled;
+        break;
+      default:
+        _statusCardType = StatusCardType.Normal;
+    }
   }
 
   Future<void> isUserAllowedToDeleteNextMaintenance() async {
     Role role = await _authenticationService.getUserRole();
-    bool isDateAfterToday = DateTimeUtils.isDateStringAfterToday(
-        _maintenanceData?.endMaintenance ?? "");
+    bool isNotMaintenanced = mappingStringtoMaintenanceStatus(
+            _maintenanceData?.maintenanceResult ?? "0") ==
+        MaintenanceStatus.NOT_MAINTENANCED;
     _isAllowedToDeleteNextMaintenance =
-        role == Role.SuperAdmin && isDateAfterToday;
+        role == Role.SuperAdmin && isNotMaintenanced;
+  }
+
+  Future<void> isUserAllowedToChangeNextMaintenanceDate() async {
+    Role role = await _authenticationService.getUserRole();
+    bool isNotMaintenanced = mappingStringtoMaintenanceStatus(
+            _maintenanceData?.maintenanceResult ?? "0") ==
+        MaintenanceStatus.NOT_MAINTENANCED;
+    _isAllowedToChangeNextMaintenanceDate =
+        (role == Role.Admin || role == Role.SuperAdmin) && isNotMaintenanced;
   }
 
   Future<void> requestGetHistoryMaintenance() async {
