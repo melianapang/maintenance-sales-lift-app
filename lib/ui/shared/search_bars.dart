@@ -3,10 +3,13 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-Widget buildSearchBar(BuildContext context,
-    {required bool isFilterShown,
-    required void Function(String) textSearchOnChanged,
-    VoidCallback? onTapFilter}) {
+Widget buildSearchBar(
+  BuildContext context, {
+  bool? isEnabled,
+  required bool isFilterShown,
+  required void Function(String) textSearchOnChanged,
+  VoidCallback? onTapFilter,
+}) {
   return Container(
     margin: const EdgeInsets.all(20),
     child: Row(
@@ -15,6 +18,7 @@ Widget buildSearchBar(BuildContext context,
           child: TextInput.editable(
             onChangedListener: textSearchOnChanged,
             hintText: "Search",
+            isEnabled: isEnabled,
             prefixIcon: const Icon(
               PhosphorIcons.magnifyingGlassBold,
               color: MyColors.lightBlack02,

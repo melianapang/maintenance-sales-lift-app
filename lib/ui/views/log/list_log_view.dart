@@ -43,6 +43,7 @@ class _ListLogViewState extends State<ListLogView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: false,
                 onTapFilter: () {},

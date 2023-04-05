@@ -66,6 +66,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: true,
                 onTapFilter: () {

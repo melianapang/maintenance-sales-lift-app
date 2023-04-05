@@ -50,6 +50,7 @@ class _ListRemindersViewState extends State<ListRemindersView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: false,
                 onTapFilter: () {},

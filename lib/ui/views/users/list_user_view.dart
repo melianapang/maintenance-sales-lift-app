@@ -25,6 +25,7 @@ class _ListUserViewState extends State<ListUserView> {
       model: ListUserViewModel(),
       onModelReady: (ListUserViewModel model) async {
         await model.initModel();
+        print("haiii:${!model.busy && !model.isShowNoDataFoundPage}");
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -41,6 +42,7 @@ class _ListUserViewState extends State<ListUserView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: false,
               ),

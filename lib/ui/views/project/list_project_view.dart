@@ -43,6 +43,7 @@ class _ListProjectViewState extends State<ListProjectView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: false,
               ),

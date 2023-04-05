@@ -37,6 +37,7 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
             children: [
               buildSearchBar(
                 context,
+                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
                 textSearchOnChanged: (text) {},
                 isFilterShown: false,
                 onTapFilter: () {},
