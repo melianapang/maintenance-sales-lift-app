@@ -75,7 +75,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       StringUtils.removeZeroWidthSpaces(
-                        "Catatan: data dengan warna kuning adalah data yang diubah.",
+                        "Catatan: data berwarna kuning adalah data yang diubah.",
                       ),
                       textAlign: TextAlign.start,
                       style: buildTextStyle(
