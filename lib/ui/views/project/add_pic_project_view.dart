@@ -65,6 +65,9 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                   label: "Nama PIC",
                   hintText: "Nama PIC Proyek",
                   text: model.name,
+                  errorText: model.isNameValid == false
+                      ? "Wajib diisi dengan benar menggunakan huruf"
+                      : null,
                   onChangedListener: (text) {
                     model.setName(text);
                   },
@@ -74,6 +77,9 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                   label: "Nomor Telepon PIC",
                   hintText: "Nomor Telepon PIC",
                   keyboardType: TextInputType.phone,
+                  errorText: model.isPhoneNumberValid == false
+                      ? "Wajib diisi dengan benar menggunakan angka"
+                      : null,
                   text: model.phoneNumber,
                   onChangedListener: (text) {
                     model.setPhoneNumber(text);

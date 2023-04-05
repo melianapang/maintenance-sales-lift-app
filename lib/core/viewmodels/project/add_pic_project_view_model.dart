@@ -11,6 +11,12 @@ class AddPicProjectViewModel extends BaseViewModel {
   String _phoneNumber = "";
   String get phoneNumber => _phoneNumber;
 
+  bool _isNameValid = true;
+  bool get isNameValid => _isNameValid;
+
+  bool _isPhoneNumberValid = true;
+  bool get isPhoneNumberValid => _isPhoneNumberValid;
+
   @override
   Future<void> initModel() async {}
 
@@ -19,10 +25,22 @@ class AddPicProjectViewModel extends BaseViewModel {
   }
 
   void setPhoneNumber(String value) {
-    _phoneNumber = value;
+    _phoneNumber = value.toString();
   }
 
   void sendDataBack(BuildContext context) {
+    if (_name.isEmpty) {
+      _isNameValid = false;
+      notifyListeners();
+      return;
+    }
+
+    if (_phoneNumber.isEmpty) {
+      _isPhoneNumberValid = false;
+      notifyListeners();
+      return;
+    }
+
     Navigator.pop(
       context,
       PicData(
