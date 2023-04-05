@@ -24,6 +24,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/login_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_history_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/export_data_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.dart';
@@ -227,6 +228,16 @@ class AppRouter {
       case Routes.formDeleteMaintenance:
         return buildRoute(
           builder: (_) => const FormDeleteMaintenanceView(),
+        );
+      case Routes.formChangeMaintenanceDate:
+        final FormChangeMaintenanceDateViewParam param =
+            settings.arguments is FormChangeMaintenanceDateViewParam
+                ? settings.arguments as FormChangeMaintenanceDateViewParam
+                : FormChangeMaintenanceDateViewParam();
+        return buildRoute(
+          builder: (_) => FormChangeMaintenanceDateView(
+            param: param,
+          ),
         );
       case Routes.listReminder:
         return buildRoute(

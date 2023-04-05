@@ -1,3 +1,5 @@
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
+
 class Routes {
   static const String splashScreen = 'splash-screen';
   static const String login = 'login';
@@ -39,6 +41,7 @@ class Routes {
   static const String formMaintenance = 'form-maintenance';
   static const String formSetReminder = 'form-set-reminder';
   static const String formDeleteMaintenance = 'form-delete-maintenance';
+  static const String formChangeMaintenanceDate = 'form-change-maintenance';
   static const String setPasswordUser = 'set-password-user';
   static const String uploadPO = 'form-upload-po';
   static const String afterSetReminder = "after-set-reminder";
