@@ -125,6 +125,15 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                           },
                           text: model.unitData?.location,
                         ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Proyek Unit",
+                          hintText: "Proyek Unit",
+                          onChangedListener: (text) {
+                            model.setUnitLocation(text);
+                          },
+                          text: model.unitData?.location,
+                        ),
                       ],
                     ),
                   ),

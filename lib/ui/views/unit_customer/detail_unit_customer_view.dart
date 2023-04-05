@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -7,20 +6,13 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/detail_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class DetailUnitCustomerViewParam {
@@ -141,6 +133,11 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Lokasi Unit",
+                    text: model.unitData?.location,
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Proyek",
                     text: model.unitData?.location,
                   ),
                   Spacings.vert(24),
