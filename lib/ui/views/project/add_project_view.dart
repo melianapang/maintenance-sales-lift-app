@@ -142,22 +142,23 @@ class _AddProjectViewState extends State<AddProjectView> {
                     },
                   ),
                 Spacings.vert(12),
-                GestureDetector(
-                  onTap: () => _awaitAddPicProjectViewResult(
-                    context,
-                    viewModel: model,
-                  ),
-                  child: Text(
-                    'Tambahkan PIC Proyek',
-                    textAlign: TextAlign.start,
-                    style: buildTextStyle(
-                      fontSize: 14,
-                      fontWeight: 400,
-                      fontColor: MyColors.blueLihatSelengkapnya,
-                      isUnderlined: true,
+                if (model.listPic.length < 5)
+                  GestureDetector(
+                    onTap: () => _awaitAddPicProjectViewResult(
+                      context,
+                      viewModel: model,
+                    ),
+                    child: Text(
+                      'Tambahkan PIC Proyek',
+                      textAlign: TextAlign.start,
+                      style: buildTextStyle(
+                        fontSize: 14,
+                        fontWeight: 400,
+                        fontColor: MyColors.blueLihatSelengkapnya,
+                        isUnderlined: true,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
