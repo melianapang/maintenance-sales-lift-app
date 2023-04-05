@@ -15,6 +15,7 @@ class AddUnitCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  //dummy pake data customer, nanti harus diganti
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
@@ -40,12 +41,6 @@ class AddUnitCustomerViewModel extends BaseViewModel {
     }
 
     setBusy(false);
-  }
-
-  void setSelectedPIlihProyek({
-    required int selectedMenu,
-  }) {
-    notifyListeners();
   }
 
   Future<void> requestGetAllCustomer() async {
