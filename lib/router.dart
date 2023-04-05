@@ -222,8 +222,14 @@ class AppRouter {
           builder: (_) => const ExportDataMaintenanceView(),
         );
       case Routes.formMaintenance:
+        final FormMaintenanceViewParam param =
+            settings.arguments is FormMaintenanceViewParam
+                ? settings.arguments as FormMaintenanceViewParam
+                : FormMaintenanceViewParam();
         return buildRoute(
-          builder: (_) => const FormMaintenanceView(),
+          builder: (_) => FormMaintenanceView(
+            param: param,
+          ),
         );
       case Routes.formDeleteMaintenance:
         return buildRoute(

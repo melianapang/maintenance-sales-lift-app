@@ -14,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
@@ -92,7 +93,13 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
           ),
           floatingActionButton: FloatingButtonWidget(
             onTap: () {
-              Navigator.pushNamed(context, Routes.formMaintenance);
+              Navigator.pushNamed(
+                context,
+                Routes.formMaintenance,
+                arguments: FormMaintenanceViewParam(
+                  maintenanceData: widget.param.maintenanceData,
+                ),
+              );
             },
           ),
           body: Padding(
@@ -101,9 +108,9 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               bottom: 24.0,
               left: 24.0,
             ),
-            child: SingleChildScrollView(
-              child: !model.busy
-                  ? Column(
+            child: !model.busy
+                ? SingleChildScrollView(
+                    child: Column(
                       children: [
                         Spacings.vert(20),
                         Text(
@@ -207,9 +214,9 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                           listTimeline: model.timelineData,
                         ),
                       ],
-                    )
-                  : buildLoadingPage(),
-            ),
+                    ),
+                  )
+                : buildLoadingPage(),
           ),
         );
       },

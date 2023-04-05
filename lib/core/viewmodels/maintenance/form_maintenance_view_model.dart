@@ -1,11 +1,27 @@
 import 'dart:io';
 
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class FormMaintenanceViewModel extends BaseViewModel {
-  FormMaintenanceViewModel();
+  FormMaintenanceViewModel({
+    MaintenanceData? maintenanceData,
+    required DioService dioService,
+  })  : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        ),
+        _maintenanceData = maintenanceData;
+
+  final ApiService _apiService;
+
+  MaintenanceData? _maintenanceData;
+  MaintenanceData? get maintenanceData => _maintenanceData;
 
   // Filter related
   int _selectedHasilMaintenanceOption = 0;

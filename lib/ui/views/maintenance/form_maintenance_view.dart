@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -18,8 +21,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class FormMaintenanceViewParam {
+  FormMaintenanceViewParam({
+    this.maintenanceData,
+  });
+
+  final MaintenanceData? maintenanceData;
+}
+
 class FormMaintenanceView extends StatefulWidget {
-  const FormMaintenanceView({super.key});
+  const FormMaintenanceView({
+    required this.param,
+    super.key,
+  });
+
+  final FormMaintenanceViewParam param;
 
   @override
   State<FormMaintenanceView> createState() => _FormMaintenanceViewState();
@@ -32,7 +48,10 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormMaintenanceViewModel>(
-      model: FormMaintenanceViewModel(),
+      model: FormMaintenanceViewModel(
+        maintenanceData: widget.param.maintenanceData,
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (FormMaintenanceViewModel model) async {
         await model.initModel();
       },
@@ -73,22 +92,25 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   },
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
+                //salah data
+                TextInput.disabled(
                   label: "Nomor Pelanggan",
                   hintText: "Nomor Pelanggan",
-                  onChangedListener: (text) {},
+                  text: model.maintenanceData?.customerName,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
+                //salah data
+                TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
-                  onChangedListener: (text) {},
+                  text: model.maintenanceData?.customerName,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
+                //salah data
+                TextInput.disabled(
                   label: "Nama Perusahaan",
                   hintText: "Nama Perusahaan",
-                  onChangedListener: (text) {},
+                  text: model.maintenanceData?.customerName,
                 ),
                 Spacings.vert(24),
                 Align(
