@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_project_view_model.dart';
@@ -27,7 +30,9 @@ class _AddProjectViewState extends State<AddProjectView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: AddProjectViewModel(),
+      model: AddProjectViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (AddProjectViewModel model) async {
         await model.initModel();
       },
@@ -64,6 +69,25 @@ class _AddProjectViewState extends State<AddProjectView> {
                   onChangedListener: (text) {},
                   label: "Nama Proyek",
                   hintText: "Nama Proyek",
+                ),
+                Spacings.vert(24),
+                GestureDetector(
+                  onTap: () {
+                    _showPilihCustomerBottomDialog(
+                      context,
+                      model,
+                      setSelectedMenu: model.setSelectedCusestomer,
+                    );
+                  },
+                  child: TextInput.disabled(
+                    label: "Nama Pelanggan",
+                    text: model.selectedCustomer?.customerName,
+                    hintText: "Pilih Pelangan untuk Proyek ini",
+                    suffixIcon: const Icon(
+                      PhosphorIcons.caretDownBold,
+                      color: MyColors.lightBlack02,
+                    ),
+                  ),
                 ),
                 Spacings.vert(24),
                 GestureDetector(
@@ -232,5 +256,51 @@ class _AddProjectViewState extends State<AddProjectView> {
     setState(() {
       viewModel.addPicProject(result as PicData);
     });
+  }
+
+  void _showPilihCustomerBottomDialog(
+    BuildContext context,
+    AddProjectViewModel model, {
+    required void Function({
+      required int selectedIndex,
+    })
+        setSelectedMenu,
+  }) {
+    showGeneralBottomSheet(
+      context: context,
+      title: 'Daftar Pelanggan',
+      isFlexible: false,
+      showCloseButton: false,
+      sizeToScreenRatio: 0.8,
+      child: Expanded(
+        child: LazyLoadScrollView(
+          onEndOfPage: () => model.requestGetAllCustomer(),
+          scrollDirection: Axis.vertical,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: model.listCustomer?.length ?? 0,
+            separatorBuilder: (_, __) => const Divider(
+              color: MyColors.transparent,
+              height: 20,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return CustomCardWidget(
+                cardType: CardType.list,
+                title: model.listCustomer?[index].customerName ?? "",
+                description: model.listCustomer?[index].companyName,
+                desc2Size: 16,
+                titleSize: 20,
+                onTap: () {
+                  setSelectedMenu(
+                    selectedIndex: index,
+                  );
+                  Navigator.maybePop(context);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
