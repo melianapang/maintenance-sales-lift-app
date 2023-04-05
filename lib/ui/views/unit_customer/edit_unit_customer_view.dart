@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/edit_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -172,35 +173,37 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
       isFlexible: false,
       showCloseButton: false,
       sizeToScreenRatio: 0.8,
-      child: Expanded(
-        child: LazyLoadScrollView(
-          onEndOfPage: () => model.requestGetAllCustomer(),
-          scrollDirection: Axis.vertical,
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: model.listCustomer?.length ?? 0,
-            separatorBuilder: (_, __) => const Divider(
-              color: MyColors.transparent,
-              height: 20,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return CustomCardWidget(
-                cardType: CardType.list,
-                title: model.listCustomer?[index].customerName ?? "",
-                description: model.listCustomer?[index].companyName,
-                desc2Size: 16,
-                titleSize: 20,
-                onTap: () {
-                  setSelectedMenu(
-                    selectedIndex: index,
-                  );
-                  Navigator.maybePop(context);
-                },
-              );
-            },
-          ),
-        ),
-      ),
+      child: !model.isShowNoDataFoundPage && !model.busy
+          ? Expanded(
+              child: LazyLoadScrollView(
+                onEndOfPage: () => model.requestGetAllCustomer(),
+                scrollDirection: Axis.vertical,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: model.listCustomer?.length ?? 0,
+                  separatorBuilder: (_, __) => const Divider(
+                    color: MyColors.transparent,
+                    height: 20,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomCardWidget(
+                      cardType: CardType.list,
+                      title: model.listCustomer?[index].customerName ?? "",
+                      description: model.listCustomer?[index].companyName,
+                      desc2Size: 16,
+                      titleSize: 20,
+                      onTap: () {
+                        setSelectedMenu(
+                          selectedIndex: index,
+                        );
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            )
+          : buildNoDataFoundPage(),
     );
   }
 }
