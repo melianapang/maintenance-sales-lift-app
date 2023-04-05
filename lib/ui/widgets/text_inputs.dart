@@ -173,6 +173,9 @@ class TextInput extends StatelessWidget {
             LengthLimitingTextInputFormatter(
               maxLength,
             ),
+            if (keyboardType == TextInputType.phone ||
+                keyboardType == TextInputType.number)
+              FilteringTextInputFormatter.digitsOnly,
           ],
           onChanged: onChangedListener,
           style: buildTextStyle(
