@@ -179,6 +179,7 @@ void showDialogWidget(BuildContext context,
               Spacings.vert(12),
               Text(
                 title,
+                textAlign: TextAlign.center,
                 style: buildTextStyle(
                   fontSize: 20,
                   fontWeight: 500,
