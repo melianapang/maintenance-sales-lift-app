@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
@@ -34,6 +35,21 @@ class AddProjectViewModel extends BaseViewModel {
   CustomerData? get selectedCustomer => _selectedCustomer;
   //endregion
 
+  //region TextController
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
+
+  bool _isNameValid = true;
+  bool get isNameValid => _isNameValid;
+
+  bool _isAdressValid = true;
+  bool get isAdressValid => _isAdressValid;
+
+  bool _isCityValid = true;
+  bool get isCityValid => _isCityValid;
+  //endregion
+
   //region keperluan proyek
   int _selectedKeperluanProyekOption = 0;
   int get selectedKeperluanProyekOption => _selectedKeperluanProyekOption;
@@ -61,6 +77,21 @@ class AddProjectViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  void onChangedName(String value) {
+    _isNameValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedAddress(String value) {
+    _isAdressValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCity(String value) {
+    _isCityValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
   Future<void> requestGetAllCustomer() async {
     List<CustomerData>? list = await _apiService.getAllCustomer(
       _paginationControl.currentPage,
@@ -78,7 +109,7 @@ class AddProjectViewModel extends BaseViewModel {
     }
   }
 
-  void setSelectedCusestomer({
+  void setSelectedCustomer({
     required int selectedIndex,
   }) {
     _selectedCustomer = _listCustomer?[selectedIndex];
@@ -108,5 +139,14 @@ class AddProjectViewModel extends BaseViewModel {
   void deletePicProject(int index) {
     _listPic.removeAt(index);
     notifyListeners();
+  }
+
+  bool saveData() {
+    _isNameValid = nameController.text.isNotEmpty;
+    _isAdressValid = addressController.text.isNotEmpty;
+    _isCityValid = cityController.text.isNotEmpty;
+    notifyListeners();
+
+    return _isNameValid && _isAdressValid && _isCityValid;
   }
 }

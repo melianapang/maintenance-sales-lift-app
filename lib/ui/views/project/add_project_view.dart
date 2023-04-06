@@ -57,7 +57,8 @@ class _AddProjectViewState extends State<AddProjectView> {
               right: 24.0,
             ),
             onTap: () {
-              Navigator.maybePop(context);
+              bool result = model.saveData();
+              if (result) Navigator.maybePop(context);
             },
             text: 'Simpan',
           ),
@@ -68,9 +69,11 @@ class _AddProjectViewState extends State<AddProjectView> {
             child: Column(
               children: [
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Nama Proyek",
                   hintText: "Nama Proyek",
+                  onChangedListener: model.onChangedName,
+                  errorText:
+                      !model.isNameValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 GestureDetector(
@@ -78,7 +81,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                     _showPilihCustomerBottomDialog(
                       context,
                       model,
-                      setSelectedMenu: model.setSelectedCusestomer,
+                      setSelectedMenu: model.setSelectedCustomer,
                     );
                   },
                   child: TextInput.disabled(
@@ -116,15 +119,19 @@ class _AddProjectViewState extends State<AddProjectView> {
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Alamat",
                   hintText: "Alamat Proyek",
+                  onChangedListener: model.onChangedAddress,
+                  errorText:
+                      !model.isAdressValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Kota",
                   hintText: "Kota",
+                  onChangedListener: model.onChangedCity,
+                  errorText:
+                      !model.isCityValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 Text(
