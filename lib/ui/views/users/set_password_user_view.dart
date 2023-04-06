@@ -44,7 +44,15 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {},
+            onTap: () {
+              bool result = model.saveData();
+              if (result)
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.listCustomer,
+                  (route) => false,
+                );
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
@@ -59,20 +67,21 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
                     controller: model.newPasswordController,
                     maxLines: 1,
                     isPassword: !model.showNewPassword,
+                    onChangedListener: model.onChangedNewPassword,
                     suffixIcon: GestureDetector(
                       onTap: () => model.setShowNewPassword(),
                       child: Icon(
                         model.showNewPassword
                             ? PhosphorIcons.eyeClosed
                             : PhosphorIcons.eye,
-                        color: model.isValid == false
+                        color: !model.isNewPasswordValid
                             ? Colors.redAccent
                             : MyColors.greyColor,
                       ),
                     ),
                     hintText: "Masukkan kata sandi untuk pengguna baru",
-                    errorText: model.isValid == false
-                        ? "Your username is wrong"
+                    errorText: !model.isNewPasswordValid
+                        ? "Wajib isi kata sandi baru anda."
                         : null,
                   ),
                   Spacings.vert(24),
@@ -81,20 +90,21 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
                     maxLines: 1,
                     controller: model.newConfirmPasswordController,
                     isPassword: !model.showConfirmNewPassword,
+                    onChangedListener: model.onChangedConfirmNewPassword,
                     suffixIcon: GestureDetector(
                       onTap: () => model.setShowConfirmNewPassword(),
                       child: Icon(
                         model.showConfirmNewPassword
                             ? PhosphorIcons.eyeClosed
                             : PhosphorIcons.eye,
-                        color: model.isValid == false
+                        color: !model.isConfirmPasswordValid
                             ? Colors.redAccent
                             : MyColors.greyColor,
                       ),
                     ),
                     hintText: "Masukkan ulang kata sandi untuk pengguna baru",
-                    errorText: model.isValid == false
-                        ? "Your username is wrong"
+                    errorText: !model.isConfirmPasswordValid
+                        ? "Wajib konfirmasi kata sandi baru anda."
                         : null,
                   ),
                 ],

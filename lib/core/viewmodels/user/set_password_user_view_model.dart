@@ -13,8 +13,11 @@ class SetPasswordViewUserModel extends BaseViewModel {
   String _newConfirmPassword = "";
   String get newConfirmPassword => _newConfirmPassword;
 
-  bool? _isValid;
-  bool? get isValid => _isValid;
+  bool _isNewPasswordValid = true;
+  bool get isNewPasswordValid => _isNewPasswordValid;
+
+  bool _isConfirmPasswordValid = true;
+  bool get isConfirmPasswordValid => _isConfirmPasswordValid;
 
   bool _showNewPassword = false;
   bool get showNewPassword => _showNewPassword;
@@ -43,5 +46,23 @@ class SetPasswordViewUserModel extends BaseViewModel {
   void setShowConfirmNewPassword() {
     _showConfirmNewPassword = !_showConfirmNewPassword;
     notifyListeners();
+  }
+
+  void onChangedNewPassword(String value) {
+    _isNewPasswordValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedConfirmNewPassword(String value) {
+    _isConfirmPasswordValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  bool saveData() {
+    _isConfirmPasswordValid = newConfirmPasswordController.text.isNotEmpty;
+    _isNewPasswordValid = newPasswordController.text.isNotEmpty;
+    notifyListeners();
+
+    return _isNewPasswordValid && _isConfirmPasswordValid;
   }
 }
