@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/edit_profile_view_model.dart';
@@ -61,7 +61,10 @@ class _EditProfileViewState extends State<EditProfileView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {},
+            onTap: () {
+              bool result = model.saveData();
+              if (result) Navigator.pushNamed(context, Routes.home);
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
@@ -76,6 +79,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Nama",
                     hintText: "Nama Lengkap",
                     keyboardType: TextInputType.name,
+                    onChangedListener: model.onChangedName,
+                    errorText:
+                        !model.isNameValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -83,6 +89,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Peran",
                     hintText: "Admin/Sales/Teknisi",
                     keyboardType: TextInputType.number,
+                    onChangedListener: model.onChangedRole,
+                    errorText:
+                        !model.isRoleValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -90,6 +99,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Nomor Telepon",
                     hintText: "081xxxxxxxxxx",
                     keyboardType: TextInputType.number,
+                    onChangedListener: model.onChangedPhoneNumber,
+                    errorText: !model.isPhoneNumberValid
+                        ? "Kolom ini wajib diisi."
+                        : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -97,6 +110,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Alamat",
                     hintText: "Alamat Lengkap",
                     keyboardType: TextInputType.streetAddress,
+                    onChangedListener: model.onChangedAddress,
+                    errorText:
+                        !model.isAdressValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -104,6 +120,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Kota",
                     hintText: "Kota",
                     keyboardType: TextInputType.text,
+                    onChangedListener: model.onChangedCity,
+                    errorText:
+                        !model.isCityValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -111,6 +130,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                     label: "Email",
                     hintText: "abc@gmail.com",
                     keyboardType: TextInputType.emailAddress,
+                    onChangedListener: model.onChangedEmail,
+                    errorText:
+                        !model.isEmailValid ? "Kolom ini wajib diisi." : null,
                   ),
                 ],
               ),
