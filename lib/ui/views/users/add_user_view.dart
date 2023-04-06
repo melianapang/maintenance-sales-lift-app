@@ -57,10 +57,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Nama",
                   hintText: "Nama User",
-                  text: model.name,
-                  onChangedListener: (text) {
-                    model.setName(value: text);
-                  },
+                  onChangedListener: model.onChangedName,
                   errorText:
                       !model.isNameValid ? "Kolom ini wajib diisi." : null,
                 ),
@@ -68,10 +65,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Peran",
                   hintText: "Admin/Sales/Teknisi",
-                  text: model.role,
-                  onChangedListener: (text) {
-                    model.setRole(value: text);
-                  },
+                  onChangedListener: model.onChangedRole,
                   errorText:
                       !model.isRoleValid ? "Kolom ini wajib diisi." : null,
                 ),
@@ -79,10 +73,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Alamat",
                   hintText: "Alamat User",
-                  text: model.address,
-                  onChangedListener: (text) {
-                    model.setAddress(value: text);
-                  },
+                  onChangedListener: model.onChangedAddress,
                   errorText:
                       !model.isAdressValid ? "Kolom ini wajib diisi." : null,
                 ),
@@ -90,10 +81,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Kota",
                   hintText: "Surabaya",
-                  text: model.city,
-                  onChangedListener: (text) {
-                    model.setCity(value: text);
-                  },
+                  onChangedListener: model.onChangedCity,
                   errorText:
                       !model.isCityValid ? "Kolom ini wajib diisi." : null,
                 ),
@@ -102,10 +90,7 @@ class _AddUserViewState extends State<AddUserView> {
                   label: "No Telepon",
                   hintText: "081xxxxxxxxxx",
                   keyboardType: TextInputType.number,
-                  text: model.phoneNumber,
-                  onChangedListener: (text) {
-                    model.setPhoneNumber(value: text);
-                  },
+                  onChangedListener: model.onChangedPhoneNumber,
                   errorText: !model.isPhoneNumberValid
                       ? "Kolom ini wajib diisi."
                       : null,
@@ -115,10 +100,7 @@ class _AddUserViewState extends State<AddUserView> {
                   label: "Email",
                   hintText: "user123@gmail.com",
                   keyboardType: TextInputType.emailAddress,
-                  text: model.email,
-                  onChangedListener: (text) {
-                    model.setEmail(value: text);
-                  },
+                  onChangedListener: model.onChangedEmail,
                   errorText:
                       !model.isEmailValid ? "Kolom ini wajib diisi." : null,
                 ),

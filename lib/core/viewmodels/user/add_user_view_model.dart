@@ -1,25 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class AddUserViewModel extends BaseViewModel {
   AddUserViewModel();
 
-  String _name = "";
-  String get name => _name;
-
-  String _role = "";
-  String get role => _role;
-
-  String _address = "";
-  String get address => _address;
-
-  String _city = "";
-  String get city => _city;
-
-  String _phoneNumber = "";
-  String get phoneNumber => _phoneNumber;
-
-  String _email = "";
-  String get email => _email;
+  final nameController = TextEditingController();
+  final roleController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final emailController = TextEditingController();
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
@@ -42,55 +32,43 @@ class AddUserViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {}
 
-  void setName({required String value}) {
-    _name = value;
-
-    _isNameValid = _name.isNotEmpty;
+  void onChangedName(String value) {
+    _isNameValid = value.isNotEmpty;
     notifyListeners();
   }
 
-  void setRole({required String value}) {
-    _role = value;
-
-    _isRoleValid = _role.isNotEmpty;
+  void onChangedRole(String value) {
+    _isRoleValid = value.isNotEmpty;
     notifyListeners();
   }
 
-  void setAddress({required String value}) {
-    _address = value;
-
-    _isAdressValid = _address.isNotEmpty;
+  void onChangedAddress(String value) {
+    _isAdressValid = value.isNotEmpty;
     notifyListeners();
   }
 
-  void setCity({required String value}) {
-    _city = value;
-
-    _isCityValid = _city.isNotEmpty;
+  void onChangedCity(String value) {
+    _isCityValid = value.isNotEmpty;
     notifyListeners();
   }
 
-  void setPhoneNumber({required String value}) {
-    _phoneNumber = value;
-
-    _isPhoneNumberValid = _phoneNumber.isNotEmpty;
+  void onChangedPhoneNumber(String value) {
+    _isPhoneNumberValid = value.isNotEmpty;
     notifyListeners();
   }
 
-  void setEmail({required String value}) {
-    _email = value;
-
-    _isEmailValid = _email.isNotEmpty;
+  void onChangedEmail(String value) {
+    _isEmailValid = value.isNotEmpty;
     notifyListeners();
   }
 
   bool saveData() {
-    _isNameValid = _name.isNotEmpty;
-    _isRoleValid = _role.isNotEmpty;
-    _isAdressValid = _address.isNotEmpty;
-    _isCityValid = _city.isNotEmpty;
-    _isPhoneNumberValid = _phoneNumber.isNotEmpty;
-    _isEmailValid = _email.isNotEmpty;
+    _isNameValid = nameController.text.isNotEmpty;
+    _isRoleValid = roleController.text.isNotEmpty;
+    _isAdressValid = addressController.text.isNotEmpty;
+    _isCityValid = cityController.text.isNotEmpty;
+    _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
+    _isEmailValid = emailController.text.isNotEmpty;
     notifyListeners();
 
     return _isNameValid &&
