@@ -34,6 +34,23 @@ class EditCustomerViewModel extends BaseViewModel {
   final cityController = TextEditingController();
   final emailController = TextEditingController();
 
+  bool _isCustomerNameValid = true;
+  bool get isCustomerNameValid => _isCustomerNameValid;
+
+  bool _isCustomerNumberValid = true;
+  bool get isCustomerNumberValid => _isCustomerNumberValid;
+
+  bool _isCompanyNameValid = true;
+  bool get isCompanyNameValid => _isCompanyNameValid;
+
+  bool _isPhoneNumberValid = true;
+  bool get isPhoneNumberValid => _isPhoneNumberValid;
+
+  bool _isEmailValid = true;
+  bool get isEmailValid => _isEmailValid;
+
+  bool _isCityValid = true;
+  bool get isCityValid => _isCityValid;
   // End of TextEditingController
 
   // Dropdown related
@@ -94,6 +111,36 @@ class EditCustomerViewModel extends BaseViewModel {
     );
 
     setBusy(false);
+  }
+
+  void onChangedCustomerName(String value) {
+    _isCustomerNameValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCustomerNumber(String value) {
+    _isCustomerNumberValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCompanyName(String value) {
+    _isCompanyNameValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedPhoneNumber(String value) {
+    _isPhoneNumberValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedEmail(String value) {
+    _isEmailValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCity(String value) {
+    _isCityValid = value.isNotEmpty;
+    notifyListeners();
   }
 
   void setSelectedSumberData({
@@ -180,5 +227,31 @@ class EditCustomerViewModel extends BaseViewModel {
       status: int.parse(data.status),
       email: data.email,
     );
+  }
+
+  bool isValid() {
+    _isCustomerNameValid = namaPelangganController.text.isNotEmpty;
+    _isCustomerNumberValid = nomorPelangganController.text.isNotEmpty;
+    _isEmailValid = emailController.text.isNotEmpty;
+    _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
+    _isCityValid = cityController.text.isNotEmpty;
+    if (selectedTipePelangganOption == 1) {
+      _isCompanyNameValid = namaPerusahaanController.text.isNotEmpty;
+    }
+    notifyListeners();
+
+    if (selectedTipePelangganOption == 1) {
+      return _isCustomerNameValid &&
+          _isCustomerNumberValid &&
+          _isEmailValid &&
+          _isPhoneNumberValid &&
+          _isCityValid;
+    }
+
+    return _isCustomerNameValid &&
+        _isCustomerNumberValid &&
+        _isEmailValid &&
+        _isPhoneNumberValid &&
+        _isCityValid;
   }
 }

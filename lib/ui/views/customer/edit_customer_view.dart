@@ -125,6 +125,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   ),
                   buttonType: ButtonType.primary,
                   onTap: () async {
+                    bool isValid = await model.isValid();
+                    if (!isValid) return;
+
                     showDialogWidget(
                       context,
                       title: "Mengubahh Data User",
@@ -219,12 +222,20 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           controller: model.nomorPelangganController,
                           label: "Nomor Pelanggan",
                           hintText: "Nomor Pelanggan",
+                          onChangedListener: model.onChangedCustomerNumber,
+                          errorText: !model.isCustomerNumberValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
-                          controller: model.nomorPelangganController,
+                          controller: model.namaPelangganController,
                           label: "Nama Pelanggan",
                           hintText: "Nama Pelanggan",
+                          onChangedListener: model.onChangedCustomerName,
+                          errorText: !model.isCustomerNameValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         if (model.selectedTipePelangganOption == 1) ...[
@@ -232,6 +243,10 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                             controller: model.namaPerusahaanController,
                             label: "Nama Perusahaan",
                             hintText: "Nama Perusahaan",
+                            onChangedListener: model.onChangedCompanyName,
+                            errorText: !model.isCompanyNameValid
+                                ? "Kolom ini wajib diisi."
+                                : null,
                           ),
                           Spacings.vert(24),
                         ],
@@ -268,12 +283,20 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           label: "Nomor Telepon",
                           hintText: "081xxxxxxxxxx",
                           keyboardType: TextInputType.number,
+                          onChangedListener: model.onChangedPhoneNumber,
+                          errorText: !model.isPhoneNumberValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
                           controller: model.cityController,
                           label: "Kota",
                           hintText: "Kota",
+                          onChangedListener: model.onChangedCity,
+                          errorText: !model.isCityValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
@@ -281,6 +304,10 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           label: "Email",
                           hintText: "pelanggan@gmail.com",
                           keyboardType: TextInputType.emailAddress,
+                          onChangedListener: model.onChangedEmail,
+                          errorText: !model.isEmailValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                       ],
                     ),
