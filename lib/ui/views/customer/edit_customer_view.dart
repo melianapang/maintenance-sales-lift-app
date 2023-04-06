@@ -216,31 +216,22 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.nomorPelangganController,
                           label: "Nomor Pelanggan",
                           hintText: "Nomor Pelanggan",
-                          onChangedListener: (text) {
-                            model.setCustomerNumber(text);
-                          },
-                          text: model.customer?.customerNumber,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.nomorPelangganController,
                           label: "Nama Pelanggan",
                           hintText: "Nama Pelanggan",
-                          onChangedListener: (text) {
-                            model.setCustomerName(text);
-                          },
-                          text: model.customer?.customerName,
                         ),
                         Spacings.vert(24),
                         if (model.selectedTipePelangganOption == 1) ...[
                           TextInput.editable(
-                            onChangedListener: (text) {
-                              model.setCompanyName(text);
-                            },
+                            controller: model.namaPerusahaanController,
                             label: "Nama Perusahaan",
                             hintText: "Nama Perusahaan",
-                            text: model.customer?.companyName,
                           ),
                           Spacings.vert(24),
                         ],
@@ -273,32 +264,23 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.phoneNumberController,
                           label: "Nomor Telepon",
                           hintText: "081xxxxxxxxxx",
                           keyboardType: TextInputType.number,
-                          onChangedListener: (text) {
-                            model.setPhoneNumber(text);
-                          },
-                          text: model.customer?.phoneNumber,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.cityController,
                           label: "Kota",
                           hintText: "Kota",
-                          onChangedListener: (text) {
-                            model.setCity(text);
-                          },
-                          text: model.customer?.city,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.emailController,
                           label: "Email",
                           hintText: "pelanggan@gmail.com",
                           keyboardType: TextInputType.emailAddress,
-                          onChangedListener: (text) {
-                            model.setEmail(text);
-                          },
-                          text: model.customer?.email,
                         ),
                       ],
                     ),

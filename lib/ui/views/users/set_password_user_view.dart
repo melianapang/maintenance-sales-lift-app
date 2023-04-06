@@ -56,10 +56,7 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
                 children: [
                   TextInput.editable(
                     label: "Kata Sandi Pengguna Baru",
-                    onChangedListener: (text) {
-                      model.setNewPassword(text);
-                    },
-                    text: model.newPassword,
+                    controller: model.newPasswordController,
                     maxLines: 1,
                     isPassword: !model.showNewPassword,
                     suffixIcon: GestureDetector(
@@ -82,10 +79,7 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
                   TextInput.editable(
                     label: "Konfirmasi Kata Sandi",
                     maxLines: 1,
-                    text: model.newConfirmPassword,
-                    onChangedListener: (text) {
-                      model.setNewConfirmPassword(text);
-                    },
+                    controller: model.newConfirmPasswordController,
                     isPassword: !model.showConfirmNewPassword,
                     suffixIcon: GestureDetector(
                       onTap: () => model.setShowConfirmNewPassword(),

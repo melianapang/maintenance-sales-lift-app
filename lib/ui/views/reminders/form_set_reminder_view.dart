@@ -89,24 +89,21 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                 if (widget.param.source !=
                     FormSetReminderSource.ListReminderPage) ...[
                   TextInput.editable(
-                    onChangedListener: (text) {},
+                    controller: model.nomorPelangganController,
                     label: "Nomor Pelanggan",
                     hintText: "Nomor Pelanggan",
-                    text: model.customerData?.customerNumber,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
-                    onChangedListener: (text) {},
+                    controller: model.namaPelangganController,
                     label: "Nama Pelanggan",
                     hintText: "Nama Pelanggan",
-                    text: model.customerData?.customerName,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
-                    onChangedListener: (text) {},
+                    controller: model.namaPerusahaanController,
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
-                    text: model.customerData?.companyName,
                   ),
                   Spacings.vert(24),
                 ],
@@ -130,24 +127,19 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
+                  controller: model.descriptionController,
                   label: "Deskripsi Pengingat",
                   hintText: "Mengingatkan untuk konfirmasi harga..",
-                  text: model.notificationDescription,
-                  onChangedListener: (text) {
-                    model.setDescriptionNotification(text);
-                  },
                   note:
                       "NB: Deskripsi ini akan ditampilkan pada notifikasi pengingat. (Max. 100 karakter)",
                   maxLength: 100,
                 ),
                 Spacings.vert(24),
                 TextInput.multiline(
+                  controller: model.reminderController,
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
                   text: model.reminderNote,
-                  onChangedListener: (text) {
-                    model.setReminderNote(text);
-                  },
                   maxLines: 5,
                   minLines: 5,
                 ),

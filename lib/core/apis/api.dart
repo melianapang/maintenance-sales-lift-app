@@ -76,21 +76,23 @@ class ApiService {
   final Api api;
 
   //region authentication
-  Future<String?> requestLogin(
+  Future<Either<Failure, String>> requestLogin(
       {required String inputUser, required String password}) async {
     try {
       final payload = LoginRequest(inputUser: inputUser, password: password);
       final HttpResponse<dynamic> response = await api.requestLogin(payload);
 
-      if (response.response.statusCode == 200) {
-        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+      if (response.isSuccess) {
+        final LoginResponse loginResponse = LoginResponse.fromJson(
+          response.data,
+        );
 
-        return loginResponse.data.token;
+        return Right<Failure, String>(loginResponse.data.token);
       }
-      return null;
+      return ErrorUtils<String>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error; ${e.toString()}");
-      return null;
+      return ErrorUtils<String>().handleError(e);
     }
   }
 
@@ -251,4 +253,22 @@ class ApiService {
     }
   }
   //endregion
+}
+
+extension ParsedResponse<T> on HttpResponse<T> {
+  bool get isSuccess =>
+      <int>[
+        HttpStatus.ok,
+        HttpStatus.created,
+        HttpStatus.accepted,
+      ].contains(response.statusCode) &&
+      response.data['Success'] == true;
+
+  Failure? get failure {
+    if (isSuccess) return null;
+    return Failure(
+      message: response.data['message'],
+      errorCode: response.statusCode,
+    );
+  }
 }

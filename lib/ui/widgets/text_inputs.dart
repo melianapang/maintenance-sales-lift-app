@@ -27,9 +27,9 @@ class TextInput extends StatelessWidget {
   }
 
   factory TextInput.editable({
+    TextEditingController? controller,
     String? label,
-    required void Function(String text) onChangedListener,
-    String? text,
+    void Function(String text)? onChangedListener,
     bool? isEnabled,
     Widget? prefixIcon,
     Widget? suffixIcon,
@@ -42,9 +42,8 @@ class TextInput extends StatelessWidget {
     Color? backgroundColor = MyColors.darkBlack02,
     String? errorText,
     TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
   }) {
-    final controller = TextEditingController();
-    controller.text = text ?? '';
     return TextInput(
       controller: controller,
       onChangedListener: onChangedListener,
@@ -61,11 +60,13 @@ class TextInput extends StatelessWidget {
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       keyboardType: keyboardType,
+      validator: validator,
     );
   }
 
   factory TextInput.multiline({
-    required void Function(String text) onChangedListener,
+    TextEditingController? controller,
+    void Function(String text)? onChangedListener,
     required String label,
     String? text,
     required int minLines,
@@ -75,8 +76,8 @@ class TextInput extends StatelessWidget {
     Color backgroundColor = MyColors.darkBlack02,
     String? hintText,
   }) {
-    final controller = TextEditingController();
-    controller.text = text ?? '';
+    // final controller = TextEditingController();
+    controller?.text = text ?? '';
     return TextInput(
       controller: controller,
       onChangedListener: onChangedListener,
@@ -129,6 +130,8 @@ class TextInput extends StatelessWidget {
     this.borderColor,
     this.onChangedListener,
     this.fontColor = MyColors.white,
+    this.validator,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
     super.key,
   });
 
@@ -149,6 +152,8 @@ class TextInput extends StatelessWidget {
   final Color? backgroundColor;
   final Color? borderColor;
   final Color fontColor;
+  final String? Function(String?)? validator;
+  final AutovalidateMode autovalidateMode;
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +236,8 @@ class TextInput extends StatelessWidget {
             ),
           ),
           obscureText: isPassword,
+          validator: validator,
+          autovalidateMode: autovalidateMode,
         ),
         if (note != null) ...[
           Text(

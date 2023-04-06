@@ -67,33 +67,27 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     Spacings.vert(10),
                     TextInput.editable(
-                      text: model.inputUser,
-                      onChangedListener: (text) {
-                        model.setInputUser(inputUser: text);
-                      },
+                      controller: model.usernameController,
                       borderColor: MyColors.secondaryLightBlack,
                       hintText: 'Username/Email',
                       prefixIcon: Icon(
                         Icons.person,
-                        color: model.isValid == false
+                        color: !model.isUsernameValid
                             ? Colors.redAccent
                             : MyColors.yellow01,
                       ),
-                      errorText: model.isValid == false
-                          ? "Username / email anda salah"
-                          : null,
+                      validator: model.usernameValidator,
+                      onChangedListener: model.onChangedUsername,
                     ),
                     Spacings.vert(24),
                     TextInput.editable(
-                      text: model.password,
-                      onChangedListener: (text) {
-                        model.setPassword(password: text);
-                      },
+                      controller: model.passwordController,
+                      onChangedListener: model.onChangedPassword,
                       maxLines: 1,
                       isPassword: !model.showPassword,
                       prefixIcon: Icon(
                         Icons.lock,
-                        color: model.isValid == false
+                        color: !model.isPasswordValid
                             ? Colors.redAccent
                             : MyColors.yellow01,
                       ),
@@ -105,16 +99,13 @@ class _LoginViewState extends State<LoginView> {
                           model.showPassword
                               ? PhosphorIcons.eyeClosed
                               : PhosphorIcons.eye,
-                          color: model.isValid == false
+                          color: !model.isPasswordValid
                               ? Colors.redAccent
                               : MyColors.yellow01,
                         ),
                       ),
                       hintText: "Password",
                       borderColor: MyColors.secondaryLightBlack,
-                      errorText: model.isValid == false
-                          ? "Kata sandi anda salah"
-                          : null,
                     ),
                     Spacings.vert(24),
                     ButtonWidget(
@@ -131,10 +122,10 @@ class _LoginViewState extends State<LoginView> {
                               final bool result = await model.requestLogin();
                               Navigator.pop(context);
 
-                              if (!result) {
-                                showErrorDialog(context);
-                                return;
-                              }
+                              // if (!result) {
+                              //   showErrorDialog(context);
+                              //   return;
+                              // }
 
                               Navigator.popAndPushNamed(
                                 context,

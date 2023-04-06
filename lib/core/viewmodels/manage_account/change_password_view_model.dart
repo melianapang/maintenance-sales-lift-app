@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -16,14 +17,9 @@ class ChangePasswordViewModel extends BaseViewModel {
   bool? _isValid;
   bool? get isValid => _isValid;
 
-  String _oldPassword = "";
-  String get oldPassword => _oldPassword;
-
-  String _newPassword = "";
-  String get newPassword => _newPassword;
-
-  String _confirmNewPassword = "";
-  String get confirmNewPassword => _confirmNewPassword;
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   bool _showOldPassword = false;
   bool get showOldPassword => _showOldPassword;
@@ -52,23 +48,14 @@ class ChangePasswordViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setOldPassword({required String password}) {
-    _oldPassword = password;
-  }
-
-  void setNewPassword({required String password}) {
-    _newPassword = password;
-  }
-
-  void setConfirmNewPassword({required String password}) {
-    _confirmNewPassword = password;
-  }
-
-  Future<bool> requrestChangePassword() async {
-    return await _apiService.requestChangePassword(
-      oldPassword: _oldPassword,
-      newPassword: _newPassword,
-      passwordConfirmation: _confirmNewPassword,
+  Future<bool> requestChangePassword() async {
+    var result = await _apiService.requestChangePassword(
+      oldPassword: oldPasswordController.text,
+      newPassword: newPasswordController.text,
+      passwordConfirmation: confirmPasswordController.text,
     );
+
+    if (result.isRight) return result.right;
+    return false;
   }
 }

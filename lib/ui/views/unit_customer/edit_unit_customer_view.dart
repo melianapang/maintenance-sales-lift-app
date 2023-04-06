@@ -113,21 +113,15 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                       children: [
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.namaUnitController,
                           label: "Nama Unit",
                           hintText: "Nama Unit",
-                          onChangedListener: (text) {
-                            model.setUnitName(text);
-                          },
-                          text: model.unitData?.unitName,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
+                          controller: model.lokasiUnitController,
                           label: "Lokasi Unit",
                           hintText: "Lokasi Unit",
-                          onChangedListener: (text) {
-                            model.setUnitLocation(text);
-                          },
-                          text: model.unitData?.location,
                         ),
                         Spacings.vert(24),
                         GestureDetector(

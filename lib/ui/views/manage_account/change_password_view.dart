@@ -60,7 +60,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 },
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
-                  bool isSuccess = await model.requrestChangePassword();
+                  bool isSuccess = await model.requestChangePassword();
 
                   showDialogWidget(
                     context,
@@ -83,11 +83,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               child: Column(
                 children: [
                   TextInput.editable(
+                    controller: model.oldPasswordController,
                     label: "Kata Sandi Lama",
-                    text: model.oldPassword,
-                    onChangedListener: (text) {
-                      model.setOldPassword(password: text);
-                    },
                     isPassword: !model.showOldPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
@@ -109,11 +106,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.newPasswordController,
                     label: "Kata Sandi Baru",
-                    text: model.newPassword,
-                    onChangedListener: (text) {
-                      model.setNewPassword(password: text);
-                    },
                     isPassword: !model.showNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
@@ -135,11 +129,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.confirmPasswordController,
                     label: "Konfirmasi Kata Sandi Baru",
-                    text: model.confirmNewPassword,
-                    onChangedListener: (text) {
-                      model.setConfirmNewPassword(password: text);
-                    },
                     isPassword: !model.showConfirmNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(

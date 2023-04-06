@@ -5,6 +5,9 @@ import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart'
 class AddPicProjectViewModel extends BaseViewModel {
   AddPicProjectViewModel();
 
+  final namaPicController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+
   String _name = "";
   String get name => _name;
 

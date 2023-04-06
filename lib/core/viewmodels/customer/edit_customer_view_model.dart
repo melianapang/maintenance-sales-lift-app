@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
@@ -24,6 +24,17 @@ class EditCustomerViewModel extends BaseViewModel {
 
   Customer? _customer;
   Customer? get customer => _customer;
+
+  // TextEditingController
+
+  final nomorPelangganController = TextEditingController();
+  final namaPelangganController = TextEditingController();
+  final namaPerusahaanController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final cityController = TextEditingController();
+  final emailController = TextEditingController();
+
+  // End of TextEditingController
 
   // Dropdown related
   int _selectedSumberDataOption = 0;
@@ -128,30 +139,6 @@ class EditCustomerViewModel extends BaseViewModel {
     }
 
     notifyListeners();
-  }
-
-  void setCustomerNumber(String value) {
-    _customer?.customerNumber = value;
-  }
-
-  void setCustomerName(String value) {
-    _customer?.customerName = value;
-  }
-
-  void setCompanyName(String value) {
-    _customer?.companyName = value;
-  }
-
-  void setCity(String value) {
-    _customer?.city = value;
-  }
-
-  void setEmail(String value) {
-    _customer?.email = value;
-  }
-
-  void setPhoneNumber(String value) {
-    _customer?.phoneNumber = value;
   }
 
   Future<bool> requestUpdateCustomer() async {

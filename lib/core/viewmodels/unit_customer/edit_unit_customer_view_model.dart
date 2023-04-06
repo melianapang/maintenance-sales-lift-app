@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -22,6 +22,9 @@ class EditUnitCustomerViewModel extends BaseViewModel {
 
   UnitData? _unitData;
   UnitData? get unitData => _unitData;
+
+  final namaUnitController = TextEditingController();
+  final lokasiUnitController = TextEditingController();
 
   // Dropdown related
   int _selectedSumberDataOption = 0;

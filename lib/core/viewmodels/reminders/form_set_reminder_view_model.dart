@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -16,6 +17,16 @@ class FormSetReminderViewModel extends BaseViewModel {
 
   final CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
+
+  // TextEditingController
+
+  final nomorPelangganController = TextEditingController();
+  final namaPelangganController = TextEditingController();
+  final namaPerusahaanController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final reminderController = TextEditingController();
+
+  // End of TextEditingController
 
   // Filter related
   int _selectedSetReminderForOption = 0;

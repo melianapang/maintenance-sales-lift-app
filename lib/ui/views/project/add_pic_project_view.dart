@@ -63,24 +63,21 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
               children: [
                 TextInput.editable(
                   label: "Nama PIC",
+                  controller: model.namaPicController,
                   hintText: "Nama PIC Proyek",
-                  text: model.name,
                   errorText: model.isNameValid == false
                       ? "Wajib diisi dengan benar menggunakan huruf"
                       : null,
-                  onChangedListener: (text) {
-                    model.setName(text);
-                  },
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
                   label: "Nomor Telepon PIC",
+                  controller: model.phoneNumberController,
                   hintText: "Nomor Telepon PIC",
                   keyboardType: TextInputType.phone,
                   errorText: model.isPhoneNumberValid == false
                       ? "Wajib diisi dengan benar menggunakan angka"
                       : null,
-                  text: model.phoneNumber,
                   onChangedListener: (text) {
                     model.setPhoneNumber(text);
                   },

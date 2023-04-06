@@ -72,65 +72,45 @@ class _EditProfileViewState extends State<EditProfileView> {
               child: Column(
                 children: [
                   TextInput.editable(
+                    controller: model.namaLengkapController,
                     label: "Nama",
-                    text: model.profileData?.username,
                     hintText: "Nama Lengkap",
                     keyboardType: TextInputType.name,
-                    onChangedListener: (text) {
-                      model.setUsername(text);
-                    },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.peranController,
                     label: "Peran",
-                    text: mappingRoleToString(
-                      model.profileData?.role ?? Role.Admin,
-                    ),
                     hintText: "Admin/Sales/Teknisi",
                     keyboardType: TextInputType.number,
-                    onChangedListener: (text) {
-                      model.setRole(text);
-                    },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.phoneNumberController,
                     label: "Nomor Telepon",
-                    text: model.profileData?.phoneNumber,
                     hintText: "081xxxxxxxxxx",
                     keyboardType: TextInputType.number,
-                    onChangedListener: (text) {
-                      model.setPhoneNumber(text);
-                    },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.alamatController,
                     label: "Alamat",
-                    text: model.profileData?.address,
                     hintText: "Alamat Lengkap",
                     keyboardType: TextInputType.streetAddress,
-                    onChangedListener: (text) {
-                      model.setAddress(text);
-                    },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.kotaController,
                     label: "Kota",
-                    text: model.profileData?.city,
                     hintText: "Kota",
                     keyboardType: TextInputType.text,
-                    onChangedListener: (text) {
-                      model.setCity(text);
-                    },
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.emailController,
                     label: "Email",
-                    text: model.profileData?.email,
                     hintText: "abc@gmail.com",
                     keyboardType: TextInputType.emailAddress,
-                    onChangedListener: (text) {
-                      model.setEmail(text);
-                    },
                   ),
                 ],
               ),

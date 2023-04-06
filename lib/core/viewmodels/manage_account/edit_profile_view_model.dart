@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
@@ -18,33 +19,30 @@ class EditProfileViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  ProfileData? _profileData;
-  ProfileData? get profileData => _profileData;
+  final ProfileData? _profileData;
+
+  final namaLengkapController = TextEditingController();
+  final peranController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final alamatController = TextEditingController();
+  final kotaController = TextEditingController();
+  final emailController = TextEditingController();
 
   @override
-  Future<void> initModel() async {}
-
-  void setUsername(String value) {
-    _profileData?.username = value;
+  Future<void> initModel() async {
+    setBusy(true);
+    handleExistingData();
+    setBusy(false);
   }
 
-  void setAddress(String value) {
-    _profileData?.address = value;
-  }
-
-  void setEmail(String value) {
-    _profileData?.email = value;
-  }
-
-  void setCity(String value) {
-    _profileData?.city = value;
-  }
-
-  void setPhoneNumber(String value) {
-    _profileData?.phoneNumber = value;
-  }
-
-  void setRole(String value) {
-    _profileData?.role = mappingStringToRole(value);
+  void handleExistingData() {
+    namaLengkapController.text = _profileData?.firstName ?? "";
+    peranController.text = mappingRoleToString(
+      _profileData?.role ?? Role.Sales,
+    );
+    phoneNumberController.text = _profileData?.phoneNumber ?? "";
+    alamatController.text = _profileData?.address ?? "";
+    kotaController.text = _profileData?.city ?? "";
+    emailController.text = _profileData?.email ?? "";
   }
 }

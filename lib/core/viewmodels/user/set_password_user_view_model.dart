@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class SetPasswordViewUserModel extends BaseViewModel {
   SetPasswordViewUserModel();
+
+  final newPasswordController = TextEditingController();
+  final newConfirmPasswordController = TextEditingController();
 
   String _newPassword = "";
   String get newPassword => _newPassword;
