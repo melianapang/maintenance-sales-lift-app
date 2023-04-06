@@ -48,6 +48,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               right: 24.0,
             ),
             onTap: () {
+              bool isValid = model.isValidToRequest();
+              if (!isValid) return;
+
               showDialogWidget(
                 context,
                 title: "Ubah Kata Sandi",
@@ -86,6 +89,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     controller: model.oldPasswordController,
                     label: "Kata Sandi Lama",
                     isPassword: !model.showOldPassword,
+                    onChangedListener: model.onChangedOldPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () =>
@@ -94,13 +98,13 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         model.showOldPassword
                             ? PhosphorIcons.eyeClosed
                             : PhosphorIcons.eye,
-                        color: model.isValid == false
+                        color: model.isOldPasswordValid == false
                             ? Colors.redAccent
                             : MyColors.greyColor,
                       ),
                     ),
                     hintText: "Masukkan kata sandi lama anda",
-                    errorText: model.isValid == false
+                    errorText: model.isOldPasswordValid == false
                         ? "Kata sandi lama anda salah."
                         : null,
                   ),
@@ -109,6 +113,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     controller: model.newPasswordController,
                     label: "Kata Sandi Baru",
                     isPassword: !model.showNewPassword,
+                    onChangedListener: model.onChangedNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () =>
@@ -117,13 +122,13 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         model.showNewPassword
                             ? PhosphorIcons.eyeClosed
                             : PhosphorIcons.eye,
-                        color: model.isValid == false
+                        color: model.isNewPasswordValid == false
                             ? Colors.redAccent
                             : MyColors.greyColor,
                       ),
                     ),
                     hintText: "Masukkan kata sandi baru anda",
-                    errorText: model.isValid == false
+                    errorText: model.isNewPasswordValid == false
                         ? "Kata sandi anda tidak valid."
                         : null,
                   ),
@@ -132,6 +137,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     controller: model.confirmPasswordController,
                     label: "Konfirmasi Kata Sandi Baru",
                     isPassword: !model.showConfirmNewPassword,
+                    onChangedListener: model.onChangedConfirmNewPassword,
                     maxLines: 1,
                     suffixIcon: GestureDetector(
                       onTap: () => model.setShowConfirmNewPassword(
@@ -140,13 +146,13 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         model.showConfirmNewPassword
                             ? PhosphorIcons.eyeClosed
                             : PhosphorIcons.eye,
-                        color: model.isValid == false
+                        color: model.isConfirmPasswordValid == false
                             ? Colors.redAccent
                             : MyColors.greyColor,
                       ),
                     ),
                     hintText: "Masukkan kata sandi baru anda",
-                    errorText: model.isValid == false
+                    errorText: model.isConfirmPasswordValid == false
                         ? "Kaya sandi anda tidak sama."
                         : null,
                   ),

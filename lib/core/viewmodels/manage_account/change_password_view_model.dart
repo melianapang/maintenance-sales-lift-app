@@ -14,9 +14,6 @@ class ChangePasswordViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  bool? _isValid;
-  bool? get isValid => _isValid;
-
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -29,6 +26,15 @@ class ChangePasswordViewModel extends BaseViewModel {
 
   bool _showConfirmNewPassword = false;
   bool get showConfirmNewPassword => _showConfirmNewPassword;
+
+  bool _isOldPasswordValid = true;
+  bool get isOldPasswordValid => _isOldPasswordValid;
+
+  bool _isNewPasswordValid = true;
+  bool get isNewPasswordValid => _isNewPasswordValid;
+
+  bool _isConfirmPasswordValid = true;
+  bool get isConfirmPasswordValid => _isConfirmPasswordValid;
 
   @override
   Future<void> initModel() async {}
@@ -48,14 +54,43 @@ class ChangePasswordViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> requestChangePassword() async {
-    var result = await _apiService.requestChangePassword(
-      oldPassword: oldPasswordController.text,
-      newPassword: newPasswordController.text,
-      passwordConfirmation: confirmPasswordController.text,
-    );
+  void onChangedOldPassword(String value) {
+    _isOldPasswordValid = value.isNotEmpty;
+    notifyListeners();
+  }
 
-    if (result.isRight) return result.right;
+  void onChangedNewPassword(String value) {
+    _isNewPasswordValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedConfirmNewPassword(String value) {
+    _isConfirmPasswordValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  bool isValidToRequest() {
+    _isOldPasswordValid = oldPasswordController.text.isNotEmpty;
+    _isConfirmPasswordValid = confirmPasswordController.text.isNotEmpty;
+    _isNewPasswordValid = newPasswordController.text.isNotEmpty;
+    notifyListeners();
+
+    return _isOldPasswordValid &&
+        _isNewPasswordValid &&
+        _isConfirmPasswordValid;
+  }
+
+  Future<bool> requestChangePassword() async {
+    if (_isOldPasswordValid && _isNewPasswordValid && _isConfirmPasswordValid) {
+      var result = await _apiService.requestChangePassword(
+        oldPassword: oldPasswordController.text,
+        newPassword: newPasswordController.text,
+        passwordConfirmation: confirmPasswordController.text,
+      );
+
+      if (result.isRight) return result.right;
+      return false;
+    }
     return false;
   }
 }
