@@ -1,8 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddCustomerViewModel extends BaseViewModel {
-  AddCustomerViewModel();
+  AddCustomerViewModel({
+    required DioService dioService,
+  }) : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        );
+
+  final ApiService _apiService;
 
   // Dropdown related
   int _selectedSumberDataOption = 0;
@@ -31,8 +42,66 @@ class AddCustomerViewModel extends BaseViewModel {
   List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
   // End of Dropdown related
 
+  //region TextController
+  final customerNameController = TextEditingController();
+  final customerNumberController = TextEditingController();
+  final companyNameController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final emailController = TextEditingController();
+  final noteController = TextEditingController();
+  final cityController = TextEditingController();
+
+  bool _isCustomerNameValid = true;
+  bool get isCustomerNameValid => _isCustomerNameValid;
+
+  bool _isCustomerNumberValid = true;
+  bool get isCustomerNumberValid => _isCustomerNumberValid;
+
+  bool _isCompanyNameValid = true;
+  bool get isCompanyNameValid => _isCompanyNameValid;
+
+  bool _isPhoneNumberValid = true;
+  bool get isPhoneNumberValid => _isPhoneNumberValid;
+
+  bool _isEmailValid = true;
+  bool get isEmailValid => _isEmailValid;
+
+  bool _isCityValid = true;
+  bool get isCityValid => _isCityValid;
+  //endregion
+
   @override
   Future<void> initModel() async {}
+
+  void onChangedCustomerName(String value) {
+    _isCustomerNameValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCustomerNumber(String value) {
+    _isCustomerNumberValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCompanyName(String value) {
+    _isCompanyNameValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedPhoneNumber(String value) {
+    _isPhoneNumberValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedEmail(String value) {
+    _isEmailValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedCity(String value) {
+    _isCityValid = value.isNotEmpty;
+    notifyListeners();
+  }
 
   void setSelectedSumberData({
     required int selectedMenu,
@@ -77,5 +146,22 @@ class AddCustomerViewModel extends BaseViewModel {
     }
 
     notifyListeners();
+  }
+
+  bool saveData() {
+    _isCustomerNameValid = customerNameController.text.isNotEmpty;
+    _isCustomerNumberValid = customerNumberController.text.isNotEmpty;
+    _isCompanyNameValid = companyNameController.text.isNotEmpty;
+    _isEmailValid = emailController.text.isNotEmpty;
+    _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
+    _isCityValid = cityController.text.isNotEmpty;
+    notifyListeners();
+
+    return _isCustomerNameValid &&
+        _isCustomerNumberValid &&
+        _isCompanyNameValid &&
+        _isEmailValid &&
+        _isPhoneNumberValid &&
+        _isCityValid;
   }
 }
