@@ -43,7 +43,8 @@ class _AddUserViewState extends State<AddUserView> {
               right: 24.0,
             ),
             onTap: () {
-              Navigator.pushNamed(context, Routes.setPasswordUser);
+              bool result = model.saveData();
+              if (result) Navigator.pushNamed(context, Routes.setPasswordUser);
             },
             text: 'Simpan',
           ),
@@ -54,41 +55,72 @@ class _AddUserViewState extends State<AddUserView> {
             child: Column(
               children: [
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Nama",
                   hintText: "Nama User",
+                  text: model.name,
+                  onChangedListener: (text) {
+                    model.setName(value: text);
+                  },
+                  errorText:
+                      !model.isNameValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Peran",
                   hintText: "Admin/Sales/Teknisi",
+                  text: model.role,
+                  onChangedListener: (text) {
+                    model.setRole(value: text);
+                  },
+                  errorText:
+                      !model.isRoleValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Alamat",
                   hintText: "Alamat User",
+                  text: model.address,
+                  onChangedListener: (text) {
+                    model.setAddress(value: text);
+                  },
+                  errorText:
+                      !model.isAdressValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Kota",
                   hintText: "Surabaya",
+                  text: model.city,
+                  onChangedListener: (text) {
+                    model.setCity(value: text);
+                  },
+                  errorText:
+                      !model.isCityValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "No Telepon",
                   hintText: "081xxxxxxxxxx",
                   keyboardType: TextInputType.number,
+                  text: model.phoneNumber,
+                  onChangedListener: (text) {
+                    model.setPhoneNumber(value: text);
+                  },
+                  errorText: !model.isPhoneNumberValid
+                      ? "Kolom ini wajib diisi."
+                      : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
                   label: "Email",
                   hintText: "user123@gmail.com",
                   keyboardType: TextInputType.emailAddress,
+                  text: model.email,
+                  onChangedListener: (text) {
+                    model.setEmail(value: text);
+                  },
+                  errorText:
+                      !model.isEmailValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
               ],
