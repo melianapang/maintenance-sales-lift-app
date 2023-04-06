@@ -1,12 +1,14 @@
-import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/login_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/manage_account_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api.g.dart';
@@ -96,7 +98,7 @@ class ApiService {
     }
   }
 
-  Future<bool> requestChangePassword({
+  Future<Either<Failure, bool>> requestChangePassword({
     required String oldPassword,
     required String newPassword,
     required String passwordConfirmation,
@@ -114,12 +116,13 @@ class ApiService {
         ChangePasswordResponse changePasswordResponse =
             ChangePasswordResponse.fromJson(response.data);
 
-        return changePasswordResponse.isSuccess;
+        return Right<Failure, bool>(changePasswordResponse.isSuccess);
       }
-      return false;
+
+      return ErrorUtils<bool>().handleDomainError(response);
     } catch (e) {
-      log("Sequence number error; ${e.toString()}");
-      return false;
+      log("Error: ${e.toString()}");
+      return ErrorUtils<bool>().handleError(e);
     }
   }
   //endregion
