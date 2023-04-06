@@ -3,8 +3,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -122,10 +120,13 @@ class _LoginViewState extends State<LoginView> {
                               final bool result = await model.requestLogin();
                               Navigator.pop(context);
 
-                              // if (!result) {
-                              //   showErrorDialog(context);
-                              //   return;
-                              // }
+                              if (!result) {
+                                showErrorDialog(
+                                  context,
+                                  text: model.errorMsg,
+                                );
+                                return;
+                              }
 
                               Navigator.popAndPushNamed(
                                 context,

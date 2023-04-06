@@ -89,8 +89,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, String>(loginResponse.data.token);
+        if (loginResponse.isSuccess) {
+          return Right<Failure, String>(loginResponse.data.token);
+        }
+        return ErrorUtils<String>()
+            .handleDomainError(response, message: loginResponse.message);
       }
+
       return ErrorUtils<String>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error; ${e.toString()}");
@@ -270,7 +275,7 @@ extension ParsedResponse<T> on HttpResponse<T> {
   Failure? get failure {
     if (isSuccess) return null;
     return Failure(
-      message: response.data['message'],
+      message: response.data['Message'],
       errorCode: response.statusCode,
     );
   }

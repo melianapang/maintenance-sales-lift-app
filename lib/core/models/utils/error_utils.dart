@@ -25,10 +25,13 @@ class ErrorUtils<T> {
     );
   }
 
-  Left<Failure, T> handleDomainError(HttpResponse<dynamic> response) {
+  Left<Failure, T> handleDomainError(
+    HttpResponse<dynamic> response, {
+    String? message,
+  }) {
     final Failure failure = Failure(
       errorCode: response.response.statusCode,
-      message: response.response.data.message,
+      message: message ?? response.data['Message'],
     );
     log('Failure: ${failure.errorCode} | ${failure.message}');
     return Left<Failure, T>(failure);

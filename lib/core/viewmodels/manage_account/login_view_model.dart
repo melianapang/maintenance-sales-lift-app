@@ -39,6 +39,9 @@ class LoginViewModel extends BaseViewModel {
   String _password = "Hello789";
   String get password => _password;
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -63,15 +66,16 @@ class LoginViewModel extends BaseViewModel {
   Future<bool> requestLogin() async {
     setBusy(true);
     final response = await _apiService.requestLogin(
-      inputUser: _inputUser,
-      password: _password,
+      inputUser: usernameController.text,
+      password: passwordController.text,
     );
     setBusy(false);
 
     if (response.isRight) {
-      _authenticationService.setLogin(response.right);
+      await _authenticationService.setLogin(response.right);
       return true;
     }
+    _errorMsg = response.left.message;
     return false;
   }
 
