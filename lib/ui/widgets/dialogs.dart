@@ -222,7 +222,7 @@ void showDialogWidget(BuildContext context,
 
 void showErrorDialog(
   BuildContext context, {
-  String text = "Gagal memproses permohonan",
+  String? text,
 }) {
   showDialog(
     context: context,
@@ -237,7 +237,7 @@ void showErrorDialog(
               ),
               Spacings.vert(4),
               Text(
-                text,
+                text ?? "Gagal memproses permohonan",
                 style: buildTextStyle(
                   fontSize: 14,
                   fontColor: MyColors.darkBlack01,
