@@ -72,6 +72,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                   label: "Nama Proyek",
                   hintText: "Nama Proyek",
                   onChangedListener: model.onChangedName,
+                  controller: model.nameController,
                   errorText:
                       !model.isNameValid ? "Kolom ini wajib diisi." : null,
                 ),
@@ -121,6 +122,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                 TextInput.editable(
                   label: "Alamat",
                   hintText: "Alamat Proyek",
+                  controller: model.addressController,
                   onChangedListener: model.onChangedAddress,
                   errorText:
                       !model.isAdressValid ? "Kolom ini wajib diisi." : null,
@@ -129,6 +131,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                 TextInput.editable(
                   label: "Kota",
                   hintText: "Kota",
+                  controller: model.cityController,
                   onChangedListener: model.onChangedCity,
                   errorText:
                       !model.isCityValid ? "Kolom ini wajib diisi." : null,
