@@ -151,15 +151,24 @@ class AddCustomerViewModel extends BaseViewModel {
   bool saveData() {
     _isCustomerNameValid = customerNameController.text.isNotEmpty;
     _isCustomerNumberValid = customerNumberController.text.isNotEmpty;
-    _isCompanyNameValid = companyNameController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
+    if (selectedTipePelangganOption == 1) {
+      _isCompanyNameValid = companyNameController.text.isNotEmpty;
+    }
     notifyListeners();
+
+    if (selectedTipePelangganOption == 1) {
+      return _isCustomerNameValid &&
+          _isCustomerNumberValid &&
+          _isEmailValid &&
+          _isPhoneNumberValid &&
+          _isCityValid;
+    }
 
     return _isCustomerNameValid &&
         _isCustomerNumberValid &&
-        _isCompanyNameValid &&
         _isEmailValid &&
         _isPhoneNumberValid &&
         _isCityValid;
