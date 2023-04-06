@@ -26,6 +26,12 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   final namaUnitController = TextEditingController();
   final lokasiUnitController = TextEditingController();
 
+  bool _isNamaValid = true;
+  bool get isNamaValid => _isNamaValid;
+
+  bool _isLocationValid = true;
+  bool get isLocationValid => _isLocationValid;
+
   // Dropdown related
   int _selectedSumberDataOption = 0;
   int get selectedSumberDataOption => _selectedSumberDataOption;
@@ -81,6 +87,16 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     }
 
     setBusy(false);
+  }
+
+  void onChangedNama(String value) {
+    _isNamaValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedLocation(String value) {
+    _isLocationValid = value.isNotEmpty;
+    notifyListeners();
   }
 
   Future<void> requestGetAllCustomer() async {
@@ -158,6 +174,14 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   }) {
     _selectedProyek = _listCustomer?[selectedIndex];
     notifyListeners();
+  }
+
+  bool isValid() {
+    _isNamaValid = namaUnitController.text.isNotEmpty;
+    _isLocationValid = lokasiUnitController.text.isNotEmpty;
+    notifyListeners();
+
+    return _isNamaValid && _isLocationValid;
   }
 
   Future<bool> requestUpdateCustomer() async {

@@ -69,6 +69,9 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                   ),
                   buttonType: ButtonType.primary,
                   onTap: () async {
+                    bool isValid = await model.isValid();
+                    if (!isValid) return;
+
                     showDialogWidget(
                       context,
                       title: "Mengubahh Data Unit",
@@ -116,12 +119,20 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                           controller: model.namaUnitController,
                           label: "Nama Unit",
                           hintText: "Nama Unit",
+                          onChangedListener: model.onChangedNama,
+                          errorText: !model.isNamaValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
                           controller: model.lokasiUnitController,
                           label: "Lokasi Unit",
                           hintText: "Lokasi Unit",
+                          onChangedListener: model.onChangedLocation,
+                          errorText: !model.isLocationValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
                         ),
                         Spacings.vert(24),
                         GestureDetector(
