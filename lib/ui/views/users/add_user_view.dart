@@ -57,6 +57,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Nama",
                   hintText: "Nama User",
+                  controller: model.nameController,
                   onChangedListener: model.onChangedName,
                   errorText:
                       !model.isNameValid ? "Kolom ini wajib diisi." : null,
@@ -65,6 +66,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Peran",
                   hintText: "Admin/Sales/Teknisi",
+                  controller: model.roleController,
                   onChangedListener: model.onChangedRole,
                   errorText:
                       !model.isRoleValid ? "Kolom ini wajib diisi." : null,
@@ -73,6 +75,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Alamat",
                   hintText: "Alamat User",
+                  controller: model.addressController,
                   onChangedListener: model.onChangedAddress,
                   errorText:
                       !model.isAdressValid ? "Kolom ini wajib diisi." : null,
@@ -81,6 +84,7 @@ class _AddUserViewState extends State<AddUserView> {
                 TextInput.editable(
                   label: "Kota",
                   hintText: "Surabaya",
+                  controller: model.cityController,
                   onChangedListener: model.onChangedCity,
                   errorText:
                       !model.isCityValid ? "Kolom ini wajib diisi." : null,
@@ -90,6 +94,7 @@ class _AddUserViewState extends State<AddUserView> {
                   label: "No Telepon",
                   hintText: "081xxxxxxxxxx",
                   keyboardType: TextInputType.number,
+                  controller: model.phoneNumberController,
                   onChangedListener: model.onChangedPhoneNumber,
                   errorText: !model.isPhoneNumberValid
                       ? "Kolom ini wajib diisi."
@@ -100,6 +105,7 @@ class _AddUserViewState extends State<AddUserView> {
                   label: "Email",
                   hintText: "user123@gmail.com",
                   keyboardType: TextInputType.emailAddress,
+                  controller: model.emailController,
                   onChangedListener: model.onChangedEmail,
                   errorText:
                       !model.isEmailValid ? "Kolom ini wajib diisi." : null,
