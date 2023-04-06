@@ -8,12 +8,6 @@ class AddPicProjectViewModel extends BaseViewModel {
   final namaPicController = TextEditingController();
   final phoneNumberController = TextEditingController();
 
-  String _name = "";
-  String get name => _name;
-
-  String _phoneNumber = "";
-  String get phoneNumber => _phoneNumber;
-
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
 
@@ -23,22 +17,24 @@ class AddPicProjectViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {}
 
-  void setName(String value) {
-    _name = value;
+  void onChangedName(String value) {
+    _isNameValid = value.isNotEmpty;
+    notifyListeners();
   }
 
-  void setPhoneNumber(String value) {
-    _phoneNumber = value.toString();
+  void onChangedPhoneNumber(String value) {
+    _isPhoneNumberValid = value.isNotEmpty;
+    notifyListeners();
   }
 
   void sendDataBack(BuildContext context) {
-    if (_name.isEmpty) {
+    if (namaPicController.text.isEmpty) {
       _isNameValid = false;
       notifyListeners();
       return;
     }
 
-    if (_phoneNumber.isEmpty) {
+    if (phoneNumberController.text.isEmpty) {
       _isPhoneNumberValid = false;
       notifyListeners();
       return;
@@ -47,8 +43,8 @@ class AddPicProjectViewModel extends BaseViewModel {
     Navigator.pop(
       context,
       PicData(
-        name: _name,
-        phoneNumber: _phoneNumber,
+        name: namaPicController.text,
+        phoneNumber: phoneNumberController.text,
       ),
     );
   }
