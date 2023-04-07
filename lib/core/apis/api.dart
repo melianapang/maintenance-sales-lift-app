@@ -211,6 +211,10 @@ class ApiService {
       log("Sequence number error");
     }
   }
+
+  Future<String> requestExportCustomerData() async {
+    return 'http://www.africau.edu/images/default/sample.pdf';
+  }
   //endregion
 
   //region maintenance
