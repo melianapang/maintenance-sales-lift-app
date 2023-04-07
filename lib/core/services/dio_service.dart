@@ -37,7 +37,6 @@ class DioService {
     return Dio()
       ..options.baseUrl = _customBaseURL ?? EnvConstants.baseURL
       ..options.connectTimeout = _timeOut
-      // ..options.responseType = ResponseType.json
       ..interceptors.addAll(<Interceptor>[
         PrettyDioLogger(
           requestHeader: true,
