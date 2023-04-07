@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -16,13 +18,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+class DetailProjectViewParam {
+  DetailProjectViewParam({
+    this.projectData,
+  });
+
+  final ProjectData? projectData;
+}
+
 class DetailProjectView extends StatefulWidget {
   const DetailProjectView({
-    required this.profileData,
+    required this.param,
     super.key,
   });
 
-  final ProfileData profileData;
+  final DetailProjectViewParam param;
 
   @override
   State<DetailProjectView> createState() => _DetailProjectViewState();
@@ -63,7 +73,10 @@ class _DetailProjectViewState extends State<DetailProjectView> {
     ];
 
     return ViewModel(
-      model: DetailProjectViewModel(),
+      model: DetailProjectViewModel(
+        projectData: widget.param.projectData,
+        authenticationService: Provider.of<AuthenticationService>(context),
+      ),
       onModelReady: (DetailProjectViewModel model) async {
         await model.initModel();
       },
@@ -77,7 +90,10 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.editProject);
+                  Navigator.pushNamed(
+                    context,
+                    Routes.editProject,
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(
@@ -92,7 +108,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               ),
             ],
           ),
-          bottomNavigationBar: widget.profileData.role == Role.SuperAdmin
+          bottomNavigationBar: model.isAllowedToDeleteData
               ? ButtonWidget.bottomSingleButton(
                   buttonType: ButtonType.primary,
                   padding: EdgeInsets.only(
@@ -164,12 +180,101 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   ),
                   Spacings.vert(35),
                   TextInput.disabled(
-                    label: "Lokasi",
+                    label: "Keperluan Proyek",
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
-                    label: "PIC",
+                    label: "Alamat",
                   ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Kota",
+                  ),
+                  Spacings.vert(24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "PIC Proyek",
+                      style: buildTextStyle(
+                        fontSize: 14,
+                        fontColor: MyColors.lightBlack02,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(12),
+                  if (model.listPic.isEmpty)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Belum ada data PIC untuk proyek ini.",
+                        style: buildTextStyle(
+                          fontSize: 14,
+                          fontColor: MyColors.lightBlack02.withOpacity(
+                            0.5,
+                          ),
+                          fontWeight: 300,
+                        ),
+                      ),
+                    ),
+                  if (model.listPic.isNotEmpty)
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: MyColors.transparent,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          elevation: 2,
+                          color: MyColors.darkBlack02,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              19.0,
+                            ),
+                          ),
+                          child: SizedBox(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 24.0,
+                                top: 14,
+                                bottom: 14,
+                              ),
+                              child: Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      StringUtils.removeZeroWidthSpaces("halo"),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: buildTextStyle(
+                                        fontColor: MyColors.lightBlack02,
+                                        fontSize: 14,
+                                        fontWeight: 800,
+                                      ),
+                                    ),
+                                    Spacings.vert(2),
+                                    Text(
+                                      StringUtils.removeZeroWidthSpaces(
+                                          "09098213972478"),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: buildTextStyle(
+                                        fontColor: MyColors.lightBlack02,
+                                        fontSize: 14,
+                                        fontWeight: 400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   Spacings.vert(24),
                   Align(
                     alignment: Alignment.centerLeft,

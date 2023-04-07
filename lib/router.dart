@@ -328,18 +328,13 @@ class AppRouter {
           ),
         );
       case Routes.detailProject:
+        final DetailProjectViewParam param =
+            settings.arguments is DetailProjectViewParam
+                ? settings.arguments as DetailProjectViewParam
+                : DetailProjectViewParam();
         return buildRoute(
           builder: (_) => DetailProjectView(
-            profileData: ProfileData(
-              username: "",
-              firstName: "",
-              lastName: "",
-              address: "",
-              city: "",
-              phoneNumber: "",
-              email: "",
-              role: Role.Admin,
-            ),
+            param: param,
           ),
         );
       case Routes.listUnit:
