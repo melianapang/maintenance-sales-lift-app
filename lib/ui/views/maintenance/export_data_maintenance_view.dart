@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -8,8 +9,10 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/export_data_mai
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -30,6 +33,9 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
       model: ExportDataMaintenanceViewModel(
         dioService: Provider.of<DioService>(context),
       ),
+      onModelReady: (ExportDataMaintenanceViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
@@ -103,12 +109,82 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                     ),
                   ),
                   Spacings.vert(24),
+                  GestureDetector(
+                    onTap: () {
+                      _showPilihProyekBottomDialog(
+                        context,
+                        model,
+                        setSelectedMenu: model.setSelectedProyek,
+                      );
+                    },
+                    child: TextInput.disabled(
+                      label: "Pilih Proyek",
+                      hintText: "Pilih proyek yang diinginkan",
+                      text: model.selectedProject?.customerData.customerName,
+                      suffixIcon: const Icon(
+                        PhosphorIcons.caretDownBold,
+                        color: MyColors.lightBlack02,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(24),
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  void _showPilihProyekBottomDialog(
+    BuildContext context,
+    ExportDataMaintenanceViewModel model, {
+    required void Function({
+      required int selectedIndex,
+    })
+        setSelectedMenu,
+  }) {
+    showGeneralBottomSheet(
+      context: context,
+      title: 'Daftar Pelanggan',
+      isFlexible: false,
+      showCloseButton: false,
+      sizeToScreenRatio: 0.8,
+      child: !model.isShowNoDataFoundPage && !model.busy
+          ? Expanded(
+              child: LazyLoadScrollView(
+                onEndOfPage: () => model.requestGetAllProjects(),
+                scrollDirection: Axis.vertical,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: model.listProject?.length ?? 0,
+                  separatorBuilder: (_, __) => const Divider(
+                    color: MyColors.transparent,
+                    height: 20,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomCardWidget(
+                      cardType: CardType.list,
+                      title:
+                          model.listProject?[index].customerData.companyName ??
+                              "",
+                      description:
+                          model.listProject?[index].customerData.customerName,
+                      desc2Size: 16,
+                      titleSize: 20,
+                      onTap: () {
+                        setSelectedMenu(
+                          selectedIndex: index,
+                        );
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            )
+          : buildNoDataFoundPage(),
     );
   }
 }

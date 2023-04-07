@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -259,6 +260,32 @@ class ApiService {
     } catch (e) {
       log("Sequence number error");
     }
+  }
+  //endregion
+
+  //region projects
+
+  Future<List<ProjectData>?> getAllProjects(
+    int currentPage,
+    int pageSize,
+  ) async {
+    return [];
+    // try {
+    // final HttpResponse<dynamic> response = await api.requestGetAllCustomer(
+    //   currentPage,
+    //   pageSize,
+    // );
+
+    // if (response.response.statusCode == 200) {
+    // GetAllCustomerResponse getAllResponse =
+    // GetAllCustomerResponse.fromJson(response.data);
+
+    // return getAllResponse.data.result;
+    //   }
+    //   return null;
+    // } catch (e) {
+    //   log("Sequence number error");
+    // }
   }
   //endregion
 }
