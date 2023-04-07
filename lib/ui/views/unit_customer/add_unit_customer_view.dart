@@ -80,7 +80,6 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
               ),
               child: Column(
                 children: [
-                  Spacings.vert(24),
                   TextInput.editable(
                     label: "Nama Unit",
                     hintText: "Nama Unit",
