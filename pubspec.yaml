@@ -71,6 +71,8 @@ dependencies:
   lazy_load_scrollview: ^1.3.0
   group_radio_button: ^1.3.0
   either_dart: ^0.3.0
+  internet_file: ^1.2.0
+  open_filex: ^4.3.2
 
 
 dev_dependencies:
