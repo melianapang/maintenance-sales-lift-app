@@ -86,8 +86,12 @@ class EditCustomerViewModel extends BaseViewModel {
 
     if (_customerData != null) {
       _customer = _mappingCustomerDataToCustomerModel(_customerData!);
+      _handleAvailableData();
     }
+    setBusy(false);
+  }
 
+  void _handleAvailableData() {
     _selectedSumberDataOption = int.parse(_customerData?.dataSource ?? "0") > 1
         ? 1
         : int.parse(_customerData?.dataSource ?? "0");
@@ -109,8 +113,6 @@ class EditCustomerViewModel extends BaseViewModel {
     setSelectedKebutuhanPelanggan(
       selectedMenu: int.parse(_selectedKebutuhanPelangganOption.toString()),
     );
-
-    setBusy(false);
   }
 
   void onChangedCustomerName(String value) {
