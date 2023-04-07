@@ -189,7 +189,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
 
     showGeneralBottomSheet(
       context: context,
-      title: 'Kebutuhan Pelanggan',
+      title: 'Tipe Dokumen',
       isFlexible: true,
       showCloseButton: false,
       child: StatefulBuilder(

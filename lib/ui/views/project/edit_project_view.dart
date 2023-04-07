@@ -252,7 +252,7 @@ class _EditProjectViewState extends State<EditProjectView> {
 
     showGeneralBottomSheet(
       context: context,
-      title: 'Kebutuhan Pelanggan',
+      title: 'Keperluan Proyek',
       isFlexible: true,
       showCloseButton: false,
       child: StatefulBuilder(

@@ -21,9 +21,10 @@ class AddCustomerView extends StatefulWidget {
 }
 
 class _AddCustomerViewState extends State<AddCustomerView> {
-  void _showSumberDataBottomDialog(
+  void _showBottomDialog(
     BuildContext context,
     AddCustomerViewModel model, {
+    required String title,
     required List<FilterOption> listMenu,
     required int selectedMenu,
     required void Function({
@@ -36,7 +37,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
 
     showGeneralBottomSheet(
       context: context,
-      title: 'Kebutuhan Pelanggan',
+      title: title,
       isFlexible: true,
       showCloseButton: false,
       child: StatefulBuilder(
@@ -116,9 +117,10 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      _showSumberDataBottomDialog(
+                      _showBottomDialog(
                         context,
                         model,
+                        title: "Sumber Data",
                         listMenu: model.sumberDataOptions,
                         selectedMenu: model.selectedSumberDataOption,
                         setSelectedMenu: model.setSelectedSumberData,
@@ -139,9 +141,10 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                   Spacings.vert(24),
                   GestureDetector(
                     onTap: () {
-                      _showSumberDataBottomDialog(
+                      _showBottomDialog(
                         context,
                         model,
+                        title: "Tipe Pelanggan",
                         listMenu: model.tipePelangganOptions,
                         selectedMenu: model.selectedTipePelangganOption,
                         setSelectedMenu: model.setSelectedTipePelanggan,
@@ -194,9 +197,10 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                   ],
                   GestureDetector(
                     onTap: () {
-                      _showSumberDataBottomDialog(
+                      _showBottomDialog(
                         context,
                         model,
+                        title: "Kebutuhan Pelanggan",
                         listMenu: model.kebutuhanPelangganOptions,
                         selectedMenu: model.selectedKebutuhanPelangganOption,
                         setSelectedMenu: model.setSelectedKebutuhanPelanggan,
