@@ -41,37 +41,6 @@ class DetailProjectView extends StatefulWidget {
 class _DetailProjectViewState extends State<DetailProjectView> {
   @override
   Widget build(BuildContext context) {
-    final List<TimelineData> list1 = [
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-    ];
-
     return ViewModel(
       model: DetailProjectViewModel(
         projectData: widget.param.projectData,
@@ -276,20 +245,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       },
                     ),
                   Spacings.vert(24),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Riwayat Pemeliharaan",
-                      style: buildTextStyle(
-                        fontSize: 16,
-                        fontColor: MyColors.yellow01,
-                        fontWeight: 400,
-                      ),
-                    ),
-                  ),
-                  TimelineWidget(
-                    listTimeline: list1,
-                  ),
                 ],
               ),
             ),
