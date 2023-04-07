@@ -89,11 +89,7 @@ class ApiService {
           response.data,
         );
 
-        if (loginResponse.isSuccess) {
-          return Right<Failure, String>(loginResponse.data.token);
-        }
-        return ErrorUtils<String>()
-            .handleDomainError(response, message: loginResponse.message);
+        return Right<Failure, String>(loginResponse.data.token);
       }
 
       return ErrorUtils<String>().handleDomainError(response);
