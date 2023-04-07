@@ -318,8 +318,14 @@ class AppRouter {
           builder: (_) => const AddPicProjectView(),
         );
       case Routes.editProject:
+        final EditProjectViewParam param =
+            settings.arguments is EditProjectViewParam
+                ? settings.arguments as EditProjectViewParam
+                : EditProjectViewParam();
         return buildRoute(
-          builder: (_) => const EditProjectView(),
+          builder: (_) => EditProjectView(
+            param: param,
+          ),
         );
       case Routes.detailProject:
         return buildRoute(
