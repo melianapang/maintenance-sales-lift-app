@@ -124,8 +124,14 @@ class AppRouter {
           builder: (_) => const ListApprovalView(),
         );
       case Routes.detailApproval:
+        final DetailApprovalViewParam param =
+            settings.arguments is DetailApprovalViewParam
+                ? settings.arguments as DetailApprovalViewParam
+                : DetailApprovalViewParam();
         return buildRoute(
-          builder: (_) => const DetailApprovalView(),
+          builder: (_) => DetailApprovalView(
+            param: param,
+          ),
         );
       case Routes.listCustomer:
         return buildRoute(

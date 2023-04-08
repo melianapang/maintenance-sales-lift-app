@@ -1,31 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/approval/approval_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/approval/detail_approval_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/before_after_widget.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class DetailApprovalViewParam {
+  DetailApprovalViewParam({
+    this.approvalData,
+  });
+
+  final ApprovalData? approvalData;
+}
+
 class DetailApprovalView extends StatefulWidget {
-  const DetailApprovalView({super.key});
+  const DetailApprovalView({
+    required this.param,
+    super.key,
+  });
+
+  final DetailApprovalViewParam param;
 
   @override
   State<DetailApprovalView> createState() => _DetailApprovalViewState();
 }
 
 class _DetailApprovalViewState extends State<DetailApprovalView> {
-  final String nama = "Bambang Pamungkas";
-  final String notelp = "0812345678910";
-  final TextEditingController tipeCustomerController =
-      TextEditingController(text: "Perorangan");
-
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: DetailApprovalViewModel(),
+      model: DetailApprovalViewModel(
+        approvalData: widget.param.approvalData,
+      ),
       onModelReady: (DetailApprovalViewModel model) async {
         await model.initModel();
       },
@@ -129,40 +142,6 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
               ),
               child: Column(
                 children: [
-                  TextInput.disabled(
-                    text: 'Perorangan',
-                    label: "Tipe Pelanggan",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Nomor Pelanggan",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Nama Pelanggan",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Nomor Telepon",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Alamat",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Kota",
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Email",
-                  ),
-                  Spacings.vert(32),
-                  const Divider(
-                    thickness: 0.5,
-                    color: MyColors.lightBlack02,
-                  ),
-                  Spacings.vert(32),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -176,11 +155,83 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                   ),
                   Spacings.vert(12),
                   TextInput.disabled(
-                    label: "Nama Teknisi:",
+                    label: "Nama:",
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
+                  ),
+                  Spacings.vert(32),
+                  const Divider(
+                    thickness: 0.5,
+                    color: MyColors.lightBlack02,
+                  ),
+                  Spacings.vert(32),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Sebelum",
+                          textAlign: TextAlign.center,
+                          style: buildTextStyle(
+                            fontSize: 20,
+                            fontColor: MyColors.lightBlack02,
+                            fontWeight: 800,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "Sesudah",
+                          textAlign: TextAlign.center,
+                          style: buildTextStyle(
+                            fontSize: 20,
+                            fontColor: MyColors.lightBlack02,
+                            fontWeight: 800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacings.vert(12),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: model.approvalData?.contentsNew?.length ?? 0,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: MyColors.lightBlack01,
+                      thickness: 0.4,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      final Map<String, dynamic> oldData =
+                          model.approvalData?.contentsOld ?? {};
+
+                      final Map<String, dynamic> newData =
+                          model.approvalData?.contentsNew ?? {};
+
+                      return BeforeAfterWigdet(
+                        titleBefore:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          oldData.keys.toList()[index].toString(),
+                        ),
+                        descriptionBefore:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          oldData.values.toList()[index].toString(),
+                        ),
+                        titleAfter:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          newData.keys.toList()[index].toString(),
+                        ),
+                        descriptionAfter:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          newData.values.toList()[index].toString(),
+                        ),
+                        isChanged: StringUtils.isStringDifferent(
+                          oldData.values.toList()[index].toString(),
+                          newData.values.toList()[index].toString(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
