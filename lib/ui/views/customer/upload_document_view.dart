@@ -103,7 +103,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                     );
                   },
                   child: TextInput.disabled(
-                    label: "Sumber Data",
+                    label: "Tipe Dokumen",
                     text: model.tipeDokumentOption
                         .where((element) => element.isSelected)
                         .first
