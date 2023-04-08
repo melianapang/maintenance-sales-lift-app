@@ -5,7 +5,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 
 class ExportDataUtils {
-  static Future<String> exportData({
+  static Future<String> downloadData({
     required String prefixString,
     required String filePath,
   }) async {
@@ -36,7 +36,7 @@ class ExportDataUtils {
     return finalFileName;
   }
 
-  static Future<void> openExportedData({required String fileName}) async {
+  static Future<void> openDownloadedData({required String fileName}) async {
     // var filePath = r'/storage/emulated/0/update.apk';
     final openFile =
         await OpenFilex.open("/storage/emulated/0/Download/$fileName");
