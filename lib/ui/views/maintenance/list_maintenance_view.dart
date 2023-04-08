@@ -71,9 +71,9 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                 isFilterShown: true,
                 onTapFilter: () {
                   showMaintenanceFilterMenu(context,
-                      listHandledByMenu: model.handledByOptions,
+                      listMaintenanceStatusMenu: model.maintenanceStatusOptions,
                       listSortMenu: model.sortOptions,
-                      selectedHandledBy: model.selectedSumberDataOption,
+                      selectedHandledBy: model.selectedMaintenanceStatusOption,
                       selectedSort: model.selectedSortOption,
                       terapkanCallback: model.terapkanFilter);
                 },

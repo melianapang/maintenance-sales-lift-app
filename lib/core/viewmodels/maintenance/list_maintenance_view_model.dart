@@ -34,13 +34,14 @@ class ListMaintenanceViewModel extends BaseViewModel {
   bool get isAllowedToExportData => _isAllowedToExportData;
 
   // Filter related
-  int _selectedHandledByOption = 0;
-  int get selectedSumberDataOption => _selectedHandledByOption;
-  final List<FilterOption> _handledByOptions = [
-    FilterOption("Lead", true),
-    FilterOption("Non-Leads", false),
+  int _selectedMaintenanceStatusOption = 0;
+  int get selectedMaintenanceStatusOption => _selectedMaintenanceStatusOption;
+  final List<FilterOption> _maintenanceStatusOptions = [
+    FilterOption("NOT MAINTENANCE", true),
+    FilterOption("DONE", false),
+    FilterOption("PENDING", false),
   ];
-  List<FilterOption> get handledByOptions => _handledByOptions;
+  List<FilterOption> get maintenanceStatusOptions => _maintenanceStatusOptions;
 
   int _selectedSortOption = 0;
   int get selectedSortOption => _selectedSortOption;
@@ -92,14 +93,14 @@ class ListMaintenanceViewModel extends BaseViewModel {
     required int selectedHandledBy,
     required int selectedSort,
   }) {
-    _selectedHandledByOption = selectedHandledBy;
+    _selectedMaintenanceStatusOption = selectedHandledBy;
     _selectedSortOption = selectedSort;
-    for (int i = 0; i < _handledByOptions.length; i++) {
+    for (int i = 0; i < _maintenanceStatusOptions.length; i++) {
       if (i == selectedHandledBy) {
-        _handledByOptions[i].isSelected = true;
+        _maintenanceStatusOptions[i].isSelected = true;
         continue;
       }
-      _handledByOptions[i].isSelected = false;
+      _maintenanceStatusOptions[i].isSelected = false;
     }
 
     for (int i = 0; i < _sortOptions.length; i++) {
