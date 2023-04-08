@@ -67,15 +67,18 @@ void showCustomerFilterMenu(
   required List<FilterOption> listPelangganMenu,
   required List<FilterOption> listSumberDataMenu,
   required List<FilterOption> listTahapKonfirmasiMenu,
+  required List<FilterOption> listKebutuhanPelanggan,
   required List<FilterOption> listSortMenu,
   required int selectedPelanggan,
   required int selectedSumberData,
   required int selectedTahapKonfirmasi,
+  required int selectedKebutuhanPelanggan,
   required int selectedSort,
   required void Function({
     required int selectedPelanggan,
     required int selectedSumberData,
     required int selectedTahapKonfirmasi,
+    required int selectedKebutuhanPelanggan,
     required int selectedSort,
   })
       terapkanCallback,
@@ -91,6 +94,10 @@ void showCustomerFilterMenu(
   final List<FilterOption> tahapKonfirmasiLocal =
       convertToNewList(listTahapKonfirmasiMenu);
   int tahapKonfirmasi = selectedTahapKonfirmasi;
+
+  final List<FilterOption> kebutuhanPelangganLocal =
+      convertToNewList(listKebutuhanPelanggan);
+  int kebutuhanPelanggan = selectedKebutuhanPelanggan;
 
   final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
   int sort = selectedSort;
@@ -156,6 +163,31 @@ void showCustomerFilterMenu(
             ),
             Spacings.vert(20),
             Text(
+              "Kebutuhan Pelanggan",
+              style: buildTextStyle(
+                fontSize: 14,
+                fontWeight: 400,
+                fontColor: MyColors.lightBlack02,
+              ),
+            ),
+            Spacings.vert(8),
+            _buildFilterOptionsWidget(
+              kebutuhanPelangganLocal,
+              (int selectedIndex) {
+                kebutuhanPelanggan = selectedIndex;
+                for (int i = 0; i < kebutuhanPelangganLocal.length; i++) {
+                  if (i == selectedIndex) {
+                    kebutuhanPelangganLocal[i].isSelected = true;
+                    continue;
+                  }
+
+                  kebutuhanPelangganLocal[i].isSelected = false;
+                }
+                setState(() {});
+              },
+            ),
+            Spacings.vert(20),
+            Text(
               "Tahap Konfirmasi",
               style: buildTextStyle(
                 fontSize: 14,
@@ -214,6 +246,7 @@ void showCustomerFilterMenu(
                   selectedPelanggan: tipePelanggan,
                   selectedSumberData: sumberData,
                   selectedTahapKonfirmasi: tahapKonfirmasi,
+                  selectedKebutuhanPelanggan: kebutuhanPelanggan,
                   selectedSort: sort,
                 );
                 Navigator.maybePop(context);
@@ -229,7 +262,7 @@ void showCustomerFilterMenu(
 //build filter menu for maintenance
 void showMaintenanceFilterMenu(
   BuildContext context, {
-  required List<FilterOption> listHandledByMenu,
+  required List<FilterOption> listMaintenanceStatusMenu,
   required List<FilterOption> listSortMenu,
   required int selectedHandledBy,
   required int selectedSort,
@@ -239,7 +272,8 @@ void showMaintenanceFilterMenu(
   })
       terapkanCallback,
 }) {
-  final List<FilterOption> handledByLocal = convertToNewList(listHandledByMenu);
+  final List<FilterOption> handledByLocal =
+      convertToNewList(listMaintenanceStatusMenu);
   int handledBy = selectedHandledBy;
 
   final List<FilterOption> sortLocal = convertToNewList(listSortMenu);

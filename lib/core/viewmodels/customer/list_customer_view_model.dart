@@ -63,6 +63,20 @@ class ListCustomerViewModel extends BaseViewModel {
   ];
   List<FilterOption> get tahapKonfirmasiOptions => _tahapKonfirmasiOptions;
 
+  int _selectedKebutuhanPelangganOption = 0;
+  int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
+  final List<FilterOption> _kenbutuhanPelangganOptions = [
+    FilterOption("Butuh Konfirmasi", true),
+    FilterOption("Konfirmasi kedua", false),
+    FilterOption("Konfirmasi ketiga", false),
+    FilterOption("Nego", false),
+    FilterOption("Instalasi", false),
+    FilterOption("Selesai", false),
+    FilterOption("Batal", false),
+  ];
+  List<FilterOption> get kenbutuhanPelangganOptions =>
+      _kenbutuhanPelangganOptions;
+
   int _selectedSortOption = 0;
   int get selectedSortOption => _selectedSortOption;
   final List<FilterOption> _sortOptions = [
@@ -122,11 +136,13 @@ class ListCustomerViewModel extends BaseViewModel {
     required int selectedPelanggan,
     required int selectedSumberData,
     required int selectedTahapKonfirmasi,
+    required int selectedKebutuhanPelanggan,
     required int selectedSort,
   }) {
     _selectedTipePelangganOption = selectedPelanggan;
     _selectedSumberDataOption = selectedSumberData;
     _selectedTahapKonfirmasiOption = selectedTahapKonfirmasi;
+    _selectedKebutuhanPelangganOption = selectedKebutuhanPelanggan;
     _selectedSortOption = selectedSort;
     for (int i = 0; i < _tipePelangganOptions.length; i++) {
       if (i == selectedPelanggan) {
@@ -150,6 +166,14 @@ class ListCustomerViewModel extends BaseViewModel {
         continue;
       }
       _tahapKonfirmasiOptions[i].isSelected = false;
+    }
+
+    for (int i = 0; i < _kenbutuhanPelangganOptions.length; i++) {
+      if (i == selectedKebutuhanPelanggan) {
+        _kenbutuhanPelangganOptions[i].isSelected = true;
+        continue;
+      }
+      _kenbutuhanPelangganOptions[i].isSelected = false;
     }
 
     for (int i = 0; i < _sortOptions.length; i++) {

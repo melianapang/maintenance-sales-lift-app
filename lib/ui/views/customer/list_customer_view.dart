@@ -84,11 +84,14 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                     listPelangganMenu: model.tipePelangganOptions,
                     listSumberDataMenu: model.sumberDataOptions,
                     listTahapKonfirmasiMenu: model.tahapKonfirmasiOptions,
+                    listKebutuhanPelanggan: model.kenbutuhanPelangganOptions,
                     listSortMenu: model.sortOptions,
                     selectedPelanggan: model.selectedTipePelangganOption,
                     selectedSumberData: model.selectedSumberDataOption,
                     selectedTahapKonfirmasi:
                         model.selectedTahapKonfirmasiOption,
+                    selectedKebutuhanPelanggan:
+                        model.selectedKebutuhanPelangganOption,
                     selectedSort: model.selectedSortOption,
                     terapkanCallback: model.terapkanFilter,
                   );
