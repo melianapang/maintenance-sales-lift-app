@@ -54,18 +54,22 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
                     await model.requestExportData();
 
                     Navigator.pop(context);
-                    showDialogWidget(context,
-                        title: "Unduh Data",
-                        isSuccessDialog: true,
-                        description:
-                            "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda.",
-                        positiveLabel: "OK",
-                        negativeLabel: "Lihat Data", positiveCallback: () {
-                      Navigator.maybePop(context);
-                    }, negativeCallback: () async {
-                      await model.openExportedData();
-                      Navigator.maybePop(context);
-                    });
+                    showDialogWidget(
+                      context,
+                      title: "Unduh Data",
+                      isSuccessDialog: true,
+                      description:
+                          "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
+                      positiveLabel: "OK",
+                      negativeLabel: "Lihat Data",
+                      positiveCallback: () {
+                        Navigator.maybePop(context);
+                      },
+                      negativeCallback: () async {
+                        await model.openExportedData();
+                        Navigator.maybePop(context);
+                      },
+                    );
                   }
                 : null,
             text: 'Unduh Data',

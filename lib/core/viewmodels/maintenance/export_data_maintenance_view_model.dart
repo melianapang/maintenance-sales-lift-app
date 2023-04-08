@@ -2,7 +2,7 @@ import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/export_data_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/download_data_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ExportDataMaintenanceViewModel extends BaseViewModel {
@@ -92,7 +92,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   Future<void> _exportData({
     required String filePath,
   }) async {
-    _exportedFileName = await ExportDataUtils.exportData(
+    _exportedFileName = await ExportDataUtils.downloadData(
       prefixString: "maintenance_data",
       filePath: filePath,
     );
@@ -100,7 +100,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
 
   Future<void> openExportedData() async {
     if (_exportedFileName == null) return;
-    await ExportDataUtils.openExportedData(
+    await ExportDataUtils.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
   }

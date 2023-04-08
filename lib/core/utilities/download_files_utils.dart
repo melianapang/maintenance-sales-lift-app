@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 
-class ExportDataUtils {
+class DownloadDataUtils {
   static Future<String> downloadData({
     required String prefixString,
     required String filePath,

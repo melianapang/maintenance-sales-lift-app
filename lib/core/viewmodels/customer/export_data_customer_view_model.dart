@@ -1,6 +1,6 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/export_data_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/download_data_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ExportDataCustomerViewModel extends BaseViewModel {
@@ -41,7 +41,7 @@ class ExportDataCustomerViewModel extends BaseViewModel {
   Future<void> _exportData({
     required String filePath,
   }) async {
-    _exportedFileName = await ExportDataUtils.exportData(
+    _exportedFileName = await ExportDataUtils.downloadData(
       prefixString: "customer_data",
       filePath: filePath,
     );
@@ -49,7 +49,7 @@ class ExportDataCustomerViewModel extends BaseViewModel {
 
   Future<void> openExportedData() async {
     if (_exportedFileName == null) return;
-    await ExportDataUtils.openExportedData(
+    await ExportDataUtils.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
   }
