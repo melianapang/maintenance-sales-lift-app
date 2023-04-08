@@ -29,8 +29,8 @@ class ListLogViewModel extends BaseViewModel {
       notifyListeners();
     }
 
-    print("logDataa keys: ${_listLogData?[0].contentsOld.values}");
-    print("logDataa entries: ${_listLogData?[0].contentsNew.values}");
+    print("logDataa keys: ${_listLogData?[0].contentsOld?.values}");
+    print("logDataa entries: ${_listLogData?[0].contentsNew?.values}");
     setBusy(false);
   }
 }
