@@ -75,8 +75,8 @@ class LogData {
   final String modulenName;
 
   @JsonKey(name: "contents_new")
-  final Map<String, dynamic> contentsNew;
+  final Map<String, dynamic>? contentsNew;
 
   @JsonKey(name: "contents_old")
-  final Map<String, dynamic> contentsOld;
+  final Map<String, dynamic>? contentsOld;
 }
