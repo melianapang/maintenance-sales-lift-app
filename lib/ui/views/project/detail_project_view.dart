@@ -127,7 +127,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                 children: [
                   Spacings.vert(20),
                   Text(
-                    "KA-23243",
+                    "NAMA PROYEK",
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
@@ -140,6 +140,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       fontSize: 20,
                       fontWeight: 400,
                       fontColor: MyColors.lightBlack02,
+                      isUnderlined: true,
                     ),
                   ),
                   Spacings.vert(35),
