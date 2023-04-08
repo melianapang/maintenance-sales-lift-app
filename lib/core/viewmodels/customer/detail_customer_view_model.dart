@@ -1,8 +1,10 @@
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
@@ -41,6 +43,12 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   @override
   Future<void> initModel() async {}
+
+  Future<bool> checkPermissions() async {
+    return await PermissionUtils.requestPermission(
+      Permission.manageExternalStorage,
+    );
+  }
 
   StatusCardType get customerStatusCardType {
     switch (_customerData?.status ?? "") {

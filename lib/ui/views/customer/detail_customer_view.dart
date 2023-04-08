@@ -213,6 +213,9 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       return GestureDetector(
                         onTap: !model.busy
                             ? () async {
+                                bool isGranted = await model.checkPermissions();
+                                if (!isGranted) return;
+
                                 buildLoadingDialog(context);
                                 await model.downloadData(
                                   index: index,
