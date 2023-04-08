@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/log/detail_log_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/before_after_widget.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
@@ -118,7 +119,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: model.logData?.contentsNew.length ?? 0,
+                    itemCount: model.logData?.contentsNew?.length ?? 0,
                     separatorBuilder: (context, index) => const Divider(
                       color: MyColors.lightBlack01,
                       thickness: 0.4,
@@ -130,20 +131,24 @@ class _DetailLogViewState extends State<DetailLogView> {
                       final Map<String, dynamic> newData =
                           model.logData?.contentsNew ?? {};
 
-                      return _buildBeforeAfterLogItem(
-                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                      return BeforeAfterWigdet(
+                        titleBefore:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                           oldData.keys.toList()[index].toString(),
                         ),
-                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                        descriptionBefore:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                           oldData.values.toList()[index].toString(),
                         ),
-                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                        titleAfter:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                           newData.keys.toList()[index].toString(),
                         ),
-                        StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                        descriptionAfter:
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                           newData.values.toList()[index].toString(),
                         ),
-                        StringUtils.isStringDifferent(
+                        isChanged: StringUtils.isStringDifferent(
                           oldData.values.toList()[index].toString(),
                           newData.values.toList()[index].toString(),
                         ),
@@ -156,80 +161,6 @@ class _DetailLogViewState extends State<DetailLogView> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildBeforeAfterLogItem(
-    String title,
-    String description,
-    String title2,
-    String description2,
-    bool isChanged,
-  ) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Spacings.vert(12),
-                Text(
-                  title,
-                  textAlign: TextAlign.start,
-                  style: buildTextStyle(
-                    fontSize: 14,
-                    fontColor: MyColors.lightBlack02.withOpacity(0.5),
-                    fontWeight: 700,
-                  ),
-                ),
-                Spacings.vert(4),
-                Text(
-                  description,
-                  maxLines: null,
-                  style: buildTextStyle(
-                    fontSize: 18,
-                    fontColor: MyColors.lightBlack02,
-                    fontWeight: 400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Spacings.horz(12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Spacings.vert(12),
-                Text(
-                  title2,
-                  textAlign: TextAlign.start,
-                  style: buildTextStyle(
-                    fontSize: 14,
-                    fontColor:
-                        (isChanged ? MyColors.yellow01 : MyColors.lightBlack02)
-                            .withOpacity(0.5),
-                    fontWeight: 700,
-                  ),
-                ),
-                Spacings.vert(4),
-                Text(
-                  description2,
-                  maxLines: null,
-                  style: buildTextStyle(
-                    fontSize: 18,
-                    fontColor:
-                        isChanged ? MyColors.yellow01 : MyColors.lightBlack02,
-                    fontWeight: 400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
