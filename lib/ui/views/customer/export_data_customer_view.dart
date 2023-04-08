@@ -30,6 +30,10 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
       model: ExportDataCustomerViewModel(
         dioService: Provider.of<DioService>(context),
       ),
+      onModelReady: (ExportDataCustomerViewModel model) async {
+        await model.initModel();
+        if (!model.isAllowedToOpenPage) Navigator.pop(context);
+      },
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
