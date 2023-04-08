@@ -12,9 +12,11 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_vi
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
@@ -157,6 +159,99 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         ),
                       ),
                     ),
+                  ),
+                  Spacings.vert(24),
+                  const Divider(
+                    thickness: 0.5,
+                    color: MyColors.yellow,
+                  ),
+                  Spacings.vert(6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      StringUtils.removeZeroWidthSpaces(
+                        "Daftar Dokumen",
+                      ),
+                      textAlign: TextAlign.start,
+                      style: buildTextStyle(
+                        fontSize: 18,
+                        fontColor: MyColors.yellow01,
+                        fontWeight: 500,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Spacings.vert(6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      StringUtils.removeZeroWidthSpaces(
+                        "Klik salah satu daftar untuk mengunduk berkas.",
+                      ),
+                      textAlign: TextAlign.start,
+                      style: buildTextStyle(
+                        fontSize: 12,
+                        fontColor: MyColors.yellow02,
+                        fontWeight: 500,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Spacings.vert(24),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    //harusnya dari list dokumen di CustomerData.
+                    itemCount: 10,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: MyColors.lightBlack01,
+                      thickness: 0.4,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: !model.busy
+                            ? () async {
+                                buildLoadingDialog(context);
+                                await model.downloadData(
+                                  index: index,
+                                );
+
+                                Navigator.pop(context);
+                                showDialogWidget(
+                                  context,
+                                  title: "Unduh Data",
+                                  isSuccessDialog: true,
+                                  description:
+                                      "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
+                                  positiveLabel: "OK",
+                                  negativeLabel: "Lihat Data",
+                                  positiveCallback: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  negativeCallback: () async {
+                                    await model.openDownloadedData();
+                                    Navigator.maybePop(context);
+                                  },
+                                );
+                              }
+                            : null,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Dokumen PO',
+                            textAlign: TextAlign.start,
+                            style: buildTextStyle(
+                              fontSize: 16,
+                              fontWeight: 400,
+                              fontColor: MyColors.blueLihatSelengkapnya,
+                              isUnderlined: true,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
