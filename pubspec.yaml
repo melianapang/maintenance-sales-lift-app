@@ -73,6 +73,7 @@ dependencies:
   either_dart: ^0.3.0
   internet_file: ^1.2.0
   open_filex: ^4.3.2
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:
