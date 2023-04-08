@@ -35,6 +35,7 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
       ),
       onModelReady: (ExportDataMaintenanceViewModel model) async {
         await model.initModel();
+        if (!model.isAllowedToOpenPage) Navigator.pop(context);
       },
       builder: (context, model, child) {
         return Scaffold(

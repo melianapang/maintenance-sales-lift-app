@@ -1,8 +1,10 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ExportDataMaintenanceViewModel extends BaseViewModel {
@@ -15,6 +17,9 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
         );
 
   final ApiService _apiService;
+
+  bool _isAllowedToOpenPage = false;
+  bool get isAllowedToOpenPage => _isAllowedToOpenPage;
 
   List<DateTime> _selectedDates = [
     DateTime.now(),
@@ -39,6 +44,12 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    _isAllowedToOpenPage =
+        await PermissionUtils.requestPermissions(listPermission: [
+      // Permission.manageExternalStorage,
+      // Permission.storage,
+    ]);
+    notifyListeners();
 
     paginationControl.currentPage = 1;
 
