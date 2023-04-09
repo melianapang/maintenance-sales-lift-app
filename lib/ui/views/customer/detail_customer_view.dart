@@ -152,7 +152,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         'Lihat Daftar Unit',
                         textAlign: TextAlign.start,
                         style: buildTextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: 400,
                           fontColor: MyColors.blueLihatSelengkapnya,
                           isUnderlined: true,
@@ -210,49 +210,64 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       thickness: 0.4,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: !model.busy
-                            ? () async {
-                                bool isGranted = await model.checkPermissions();
-                                if (!isGranted) return;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: !model.busy
+                                ? () async {
+                                    bool isGranted =
+                                        await model.checkPermissions();
+                                    if (!isGranted) return;
 
-                                buildLoadingDialog(context);
-                                await model.downloadData(
-                                  index: index,
-                                );
+                                    buildLoadingDialog(context);
+                                    await model.downloadData(
+                                      index: index,
+                                    );
 
-                                Navigator.pop(context);
-                                showDialogWidget(
-                                  context,
-                                  title: "Unduh Data",
-                                  isSuccessDialog: true,
-                                  description:
-                                      "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
-                                  positiveLabel: "OK",
-                                  negativeLabel: "Lihat Data",
-                                  positiveCallback: () {
-                                    Navigator.maybePop(context);
-                                  },
-                                  negativeCallback: () async {
-                                    await model.openDownloadedData();
-                                    Navigator.maybePop(context);
-                                  },
-                                );
-                              }
-                            : null,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Dokumen PO',
+                                    Navigator.pop(context);
+                                    showDialogWidget(
+                                      context,
+                                      title: "Unduh Data",
+                                      isSuccessDialog: true,
+                                      description:
+                                          "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
+                                      positiveLabel: "OK",
+                                      negativeLabel: "Lihat Data",
+                                      positiveCallback: () {
+                                        Navigator.maybePop(context);
+                                      },
+                                      negativeCallback: () async {
+                                        await model.openDownloadedData();
+                                        Navigator.maybePop(context);
+                                      },
+                                    );
+                                  }
+                                : null,
+                            child: Text(
+                              'Jenis Dokumen',
+                              textAlign: TextAlign.start,
+                              style: buildTextStyle(
+                                fontSize: 16,
+                                fontWeight: 400,
+                                fontColor: MyColors.blueLihatSelengkapnya,
+                                isUnderlined: true,
+                              ),
+                            ),
+                          ),
+                          Spacings.vert(6),
+                          Text(
+                            'Created At: ',
                             textAlign: TextAlign.start,
                             style: buildTextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
                               fontWeight: 400,
-                              fontColor: MyColors.blueLihatSelengkapnya,
+                              fontColor: MyColors.lightBlack02,
                               isUnderlined: true,
                             ),
                           ),
-                        ),
+                          Spacings.vert(8),
+                        ],
                       );
                     },
                   ),
