@@ -9,7 +9,11 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 Widget buildLoadingPage() {
   return const Expanded(
     child: Center(
-      child: CircularProgressIndicator.adaptive(),
+      child: CircularProgressIndicator.adaptive(
+        valueColor: AlwaysStoppedAnimation<Color>(
+          MyColors.yellow01,
+        ),
+      ),
     ),
   );
 }
