@@ -145,8 +145,6 @@ class EditProfileViewModel extends BaseViewModel {
   }
 
   Future<bool> requestUpdateUser() async {
-    setBusy(true);
-
     if (!_isValid()) {
       _errorMsg = "Pastikan semua kolom terisi";
       return false;
@@ -165,7 +163,6 @@ class EditProfileViewModel extends BaseViewModel {
         address: alamatController.text,
         city: kotaController.text,
         email: emailController.text);
-    setBusy(false);
 
     if (response.isRight) {
       await _saveNewData();
