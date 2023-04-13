@@ -125,9 +125,6 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   ),
                   buttonType: ButtonType.primary,
                   onTap: () async {
-                    bool isValid = await model.isValid();
-                    if (!isValid) return;
-
                     showDialogWidget(
                       context,
                       title: "Mengubahh Data User",
@@ -139,24 +136,32 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         Navigator.maybePop(context);
                       },
                       positiveCallback: () async {
-                        //belom bener
+                        await Navigator.maybePop(context);
+
+                        buildLoadingDialog(context);
                         final bool result = await model.requestUpdateCustomer();
-                        if (result == false) {
+                        Navigator.pop(context);
+
+                        if (!result) {
                           showDialogWidget(
                             context,
                             title: "Ubah Data User",
-                            description: "Perubahan data user gagal.",
+                            description:
+                                model.errorMsg ?? "Perubahan data user gagal.",
                             isSuccessDialog: false,
+                            positiveLabel: "OK",
+                            positiveCallback: () => Navigator.maybePop(context),
                           );
                           return;
                         }
 
-                        await Navigator.maybePop(context);
                         showDialogWidget(
                           context,
                           title: "Ubah Data User",
                           description: "Perubahan data user berhasil disimpan",
                           isSuccessDialog: true,
+                          positiveLabel: "OK",
+                          positiveCallback: () => Navigator.maybePop(context),
                         );
                       },
                     );
@@ -244,9 +249,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                             label: "Nama Perusahaan",
                             hintText: "Nama Perusahaan",
                             onChangedListener: model.onChangedCompanyName,
-                            errorText: !model.isCompanyNameValid
-                                ? "Kolom ini wajib diisi."
-                                : null,
+                            // errorText: !model.isCompanyNameValid
+                            //     ? "Kolom ini wajib diisi."
+                            //     : null,
                           ),
                           Spacings.vert(24),
                         ],

@@ -80,6 +80,9 @@ class EditCustomerViewModel extends BaseViewModel {
   List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
   // End of Dropdown related
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -87,6 +90,11 @@ class EditCustomerViewModel extends BaseViewModel {
     if (_customerData != null) {
       _customer = _mappingCustomerDataToCustomerModel(_customerData!);
       _handleAvailableData();
+      nomorPelangganController.text = _customerData?.customerNumber ?? "";
+      namaPelangganController.text = _customerData?.customerName ?? "";
+      phoneNumberController.text = _customerData?.phoneNumber ?? "";
+      cityController.text = _customer?.city ?? "";
+      emailController.text = _customer?.email ?? "";
     }
     setBusy(false);
   }
@@ -191,7 +199,11 @@ class EditCustomerViewModel extends BaseViewModel {
   }
 
   Future<bool> requestUpdateCustomer() async {
-    setBusy(true);
+    if (!_isValid()) {
+      _errorMsg = "Pastikan semua kolom terisi";
+      return false;
+    }
+
     final response = await _apiService.requestUpdateCustomer(
       customerId: _customer?.customerId ?? 0,
       nama: _customer?.customerName ?? "",
@@ -206,11 +218,10 @@ class EditCustomerViewModel extends BaseViewModel {
       customerType: _selectedTipePelangganOption,
     );
 
-    print(
-        "edit data: ${_customer?.customerName};  ${_customer?.customerType};  ${_customer?.dataSource};  ${_customer?.email};  ${_customer?.phoneNumber};  ${_customer?.companyName}; ");
+    if (response.isRight) return true;
 
-    setBusy(false);
-    return response != null;
+    _errorMsg = response.left.message;
+    return false;
   }
 
   Customer _mappingCustomerDataToCustomerModel(CustomerData data) {
@@ -220,7 +231,7 @@ class EditCustomerViewModel extends BaseViewModel {
       customerType:
           int.parse(data.customerType) > 1 ? 1 : int.parse(data.customerType),
       customerNumber: data.customerNumber,
-      companyName: data.companyName,
+      companyName: data.companyName ?? "",
       customerNeed: data.customerNeed,
       city: data.city,
       dataSource: int.parse(data.dataSource),
@@ -231,7 +242,7 @@ class EditCustomerViewModel extends BaseViewModel {
     );
   }
 
-  bool isValid() {
+  bool _isValid() {
     _isCustomerNameValid = namaPelangganController.text.isNotEmpty;
     _isCustomerNumberValid = nomorPelangganController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
