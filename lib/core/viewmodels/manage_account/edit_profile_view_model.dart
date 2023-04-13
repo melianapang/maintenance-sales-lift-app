@@ -137,7 +137,7 @@ class EditProfileViewModel extends BaseViewModel {
         phoneNumber: phoneNumberController.text,
         address: alamatController.text,
         city: kotaController.text,
-        role: mappingStringToRole(
+        role: mappingStringNumberToRole(
           _profileData?.role.toString() ?? "Super Admin",
         ),
       ),
@@ -153,6 +153,7 @@ class EditProfileViewModel extends BaseViewModel {
     }
 
     final response = await _apiService.requestUpdateUser(
+        userId: await _sharedPreferencesService.get(SharedPrefKeys.userId),
         idRole: int.parse(
           mappingRoleToNumberString(
             _profileData?.role ?? Role.Admin,
