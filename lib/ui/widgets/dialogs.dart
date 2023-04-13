@@ -235,14 +235,21 @@ void showErrorDialog(
               const Icon(
                 Icons.error,
               ),
-              Spacings.vert(4),
+              Spacings.vert(12),
               Text(
                 text ?? "Gagal memproses permohonan",
+                textAlign: TextAlign.center,
                 style: buildTextStyle(
                   fontSize: 14,
                   fontColor: MyColors.darkBlack01,
                   fontWeight: 500,
                 ),
+              ),
+              Spacings.vert(12),
+              ButtonWidget(
+                buttonType: ButtonType.primary,
+                text: "Okay",
+                onTap: () => Navigator.maybePop(context),
               ),
             ],
           ),
