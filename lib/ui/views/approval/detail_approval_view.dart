@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/approval/approval_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/approval/detail_approval_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/before_after_widget.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -38,6 +41,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
     return ViewModel(
       model: DetailApprovalViewModel(
         approvalData: widget.param.approvalData,
+        dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (DetailApprovalViewModel model) async {
         await model.initModel();
@@ -75,6 +79,26 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                       negativeLabel: "Tidak",
                       positiveCallback: () async {
                         await Navigator.maybePop(context);
+
+                        buildLoadingDialog(context);
+                        bool result = await model.requestChangeApprovalStatus(
+                            isApprove: false);
+                        Navigator.pop(context);
+
+                        if (!result) {
+                          showDialogWidget(
+                            context,
+                            title: "Menolak Permohonan",
+                            description: model.errorMsg ??
+                                "Data permintaan gagal diubah.",
+                            isSuccessDialog: false,
+                            positiveLabel: "OK",
+                            positiveCallback: () {
+                              Navigator.maybePop(context);
+                            },
+                          );
+                          return;
+                        }
 
                         showDialogWidget(
                           context,
@@ -114,6 +138,26 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                       negativeLabel: "Tidak",
                       positiveCallback: () async {
                         await Navigator.maybePop(context);
+
+                        buildLoadingDialog(context);
+                        bool result = await model.requestChangeApprovalStatus(
+                            isApprove: true);
+                        Navigator.pop(context);
+
+                        if (!result) {
+                          showDialogWidget(
+                            context,
+                            title: "Menyetujui Permohonan",
+                            description: model.errorMsg ??
+                                "Data permintaan gagal diubah.",
+                            isSuccessDialog: false,
+                            positiveLabel: "OK",
+                            positiveCallback: () {
+                              Navigator.maybePop(context);
+                            },
+                          );
+                          return;
+                        }
 
                         showDialogWidget(
                           context,
@@ -156,10 +200,12 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                   Spacings.vert(12),
                   TextInput.disabled(
                     label: "Nama:",
+                    text: model.approvalData?.userRequestName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
+                    text: model.approvalData?.userRequestPhoneNumber,
                   ),
                   Spacings.vert(32),
                   const Divider(
