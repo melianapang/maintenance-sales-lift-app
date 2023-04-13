@@ -3,12 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/edit_profile_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
@@ -38,6 +41,8 @@ class _EditProfileViewState extends State<EditProfileView> {
     return ViewModel(
       model: EditProfileViewModel(
         dioService: Provider.of<DioService>(context),
+        sharedPreferencesService:
+            Provider.of<SharedPreferencesService>(context),
         profileData: widget.param.profileData,
       ),
       onModelReady: (EditProfileViewModel model) async {
@@ -61,9 +66,27 @@ class _EditProfileViewState extends State<EditProfileView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {
-              bool result = model.saveData();
-              if (result) Navigator.pushNamed(context, Routes.home);
+            onTap: () async {
+              bool result = await model.requestUpdateUser();
+
+              if (result) {
+                showDialogWidget(
+                  context,
+                  title: "Edit Data Profil",
+                  description: "Berhasil mengubah data.",
+                  isSuccessDialog: true,
+                  positiveLabel: "OK",
+                  positiveCallback: () =>
+                      Navigator.pushNamed(context, Routes.home),
+                );
+
+                return;
+              }
+
+              showErrorDialog(
+                context,
+                text: model.errorMsg,
+              );
             },
             text: 'Simpan',
           ),
@@ -82,6 +105,17 @@ class _EditProfileViewState extends State<EditProfileView> {
                     onChangedListener: model.onChangedName,
                     errorText:
                         !model.isNameValid ? "Kolom ini wajib diisi." : null,
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    controller: model.usernameController,
+                    label: "Username",
+                    hintText: "Username",
+                    keyboardType: TextInputType.name,
+                    onChangedListener: model.onChangedUsername,
+                    errorText: !model.isUsernameValid
+                        ? "Kolom ini wajib diisi."
+                        : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
