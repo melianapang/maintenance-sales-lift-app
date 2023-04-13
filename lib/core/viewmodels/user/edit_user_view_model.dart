@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class EditUserViewModel extends BaseViewModel {
-  EditUserViewModel();
+  EditUserViewModel({
+    UserData? userData,
+  }) : _userData = userData;
+
+  UserData? _userData;
+  UserData? get userData => _userData;
 
   final nameController = TextEditingController();
   final roleController = TextEditingController();
@@ -30,7 +36,16 @@ class EditUserViewModel extends BaseViewModel {
   bool get isEmailValid => _isEmailValid;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    nameController.text = _userData?.name ?? "";
+    roleController.text = _userData?.roleName ?? "";
+    addressController.text = _userData?.address ?? "";
+    cityController.text = _userData?.city ?? "";
+    phoneNumberController.text = _userData?.city ?? "";
+    emailController.text = _userData?.email ?? "";
+    setBusy(false);
+  }
 
   void onChangedName(String value) {
     _isNameValid = value.isNotEmpty;

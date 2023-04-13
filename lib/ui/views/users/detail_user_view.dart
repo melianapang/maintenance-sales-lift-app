@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/detail_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -13,13 +15,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+class DetailUserViewParam {
+  DetailUserViewParam({
+    this.userData,
+  });
+
+  UserData? userData;
+}
+
 class DetailUserView extends StatefulWidget {
   const DetailUserView({
-    required this.profileData,
+    required this.param,
     super.key,
   });
 
-  final ProfileData profileData;
+  final DetailUserViewParam param;
 
   @override
   State<DetailUserView> createState() => _DetailUserViewState();
@@ -29,7 +39,10 @@ class _DetailUserViewState extends State<DetailUserView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: DetailUserViewModel(),
+      model: DetailUserViewModel(
+        userData: widget.param.userData,
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (DetailUserViewModel model) async {
         await model.initModel();
       },
@@ -43,7 +56,10 @@ class _DetailUserViewState extends State<DetailUserView> {
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.editUser);
+                  Navigator.pushNamed(
+                    context,
+                    Routes.editUser,
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(
@@ -58,7 +74,8 @@ class _DetailUserViewState extends State<DetailUserView> {
               ),
             ],
           ),
-          bottomNavigationBar: widget.profileData.role == Role.SuperAdmin
+          bottomNavigationBar: model.userData?.roleName ==
+                  mappingRoleToString(Role.SuperAdmin).toLowerCase()
               ? ButtonWidget.bottomSingleButton(
                   buttonType: ButtonType.primary,
                   padding: EdgeInsets.only(
@@ -77,12 +94,16 @@ class _DetailUserViewState extends State<DetailUserView> {
                       positiveLabel: "Iya",
                       negativeLabel: "Tidak",
                       positiveCallback: () async {
+                        bool isSucceed = await model.requestDeleteUser();
                         await Navigator.maybePop(context);
 
                         showDialogWidget(
                           context,
                           title: "Menghapus Data User",
-                          description: "User telah dihapus.",
+                          isSuccessDialog: isSucceed,
+                          description: isSucceed
+                              ? "User telah dihapus."
+                              : "User gagal dihapus. \n ${model.errorMsg}.",
                           positiveLabel: "OK",
                           positiveCallback: () {
                             Navigator.maybePop(context);

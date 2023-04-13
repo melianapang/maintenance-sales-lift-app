@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/edit_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -9,8 +10,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class EditUserViewParam {
+  EditUserViewParam({
+    this.userData,
+  });
+
+  UserData? userData;
+}
+
 class EditUserView extends StatefulWidget {
-  const EditUserView({super.key});
+  const EditUserView({
+    required this.param,
+    super.key,
+  });
+
+  final EditUserViewParam param;
 
   @override
   State<EditUserView> createState() => _EditUserViewState();
@@ -20,7 +34,9 @@ class _EditUserViewState extends State<EditUserView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: EditUserViewModel(),
+      model: EditUserViewModel(
+        userData: widget.param.userData,
+      ),
       onModelReady: (EditUserViewModel model) async {
         await model.initModel();
       },

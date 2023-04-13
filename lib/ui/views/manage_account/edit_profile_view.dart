@@ -88,7 +88,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     controller: model.peranController,
                     label: "Peran",
                     hintText: "Admin/Sales/Teknisi",
-                    keyboardType: TextInputType.number,
                     onChangedListener: model.onChangedRole,
                     errorText:
                         !model.isRoleValid ? "Kolom ini wajib diisi." : null,
