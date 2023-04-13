@@ -1,7 +1,8 @@
 enum MaintenanceStatus {
   DELETED,
   NOT_MAINTENANCED,
-  DONE,
+  FAILED,
+  SUCCESS,
 }
 
 MaintenanceStatus mappingStringtoMaintenanceStatus(String value) {
@@ -11,7 +12,9 @@ MaintenanceStatus mappingStringtoMaintenanceStatus(String value) {
     case "-1":
       return MaintenanceStatus.DELETED;
     case "1":
-      return MaintenanceStatus.DONE;
+      return MaintenanceStatus.FAILED;
+    case "2":
+      return MaintenanceStatus.SUCCESS;
     default:
       return MaintenanceStatus.NOT_MAINTENANCED;
   }
@@ -23,8 +26,10 @@ String mappingMaintenanceStatusToString(MaintenanceStatus value) {
       return "0";
     case MaintenanceStatus.DELETED:
       return "-1";
-    case MaintenanceStatus.DONE:
+    case MaintenanceStatus.FAILED:
       return "1";
+    case MaintenanceStatus.SUCCESS:
+      return "2";
     default:
       return "0";
   }
