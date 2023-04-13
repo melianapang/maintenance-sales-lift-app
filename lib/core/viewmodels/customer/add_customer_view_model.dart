@@ -70,6 +70,9 @@ class AddCustomerViewModel extends BaseViewModel {
   bool get isCityValid => _isCityValid;
   //endregion
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {}
 
@@ -148,7 +151,7 @@ class AddCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  bool saveData() {
+  bool _isValid() {
     _isCustomerNameValid = customerNameController.text.isNotEmpty;
     _isCustomerNumberValid = customerNumberController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
@@ -172,5 +175,24 @@ class AddCustomerViewModel extends BaseViewModel {
         _isEmailValid &&
         _isPhoneNumberValid &&
         _isCityValid;
+  }
+
+  Future<bool> requestCreateCustomer() async {
+    final response = await _apiService.requestCreateCustomer(
+        nama: customerNameController.text,
+        customerNumber: customerNumberController.text,
+        customerType: _selectedTipePelangganOption,
+        customerNeed: _selectedKebutuhanPelangganOption.toString(),
+        email: emailController.text,
+        companyName: companyNameController.text,
+        phoneNumber: phoneNumberController.text,
+        note: noteController.text,
+        dataSource: _selectedSumberDataOption,
+        city: cityController.text);
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

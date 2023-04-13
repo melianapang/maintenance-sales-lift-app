@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/add_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -102,9 +103,34 @@ class _AddCustomerViewState extends State<AddCustomerView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {
-              bool result = model.saveData();
-              if (result) Navigator.maybePop(context);
+            onTap: () async {
+              showDialogWidget(
+                context,
+                title: "Tambah Pelanggan",
+                description:
+                    "Apakah anda yakin ingin menambah data pelanggan ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
+
+                  buildLoadingDialog(context);
+                  bool result = await model.requestCreateCustomer();
+                  Navigator.pop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Tambah Pelanggan",
+                    description: result
+                        ? "Berhasil menambah data pelanggan"
+                        : model.errorMsg ?? "Gagal menambah data pelanggan",
+                    isSuccessDialog: result,
+                    positiveLabel: "OK",
+                    positiveCallback: () => Navigator.pop(context),
+                  );
+                },
+                negativeCallback: () => Navigator.pop(context),
+              );
             },
             text: 'Simpan',
           ),
