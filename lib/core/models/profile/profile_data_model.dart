@@ -7,8 +7,7 @@ part 'profile_data_model.g.dart';
 class ProfileData {
   ProfileData({
     required this.username,
-    this.firstName = "",
-    this.lastName = "",
+    required this.name,
     this.address = "",
     this.city = "",
     this.phoneNumber = "",
@@ -22,8 +21,7 @@ class ProfileData {
   Map<String, dynamic> toJson() => _$ProfileDataToJson(this);
 
   String username;
-  String firstName;
-  String lastName;
+  String name;
   String address;
   String city;
   String phoneNumber;

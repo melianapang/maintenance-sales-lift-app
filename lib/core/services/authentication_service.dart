@@ -45,6 +45,7 @@ class AuthenticationService {
       print("payload: $payload");
       ProfileData profileData = ProfileData(
         username: payload['username'],
+        name: payload['name'],
         city: payload['city'],
         address: payload['address'],
         phoneNumber: payload['phone_number'],
