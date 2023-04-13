@@ -4,12 +4,15 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/detail_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/users/edit_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -42,6 +45,7 @@ class _DetailUserViewState extends State<DetailUserView> {
       model: DetailUserViewModel(
         userData: widget.param.userData,
         dioService: Provider.of<DioService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (DetailUserViewModel model) async {
         await model.initModel();
@@ -59,6 +63,9 @@ class _DetailUserViewState extends State<DetailUserView> {
                   Navigator.pushNamed(
                     context,
                     Routes.editUser,
+                    arguments: EditUserViewParam(
+                      userData: model.userData,
+                    ),
                   );
                 },
                 child: const Padding(
@@ -74,8 +81,7 @@ class _DetailUserViewState extends State<DetailUserView> {
               ),
             ],
           ),
-          bottomNavigationBar: model.userData?.roleName ==
-                  mappingRoleToString(Role.SuperAdmin).toLowerCase()
+          bottomNavigationBar: model.isAllowedToDeleteUser
               ? ButtonWidget.bottomSingleButton(
                   buttonType: ButtonType.primary,
                   padding: EdgeInsets.only(
@@ -126,26 +132,39 @@ class _DetailUserViewState extends State<DetailUserView> {
               children: [
                 TextInput.disabled(
                   label: "Nama User",
+                  text: model.userData?.name,
+                ),
+                Spacings.vert(24),
+                TextInput.disabled(
+                  label: "Username",
+                  text: model.userData?.username,
                 ),
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Peran",
+                  text: StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                    model.userData?.roleName ?? "",
+                  ),
                 ),
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Alamat",
+                  text: model.userData?.address,
                 ),
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Kota",
+                  text: model.userData?.city,
                 ),
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "No Telepon",
+                  text: model.userData?.phoneNumber,
                 ),
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Email",
+                  text: model.userData?.email,
                 ),
                 Spacings.vert(24),
               ],

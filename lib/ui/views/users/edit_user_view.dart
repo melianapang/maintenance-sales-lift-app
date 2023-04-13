@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/edit_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -36,6 +40,7 @@ class _EditUserViewState extends State<EditUserView> {
     return ViewModel(
       model: EditUserViewModel(
         userData: widget.param.userData,
+        dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (EditUserViewModel model) async {
         await model.initModel();
@@ -71,11 +76,27 @@ class _EditUserViewState extends State<EditUserView> {
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
-                  showDialogWidget(
+                  buildLoadingDialog(context);
+                  bool isSucceed = await model.requestEditUser();
+                  Navigator.pop(context);
+
+                  if (isSucceed) {
+                    showDialogWidget(
+                      context,
+                      title: "Ubah Data User",
+                      description: "Perubahan data user berhasil disimpan",
+                      isSuccessDialog: true,
+                      positiveLabel: "OK",
+                      positiveCallback: () => Navigator.pop(
+                        context,
+                      ),
+                    );
+                    return;
+                  }
+
+                  showErrorDialog(
                     context,
-                    title: "Ubah Data User",
-                    description: "Perubahan data user berhasil disimpan",
-                    isSuccessDialog: true,
+                    text: model.errorMsg,
                   );
                 },
               );
@@ -95,6 +116,15 @@ class _EditUserViewState extends State<EditUserView> {
                   onChangedListener: model.onChangedName,
                   errorText:
                       !model.isNameValid ? "Kolom ini wajib diisi." : null,
+                ),
+                Spacings.vert(24),
+                TextInput.editable(
+                  label: "Username",
+                  hintText: "Username",
+                  controller: model.usernameController,
+                  onChangedListener: model.onChangedUsername,
+                  errorText:
+                      !model.isUsernameValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
