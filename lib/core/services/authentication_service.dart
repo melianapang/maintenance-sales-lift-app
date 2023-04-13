@@ -50,7 +50,7 @@ class AuthenticationService {
         address: payload['address'],
         phoneNumber: payload['phone_number'],
         email: payload['email'],
-        role: mappingStringToRole(
+        role: mappingStringNumberToRole(
           payload['id_role'],
         ),
       );
