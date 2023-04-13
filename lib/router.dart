@@ -82,8 +82,7 @@ class AppRouter {
             ? settings.arguments as ProfileData
             : ProfileData(
                 username: '',
-                firstName: '',
-                lastName: '',
+                name: '',
                 phoneNumber: '',
                 email: '',
                 address: '',
@@ -289,27 +288,33 @@ class AppRouter {
           builder: (_) => const AddUserView(),
         );
       case Routes.editUser:
+        final EditUserViewParam param = settings.arguments is EditUserViewParam
+            ? settings.arguments as EditUserViewParam
+            : EditUserViewParam();
         return buildRoute(
-          builder: (_) => const EditUserView(),
+          builder: (_) => EditUserView(
+            param: param,
+          ),
         );
       case Routes.detailUser:
+        final DetailUserViewParam param =
+            settings.arguments is DetailUserViewParam
+                ? settings.arguments as DetailUserViewParam
+                : DetailUserViewParam();
         return buildRoute(
           builder: (_) => DetailUserView(
-            profileData: ProfileData(
-              username: "",
-              firstName: "",
-              lastName: "",
-              address: "",
-              city: "",
-              phoneNumber: "",
-              email: "",
-              role: Role.Admin,
-            ),
+            param: param,
           ),
         );
       case Routes.setPasswordUser:
+        final SetPasswordUserViewParam param =
+            settings.arguments is SetPasswordUserViewParam
+                ? settings.arguments as SetPasswordUserViewParam
+                : SetPasswordUserViewParam();
         return buildRoute(
-          builder: (_) => const SetPasswordUserView(),
+          builder: (_) => SetPasswordUserView(
+            param: param,
+          ),
         );
       case Routes.listProjects:
         return buildRoute(

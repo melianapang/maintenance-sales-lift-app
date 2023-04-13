@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/set_password_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -11,8 +14,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 //set password for new user.
+class SetPasswordUserViewParam {
+  SetPasswordUserViewParam({
+    this.profileData,
+  });
+
+  final ProfileData? profileData;
+}
+
 class SetPasswordUserView extends StatefulWidget {
-  const SetPasswordUserView({super.key});
+  SetPasswordUserView({
+    required this.param,
+    super.key,
+  });
+
+  SetPasswordUserViewParam param;
 
   @override
   State<SetPasswordUserView> createState() => _SetPasswordUserViewState();
@@ -22,7 +38,10 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<SetPasswordViewUserModel>(
-      model: SetPasswordViewUserModel(),
+      model: SetPasswordViewUserModel(
+        profileData: widget.param.profileData,
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (SetPasswordViewUserModel model) async {
         await model.initModel();
       },
@@ -44,12 +63,12 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
               right: 24.0,
             ),
             buttonType: ButtonType.primary,
-            onTap: () {
-              bool result = model.saveData();
+            onTap: () async {
+              bool result = await model.requestCreateUser();
               if (result)
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  Routes.listCustomer,
+                  Routes.home,
                   (route) => false,
                 );
             },
