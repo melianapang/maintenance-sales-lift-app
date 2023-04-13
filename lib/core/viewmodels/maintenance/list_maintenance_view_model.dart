@@ -52,6 +52,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
   List<FilterOption> get sortOptions => _sortOptions;
   // End of filter related
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -69,19 +72,25 @@ class ListMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllMaintenance() async {
-    List<MaintenanceData>? list = await _apiService.requestGetAllMaintenance(
+    final response = await _apiService.requestGetAllMaintenance(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listMaintenance = list;
-      } else {
-        _listMaintenance?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listMaintenance = response.right;
+        } else {
+          _listMaintenance?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   Future<bool> isUserAllowedToExportData() async {

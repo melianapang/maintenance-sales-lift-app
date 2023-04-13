@@ -86,6 +86,9 @@ class ListCustomerViewModel extends BaseViewModel {
   List<FilterOption> get sortOptions => _sortOptions;
   // End of filter related
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -111,20 +114,25 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    List<CustomerData>? list = await _apiService.getAllCustomer(
+    final response = await _apiService.getAllCustomer(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listCustomer = list;
-      } else {
-        _listCustomer?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right!;
+        } else {
+          _listCustomer?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   Future<bool> isUserAllowedToExportData() async {
