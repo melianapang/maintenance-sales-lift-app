@@ -26,6 +26,21 @@ String mappingRoleToString(Role role) {
 
 Role mappingStringToRole(String role) {
   switch (role) {
+    case "Super Admin":
+      return Role.SuperAdmin;
+    case "Admin":
+      return Role.Admin;
+    case "Sales":
+      return Role.Engineers;
+    case "Teknisi":
+      return Role.Sales;
+    default:
+      return Role.Admin;
+  }
+}
+
+Role mappingStringNumberToRole(String role) {
+  switch (role) {
     case "1":
       return Role.SuperAdmin;
     case "2":
@@ -36,5 +51,18 @@ Role mappingStringToRole(String role) {
       return Role.Sales;
     default:
       return Role.Admin;
+  }
+}
+
+String mappingRoleToNumberString(Role role) {
+  switch (role) {
+    case Role.SuperAdmin:
+      return "1";
+    case Role.Admin:
+      return "2";
+    case Role.Sales:
+      return "3";
+    case Role.Engineers:
+      return "4";
   }
 }
