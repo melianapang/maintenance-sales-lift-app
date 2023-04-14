@@ -1,20 +1,25 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ListUnitCustomerViewModel extends BaseViewModel {
   ListUnitCustomerViewModel({
+    CustomerData? customerData,
     required DioService dioService,
-  }) : _apiService = ApiService(
+  })  : _customerData = customerData,
+        _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         );
 
   final ApiService _apiService;
+
+  CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
 
   List<UnitData>? _listUnit;
   List<UnitData>? get listUnit => _listUnit;
@@ -24,6 +29,9 @@ class ListUnitCustomerViewModel extends BaseViewModel {
 
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
+
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {
@@ -48,26 +56,25 @@ class ListUnitCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllUnit() async {
-    List<UnitData>? list = [
-      UnitData(
-        unitId: "1",
-        unitName: "KA23492834",
-        location: "Tower A",
-      ),
-    ];
-    // await _apiService.getAllCustomer(
-    //   _paginationControl.currentPage,
-    //   _paginationControl.pageSize,
-    // );
+    final response = await _apiService.getAllUnitByCustomer(
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+    );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listUnit = list;
-      } else {
-        _listUnit?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listUnit = response.right;
+        } else {
+          _listUnit?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 }

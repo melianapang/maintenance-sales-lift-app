@@ -355,8 +355,14 @@ class AppRouter {
           ),
         );
       case Routes.listUnit:
+        final ListUnitCustomerViewParam param =
+            settings.arguments is ListUnitCustomerViewParam
+                ? settings.arguments as ListUnitCustomerViewParam
+                : ListUnitCustomerViewParam();
         return buildRoute(
-          builder: (_) => const ListUnitCustomerView(),
+          builder: (_) => ListUnitCustomerView(
+            param: param,
+          ),
         );
       case Routes.detailUnit:
         final DetailUnitCustomerViewParam param =
