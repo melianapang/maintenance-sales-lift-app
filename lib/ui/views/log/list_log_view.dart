@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/log/list_log_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -13,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/log/detail_log_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:intl/intl.dart';
 
 class ListLogView extends StatefulWidget {
   const ListLogView({super.key});
@@ -64,8 +66,19 @@ class _ListLogViewState extends State<ListLogView> {
                           title:
                               StringUtils.replaceUnderscoreToSpaceAndTitleCase(
                                   model.listLogData?[index].tableName ?? ""),
-                          description: "Diubah oleh: Olivia North",
-                          description2: "12 March 2023",
+                          description:
+                              "Diubah oleh: ${model.listLogData?[index].userName}",
+                          description2: DateTimeUtils
+                              .convertStringToOtherStringDateFormat(
+                            date: model.listLogData?[index].createdAt ??
+                                DateTimeUtils.convertDateToString(
+                                  date: DateTime.now(),
+                                  formatter: DateFormat(
+                                    DateTimeUtils.DATE_FORMAT_2,
+                                  ),
+                                ),
+                            formattedString: DateTimeUtils.DATE_FORMAT_2,
+                          ),
                           titleSize: 20,
                           descSize: 16,
                           desc2Size: 12,
