@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -32,33 +32,6 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   bool _isLocationValid = true;
   bool get isLocationValid => _isLocationValid;
 
-  // Dropdown related
-  int _selectedSumberDataOption = 0;
-  int get selectedSumberDataOption => _selectedSumberDataOption;
-  final List<FilterOption> _sumberDataOptions = [
-    FilterOption("Leads", true),
-    FilterOption("Non-Leads", false),
-  ];
-  List<FilterOption> get sumberDataOptions => _sumberDataOptions;
-
-  int _selectedKebutuhanPelangganOption = 0;
-  int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
-  final List<FilterOption> _kebutuhanPelangganOptions = [
-    FilterOption("Pembelian Unit", true),
-    FilterOption("Perawatan/Troubleshooting", false),
-  ];
-  List<FilterOption> get kebutuhanPelangganOptions =>
-      _kebutuhanPelangganOptions;
-
-  int _selectedTipePelangganOption = 0;
-  int get selectedTipePelangganOption => _selectedTipePelangganOption;
-  final List<FilterOption> _tipePelangganOptions = [
-    FilterOption("Perorangan", true),
-    FilterOption("Perusahaan", false),
-  ];
-  List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
-  // End of Dropdown related
-
   //region pilih proyek
   //dummy pake customerData, harus ganti nanti
   List<CustomerData>? _listCustomer;
@@ -80,7 +53,7 @@ class EditUnitCustomerViewModel extends BaseViewModel {
 
     paginationControl.currentPage = 1;
 
-    await requestGetAllCustomer();
+    await requestGetAllProjects();
     if (_listCustomer?.isEmpty == true || _listCustomer == null) {
       _isShowNoDataFoundPage = true;
       notifyListeners();
@@ -99,74 +72,21 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> requestGetAllCustomer() async {
-    List<CustomerData>? list = await _apiService.getAllCustomer(
-      _paginationControl.currentPage,
-      _paginationControl.pageSize,
-    );
+  Future<void> requestGetAllProjects() async {
+    // List<CustomerData>? list = await _apiService.getAllCustomer(
+    //   _paginationControl.currentPage,
+    //   _paginationControl.pageSize,
+    // );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listCustomer = list;
-      } else {
-        _listCustomer?.addAll(list!);
-      }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
-    }
-  }
-
-  void setSelectedSumberData({
-    required int selectedMenu,
-  }) {
-    _selectedSumberDataOption = selectedMenu;
-    for (int i = 0; i < _sumberDataOptions.length; i++) {
-      if (i == selectedMenu) {
-        _sumberDataOptions[i].isSelected = true;
-        continue;
-      }
-      _sumberDataOptions[i].isSelected = false;
-    }
-
-    notifyListeners();
-  }
-
-  void setSelectedTipePelanggan({
-    required int selectedMenu,
-  }) {
-    _selectedTipePelangganOption = selectedMenu;
-    for (int i = 0; i < _tipePelangganOptions.length; i++) {
-      if (i == selectedMenu) {
-        _tipePelangganOptions[i].isSelected = true;
-        continue;
-      }
-      _tipePelangganOptions[i].isSelected = false;
-    }
-
-    notifyListeners();
-  }
-
-  void setSelectedKebutuhanPelanggan({
-    required int selectedMenu,
-  }) {
-    _selectedKebutuhanPelangganOption = selectedMenu;
-    for (int i = 0; i < _kebutuhanPelangganOptions.length; i++) {
-      if (i == selectedMenu) {
-        _kebutuhanPelangganOptions[i].isSelected = true;
-        continue;
-      }
-      _kebutuhanPelangganOptions[i].isSelected = false;
-    }
-
-    notifyListeners();
-  }
-
-  void setUnitName(String value) {
-    _unitData?.unitName = value;
-  }
-
-  void setUnitLocation(String value) {
-    _unitData?.location = value;
+    // if (list != null || list?.isNotEmpty == true) {
+    //   if (_paginationControl.currentPage == 1) {
+    //     _listCustomer = list;
+    //   } else {
+    //     _listCustomer?.addAll(list!);
+    //   }
+    //   _paginationControl.currentPage += 1;
+    //   notifyListeners();
+    // }
   }
 
   void setSelectedProyek({
