@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
@@ -17,7 +18,9 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -168,7 +171,13 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                   Spacings.vert(24),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.listUnit);
+                      Navigator.pushNamed(
+                        context,
+                        Routes.listUnit,
+                        arguments: ListUnitCustomerViewParam(
+                          customerData: model.customerData,
+                        ),
+                      );
                     },
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -397,7 +406,13 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           labelStyle: buildTextStyle(
               fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
           onTap: () {
-            Navigator.pushNamed(context, Routes.uploadPO);
+            Navigator.pushNamed(
+              context,
+              Routes.uploadPO,
+              arguments: UploadDocumentViewParam(
+                customerData: model.customerData,
+              ),
+            );
 
             setState() {
               model.setDialChildrenVisible();
