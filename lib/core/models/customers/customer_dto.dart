@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 
 part 'customer_dto.g.dart';
 
+//region update customer
 @JsonSerializable()
 class UpdateCustomerRequest {
   UpdateCustomerRequest({
@@ -80,7 +81,9 @@ class UpdateCustomerResponse {
   @JsonKey(name: "Data")
   final List<String> data;
 }
+//endregion
 
+//region get all customer
 @JsonSerializable()
 class GetAllCustomerResponse {
   GetAllCustomerResponse({
@@ -124,19 +127,17 @@ class CustomerData {
   CustomerData({
     required this.customerId,
     required this.customerNumber,
-    required this.userId,
     required this.customerType,
     required this.customerName,
-    required this.companyName,
+    this.companyName,
     required this.customerNeed,
     required this.dataSource,
     required this.city,
     required this.phoneNumber,
     required this.email,
-    this.note,
     required this.status,
-    required this.statusDeleted,
-    required this.createdAt,
+    this.note,
+    required this.documents,
   });
 
   factory CustomerData.fromJson(Map<String, dynamic> json) =>
@@ -150,9 +151,6 @@ class CustomerData {
   @JsonKey(name: "customer_number")
   final String customerNumber;
 
-  @JsonKey(name: "user_id")
-  final String userId;
-
   @JsonKey(name: "customer_type")
   final String customerType;
 
@@ -160,7 +158,7 @@ class CustomerData {
   final String customerName;
 
   @JsonKey(name: "company_name")
-  final String companyName;
+  final String? companyName;
 
   @JsonKey(name: "customer_need")
   final String customerNeed;
@@ -183,9 +181,104 @@ class CustomerData {
   @JsonKey(name: "status")
   final String status;
 
-  @JsonKey(name: "status_deleted")
-  final String statusDeleted;
-
-  @JsonKey(name: "created_at")
-  final String createdAt;
+  @JsonKey(name: "documents")
+  final List<MaintenanceFileData> documents;
 }
+//endregion
+
+//region create customer
+@JsonSerializable()
+class CreateCustomerRequest {
+  CreateCustomerRequest({
+    required this.customerName,
+    required this.customerType,
+    required this.customerNumber,
+    required this.customerNeed,
+    required this.email,
+    required this.phoneNumber,
+    required this.city,
+    required this.dataSource,
+    required this.note,
+    required this.companyName,
+    required this.status,
+  });
+
+  factory CreateCustomerRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateCustomerRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateCustomerRequestToJson(this);
+
+  @JsonKey(name: "customer_name")
+  final String customerName;
+
+  @JsonKey(name: "customer_type")
+  final int customerType;
+
+  @JsonKey(name: "customer_number")
+  final String customerNumber;
+
+  @JsonKey(name: "customer_need")
+  final String customerNeed;
+
+  @JsonKey(name: "email")
+  final String email;
+
+  @JsonKey(name: "phone_number")
+  final String phoneNumber;
+
+  @JsonKey(name: "city")
+  final String city;
+
+  @JsonKey(name: "data_source")
+  final int dataSource;
+
+  @JsonKey(name: "note")
+  final String note;
+
+  @JsonKey(name: "company_name")
+  final String companyName;
+
+  @JsonKey(name: "status")
+  final int status;
+}
+
+@JsonSerializable()
+class CreateCustomerResponse {
+  CreateCustomerResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory CreateCustomerResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateCustomerResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateCustomerResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
+
+//region delete user
+@JsonSerializable()
+class DeleteCustomerResponse {
+  DeleteCustomerResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory DeleteCustomerResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteCustomerResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteCustomerResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
