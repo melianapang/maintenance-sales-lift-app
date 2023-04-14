@@ -6,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 
 class DetailCustomerViewModel extends BaseViewModel {
@@ -73,7 +72,7 @@ class DetailCustomerViewModel extends BaseViewModel {
     setBusy(true);
     _exportedFileName = await DownloadDataUtils.downloadData(
       prefixString: "maintenance_data",
-      filePath: _urlDocuments[index],
+      filePath: customerData?.documents[index].filePath ?? "",
     );
     setBusy(false);
   }
