@@ -31,13 +31,13 @@ class DetailApprovalViewModel extends BaseViewModel {
   Future<bool> requestChangeApprovalStatus({
     required bool isApprove,
   }) async {
-    // final response = await _apiService.requestUpdateApproval(
-    //   // approvalId: _approvalData.approvalId,
-    //   approvalStatus: isApprove ? 1 : 2,
-    // );
-    // if (response.isRight) return true;
+    final response = await _apiService.requestUpdateApproval(
+      approvalId: int.parse(_approvalData?.approvalId ?? "0"),
+      approvalStatus: isApprove ? 1 : 2,
+    );
+    if (response.isRight) return true;
 
-    // _errorMsg = response.left.message;
+    _errorMsg = response.left.message;
     return false;
   }
 }
