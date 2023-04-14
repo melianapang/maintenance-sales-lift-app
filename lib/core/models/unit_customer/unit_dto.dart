@@ -53,6 +53,7 @@ class UnitData {
     required this.unitId,
     required this.unitName,
     required this.unitLocation,
+    required this.projectName,
   });
 
   factory UnitData.fromJson(Map<String, dynamic> json) =>
@@ -68,5 +69,8 @@ class UnitData {
 
   @JsonKey(name: "unit_location")
   final String unitLocation;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
 }
 //endregion

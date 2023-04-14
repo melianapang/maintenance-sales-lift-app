@@ -3,7 +3,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/detail_unit_customer_view_model.dart';
@@ -133,12 +133,12 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Lokasi Unit",
-                    text: model.unitData?.location,
+                    text: model.unitData?.unitLocation,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Proyek",
-                    text: model.unitData?.location,
+                    text: model.unitData?.projectName,
                   ),
                   Spacings.vert(24),
                 ],
