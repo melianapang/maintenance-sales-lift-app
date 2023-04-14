@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'log_dto.g.dart';
 
+//region get all log
 @JsonSerializable()
 class GetAllLogResponse {
   GetAllLogResponse({
@@ -46,10 +47,10 @@ class ListLogData {
 class LogData {
   LogData({
     required this.logId,
-    required this.userCreatedId,
-    required this.changeId,
+    required this.userName,
+    required this.createdAt,
     required this.tableName,
-    required this.modulenName,
+    required this.moduleName,
     required this.contentsNew,
     required this.contentsOld,
   });
@@ -59,20 +60,20 @@ class LogData {
 
   Map<String, dynamic> toJson() => _$LogDataToJson(this);
 
-  @JsonKey(name: "id")
+  @JsonKey(name: "log_id")
   final String logId;
 
-  @JsonKey(name: "user_created_id")
-  final String userCreatedId;
+  @JsonKey(name: "name")
+  final String userName;
 
-  @JsonKey(name: "changed_id")
-  final String changeId;
+  @JsonKey(name: "created_at")
+  final String createdAt;
 
   @JsonKey(name: "table_name")
   final String tableName;
 
   @JsonKey(name: "module_name")
-  final String modulenName;
+  final String moduleName;
 
   @JsonKey(name: "contents_new")
   final Map<String, dynamic>? contentsNew;
@@ -80,3 +81,60 @@ class LogData {
   @JsonKey(name: "contents_old")
   final Map<String, dynamic>? contentsOld;
 }
+//endregion
+
+//region get detail
+@JsonSerializable()
+class DetailLogResponse {
+  DetailLogResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory DetailLogResponse.fromJson(Map<String, dynamic> json) =>
+      _$DetailLogResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DetailLogResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final DetailLogData data;
+}
+
+@JsonSerializable()
+class DetailLogData {
+  DetailLogData({
+    required this.logId,
+    required this.tableName,
+    required this.moduleName,
+    required this.contentsNew,
+    required this.contentsOld,
+  });
+
+  factory DetailLogData.fromJson(Map<String, dynamic> json) =>
+      _$DetailLogDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DetailLogDataToJson(this);
+
+  @JsonKey(name: "log_id")
+  final String logId;
+
+  @JsonKey(name: "table_name")
+  final String tableName;
+
+  @JsonKey(name: "module_name")
+  final String moduleName;
+
+  @JsonKey(name: "contents_new")
+  final Map<String, dynamic>? contentsNew;
+
+  @JsonKey(name: "contents_old")
+  final Map<String, dynamic>? contentsOld;
+}
+//endregion
