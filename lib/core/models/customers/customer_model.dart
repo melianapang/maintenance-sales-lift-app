@@ -34,3 +34,33 @@ enum CustomerStatus {
   Hot,
   In_Progress,
 }
+
+String mappingCustomerTypeToString(int value) {
+  switch (value) {
+    case 0:
+      return "Individual";
+    case 1:
+    default:
+      return "Perusahaan";
+  }
+}
+
+String mappingDataSourceToString(int value) {
+  switch (value) {
+    case 0:
+      return "Leads";
+    case 1:
+    default:
+      return "Non-Leads";
+  }
+}
+
+String mappingCustomerNeedToString(int value) {
+  switch (value) {
+    case 0:
+      return "Pembelian Unit";
+    case 1:
+    default:
+      return "Perawatan/Troubleshooting";
+  }
+}
