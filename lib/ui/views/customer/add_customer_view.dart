@@ -104,6 +104,9 @@ class _AddCustomerViewState extends State<AddCustomerView> {
             ),
             buttonType: ButtonType.primary,
             onTap: () async {
+              bool isValid = model.isValid();
+              if (!isValid) return;
+
               showDialogWidget(
                 context,
                 title: "Tambah Pelanggan",

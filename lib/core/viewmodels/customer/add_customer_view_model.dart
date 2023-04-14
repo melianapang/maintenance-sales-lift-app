@@ -151,7 +151,7 @@ class AddCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  bool _isValid() {
+  bool isValid() {
     _isCustomerNameValid = customerNameController.text.isNotEmpty;
     _isCustomerNumberValid = customerNumberController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
@@ -178,6 +178,11 @@ class AddCustomerViewModel extends BaseViewModel {
   }
 
   Future<bool> requestCreateCustomer() async {
+    if (!isValid()) {
+      _errorMsg = "Isi semua data dengan benar.";
+      return false;
+    }
+
     final response = await _apiService.requestCreateCustomer(
         nama: customerNameController.text,
         customerNumber: customerNumberController.text,
