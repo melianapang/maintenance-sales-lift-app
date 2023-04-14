@@ -125,7 +125,7 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                     child: TextInput.disabled(
                       label: "Pilih Proyek",
                       hintText: "Pilih proyek yang diinginkan",
-                      text: model.selectedProject?.customerData.customerName,
+                      text: model.selectedProject?.projectName,
                       suffixIcon: const Icon(
                         PhosphorIcons.caretDownBold,
                         color: MyColors.lightBlack02,
@@ -171,11 +171,8 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                   itemBuilder: (BuildContext context, int index) {
                     return CustomCardWidget(
                       cardType: CardType.list,
-                      title:
-                          model.listProject?[index].customerData.companyName ??
-                              "",
-                      description:
-                          model.listProject?[index].customerData.customerName,
+                      title: model.listProject?[index].projectName ?? "",
+                      description: model.listProject?[index].customerName,
                       desc2Size: 16,
                       titleSize: 20,
                       onTap: () {

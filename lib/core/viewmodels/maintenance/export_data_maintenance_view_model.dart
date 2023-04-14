@@ -1,7 +1,6 @@
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
@@ -41,6 +40,9 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
 
   String? _exportedFileName;
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -75,20 +77,25 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjects() async {
-    List<ProjectData>? list = await _apiService.getAllProjects(
-      _paginationControl.currentPage,
-      _paginationControl.pageSize,
+    final response = await _apiService.getAllProjects(
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
     );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listProject = list;
-      } else {
-        _listProject?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listProject = response.right;
+        } else {
+          _listProject?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   Future<void> requestExportData() async {
