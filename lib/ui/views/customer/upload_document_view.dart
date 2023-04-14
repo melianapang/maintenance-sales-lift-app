@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/upload_document_view_model.dart';
@@ -15,8 +18,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class UploadDocumentViewParam {
+  UploadDocumentViewParam({
+    this.customerData,
+  });
+
+  final CustomerData? customerData;
+}
+
 class UploadDocumentView extends StatefulWidget {
-  const UploadDocumentView({super.key});
+  const UploadDocumentView({
+    required this.param,
+    super.key,
+  });
+
+  final UploadDocumentViewParam param;
 
   @override
   State<UploadDocumentView> createState() => _UploadDocumentViewState();
@@ -40,7 +56,10 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: UploadDocumentViewModel(),
+      model: UploadDocumentViewModel(
+        customerData: widget.param.customerData,
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (UploadDocumentViewModel model) async {
         await model.initModel();
       },
@@ -61,11 +80,18 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {
+            onTap: () async {
+              buildLoadingDialog(context);
+              bool isSucceed = await model.requestCreateCustomer();
+              Navigator.pop(context);
+
               showDialogWidget(
                 context,
                 title: "Unggah Dokumen",
-                description: "Dokumen telah disimpan!",
+                isSuccessDialog: isSucceed,
+                description: isSucceed
+                    ? "Dokumen telah disimpan!"
+                    : model.errorMsg ?? "Dokumen gagal disimpan.",
                 positiveLabel: "OK",
                 positiveCallback: () {
                   Navigator.maybePop(context);
@@ -80,16 +106,16 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
             ),
             child: Column(
               children: [
-                TextInput.editable(
-                  onChangedListener: (text) {},
+                TextInput.disabled(
                   label: "Nomor Pelanggan",
                   hintText: "Nomor Pelanggan",
+                  text: model.customerData?.customerNumber,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
-                  onChangedListener: (text) {},
+                TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
+                  text: model.customerData?.customerName,
                 ),
                 Spacings.vert(24),
                 GestureDetector(
@@ -159,7 +185,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                 ),
                 Spacings.vert(24),
                 TextInput.multiline(
-                  onChangedListener: (text) {},
+                  controller: model.noteController,
                   label: "Catatan",
                   minLines: 5,
                   maxLines: 5,

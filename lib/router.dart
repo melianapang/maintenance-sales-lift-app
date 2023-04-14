@@ -165,8 +165,14 @@ class AppRouter {
           builder: (_) => const ExportDataCustomerView(),
         );
       case Routes.uploadPO:
+        final UploadDocumentViewParam param =
+            settings.arguments is UploadDocumentViewParam
+                ? settings.arguments as UploadDocumentViewParam
+                : UploadDocumentViewParam();
         return buildRoute(
-          builder: (_) => const UploadDocumentView(),
+          builder: (_) => UploadDocumentView(
+            param: param,
+          ),
         );
       case Routes.listLog:
         return buildRoute(
