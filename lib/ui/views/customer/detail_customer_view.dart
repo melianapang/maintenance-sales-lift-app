@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_view_model.dart';
@@ -19,6 +21,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.d
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:intl/intl.dart';
 
 class DetailCustomerViewParam {
   DetailCustomerViewParam({
@@ -128,6 +131,27 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
+                    label: "Tipe Pelanggan",
+                    text: mappingCustomerTypeToString(
+                      int.parse(model.customerData?.customerType ?? "0"),
+                    ),
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Sumber Data",
+                    text: mappingDataSourceToString(
+                      int.parse(model.customerData?.dataSource ?? "0"),
+                    ),
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Kebutuhan Pelanggan",
+                    text: mappingCustomerNeedToString(
+                      int.parse(model.customerData?.customerNeed ?? "0"),
+                    ),
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
                     label: "Kota",
                     text: model.customerData?.city,
                   ),
@@ -160,117 +184,129 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       ),
                     ),
                   ),
-                  Spacings.vert(24),
-                  const Divider(
-                    thickness: 0.5,
-                    color: MyColors.yellow,
-                  ),
-                  Spacings.vert(6),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      StringUtils.removeZeroWidthSpaces(
-                        "Daftar Dokumen",
-                      ),
-                      textAlign: TextAlign.start,
-                      style: buildTextStyle(
-                        fontSize: 18,
-                        fontColor: MyColors.yellow01,
-                        fontWeight: 500,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                  if (model.customerData?.documents.isNotEmpty == true) ...[
+                    Spacings.vert(24),
+                    const Divider(
+                      thickness: 0.5,
+                      color: MyColors.yellow,
                     ),
-                  ),
-                  Spacings.vert(6),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      StringUtils.removeZeroWidthSpaces(
-                        "Klik salah satu daftar untuk mengunduk berkas.",
+                    Spacings.vert(6),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        StringUtils.removeZeroWidthSpaces(
+                          "Daftar Dokumen",
+                        ),
+                        textAlign: TextAlign.start,
+                        style: buildTextStyle(
+                          fontSize: 18,
+                          fontColor: MyColors.yellow01,
+                          fontWeight: 500,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      textAlign: TextAlign.start,
-                      style: buildTextStyle(
-                        fontSize: 12,
-                        fontColor: MyColors.yellow02,
-                        fontWeight: 500,
+                    ),
+                    Spacings.vert(6),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        StringUtils.removeZeroWidthSpaces(
+                          "Klik salah satu daftar untuk mengunduh berkas.",
+                        ),
+                        textAlign: TextAlign.start,
+                        style: buildTextStyle(
+                          fontSize: 12,
+                          fontColor: MyColors.yellow02,
+                          fontWeight: 500,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Spacings.vert(24),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    //harusnya dari list dokumen di CustomerData.
-                    itemCount: 10,
-                    separatorBuilder: (context, index) => const Divider(
-                      color: MyColors.lightBlack01,
-                      thickness: 0.4,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: !model.busy
-                                ? () async {
-                                    bool isGranted =
-                                        await model.checkPermissions();
-                                    if (!isGranted) return;
+                    Spacings.vert(24),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: model.customerData?.documents.length ?? 0,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: MyColors.lightBlack01,
+                        thickness: 0.4,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: !model.busy
+                                  ? () async {
+                                      bool isGranted =
+                                          await model.checkPermissions();
+                                      if (!isGranted) return;
 
-                                    buildLoadingDialog(context);
-                                    await model.downloadData(
-                                      index: index,
-                                    );
+                                      buildLoadingDialog(context);
+                                      await model.downloadData(
+                                        index: index,
+                                      );
 
-                                    Navigator.pop(context);
-                                    showDialogWidget(
-                                      context,
-                                      title: "Unduh Data",
-                                      isSuccessDialog: true,
-                                      description:
-                                          "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
-                                      positiveLabel: "OK",
-                                      negativeLabel: "Lihat Data",
-                                      positiveCallback: () {
-                                        Navigator.maybePop(context);
-                                      },
-                                      negativeCallback: () async {
-                                        await model.openDownloadedData();
-                                        Navigator.maybePop(context);
-                                      },
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                              'Jenis Dokumen',
+                                      Navigator.pop(context);
+                                      showDialogWidget(
+                                        context,
+                                        title: "Unduh Data",
+                                        isSuccessDialog: true,
+                                        description:
+                                            "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
+                                        positiveLabel: "OK",
+                                        negativeLabel: "Lihat Data",
+                                        positiveCallback: () {
+                                          Navigator.maybePop(context);
+                                        },
+                                        negativeCallback: () async {
+                                          await model.openDownloadedData();
+                                          Navigator.maybePop(context);
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: Text(
+                                model.customerData?.documents[index].fileType ??
+                                    "Jenis Dokumen",
+                                textAlign: TextAlign.start,
+                                style: buildTextStyle(
+                                  fontSize: 16,
+                                  fontWeight: 400,
+                                  fontColor: MyColors.blueLihatSelengkapnya,
+                                  isUnderlined: true,
+                                ),
+                              ),
+                            ),
+                            Spacings.vert(6),
+                            Text(
+                              'Dibuat pada tanggal: ${DateTimeUtils.convertStringToOtherStringDateFormat(
+                                date: model.customerData?.documents[index]
+                                        .createdAt ??
+                                    DateTimeUtils.convertDateToString(
+                                      date: DateTime.now(),
+                                      formatter: DateFormat(
+                                        DateTimeUtils.DATE_FORMAT_2,
+                                      ),
+                                    ),
+                                formattedString: DateTimeUtils.DATE_FORMAT_2,
+                              )}',
                               textAlign: TextAlign.start,
                               style: buildTextStyle(
-                                fontSize: 16,
+                                fontSize: 12,
                                 fontWeight: 400,
-                                fontColor: MyColors.blueLihatSelengkapnya,
+                                fontColor: MyColors.lightBlack02,
                                 isUnderlined: true,
                               ),
                             ),
-                          ),
-                          Spacings.vert(6),
-                          Text(
-                            'Created At: ',
-                            textAlign: TextAlign.start,
-                            style: buildTextStyle(
-                              fontSize: 12,
-                              fontWeight: 400,
-                              fontColor: MyColors.lightBlack02,
-                              isUnderlined: true,
-                            ),
-                          ),
-                          Spacings.vert(8),
-                        ],
-                      );
-                    },
-                  ),
+                            Spacings.vert(8),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ],
               ),
             ),
