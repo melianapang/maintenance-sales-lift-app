@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/list_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -15,7 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
+import 'package:intl/intl.dart';
 import '../../widgets/filter_menu.dart';
 
 class ListMaintenanceView extends StatefulWidget {
@@ -94,13 +95,21 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                         itemBuilder: (BuildContext context, int index) {
                           return CustomCardWidget(
                             cardType: CardType.list,
-                            // title: "KA-23243",
-                            // description: "PT ABC JAYA",
-                            // description2: "12 March 2023",
                             title: model.listMaintenance?[index].unitName ?? "",
-                            description: "PT ABC JAYA",
-                            description2:
-                                model.listMaintenance?[index].startMaintenance,
+                            description:
+                                "${model.listMaintenance?[index].companyName} ${model.listMaintenance?[index].companyName != null ? "|" : ""} ${model.listMaintenance?[index].customerName}",
+                            description2: DateTimeUtils
+                                .convertStringToOtherStringDateFormat(
+                                    date: model.listMaintenance?[index]
+                                            .startMaintenance ??
+                                        DateTimeUtils.convertDateToString(
+                                          date: DateTime.now(),
+                                          formatter: DateFormat(
+                                            DateTimeUtils.DATE_FORMAT_2,
+                                          ),
+                                        ),
+                                    formattedString:
+                                        DateTimeUtils.DATE_FORMAT_2),
                             titleSize: 20,
                             descSize: 16,
                             desc2Size: 12,
