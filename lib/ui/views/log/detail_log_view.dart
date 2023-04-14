@@ -64,7 +64,7 @@ class _DetailLogViewState extends State<DetailLogView> {
                   TextInput.disabled(
                     label: "Jenis Data yang diubah",
                     text: StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                        model.logData?.modulenName ?? ""),
+                        model.logData?.moduleName ?? ""),
                   ),
                   Spacings.vert(24),
                   const Divider(
