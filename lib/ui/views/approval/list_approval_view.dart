@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/approval/list_approval_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -13,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:intl/intl.dart';
 
 class ListApprovalView extends StatefulWidget {
   const ListApprovalView({super.key});
@@ -59,8 +61,20 @@ class _ListApprovalViewState extends State<ListApprovalView> {
                           cardType: CardType.list,
                           title: StringUtils.removeZeroWidthSpaces(
                               model.listApproval?[index].userRequestName ?? ""),
-                          description: "Edit Data Request",
+                          description: "Permohonan Edit Data Pelanggan",
+                          description2: DateTimeUtils
+                              .convertStringToOtherStringDateFormat(
+                            date: model.listApproval?[index].approvalDate ??
+                                DateTimeUtils.convertDateToString(
+                                  date: DateTime.now(),
+                                  formatter: DateFormat(
+                                    DateTimeUtils.DATE_FORMAT_2,
+                                  ),
+                                ),
+                            formattedString: DateTimeUtils.DATE_FORMAT_2,
+                          ),
                           descSize: 16,
+                          desc2Size: 14,
                           titleSize: 20,
                           onTap: () {
                             Navigator.pushNamed(
