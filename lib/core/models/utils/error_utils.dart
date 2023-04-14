@@ -12,12 +12,12 @@ class ErrorUtils<T> {
     if (error is DioError) {
       String message = "";
       switch (error.type) {
-        case DioErrorType.other:
         case DioErrorType.connectTimeout:
         case DioErrorType.receiveTimeout:
         case DioErrorType.sendTimeout:
           message = 'Tolong cek koneksi internet anda lagi.';
           break;
+        case DioErrorType.other:
         case DioErrorType.response:
           message = error.message;
           break;
