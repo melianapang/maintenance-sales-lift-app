@@ -74,3 +74,103 @@ class UnitData {
   final String projectName;
 }
 //endregion
+
+//region create unit
+@JsonSerializable()
+class CreateUnitRequest {
+  CreateUnitRequest({
+    required this.customerId,
+    required this.projectId,
+    required this.unitName,
+    required this.unitLocation,
+  });
+
+  factory CreateUnitRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateUnitRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateUnitRequestToJson(this);
+
+  @JsonKey(name: "customer_id")
+  final int customerId;
+
+  @JsonKey(name: "project_id")
+  final int projectId;
+
+  @JsonKey(name: "unit_name")
+  final String unitName;
+
+  @JsonKey(name: "unit_location")
+  final String unitLocation;
+}
+
+@JsonSerializable()
+class CreateUnitResponse {
+  CreateUnitResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory CreateUnitResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateUnitResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateUnitResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
+
+//region update unit
+@JsonSerializable()
+class UpdateUnitRequest {
+  UpdateUnitRequest({
+    required this.customerId,
+    required this.projectId,
+    required this.unitName,
+    required this.unitLocation,
+  });
+
+  factory UpdateUnitRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUnitRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUnitRequestToJson(this);
+
+  @JsonKey(name: "customer_id")
+  final int customerId;
+
+  @JsonKey(name: "project_id")
+  final int projectId;
+
+  @JsonKey(name: "unit_name")
+  final String unitName;
+
+  @JsonKey(name: "unit_location")
+  final String unitLocation;
+}
+
+@JsonSerializable()
+class UpdateUnitResponse {
+  UpdateUnitResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory UpdateUnitResponse.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUnitResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUnitResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final List<String> data;
+}
+//endregion

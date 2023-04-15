@@ -104,3 +104,124 @@ class PICProject {
   final String phoneNumber;
 }
 //endregion
+
+//region create project
+@JsonSerializable()
+class CreateProjectRequest {
+  CreateProjectRequest({
+    required this.projectName,
+    required this.projectNeed,
+    required this.address,
+    required this.city,
+  });
+
+  factory CreateProjectRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateProjectRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateProjectRequestToJson(this);
+
+  @JsonKey(name: "project_name")
+  final String projectName;
+
+  @JsonKey(name: "project_need")
+  final String projectNeed;
+
+  @JsonKey(name: "address")
+  final int address;
+
+  @JsonKey(name: "city")
+  final int city;
+}
+
+@JsonSerializable()
+class CreateProjectResponse {
+  CreateProjectResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory CreateProjectResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateProjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateProjectResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
+
+//region update project
+@JsonSerializable()
+class UpdateProjectRequest {
+  UpdateProjectRequest({
+    required this.projectName,
+    required this.projectNeed,
+    required this.address,
+    required this.city,
+  });
+
+  factory UpdateProjectRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateProjectRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateProjectRequestToJson(this);
+
+  @JsonKey(name: "project_name")
+  final String projectName;
+
+  @JsonKey(name: "project_need")
+  final String projectNeed;
+
+  @JsonKey(name: "address")
+  final int address;
+
+  @JsonKey(name: "city")
+  final int city;
+}
+
+@JsonSerializable()
+class UpdateProjectResponse {
+  UpdateProjectResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory UpdateProjectResponse.fromJson(Map<String, dynamic> json) =>
+      _$UpdateProjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateProjectResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final List<String> data;
+}
+//endregion
+
+//region delete user
+@JsonSerializable()
+class DeleteProjectResponse {
+  DeleteProjectResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory DeleteProjectResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteProjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteProjectResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
