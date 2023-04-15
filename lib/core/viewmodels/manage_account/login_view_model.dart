@@ -64,12 +64,10 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<bool> requestLogin() async {
-    setBusy(true);
     final response = await _apiService.requestLogin(
       inputUser: usernameController.text,
       password: passwordController.text,
     );
-    setBusy(false);
 
     if (response.isRight) {
       await _authenticationService.setLogin(response.right);

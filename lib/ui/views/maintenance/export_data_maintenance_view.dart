@@ -59,8 +59,8 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                 ? () async {
                     buildLoadingDialog(context);
                     await model.requestExportData();
-
                     Navigator.pop(context);
+
                     showDialogWidget(
                       context,
                       title: "Unduh Data",

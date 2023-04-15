@@ -99,12 +99,10 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestExportData() async {
-    setBusy(true);
     String filePath = await _apiService.requestExportCustomerData();
     await _exportData(
       filePath: filePath,
     );
-    setBusy(false);
   }
 
   Future<void> _exportData({
