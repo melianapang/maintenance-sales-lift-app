@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
@@ -62,6 +63,9 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   Navigator.pushNamed(
                     context,
                     Routes.editProject,
+                    arguments: EditProjectViewParam(
+                      projectData: model.projectData,
+                    ),
                   );
                 },
                 child: const Padding(
@@ -129,7 +133,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   Text(
                     model.projectData?.projectName ?? "",
                     style: buildTextStyle(
-                      fontSize: 32,
+                      fontSize: 30,
                       fontWeight: 800,
                       fontColor: MyColors.yellow01,
                     ),
@@ -140,7 +144,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       fontSize: 20,
                       fontWeight: 400,
                       fontColor: MyColors.lightBlack02,
-                      isUnderlined: true,
                     ),
                   ),
                   Spacings.vert(35),
@@ -152,7 +155,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   TextInput.disabled(
                     label: "Keperluan Proyek",
                     text: mappingProjectNeedTypeToString(
-                      model.projectData?.projectNeed ?? 0,
+                      int.parse(model.projectData?.projectNeed ?? "0"),
                     ),
                   ),
                   Spacings.vert(24),
@@ -165,14 +168,15 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     label: "Kota",
                     text: model.projectData?.city,
                   ),
-                  Spacings.vert(24),
+                  Spacings.vert(32),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "PIC Proyek",
                       style: buildTextStyle(
-                        fontSize: 14,
-                        fontColor: MyColors.lightBlack02,
+                        fontSize: 18,
+                        fontColor: MyColors.yellow01,
+                        fontWeight: 700,
                       ),
                     ),
                   ),
@@ -183,7 +187,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       child: Text(
                         "Belum ada data PIC untuk proyek ini.",
                         style: buildTextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontColor: MyColors.lightBlack02.withOpacity(
                             0.5,
                           ),

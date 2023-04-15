@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditProjectViewModel extends BaseViewModel {
@@ -24,8 +23,8 @@ class EditProjectViewModel extends BaseViewModel {
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
 
-  List<PicData> _listPic = [];
-  List<PicData> get listPic => _listPic;
+  List<PICProject> _listPic = [];
+  List<PICProject> get listPic => _listPic;
 
   //region pilih customer proyek
   List<CustomerData>? _listCustomer;
@@ -71,6 +70,9 @@ class EditProjectViewModel extends BaseViewModel {
   List<FilterOption> get keperluanProyekOptions => _keperluanProyekOptions;
   //endregion
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -88,34 +90,39 @@ class EditProjectViewModel extends BaseViewModel {
   }
 
   void _handleAvailableData() {
-    //Dummy
-    _selectedKeperluanProyekOption = 1;
+    nameController.text = _projectData?.projectName ?? "";
+    cityController.text = _projectData?.city ?? "";
+    addressController.text = _projectData?.address ?? "";
+    _selectedKeperluanProyekOption =
+        int.parse(_projectData?.projectNeed ?? "1");
     _selectedCustomer = CustomerData(
-      customerId: "",
-      customerNumber: "",
-      userId: "userId",
+      customerId: _projectData?.customerId ?? "",
+      customerNumber: "customerNumber",
       customerType: "customerType",
-      customerName: "customerName",
-      companyName: "companyName",
+      customerName: _projectData?.customerName ?? "",
       customerNeed: "customerNeed",
       dataSource: "dataSource",
       city: "city",
       phoneNumber: "phoneNumber",
       email: "email",
       status: "status",
-      statusDeleted: "statusDeleted",
-      createdAt: "createdAt",
+      documents: [],
     );
-
-    //  _selectedCustomer =
-
-    // _selectedKeperluanProyekOption =
-    //     int.parse(_customerData?.dataSource ?? "0");
 
     setSelectedKeperluanProyek(
       selectedMenu: int.parse(_selectedKeperluanProyekOption.toString()),
     );
     notifyListeners();
+
+    _listPic = (projectData?.pics ?? [])
+        .map(
+          (e) => PICProject(
+            picId: e.picId,
+            picName: e.picName,
+            phoneNumber: e.phoneNumber,
+          ),
+        )
+        .toList();
   }
 
   void onChangedName(String value) {
@@ -134,20 +141,25 @@ class EditProjectViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    List<CustomerData>? list = await _apiService.getAllCustomer(
+    final response = await _apiService.getAllCustomer(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listCustomer = list;
-      } else {
-        _listCustomer?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right!;
+        } else {
+          _listCustomer?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   void setSelectedCustomer({
@@ -172,7 +184,7 @@ class EditProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void addPicProject(PicData value) {
+  void addPicProject(PICProject value) {
     _listPic.add(value);
     notifyListeners();
   }
@@ -186,9 +198,109 @@ class EditProjectViewModel extends BaseViewModel {
     _isNameValid = nameController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
-    _isCustomerValid = selectedCustomer != null;
+    _isCustomerValid = _selectedCustomer != null;
     notifyListeners();
 
     return _isNameValid && _isAdressValid && _isCityValid && _isCustomerValid;
+  }
+
+  Future<bool> requestUpdateProject() async {
+    if (!isValid()) {
+      _errorMsg = "Pastikan semua kolom terisi";
+      return false;
+    }
+
+    final response = await _apiService.requestUpdateProject(
+      customerId: int.parse(
+        _selectedCustomer?.customerId ?? _projectData?.customerId ?? "0",
+      ),
+      projectName: nameController.text,
+      projectNeed: _selectedKeperluanProyekOption,
+      address: addressController.text,
+      city: cityController.text,
+      projectId: int.parse(_projectData?.projectId ?? "0"),
+    );
+
+    if (response.isRight) {
+      bool isSucceedUpdatePic = await requestUpdatePIC();
+      if (isSucceedUpdatePic) return true;
+      return false;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestUpdatePIC() async {
+    // for (PICProject pic in _listPic) {
+    //   print("LIST: ${pic.picId}");
+    // }
+    List<PICProject> newAddedPics =
+        _listPic.where((element) => element.picId == null).toList();
+
+    for (PICProject pic in newAddedPics) {
+      print("LIST: ${pic.picId} ${pic.picName}");
+    }
+    List<PICProject> deletedPics = [];
+
+    final defaultPicIds = [
+      for (var data in (_projectData?.pics ?? <PICProject>[])) data.picId
+    ];
+    final listPicIds = [for (var data in _listPic) data.picId];
+
+    for (String? picId in defaultPicIds) {
+      if (picId == null) continue;
+      if (!listPicIds.contains(picId)) {
+        final deleted = (_projectData?.pics ?? <PICProject>[])
+            .firstWhere((element) => element.picId == picId);
+        deletedPics.add(deleted);
+      }
+    }
+
+    for (PICProject pic in deletedPics) {
+      print("LIST DEL: ${pic.picId} ${pic.picName}");
+    }
+    if (newAddedPics.isNotEmpty) {
+      bool isSucceed = await requestCreatePICs(listAddedPic: newAddedPics);
+      if (!isSucceed) return false;
+    }
+
+    if (deletedPics.isNotEmpty) {
+      for (var pic in deletedPics) {
+        bool isSucceed = await requestDeletePICs(
+          picId: int.parse(pic.picId ?? "0"),
+        );
+        if (!isSucceed) return false;
+      }
+    }
+
+    return true;
+  }
+
+  Future<bool> requestCreatePICs({
+    required List<PICProject> listAddedPic,
+  }) async {
+    final response = await _apiService.requestCreatePIC(
+      projectId: int.parse(_projectData?.projectId ?? "0"),
+      listPic: listAddedPic,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestDeletePICs({
+    required int picId,
+  }) async {
+    final response = await _apiService.requestDeletePIC(
+      picId: picId,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

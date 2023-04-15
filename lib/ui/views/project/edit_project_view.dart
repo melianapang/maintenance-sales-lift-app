@@ -11,9 +11,9 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/edit_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -85,11 +85,20 @@ class _EditProjectViewState extends State<EditProjectView> {
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
+                  buildLoadingDialog(context);
+                  bool result = await model.requestUpdateProject();
+                  Navigator.pop(context);
+
                   showDialogWidget(
                     context,
                     title: "Ubah Data Proyek",
-                    description: "Perubahan data proyek berhasil disimpan",
+                    description: result
+                        ? "Perubahan data proyek berhasil disimpan."
+                        : model.errorMsg ??
+                            "Perubahan data proyek gagal disimpan.",
                     isSuccessDialog: true,
+                    positiveLabel: "Ok",
+                    positiveCallback: () => Navigator.pop(context),
                   );
                 },
               );
@@ -200,7 +209,7 @@ class _EditProjectViewState extends State<EditProjectView> {
                     itemBuilder: (BuildContext context, int index) {
                       return CustomCardWidget(
                         cardType: CardType.listWithIcon,
-                        title: model.listPic[index].name,
+                        title: model.listPic[index].picName,
                         description: model.listPic[index].phoneNumber,
                         desc2Size: 12,
                         titleSize: 14,
@@ -300,7 +309,7 @@ class _EditProjectViewState extends State<EditProjectView> {
   }) async {
     final result = await Navigator.pushNamed(context, Routes.addPicProject);
     setState(() {
-      viewModel.addPicProject(result as PicData);
+      viewModel.addPicProject(result as PICProject);
     });
   }
 

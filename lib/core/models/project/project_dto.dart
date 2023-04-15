@@ -54,6 +54,7 @@ class ProjectData {
     required this.projectName,
     required this.address,
     required this.city,
+    required this.customerId,
     required this.customerName,
     required this.pics,
   });
@@ -70,7 +71,10 @@ class ProjectData {
   final String projectName;
 
   @JsonKey(name: "project_need")
-  final int projectNeed;
+  final String projectNeed;
+
+  @JsonKey(name: "customer_id")
+  final String customerId;
 
   @JsonKey(name: "customer_name")
   final String customerName;
@@ -88,6 +92,7 @@ class ProjectData {
 @JsonSerializable()
 class PICProject {
   PICProject({
+    this.picId,
     required this.picName,
     required this.phoneNumber,
   });
@@ -97,7 +102,10 @@ class PICProject {
 
   Map<String, dynamic> toJson() => _$PICProjectToJson(this);
 
-  @JsonKey(name: "pic_ame")
+  @JsonKey(name: "pic_id")
+  final String? picId;
+
+  @JsonKey(name: "pic_name")
   final String picName;
 
   @JsonKey(name: "phone_number")
@@ -142,6 +150,7 @@ class CreateProjectResponse {
   CreateProjectResponse({
     required this.isSuccess,
     required this.message,
+    required this.data,
   });
 
   factory CreateProjectResponse.fromJson(Map<String, dynamic> json) =>
@@ -154,11 +163,93 @@ class CreateProjectResponse {
 
   @JsonKey(name: "Message")
   final String message;
+
+  @JsonKey(name: "Data")
+  final CreatedProjectIdResponse data;
+}
+
+@JsonSerializable()
+class CreatedProjectIdResponse {
+  CreatedProjectIdResponse({
+    required this.projectId,
+  });
+
+  factory CreatedProjectIdResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreatedProjectIdResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreatedProjectIdResponseToJson(this);
+
+  @JsonKey(name: "project_id")
+  final int projectId;
+}
+//endregion
+
+//region create pic
+@JsonSerializable()
+class CreatePICProjectRequest {
+  CreatePICProjectRequest({
+    required this.projectId,
+    required this.picName,
+    required this.phoneNumber,
+  });
+
+  factory CreatePICProjectRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreatePICProjectRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreatePICProjectRequestToJson(this);
+
+  @JsonKey(name: "project_id")
+  final int projectId;
+
+  @JsonKey(name: "pic_name")
+  final String picName;
+
+  @JsonKey(name: "phone_number")
+  final String phoneNumber;
+}
+
+@JsonSerializable()
+class CreatePICProjectResponse {
+  CreatePICProjectResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory CreatePICProjectResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreatePICProjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreatePICProjectResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
+
+//region delete pic
+@JsonSerializable()
+class DeletePICProjectResponse {
+  DeletePICProjectResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory DeletePICProjectResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeletePICProjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeletePICProjectResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
 }
 //endregion
 
 //region update project
-//update project cant change customer data
 @JsonSerializable()
 class UpdateProjectRequest {
   UpdateProjectRequest({
@@ -166,6 +257,7 @@ class UpdateProjectRequest {
     required this.projectNeed,
     required this.address,
     required this.city,
+    required this.customerId,
   });
 
   factory UpdateProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -184,6 +276,9 @@ class UpdateProjectRequest {
 
   @JsonKey(name: "city")
   final String city;
+
+  @JsonKey(name: "customer_id")
+  final int customerId;
 }
 
 @JsonSerializable()

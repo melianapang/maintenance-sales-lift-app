@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -72,15 +73,30 @@ class _AddProjectViewState extends State<AddProjectView> {
 
               buildLoadingDialog(context);
               bool isSucceed = await model.requestCreateProject();
+              if (!isSucceed) {
+                Navigator.pop(context);
+                showDialogWidget(
+                  context,
+                  title: "Tambah Data Proyek",
+                  description:
+                      model.errorMsg ?? "Gagal menambahkan data proyek.",
+                  isSuccessDialog: false,
+                  positiveLabel: "Okay",
+                  positiveCallback: () => Navigator.pop(context),
+                );
+                return;
+              }
+
+              bool isSucceedCreatePIC = await model.requestCreatePICs();
               Navigator.pop(context);
 
               showDialogWidget(
                 context,
                 title: "Tambah Data Proyek",
-                description: isSucceed
+                description: isSucceedCreatePIC
                     ? "Berhasil menambahkan data proyek"
                     : model.errorMsg ?? "Gagal menambahkan data proyek.",
-                isSuccessDialog: false,
+                isSuccessDialog: isSucceedCreatePIC,
                 positiveLabel: "Okay",
                 positiveCallback: () => Navigator.pop(context),
               );
@@ -191,7 +207,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                     itemBuilder: (BuildContext context, int index) {
                       return CustomCardWidget(
                         cardType: CardType.listWithIcon,
-                        title: model.listPic[index].name,
+                        title: model.listPic[index].picName,
                         description: model.listPic[index].phoneNumber,
                         desc2Size: 12,
                         titleSize: 14,
@@ -291,7 +307,7 @@ class _AddProjectViewState extends State<AddProjectView> {
   }) async {
     final result = await Navigator.pushNamed(context, Routes.addPicProject);
     setState(() {
-      viewModel.addPicProject(result as PicData);
+      viewModel.addPicProject(result as PICProject);
     });
   }
 

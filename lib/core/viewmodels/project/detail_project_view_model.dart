@@ -18,12 +18,13 @@ class DetailProjectViewModel extends BaseViewModel {
   bool _isAllowedToDeleteData = false;
   bool get isAllowedToDeleteData => _isAllowedToDeleteData;
 
-  List<PicData> _listPic = [];
-  List<PicData> get listPic => _listPic;
+  List<PICProject> _listPic = [];
+  List<PICProject> get listPic => _listPic;
 
   @override
   Future<void> initModel() async {
     setBusy(true);
+    _listPic.addAll(projectData?.pics ?? []);
     _checkIsAllowedToDeleteData();
     setBusy(false);
   }

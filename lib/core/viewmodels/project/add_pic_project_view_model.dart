@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 
@@ -42,8 +43,8 @@ class AddPicProjectViewModel extends BaseViewModel {
 
     Navigator.pop(
       context,
-      PicData(
-        name: namaPicController.text,
+      PICProject(
+        picName: namaPicController.text,
         phoneNumber: phoneNumberController.text,
       ),
     );

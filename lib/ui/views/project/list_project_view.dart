@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
 class ListProjectView extends StatefulWidget {
@@ -75,7 +76,13 @@ class _ListProjectViewState extends State<ListProjectView> {
                           titleSize: 20,
                           descSize: 16,
                           onTap: () {
-                            Navigator.pushNamed(context, Routes.detailProject);
+                            Navigator.pushNamed(
+                              context,
+                              Routes.detailProject,
+                              arguments: DetailProjectViewParam(
+                                projectData: model.listProject[index],
+                              ),
+                            );
                           },
                         );
                       },
