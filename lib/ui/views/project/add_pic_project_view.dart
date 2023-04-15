@@ -7,16 +7,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
-class PicData {
-  PicData({
-    required this.name,
-    required this.phoneNumber,
-  });
-
-  final String name;
-  final String phoneNumber;
-}
-
 class AddPicProjectView extends StatefulWidget {
   const AddPicProjectView({super.key});
 
