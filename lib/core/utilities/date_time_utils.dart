@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 class DateTimeUtils {
   static String DATE_FORMAT_1 = "ddMMMyyyy";
   static String DATE_FORMAT_2 = "dd MMM yyyy";
+  static String DATE_FORMAT_3 = "dd-MM-yyyy";
 
   static String convertHmTimeToString(DateTime pickedTime) {
     return DateFormat.Hm().format(pickedTime);
