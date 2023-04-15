@@ -212,50 +212,45 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                               19.0,
                             ),
                           ),
-                          child: SizedBox(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 24.0,
-                                top: 14,
-                                bottom: 14,
-                              ),
-                              child: Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      StringUtils.removeZeroWidthSpaces(
-                                        model.projectData?.pics[index]
-                                                .picName ??
-                                            "",
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: buildTextStyle(
-                                        fontColor: MyColors.lightBlack02,
-                                        fontSize: 14,
-                                        fontWeight: 800,
-                                      ),
-                                    ),
-                                    Spacings.vert(2),
-                                    Text(
-                                      StringUtils.removeZeroWidthSpaces(
-                                        model.projectData?.pics[index]
-                                                .phoneNumber ??
-                                            "",
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: buildTextStyle(
-                                        fontColor: MyColors.lightBlack02,
-                                        fontSize: 14,
-                                        fontWeight: 400,
-                                      ),
-                                    ),
-                                  ],
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 24.0,
+                              top: 14,
+                              bottom: 14,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  StringUtils.removeZeroWidthSpaces(
+                                    model.projectData?.pics[index].picName ??
+                                        "",
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: buildTextStyle(
+                                    fontColor: MyColors.lightBlack02,
+                                    fontSize: 14,
+                                    fontWeight: 800,
+                                  ),
                                 ),
-                              ),
+                                Spacings.vert(2),
+                                Text(
+                                  StringUtils.removeZeroWidthSpaces(
+                                    model.projectData?.pics[index]
+                                            .phoneNumber ??
+                                        "",
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: buildTextStyle(
+                                    fontColor: MyColors.lightBlack02,
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );

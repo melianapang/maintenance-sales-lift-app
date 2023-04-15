@@ -220,7 +220,11 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                       ],
                     ),
                   )
-                : buildLoadingPage(),
+                : Column(
+                    children: [
+                      buildLoadingPage(),
+                    ],
+                  ),
           ),
         );
       },
