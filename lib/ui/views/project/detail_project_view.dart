@@ -126,7 +126,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                 children: [
                   Spacings.vert(20),
                   Text(
-                    "NAMA PROYEK",
+                    model.projectData?.projectName ?? "",
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
@@ -134,7 +134,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     ),
                   ),
                   Text(
-                    "PT ABC JAYA",
+                    model.projectData?.customerName ?? "",
                     style: buildTextStyle(
                       fontSize: 20,
                       fontWeight: 400,
@@ -150,14 +150,17 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Keperluan Proyek",
+                    text: model.projectData?.projectNeed,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Alamat",
+                    text: model.projectData?.address,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Kota",
+                    text: model.projectData?.city,
                   ),
                   Spacings.vert(24),
                   Align(
@@ -189,7 +192,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 5,
+                      itemCount: model.projectData?.pics.length ?? 0,
                       separatorBuilder: (context, index) => const Divider(
                         color: MyColors.transparent,
                       ),
@@ -215,7 +218,11 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      StringUtils.removeZeroWidthSpaces("halo"),
+                                      StringUtils.removeZeroWidthSpaces(
+                                        model.projectData?.pics[index]
+                                                .picName ??
+                                            "",
+                                      ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: buildTextStyle(
@@ -227,7 +234,10 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                     Spacings.vert(2),
                                     Text(
                                       StringUtils.removeZeroWidthSpaces(
-                                          "09098213972478"),
+                                        model.projectData?.pics[index]
+                                                .phoneNumber ??
+                                            "",
+                                      ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: buildTextStyle(
