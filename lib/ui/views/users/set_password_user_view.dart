@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/set_password_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -65,7 +66,9 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
             ),
             buttonType: ButtonType.primary,
             onTap: () async {
+              buildLoadingDialog(context);
               bool result = await model.requestCreateUser();
+              Navigator.pop(context);
 
               showDialogWidget(
                 context,
