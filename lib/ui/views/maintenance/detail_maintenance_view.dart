@@ -121,8 +121,17 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             fontColor: MyColors.yellow01,
                           ),
                         ),
+                        if (model.maintenanceData?.companyName != null)
+                          Text(
+                            model.maintenanceData?.companyName ?? "",
+                            style: buildTextStyle(
+                              fontSize: 20,
+                              fontWeight: 400,
+                              fontColor: MyColors.lightBlack02,
+                            ),
+                          ),
                         Text(
-                          "PT ABC JAYA",
+                          model.maintenanceData?.customerName ?? "",
                           style: buildTextStyle(
                             fontSize: 20,
                             fontWeight: 400,
@@ -141,13 +150,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
-                          label: "PIC",
-                          text: model.maintenanceData?.pic,
-                        ),
-                        Spacings.vert(24),
-                        TextInput.disabled(
                           label: "Jadwal Pemeliharaan Selanjutnya",
-                          text: model.maintenanceData?.endMaintenance,
+                          text: model.maintenanceData?.scheduleDate,
                         ),
                         if (model.isAllowedToDeleteNextMaintenance) ...[
                           Spacings.vert(8),

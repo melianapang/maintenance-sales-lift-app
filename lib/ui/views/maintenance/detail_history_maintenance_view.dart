@@ -163,7 +163,7 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Tanggal",
-                    text: model.maintenanceData?.endMaintenance,
+                    text: model.maintenanceData?.scheduleDate,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
@@ -231,12 +231,12 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(12),
                   TextInput.disabled(
                     label: "Nama Teknisi:",
-                    text: model.maintenanceData?.engineerName,
+                    // text: model.maintenanceData?.engineerName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
-                    text: model.maintenanceData?.engineerPhoneNumber,
+                    // text: model.maintenanceData?.engineerPhoneNumber,
                   ),
                 ],
               ),
