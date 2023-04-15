@@ -67,7 +67,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
       case MaintenanceStatus.NOT_MAINTENANCED:
         _statusCardType = StatusCardType.Pending;
         break;
-      case MaintenanceStatus.DONE:
+      case MaintenanceStatus.FAILED:
+        _statusCardType = StatusCardType.Canceled;
+        break;
+      case MaintenanceStatus.SUCCESS:
         _statusCardType = StatusCardType.Normal;
         break;
       case MaintenanceStatus.DELETED:
@@ -97,10 +100,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetHistoryMaintenance() async {
-    _historyData = await _apiService.requestGetAllHistoryMaintenance(
-      _maintenanceData?.unitId ?? "",
-    );
-    if (_historyData != null) _mappingToTimelineData();
+    // _historyData = await _apiService.requestGetHistoryMaintenance(
+    //   _maintenanceData?.unitId ?? "",
+    // );
+    // if (_historyData != null) _mappingToTimelineData();
   }
 
   void _mappingToTimelineData() {
@@ -109,7 +112,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     for (var data in _historyData!) {
       _timelineData.add(
         TimelineData(
-          date: data.endMaintenance,
+          date: data.scheduleDate,
           note: data.maintenanceResult,
           onTap: () {
             _navigationService.navigateTo(
