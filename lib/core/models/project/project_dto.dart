@@ -70,7 +70,7 @@ class ProjectData {
   final String projectName;
 
   @JsonKey(name: "project_need")
-  final String projectNeed;
+  final int projectNeed;
 
   @JsonKey(name: "customer_name")
   final String customerName;
@@ -113,6 +113,7 @@ class CreateProjectRequest {
     required this.projectNeed,
     required this.address,
     required this.city,
+    required this.customerId,
   });
 
   factory CreateProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -124,13 +125,16 @@ class CreateProjectRequest {
   final String projectName;
 
   @JsonKey(name: "project_need")
-  final String projectNeed;
+  final int projectNeed;
 
   @JsonKey(name: "address")
-  final int address;
+  final String address;
 
   @JsonKey(name: "city")
-  final int city;
+  final String city;
+
+  @JsonKey(name: "customer_id")
+  final int customerId;
 }
 
 @JsonSerializable()
@@ -154,6 +158,7 @@ class CreateProjectResponse {
 //endregion
 
 //region update project
+//update project cant change customer data
 @JsonSerializable()
 class UpdateProjectRequest {
   UpdateProjectRequest({
@@ -172,13 +177,13 @@ class UpdateProjectRequest {
   final String projectName;
 
   @JsonKey(name: "project_need")
-  final String projectNeed;
+  final int projectNeed;
 
   @JsonKey(name: "address")
-  final int address;
+  final String address;
 
   @JsonKey(name: "city")
-  final int city;
+  final String city;
 }
 
 @JsonSerializable()
