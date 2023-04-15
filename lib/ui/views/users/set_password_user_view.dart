@@ -10,6 +10,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -65,12 +66,21 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
             buttonType: ButtonType.primary,
             onTap: () async {
               bool result = await model.requestCreateUser();
-              if (result)
-                Navigator.pushNamedAndRemoveUntil(
+
+              showDialogWidget(
+                context,
+                title: "Pembuatan User Baru",
+                isSuccessDialog: result,
+                description: result
+                    ? "Pembuatan user baru telah berhasil"
+                    : model.errorMsg ?? "Pembuatan user gagal dilakukan",
+                positiveLabel: "Okay",
+                positiveCallback: () => Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.home,
                   (route) => false,
-                );
+                ),
+              );
             },
             text: 'Simpan',
           ),
