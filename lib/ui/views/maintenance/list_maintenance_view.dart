@@ -101,7 +101,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                             description2: DateTimeUtils
                                 .convertStringToOtherStringDateFormat(
                                     date: model.listMaintenance?[index]
-                                            .startMaintenance ??
+                                            .scheduleDate ??
                                         DateTimeUtils.convertDateToString(
                                           date: DateTime.now(),
                                           formatter: DateFormat(
