@@ -232,15 +232,8 @@ class EditProjectViewModel extends BaseViewModel {
   }
 
   Future<bool> requestUpdatePIC() async {
-    // for (PICProject pic in _listPic) {
-    //   print("LIST: ${pic.picId}");
-    // }
     List<PICProject> newAddedPics =
         _listPic.where((element) => element.picId == null).toList();
-
-    for (PICProject pic in newAddedPics) {
-      print("LIST: ${pic.picId} ${pic.picName}");
-    }
     List<PICProject> deletedPics = [];
 
     final defaultPicIds = [
@@ -257,9 +250,6 @@ class EditProjectViewModel extends BaseViewModel {
       }
     }
 
-    for (PICProject pic in deletedPics) {
-      print("LIST DEL: ${pic.picId} ${pic.picName}");
-    }
     if (newAddedPics.isNotEmpty) {
       bool isSucceed = await requestCreatePICs(listAddedPic: newAddedPics);
       if (!isSucceed) return false;
