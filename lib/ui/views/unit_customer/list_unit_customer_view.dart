@@ -87,6 +87,7 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                               Routes.detailUnit,
                               arguments: DetailUnitCustomerViewParam(
                                 unitData: model.listUnit?[index],
+                                customerData: model.customerData,
                               ),
                             );
                           },

@@ -3,6 +3,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -17,9 +18,11 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class DetailUnitCustomerViewParam {
   DetailUnitCustomerViewParam({
+    this.customerData,
     this.unitData,
   });
 
+  final CustomerData? customerData;
   final UnitData? unitData;
 }
 
@@ -63,6 +66,7 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                     Routes.editUnit,
                     arguments: EditUnitCustomerViewParam(
                       unitData: model.unitData,
+                      customerData: widget.param.customerData,
                     ),
                   );
                 },
