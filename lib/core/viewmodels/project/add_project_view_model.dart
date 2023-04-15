@@ -62,6 +62,9 @@ class AddProjectViewModel extends BaseViewModel {
   List<FilterOption> get keperluanProyekOptions => _keperluanProyekOptions;
   //endregion
 
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -93,20 +96,25 @@ class AddProjectViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    List<CustomerData>? list = await _apiService.getAllCustomer(
+    final response = await _apiService.getAllCustomer(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
 
-    if (list != null || list?.isNotEmpty == true) {
-      if (_paginationControl.currentPage == 1) {
-        _listCustomer = list;
-      } else {
-        _listCustomer?.addAll(list!);
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right!;
+        } else {
+          _listCustomer?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
       }
-      _paginationControl.currentPage += 1;
-      notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   void setSelectedCustomer({
@@ -141,12 +149,32 @@ class AddProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  bool saveData() {
+  bool isValid() {
     _isNameValid = nameController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
     notifyListeners();
 
     return _isNameValid && _isAdressValid && _isCityValid;
+  }
+
+  Future<bool> requestCreateProject() async {
+    if (!isValid()) {
+      _errorMsg = "Isi semua data dengan benar.";
+      return false;
+    }
+
+    final response = await _apiService.requestCreateProject(
+      customerId: int.parse(selectedCustomer?.customerId ?? "0"),
+      projectName: nameController.text,
+      projectNeed: _selectedKeperluanProyekOption,
+      address: addressController.text,
+      city: cityController.text,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

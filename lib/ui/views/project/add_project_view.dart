@@ -56,9 +56,34 @@ class _AddProjectViewState extends State<AddProjectView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {
-              bool result = model.saveData();
-              if (result) Navigator.maybePop(context);
+            onTap: () async {
+              bool result = model.isValid();
+              if (!result) {
+                showDialogWidget(
+                  context,
+                  title: "Tambah Data Proyek",
+                  description: "Wajib mengisi semua informasi yang diperlukan.",
+                  isSuccessDialog: false,
+                  positiveLabel: "Okay",
+                  positiveCallback: () => Navigator.pop(context),
+                );
+                return;
+              }
+
+              buildLoadingDialog(context);
+              bool isSucceed = await model.requestCreateProject();
+              Navigator.pop(context);
+
+              showDialogWidget(
+                context,
+                title: "Tambah Data Proyek",
+                description: isSucceed
+                    ? "Berhasil menambahkan data proyek"
+                    : model.errorMsg ?? "Gagal menambahkan data proyek.",
+                isSuccessDialog: false,
+                positiveLabel: "Okay",
+                positiveCallback: () => Navigator.pop(context),
+              );
             },
             text: 'Simpan',
           ),
