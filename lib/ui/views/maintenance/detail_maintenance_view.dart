@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -40,6 +42,8 @@ class DetailMaintenanceView extends StatefulWidget {
 }
 
 class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
+  var isDialOpen = ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     final List<TimelineData> list1 = [
@@ -91,17 +95,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
             title: "Data Pemeliharaan",
             isBackEnabled: true,
           ),
-          floatingActionButton: FloatingButtonWidget(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                Routes.formMaintenance,
-                arguments: FormMaintenanceViewParam(
-                  maintenanceData: widget.param.maintenanceData,
-                ),
-              );
-            },
-          ),
+          floatingActionButton: _buildExtendedFAB(model),
           body: Padding(
             padding: const EdgeInsets.only(
               right: 24.0,
@@ -153,55 +147,6 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                           label: "Jadwal Pemeliharaan Selanjutnya",
                           text: model.maintenanceData?.scheduleDate,
                         ),
-                        if (model.isAllowedToDeleteNextMaintenance) ...[
-                          Spacings.vert(8),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.formDeleteMaintenance,
-                              );
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'Hapus data Pemeliharaan selanjutnya',
-                                style: buildTextStyle(
-                                  fontSize: 12,
-                                  fontWeight: 400,
-                                  fontColor: MyColors.blueLihatSelengkapnya,
-                                  isUnderlined: true,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        if (model.isAllowedToChangeNextMaintenanceDate) ...[
-                          Spacings.vert(8),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.formChangeMaintenanceDate,
-                                arguments: FormChangeMaintenanceDateViewParam(
-                                  maintenanceData: model.maintenanceData,
-                                ),
-                              );
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'Ganti Tanggal Pemeliharaan selanjutnya',
-                                style: buildTextStyle(
-                                  fontSize: 12,
-                                  fontWeight: 400,
-                                  fontColor: MyColors.blueLihatSelengkapnya,
-                                  isUnderlined: true,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
                         Spacings.vert(24),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -228,6 +173,127 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildExtendedFAB(DetailMaintenanceViewModel model) {
+    return SpeedDial(
+      icon: PhosphorIcons.plusBold,
+      activeIcon: PhosphorIcons.xBold,
+      spacing: 3,
+      mini: false,
+      openCloseDial: isDialOpen,
+      childPadding: const EdgeInsets.all(5),
+      spaceBetweenChildren: 4,
+      dialRoot: (ctx, open, toggleChildren) {
+        return FloatingButtonWidget(
+          onTap: toggleChildren,
+          icon: PhosphorIcons.squaresFourBold,
+        );
+      },
+      buttonSize: const Size(56.0, 56.0),
+      childrenButtonSize: const Size(52.0, 52.0),
+      visible: true,
+      direction: SpeedDialDirection.up,
+      switchLabelPosition: false,
+      renderOverlay: false,
+      useRotationAnimation: true,
+      elevation: 8.0,
+      animationCurve: Curves.elasticInOut,
+      isOpenOnStart: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
+      ),
+      children: [
+        if (model.isAllowedToDeleteNextMaintenance) ...[
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.trashBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Hapus Tanggal Pemeliharaan',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.formDeleteMaintenance,
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
+        ],
+        if (model.isAllowedToChangeNextMaintenanceDate) ...[
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.calendarBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Ganti Tanggal Pemeliharaan',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.formChangeMaintenanceDate,
+                arguments: FormChangeMaintenanceDateViewParam(
+                  maintenanceData: model.maintenanceData,
+                ),
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
+        ],
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.pencilSimpleLineBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Buat Laporan Pemeliharaan',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.formMaintenance,
+              arguments: FormMaintenanceViewParam(
+                maintenanceData: widget.param.maintenanceData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+      ],
     );
   }
 }

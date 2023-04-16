@@ -1,3 +1,4 @@
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
@@ -50,6 +51,14 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   List<TimelineData> _timelineData = [];
   List<TimelineData> get timelineData => _timelineData;
 
+  //region extended fab
+  SpeedDialDirection _speedDialDirection = SpeedDialDirection.up;
+  SpeedDialDirection get selectedTahapKonfirmasiOption => _speedDialDirection;
+
+  bool _isDialChildrenVisible = false;
+  bool get isDialChildrenVisible => _isDialChildrenVisible;
+  //endregion
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -58,6 +67,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     await isUserAllowedToChangeNextMaintenanceDate();
     setStatusCard();
     setBusy(false);
+  }
+
+  void setDialChildrenVisible() {
+    _isDialChildrenVisible = !isDialChildrenVisible;
   }
 
   void setStatusCard() {
