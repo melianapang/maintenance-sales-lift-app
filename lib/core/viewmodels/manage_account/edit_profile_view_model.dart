@@ -150,8 +150,10 @@ class EditProfileViewModel extends BaseViewModel {
       return false;
     }
 
+    String userId = await _sharedPreferencesService.get(SharedPrefKeys.userId);
+
     final response = await _apiService.requestUpdateUser(
-        userId: await _sharedPreferencesService.get(SharedPrefKeys.userId),
+        userId: int.parse(userId),
         idRole: int.parse(
           mappingRoleToNumberString(
             _profileData?.role ?? Role.Admin,
