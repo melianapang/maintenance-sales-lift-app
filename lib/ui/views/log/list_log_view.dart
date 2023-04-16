@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -53,46 +54,50 @@ class _ListLogViewState extends State<ListLogView> {
               if (!model.isShowNoDataFoundPage && !model.busy) ...[
                 Spacings.vert(12),
                 Expanded(
-                  child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: model.listLogData?.length ?? 0,
-                      separatorBuilder: (context, index) => const Divider(
-                            color: MyColors.transparent,
-                            height: 20,
-                          ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCardWidget(
-                          cardType: CardType.list,
-                          title:
-                              StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                                  model.listLogData?[index].tableName ?? ""),
-                          description:
-                              "Diubah oleh: ${model.listLogData?[index].userName}",
-                          description2: DateTimeUtils
-                              .convertStringToOtherStringDateFormat(
-                            date: model.listLogData?[index].createdAt ??
-                                DateTimeUtils.convertDateToString(
-                                  date: DateTime.now(),
-                                  formatter: DateFormat(
-                                    DateTimeUtils.DATE_FORMAT_2,
+                  child: LazyLoadScrollView(
+                    onEndOfPage: () => model.requestGetAllLog(),
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: model.listLogData?.length ?? 0,
+                        separatorBuilder: (context, index) => const Divider(
+                              color: MyColors.transparent,
+                              height: 20,
+                            ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return CustomCardWidget(
+                            cardType: CardType.list,
+                            title: StringUtils
+                                .replaceUnderscoreToSpaceAndTitleCase(
+                                    model.listLogData?[index].tableName ?? ""),
+                            description:
+                                "Diubah oleh: ${model.listLogData?[index].userName}",
+                            description2: DateTimeUtils
+                                .convertStringToOtherStringDateFormat(
+                              date: model.listLogData?[index].createdAt ??
+                                  DateTimeUtils.convertDateToString(
+                                    date: DateTime.now(),
+                                    formatter: DateFormat(
+                                      DateTimeUtils.DATE_FORMAT_2,
+                                    ),
                                   ),
+                              formattedString: DateTimeUtils.DATE_FORMAT_2,
+                            ),
+                            titleSize: 20,
+                            descSize: 16,
+                            desc2Size: 12,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.detailLog,
+                                arguments: DetailLogViewParam(
+                                  logData: model.listLogData?[index],
                                 ),
-                            formattedString: DateTimeUtils.DATE_FORMAT_2,
-                          ),
-                          titleSize: 20,
-                          descSize: 16,
-                          desc2Size: 12,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.detailLog,
-                              arguments: DetailLogViewParam(
-                                logData: model.listLogData?[index],
-                              ),
-                            );
-                          },
-                        );
-                      }),
+                              );
+                            },
+                          );
+                        }),
+                  ),
                 ),
               ],
               if (model.isShowNoDataFoundPage && !model.busy)
