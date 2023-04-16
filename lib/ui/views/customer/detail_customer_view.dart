@@ -350,7 +350,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
       dialRoot: (ctx, open, toggleChildren) {
         return FloatingButtonWidget(
           onTap: toggleChildren,
-          icon: PhosphorIcons.folderOpenBold,
+          icon: PhosphorIcons.squaresFourBold,
         );
       },
       buttonSize: const Size(56.0, 56.0),

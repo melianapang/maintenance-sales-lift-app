@@ -24,7 +24,7 @@ class FloatingButtonWidget extends StatelessWidget {
       child: Icon(
         icon,
         color: MyColors.yellow01,
-        size: 18,
+        size: 24,
       ),
     );
   }
