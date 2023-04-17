@@ -11,3 +11,5 @@ String mappingProjectNeedTypeToString(int value) {
       return "Lainnya";
   }
 }
+
+enum ProjectNeedStatus { Lift, Elevator, LiftAndElevator, Others }
