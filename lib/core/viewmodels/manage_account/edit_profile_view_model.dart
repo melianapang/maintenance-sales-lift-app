@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditProfileViewModel extends BaseViewModel {
   EditProfileViewModel({
@@ -24,9 +25,20 @@ class EditProfileViewModel extends BaseViewModel {
 
   final ProfileData? _profileData;
 
+  // Dropdown related
+  int _selectedRoleOption = 0;
+  int get selectedRoleOption => _selectedRoleOption;
+  final List<FilterOption> _roleOptions = [
+    FilterOption("Super Admin", true),
+    FilterOption("Admin", false),
+    FilterOption("Sales", true),
+    FilterOption("Teknisi", false),
+  ];
+  List<FilterOption> get roleOptions => _roleOptions;
+  //End of Dropdown related
+
   final namaLengkapController = TextEditingController();
   final usernameController = TextEditingController();
-  final peranController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final alamatController = TextEditingController();
   final kotaController = TextEditingController();
@@ -37,9 +49,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   bool _isUsernameValid = true;
   bool get isUsernameValid => _isUsernameValid;
-
-  bool _isRoleValid = true;
-  bool get isRoleValid => _isRoleValid;
 
   bool _isAdressValid = true;
   bool get isAdressValid => _isAdressValid;
@@ -66,13 +75,30 @@ class EditProfileViewModel extends BaseViewModel {
   void handleExistingData() {
     namaLengkapController.text = _profileData?.name ?? "";
     usernameController.text = _profileData?.username ?? "";
-    peranController.text = mappingRoleToString(
-      _profileData?.role ?? Role.Sales,
-    );
     phoneNumberController.text = _profileData?.phoneNumber ?? "";
     alamatController.text = _profileData?.address ?? "";
     kotaController.text = _profileData?.city ?? "";
     emailController.text = _profileData?.email ?? "";
+
+    _selectedRoleOption = (_profileData?.role.index ?? 1 + 1);
+    setSelectedRole(
+      selectedMenu: int.parse(_selectedRoleOption.toString()),
+    );
+  }
+
+  void setSelectedRole({
+    required int selectedMenu,
+  }) {
+    _selectedRoleOption = selectedMenu;
+    for (int i = 0; i < _roleOptions.length; i++) {
+      if (i == selectedMenu) {
+        _roleOptions[i].isSelected = true;
+        continue;
+      }
+      _roleOptions[i].isSelected = false;
+    }
+
+    notifyListeners();
   }
 
   void onChangedName(String value) {
@@ -82,11 +108,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   void onChangedUsername(String value) {
     _isUsernameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedRole(String value) {
-    _isRoleValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -112,7 +133,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   bool _isValid() {
     _isNameValid = namaLengkapController.text.isNotEmpty;
-    _isRoleValid = peranController.text.isNotEmpty;
     _isAdressValid = alamatController.text.isNotEmpty;
     _isCityValid = kotaController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
@@ -120,7 +140,6 @@ class EditProfileViewModel extends BaseViewModel {
     notifyListeners();
 
     return _isNameValid &&
-        _isRoleValid &&
         _isAdressValid &&
         _isCityValid &&
         _isPhoneNumberValid &&
@@ -137,9 +156,7 @@ class EditProfileViewModel extends BaseViewModel {
         phoneNumber: phoneNumberController.text,
         address: alamatController.text,
         city: kotaController.text,
-        role: mappingStringNumberToRole(
-          _profileData?.role.toString() ?? "Super Admin",
-        ),
+        role: Role.values[_selectedRoleOption],
       ),
     );
   }
@@ -154,11 +171,7 @@ class EditProfileViewModel extends BaseViewModel {
 
     final response = await _apiService.requestUpdateUser(
         userId: int.parse(userId),
-        idRole: int.parse(
-          mappingRoleToNumberString(
-            _profileData?.role ?? Role.Admin,
-          ),
-        ),
+        idRole: _selectedRoleOption + 1,
         name: namaLengkapController.text,
         username: usernameController.text,
         phoneNumber: phoneNumberController.text,

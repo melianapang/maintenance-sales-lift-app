@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 import '../../shared/app_bars.dart';
@@ -118,13 +119,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                         : null,
                   ),
                   Spacings.vert(24),
-                  TextInput.editable(
-                    controller: model.peranController,
-                    label: "Peran",
-                    hintText: "Admin/Sales/Teknisi",
-                    onChangedListener: model.onChangedRole,
-                    errorText:
-                        !model.isRoleValid ? "Kolom ini wajib diisi." : null,
+                  GestureDetector(
+                    onTap: () {
+                      _showBottomDialog(
+                        context,
+                        model,
+                        listMenu: model.roleOptions,
+                        selectedMenu: model.selectedRoleOption,
+                        setSelectedMenu: model.setSelectedRole,
+                      );
+                    },
+                    child: TextInput.disabled(
+                      label: "Peran",
+                      text: model.roleOptions
+                          .where((element) => element.isSelected)
+                          .first
+                          .title,
+                      suffixIcon: const Icon(
+                        PhosphorIcons.caretDownBold,
+                        color: MyColors.lightBlack02,
+                      ),
+                    ),
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
@@ -173,6 +188,63 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
         );
       },
+    );
+  }
+
+  void _showBottomDialog(
+    BuildContext context,
+    EditProfileViewModel model, {
+    required List<FilterOption> listMenu,
+    required int selectedMenu,
+    required void Function({
+      required int selectedMenu,
+    })
+        setSelectedMenu,
+  }) {
+    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    int menu = selectedMenu;
+
+    showGeneralBottomSheet(
+      context: context,
+      title: 'Peran',
+      isFlexible: true,
+      showCloseButton: false,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildMenuChoices(
+                menuLocal,
+                (int selectedIndex) {
+                  menu = selectedIndex;
+                  for (int i = 0; i < menuLocal.length; i++) {
+                    if (i == selectedIndex) {
+                      menuLocal[i].isSelected = true;
+                      continue;
+                    }
+
+                    menuLocal[i].isSelected = false;
+                  }
+                  setState(() {});
+                },
+              ),
+              Spacings.vert(32),
+              ButtonWidget(
+                buttonType: ButtonType.primary,
+                buttonSize: ButtonSize.large,
+                text: "Terapkan",
+                onTap: () {
+                  setSelectedMenu(
+                    selectedMenu: menu,
+                  );
+                  Navigator.maybePop(context);
+                },
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }
