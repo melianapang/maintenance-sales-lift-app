@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditUserViewModel extends BaseViewModel {
   EditUserViewModel({
@@ -20,6 +21,18 @@ class EditUserViewModel extends BaseViewModel {
 
   UserData? _userData;
   UserData? get userData => _userData;
+
+  // Dropdown related
+  int _selectedRoleOption = 0;
+  int get selectedRoleOption => _selectedRoleOption;
+  final List<FilterOption> _roleOptions = [
+    FilterOption("Super Admin", true),
+    FilterOption("Admin", false),
+    FilterOption("Sales", true),
+    FilterOption("Teknisi", false),
+  ];
+  List<FilterOption> get roleOptions => _roleOptions;
+  //End of Dropdown related
 
   final nameController = TextEditingController();
   final usernameController = TextEditingController();
@@ -64,6 +77,27 @@ class EditUserViewModel extends BaseViewModel {
     phoneNumberController.text = _userData?.phoneNumber ?? "";
     emailController.text = _userData?.email ?? "";
     setBusy(false);
+
+    _selectedRoleOption =
+        mappingStringToRole(_userData?.roleName ?? "Sales").index;
+    setSelectedRole(
+      selectedMenu: int.parse(_selectedRoleOption.toString()),
+    );
+  }
+
+  void setSelectedRole({
+    required int selectedMenu,
+  }) {
+    _selectedRoleOption = selectedMenu;
+    for (int i = 0; i < _roleOptions.length; i++) {
+      if (i == selectedMenu) {
+        _roleOptions[i].isSelected = true;
+        continue;
+      }
+      _roleOptions[i].isSelected = false;
+    }
+
+    notifyListeners();
   }
 
   void onChangedName(String value) {
@@ -73,11 +107,6 @@ class EditUserViewModel extends BaseViewModel {
 
   void onChangedUsername(String value) {
     _isUsernameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedRole(String value) {
-    _isRoleValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -104,7 +133,6 @@ class EditUserViewModel extends BaseViewModel {
   bool _isValid() {
     _isNameValid = nameController.text.isNotEmpty;
     _isUsernameValid = usernameController.text.isNotEmpty;
-    _isRoleValid = roleController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
@@ -113,7 +141,6 @@ class EditUserViewModel extends BaseViewModel {
 
     return _isNameValid &&
         _isUsernameValid &&
-        _isRoleValid &&
         _isAdressValid &&
         _isCityValid &&
         _isPhoneNumberValid &&
