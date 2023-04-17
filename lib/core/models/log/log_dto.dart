@@ -31,6 +31,7 @@ class GetAllLogResponse {
 @JsonSerializable()
 class ListLogData {
   ListLogData({
+    required this.totalSize,
     required this.result,
   });
 
@@ -38,6 +39,9 @@ class ListLogData {
       _$ListLogDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ListLogDataToJson(this);
+
+  @JsonKey(name: "total_size")
+  final String totalSize;
 
   @JsonKey(name: "result")
   final List<LogData> result;
