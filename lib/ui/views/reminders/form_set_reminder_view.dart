@@ -5,7 +5,6 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -133,15 +132,17 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                   note:
                       "NB: Deskripsi ini akan ditampilkan pada notifikasi pengingat. (Max. 100 karakter)",
                   maxLength: 100,
+                  onChangedListener: model.onChangedDescription,
+                  errorText: !model.isDescriptionValid
+                      ? "Kolom ini wajib diisi."
+                      : null,
                 ),
                 Spacings.vert(24),
-                TextInput.multiline(
-                  controller: model.reminderController,
+                TextInput.editable(
+                  controller: model.noteController,
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
-                  text: model.reminderNote,
                   maxLines: 5,
-                  minLines: 5,
                 ),
               ],
             ),

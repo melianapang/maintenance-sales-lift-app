@@ -19,14 +19,15 @@ class FormSetReminderViewModel extends BaseViewModel {
   CustomerData? get customerData => _customerData;
 
   // TextEditingController
-
   final nomorPelangganController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
   final descriptionController = TextEditingController();
-  final reminderController = TextEditingController();
-
+  final noteController = TextEditingController();
   // End of TextEditingController
+
+  bool _isDescriptionValid = true;
+  bool get isDescriptionValid => _isDescriptionValid;
 
   // Filter related
   int _selectedSetReminderForOption = 0;
@@ -43,12 +44,6 @@ class FormSetReminderViewModel extends BaseViewModel {
   List<FilterOption> get setReminderForOption => _setReminderForOption;
   // End of filter related
 
-  String _notificationDescription = "";
-  String get notificationDescription => _notificationDescription;
-
-  String _reminderNote = "";
-  String get reminderNote => _reminderNote;
-
   DateTime _selectedTime = DateTime.now();
   DateTime get selectedTime => _selectedTime;
 
@@ -56,6 +51,9 @@ class FormSetReminderViewModel extends BaseViewModel {
     DateTime.now(),
   ];
   List<DateTime> get selectedDates => _selectedDates;
+
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {}
@@ -72,12 +70,9 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setDescriptionNotification(String value) {
-    _notificationDescription = value;
-  }
-
-  void setReminderNote(String value) {
-    _reminderNote = value;
+  void onChangedDescription(String value) {
+    _isDescriptionValid = value.isNotEmpty;
+    notifyListeners();
   }
 
   void setSelectedTime(DateTime value) {
@@ -102,9 +97,10 @@ class FormSetReminderViewModel extends BaseViewModel {
     final DateTime reminderSetAt = DateTime.parse("$dateStr $timeStr");
 
     await _oneSignalService.postNotification(
-        description: _notificationDescription,
-        note: _reminderNote,
-        date: reminderSetAt,
-        time: timeStr);
+      description: descriptionController.text,
+      note: noteController.text,
+      date: reminderSetAt,
+      time: timeStr,
+    );
   }
 }
