@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -7,10 +8,12 @@ import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_history_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
+import 'package:intl/intl.dart';
 
 class DetailMaintenanceViewModel extends BaseViewModel {
   DetailMaintenanceViewModel({
@@ -45,8 +48,8 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   StatusCardType _statusCardType = StatusCardType.Normal;
   StatusCardType get statusCardType => _statusCardType;
 
-  List<MaintenanceData>? _historyData;
-  List<MaintenanceData>? get historyData => _historyData;
+  List<HistoryMaintenanceData>? _historyData;
+  List<HistoryMaintenanceData>? get historyData => _historyData;
 
   List<TimelineData> _timelineData = [];
   List<TimelineData> get timelineData => _timelineData;
@@ -58,6 +61,9 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   bool _isDialChildrenVisible = false;
   bool get isDialChildrenVisible => _isDialChildrenVisible;
   //endregion
+
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {
@@ -113,20 +119,36 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetHistoryMaintenance() async {
-    // _historyData = await _apiService.requestGetHistoryMaintenance(
-    //   _maintenanceData?.unitId ?? "",
-    // );
-    // if (_historyData != null) _mappingToTimelineData();
+    final response = await _apiService.requestGetHistoryMaintenance(
+      _maintenanceData?.unitId ?? "",
+    );
+
+    if (response.isRight) {
+      _historyData = response.right;
+      _mappingToTimelineData();
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 
   void _mappingToTimelineData() {
     if (_historyData == null) return;
 
-    for (var data in _historyData!) {
+    for (int i = 0; i < (_historyData?.length ?? 0); i++) {
       _timelineData.add(
         TimelineData(
-          date: data.scheduleDate,
-          note: data.maintenanceResult,
+          date: DateTimeUtils.convertStringToOtherStringDateFormat(
+            date: _historyData?[i].scheduleDate ??
+                DateTimeUtils.convertDateToString(
+                  date: DateTime.now(),
+                  formatter: DateFormat(
+                    DateTimeUtils.DATE_FORMAT_2,
+                  ),
+                ),
+            formattedString: DateTimeUtils.DATE_FORMAT_2,
+          ),
+          note: _historyData?[i].maintenanceResult ?? "0",
           onTap: () {
             _navigationService.navigateTo(
               Routes.detailHistoryMaintenance,
