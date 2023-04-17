@@ -49,6 +49,7 @@ class MaintenanceData {
     required this.phoneNumber,
     required this.customerName,
     required this.companyName,
+    required this.unitId,
     required this.unitName,
     required this.unitLocation,
     required this.latitude,
@@ -80,10 +81,10 @@ class MaintenanceData {
   final String phoneNumber;
 
   @JsonKey(name: "latitude")
-  final String latitude;
+  final String? latitude;
 
   @JsonKey(name: "longitude")
-  final String longitude;
+  final String? longitude;
 
   @JsonKey(name: "maintenance_result")
   final String maintenanceResult;
@@ -93,6 +94,9 @@ class MaintenanceData {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "unit_id")
+  final String unitId;
 
   @JsonKey(name: "unit_name")
   final String unitName;
@@ -132,12 +136,10 @@ class UpdateMaintenanceRequest {
   UpdateMaintenanceRequest({
     required this.userId,
     required this.unitId,
-    required this.pic,
     required this.latitude,
     required this.longitude,
     required this.maintenanceResult,
-    required this.scheduleData,
-    required this.status,
+    required this.scheduleDate,
     required this.note,
   });
 
@@ -152,26 +154,20 @@ class UpdateMaintenanceRequest {
   @JsonKey(name: "unit_id")
   final int unitId;
 
-  @JsonKey(name: "pic")
-  final String pic;
-
   @JsonKey(name: "latitude")
-  final double latitude;
+  final double? latitude;
 
   @JsonKey(name: "longitude")
-  final double longitude;
+  final double? longitude;
 
   @JsonKey(name: "maintenance_result")
-  final String maintenanceResult;
+  final int maintenanceResult;
 
   @JsonKey(name: "note")
   final String note;
 
-  @JsonKey(name: "schedule_data")
-  final String scheduleData;
-
-  @JsonKey(name: "status")
-  final int status;
+  @JsonKey(name: "schedule_date")
+  final String scheduleDate;
 }
 
 @JsonSerializable()
@@ -256,10 +252,10 @@ class DetailMaintenanceData {
   final String phoneNumber;
 
   @JsonKey(name: "latitude")
-  final String latitude;
+  final String? latitude;
 
   @JsonKey(name: "longitude")
-  final String longitude;
+  final String? longitude;
 
   @JsonKey(name: "maintenance_result")
   final String maintenanceResult;
@@ -302,7 +298,22 @@ class GetHistoryMaintenanceResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final HistoryMaintenanceData data;
+  final ListHistoryMaintenane data;
+}
+
+@JsonSerializable()
+class ListHistoryMaintenane {
+  ListHistoryMaintenane({
+    required this.result,
+  });
+
+  factory ListHistoryMaintenane.fromJson(Map<String, dynamic> json) =>
+      _$ListHistoryMaintenaneFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ListHistoryMaintenaneToJson(this);
+
+  @JsonKey(name: "result")
+  final List<HistoryMaintenanceData> result;
 }
 
 @JsonSerializable()
@@ -311,6 +322,11 @@ class HistoryMaintenanceData {
     required this.maintenanceId,
     required this.userName,
     required this.phoneNumber,
+    required this.customerName,
+    required this.companyName,
+    required this.unitId,
+    required this.unitName,
+    required this.unitLocation,
     required this.latitude,
     required this.longitude,
     required this.maintenanceResult,
@@ -331,6 +347,21 @@ class HistoryMaintenanceData {
 
   @JsonKey(name: "phone_number")
   final String phoneNumber;
+
+  @JsonKey(name: "customer_name")
+  final String customerName;
+
+  @JsonKey(name: "company_name")
+  final String companyName;
+
+  @JsonKey(name: "unit_id")
+  final String unitId;
+
+  @JsonKey(name: "unit_name")
+  final String unitName;
+
+  @JsonKey(name: "unit_location")
+  final String unitLocation;
 
   @JsonKey(name: "latitude")
   final String latitude;
@@ -371,7 +402,7 @@ class CreateMaintenanceRequest {
   Map<String, dynamic> toJson() => _$CreateMaintenanceRequestToJson(this);
 
   @JsonKey(name: "unit_id")
-  final String unitId;
+  final int unitId;
 
   @JsonKey(name: "latitude")
   final double latitude;
@@ -380,7 +411,7 @@ class CreateMaintenanceRequest {
   final double longitude;
 
   @JsonKey(name: "maintenance_result")
-  final String maintenanceResult;
+  final int maintenanceResult;
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
