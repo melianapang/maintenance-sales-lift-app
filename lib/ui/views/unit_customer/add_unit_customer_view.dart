@@ -3,11 +3,14 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/add_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -15,8 +18,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class AddUnitCustomerViewParam {
+  AddUnitCustomerViewParam({
+    this.customerData,
+  });
+
+  CustomerData? customerData;
+}
+
 class AddUnitCustomerView extends StatefulWidget {
-  const AddUnitCustomerView({super.key});
+  const AddUnitCustomerView({
+    required this.param,
+    super.key,
+  });
+
+  final AddUnitCustomerViewParam param;
 
   @override
   State<AddUnitCustomerView> createState() => _AddUnitCustomerViewState();
@@ -27,6 +43,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: AddUnitCustomerViewModel(
+        customerData: widget.param.customerData,
         dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (AddUnitCustomerViewModel model) async {
@@ -50,25 +67,21 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
             ),
             buttonType: ButtonType.primary,
             onTap: () async {
-              //belom bener
-              // final bool result = await model.requestUpdateCustomer();
-              final bool result = true;
-              if (result == false) {
-                showDialogWidget(
-                  context,
-                  title: "Ubah Data Unit",
-                  description: "Perubahan data unit gagal.",
-                  isSuccessDialog: false,
-                );
-                return;
-              }
+              buildLoadingDialog(context);
+              final bool result = await model.requestCreateUnit();
+              Navigator.pop(context);
 
-              await Navigator.maybePop(context);
               showDialogWidget(
                 context,
                 title: "Ubah Data Unit",
-                description: "Perubahan data unit berhasil disimpan",
-                isSuccessDialog: true,
+                description: result
+                    ? "Perubahan data unit berhasil disimpan"
+                    : model.errorMsg ?? "Perubahan data unit gagal.",
+                isSuccessDialog: result,
+                positiveLabel: "Okay",
+                positiveCallback: () => Navigator.of(context)
+                  ..pop()
+                  ..pop(),
               );
             },
             text: 'Simpan',
@@ -81,15 +94,22 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
               child: Column(
                 children: [
                   TextInput.editable(
+                    controller: model.nameController,
                     label: "Nama Unit",
                     hintText: "Nama Unit",
-                    onChangedListener: (text) {},
+                    onChangedListener: model.onChangedName,
+                    errorText:
+                        !model.isNameValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
+                    controller: model.locationController,
                     label: "Lokasi Unit",
                     hintText: "Lokasi Unit",
-                    onChangedListener: (text) {},
+                    onChangedListener: model.onChangedLocation,
+                    errorText: !model.isLocationValid
+                        ? "Kolom ini wajib diisi."
+                        : null,
                   ),
                   Spacings.vert(24),
                   GestureDetector(
@@ -102,7 +122,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                     },
                     child: TextInput.disabled(
                       label: "Pilih Proyek",
-                      text: model.selectedProyek?.customerName,
+                      text: model.selectedProyek?.projectName,
                       hintText: "Pilih Proyek untuk Unit ini",
                       suffixIcon: const Icon(
                         PhosphorIcons.caretDownBold,
@@ -137,11 +157,11 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
       child: !model.isShowNoDataFoundPage && !model.busy
           ? Expanded(
               child: LazyLoadScrollView(
-                onEndOfPage: () => model.requestGetAllCustomer(),
+                onEndOfPage: () => model.requestGetAllProjectByCustomerId(),
                 scrollDirection: Axis.vertical,
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: model.listCustomer?.length ?? 0,
+                  itemCount: model.listProject?.length ?? 0,
                   separatorBuilder: (_, __) => const Divider(
                     color: MyColors.transparent,
                     height: 20,
@@ -149,9 +169,14 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                   itemBuilder: (BuildContext context, int index) {
                     return CustomCardWidget(
                       cardType: CardType.list,
-                      title: model.listCustomer?[index].customerName ?? "",
-                      description: model.listCustomer?[index].companyName,
-                      desc2Size: 16,
+                      title: model.listProject?[index].projectName ?? "",
+                      description:
+                          "Kebutuhan Proyek: ${mappingProjectNeedTypeToString(
+                        int.parse(
+                          model.listProject?[index].projectNeed ?? "0",
+                        ),
+                      )}",
+                      desc2Size: 14,
                       titleSize: 20,
                       onTap: () {
                         setSelectedMenu(
