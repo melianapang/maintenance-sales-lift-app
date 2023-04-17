@@ -1,12 +1,11 @@
-import 'dart:io';
-
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -15,11 +14,13 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:intl/intl.dart';
 
 class FormMaintenanceViewParam {
   FormMaintenanceViewParam({
@@ -51,6 +52,8 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
       model: FormMaintenanceViewModel(
         maintenanceData: widget.param.maintenanceData,
         dioService: Provider.of<DioService>(context),
+        sharedPreferencesService:
+            Provider.of<SharedPreferencesService>(context),
       ),
       onModelReady: (FormMaintenanceViewModel model) async {
         await model.initModel();
@@ -73,7 +76,46 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
               right: 24.0,
               top: 24,
             ),
-            onTap: () {},
+            onTap: () {
+              showDialogWidget(
+                context,
+                title: "Form Hasil Pemeliharaan",
+                description:
+                    "Apakah anda yakin ingin mengubah data ${model.maintenanceData?.unitName} untuk Pemeliharaan pada tanggal ${DateTimeUtils.convertStringToOtherStringDateFormat(
+                  date: model.maintenanceData?.scheduleDate ?? "",
+                  formattedString: DateTimeUtils.DATE_FORMAT_2,
+                )}? \n \n Dengan TANGGAL PEMELIHARAAN SELANJUTNYA, yaitu: ${DateTimeUtils.convertDateToString(
+                  date: model.selectedNextMaintenanceDates.first,
+                  formatter: DateFormat(
+                    DateTimeUtils.DATE_FORMAT_2,
+                  ),
+                )}",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
+
+                  buildLoadingDialog(context);
+                  bool result = await model.requestUpdateMaintenanceData();
+                  Navigator.pop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Form Hasil Pemeliharaan",
+                    isSuccessDialog: result,
+                    description: result
+                        ? "Data pemeliharaan telah ditambahkan"
+                        : model.errorMsg ??
+                            "Data pemeliharaan gagal ditambahkan",
+                    positiveLabel: "Ok",
+                    positiveCallback: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+                negativeCallback: () => Navigator.pop(context),
+              );
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
@@ -82,36 +124,26 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
             ),
             child: Column(
               children: [
-                DatePickerWidget(
-                  label: "Tanggal Pemeliharaan",
-                  isRangeCalendar: false,
-                  selectedDates: model.selectedDates,
-                  onSelectedDates: (DateTime start, DateTime? end) {
-                    print('$start $end');
-                    model.setSelectedDates([start]);
-                  },
-                ),
-                Spacings.vert(24),
-                //salah data
                 TextInput.disabled(
-                  label: "Nomor Pelanggan",
-                  hintText: "Nomor Pelanggan",
-                  text: model.maintenanceData?.customerName,
+                  label: "Tanggal Pemeliharaan",
+                  text: DateTimeUtils.convertStringToOtherStringDateFormat(
+                    date: model.maintenanceData?.scheduleDate ?? "",
+                    formattedString: DateTimeUtils.DATE_FORMAT_2,
+                  ),
                 ),
                 Spacings.vert(24),
-                //salah data
                 TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
                   text: model.maintenanceData?.customerName,
                 ),
                 Spacings.vert(24),
-                //salah data
-                TextInput.disabled(
-                  label: "Nama Perusahaan",
-                  hintText: "Nama Perusahaan",
-                  text: model.maintenanceData?.customerName,
-                ),
+                if (model.maintenanceData?.companyName?.isNotEmpty == true)
+                  TextInput.disabled(
+                    label: "Nama Perusahaan",
+                    hintText: "Nama Perusahaan",
+                    text: model.maintenanceData?.companyName,
+                  ),
                 Spacings.vert(24),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -210,7 +242,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Hasil Maintenance",
+                    "Hasil Pemeliharaan",
                     style: buildTextStyle(
                       fontSize: 14,
                       fontWeight: 400,
@@ -226,12 +258,12 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   },
                 ),
                 Spacings.vert(24),
-                TextInput.multiline(
+                TextInput.editable(
                   onChangedListener: (text) {},
                   label: "Catatan",
+                  controller: model.noteController,
                   hintText: "Tulis catatan disini..",
                   maxLines: 5,
-                  minLines: 5,
                 ),
                 Spacings.vert(24),
                 DatePickerWidget(
@@ -240,7 +272,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   selectedDates: model.selectedNextMaintenanceDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
                     print('$start $end');
-                    model.setSelectedDates([start]);
+                    model.setSelectedNextMaintenanceDates([start]);
                   },
                 ),
                 Spacings.vert(24),
