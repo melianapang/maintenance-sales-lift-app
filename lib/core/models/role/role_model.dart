@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 
 enum Role {
   @JsonValue('super_admin')
@@ -25,17 +26,16 @@ String mappingRoleToString(Role role) {
 }
 
 Role mappingStringToRole(String role) {
-  switch (role) {
+  switch (StringUtils.replaceUnderscoreToSpaceAndTitleCase(role)) {
     case "Super Admin":
       return Role.SuperAdmin;
     case "Admin":
       return Role.Admin;
     case "Sales":
-      return Role.Engineers;
-    case "Teknisi":
       return Role.Sales;
+    case "Teknisi":
     default:
-      return Role.Admin;
+      return Role.Engineers;
   }
 }
 
@@ -46,11 +46,10 @@ Role mappingStringNumberToRole(String role) {
     case "2":
       return Role.Admin;
     case "3":
-      return Role.Engineers;
-    case "4":
       return Role.Sales;
+    case "4":
     default:
-      return Role.Admin;
+      return Role.Engineers;
   }
 }
 
