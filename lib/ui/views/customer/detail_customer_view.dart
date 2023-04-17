@@ -169,30 +169,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                     text: model.customerData?.email,
                   ),
                   Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.listUnit,
-                        arguments: ListUnitCustomerViewParam(
-                          customerData: model.customerData,
-                        ),
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Lihat Daftar Unit',
-                        textAlign: TextAlign.start,
-                        style: buildTextStyle(
-                          fontSize: 16,
-                          fontWeight: 400,
-                          fontColor: MyColors.blueLihatSelengkapnya,
-                          isUnderlined: true,
-                        ),
-                      ),
-                    ),
-                  ),
                   if (model.customerData?.documents.isNotEmpty == true)
                     ..._buildDocumentList(
                       model: model,
@@ -367,6 +343,35 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
         borderRadius: BorderRadius.circular(100),
       ),
       children: [
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.archiveBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Daftar Unit',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.listUnit,
+              arguments: ListUnitCustomerViewParam(
+                customerData: model.customerData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
         SpeedDialChild(
           child: !model.isDialChildrenVisible
               ? const Icon(PhosphorIcons.listBulletsBold)
