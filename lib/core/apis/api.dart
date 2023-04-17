@@ -1,14 +1,20 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/approval/approval_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/login_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/manage_account_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/project/project_data.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/reminder/reminder_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -19,54 +25,230 @@ abstract class Api {
   factory Api(Dio dio, {String baseUrl}) = _Api;
 
   //region authentication
-  @POST('/project-lift/api/0/Auth/login')
+  @POST('/api/0/Auth/login')
   Future<HttpResponse<dynamic>> requestLogin(
     @Body() LoginRequest request,
   );
 
-  @PUT('/project-lift/api/0/Auth/update_password/')
+  @PUT('/api/0/Auth/update_password/')
   Future<HttpResponse<dynamic>> requestChangePassword(
     @Body() ChangePasswordRequest request,
   );
   //endregion
 
+  //region user
+  @POST('/api/0/User/create_user')
+  Future<HttpResponse<dynamic>> requestCreateUser(
+    @Body() CreateUserRequest request,
+  );
+
+  @PUT('/api/0/User/update_user/{user_id}')
+  Future<HttpResponse<dynamic>> requestUpdateUser(
+    @Path("user_id") int userId,
+    @Body() UpdateUserRequest request,
+  );
+
+  @DELETE('/api/0/User/delete_user/{user_id}')
+  Future<HttpResponse<dynamic>> requestDeleteUser(
+    @Path("user_id") int userId,
+  );
+
+  @GET('/api/0/User/get_all_users/')
+  Future<HttpResponse<dynamic>> requestGetAllUser(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/User/get_user_deail/{user_id}')
+  Future<HttpResponse<dynamic>> requestGetUserDetail(
+    @Path("user_id") int userId,
+  );
+  //endregion
+
+  //region approval
+  @GET('/api/0/Approval/get_all_approvals/')
+  Future<HttpResponse<dynamic>> requestGetAllApproval(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Approval/get_approval_detail/{approval_id}')
+  Future<HttpResponse<dynamic>> requestGetApprovalDetail(
+    @Path("approval_id") int approvalId,
+  );
+
+  @PUT('/api/0/Approval/update_approval/{approval_id}')
+  Future<HttpResponse<dynamic>> requestUpdateApproval(
+    @Path("approval_id") int approvalId,
+    @Body() UpdateApprovalRequest request,
+  );
+  //endregion
+
   //region log
-  @GET('/project-lift/api/0/Log/get_logs/')
+  @GET('/api/0/Log/get_logs/')
   Future<HttpResponse<dynamic>> requestGetAllLog(
-      // @Query("page") int page,
-      );
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Log/get_log_detail/{log_id}')
+  Future<HttpResponse<dynamic>> requestGetLogDetail(
+    @Path("log_id") int logId,
+  );
+  //endregion
+
+  //region reminder
+  @GET('/api/0/LReminderog/get_all_reminders/')
+  Future<HttpResponse<dynamic>> requestGetAllReminder(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @POST('/api/0/Reminder/create_reminder')
+  Future<HttpResponse<dynamic>> requestCreateReminder(
+    @Body() CreateReminderRequest request,
+  );
+
+  @PUT('/api/0/Reminder/update_reminder/{reminder_id}')
+  Future<HttpResponse<dynamic>> requestUpdateReminder(
+    @Path("reminder_id") int reminderId,
+    @Body() UpdateReminderRequest request,
+  );
+
+  @DELETE('/api/0/Reminder/delete_reminder/{reminder_id}')
+  Future<HttpResponse<dynamic>> requestDeleteReminder(
+    @Path("reminder_id") int reminderId,
+  );
   //endregion
 
   //region customer
-  @PUT('/project-lift/api/0/Customer/update_customer/{customer_id}')
+  @POST('/api/0/Customer/create_customer')
+  Future<HttpResponse<dynamic>> requestCreateCustomer(
+    @Body() CreateCustomerRequest request,
+  );
+
+  @PUT('/api/0/Customer/update_customer/{customer_id}')
   Future<HttpResponse<dynamic>> requestUpdateCustomer(
     @Path("customer_id") int customerId,
     @Body() UpdateCustomerRequest request,
   );
 
-  @GET('/project-lift/api/0/Customer/get_all_customers/')
+  @DELETE('/api/0/Customer/delete_customer/{customer_id}')
+  Future<HttpResponse<dynamic>> requestDeleteCustomer(
+    @Path("customer_id") int customerId,
+  );
+
+  @GET('/api/0/Customer/get_all_customers/')
   Future<HttpResponse<dynamic>> requestGetAllCustomer(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
   //endregion
 
+  //region unit
+  @GET('/api/0/Unit/get_all_units/{customer_id}')
+  Future<HttpResponse<dynamic>> requestGetAllUnitByCustomer(
+    @Path("customer_id") int customerId,
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @POST('/api/0/Unit/create_unit')
+  Future<HttpResponse<dynamic>> requestCreateUnit(
+    @Body() CreateUnitRequest request,
+  );
+
+  @PUT('/api/0/Unit/update_unit/{unit_id}')
+  Future<HttpResponse<dynamic>> requestUpdateUnit(
+    @Path("unit_id") int unitId,
+    @Body() UpdateUnitRequest request,
+  );
+
+  @DELETE('/api/0/Unit/delete_unit/{unit_id}')
+  Future<HttpResponse<dynamic>> requestDeleteUnit(
+    @Path("unit_id") int unitId,
+  );
+  //endregion
+
+  //region document
+  @POST('/api/0/Document/create_document')
+  Future<HttpResponse<dynamic>> requestCreateDocument(
+    @Body() CreateDocumentRequest request,
+  );
+  //enregion
+
   //region maintenance
-  @GET('/project-lift/api/0/Maintenance/get_all_maintenances/')
+  @GET('/api/0/Maintenance/get_all_maintenances/')
   Future<HttpResponse<dynamic>> requestGetAllMaintenance(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
 
-  @GET('/project-lift/api/0/Maintenance/get_history_maintenances/{unit_id}')
+  @GET('/api/0/Maintenance/get_detail_maintenance/{maintenance_id}')
+  Future<HttpResponse<dynamic>> requestGetMaintenanceDetail(
+    @Path("maintenance_id") int maintenanceId,
+  );
+
+  @GET('/api/0/Maintenance/get_history_maintenances/{unit_id}')
   Future<HttpResponse<dynamic>> requestGetAllHistoryMaintenance(
     @Path("unit_id") String customerId,
   );
 
-  @PUT('/project-lift/api/0/Customer/update_maintenance/{customer_id}')
+  @POST('project-lift/api/0/Maintenance/create_maintenance')
+  Future<HttpResponse<dynamic>> requestCreateMaintenance(
+    @Body() CreateMaintenanceRequest request,
+  );
+
+  @PUT('/api/0/Maintenance/update_maintenance/{maintenance_id}')
   Future<HttpResponse<dynamic>> requestUpdateMaintenance(
-    @Path("maintenance_id") int customerId,
+    @Path("maintenance_id") int maintenanceId,
     @Body() UpdateMaintenanceRequest request,
+  );
+  //endregion
+
+  //region project
+  @GET('/api/0/Project/get_all_projects/')
+  Future<HttpResponse<dynamic>> requestGetAllProjects(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Project/get_all_projects_by_customer_id/{customer_id}')
+  Future<HttpResponse<dynamic>> requestGetAllProjectsByCustomerId(
+    @Path("customer_id") int customerId,
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Project/get_project_detail/{project_id}')
+  Future<HttpResponse<dynamic>> requestProjectDetail(
+    @Path("project_id") int projectId,
+  );
+
+  @POST('/api/0/Project/create_project')
+  Future<HttpResponse<dynamic>> requestCreateProject(
+    @Body() CreateProjectRequest request,
+  );
+
+  @POST('/api/0/Pic/create_pic/')
+  Future<HttpResponse<dynamic>> requestCreatePICProject(
+    @Body() List<CreatePICProjectRequest> request,
+  );
+
+  @DELETE('/api/0/Pic/delete_pic/{pic_id}')
+  Future<HttpResponse<dynamic>> requestDeletePICProject(
+    @Path("pic_id") int picId,
+  );
+
+  @PUT('/api/0/Project/update_project/{project_id}')
+  Future<HttpResponse<dynamic>> requestUpdateProject(
+    @Path("project_id") int projectId,
+    @Body() UpdateProjectRequest request,
+  );
+
+  @DELETE('/api/0/Project/delete_project/{project_id}')
+  Future<HttpResponse<dynamic>> requestDeleteProject(
+    @Path("project_id") int projectId,
   );
   //endregion
 }
@@ -82,7 +264,10 @@ class ApiService {
   Future<Either<Failure, String>> requestLogin(
       {required String inputUser, required String password}) async {
     try {
-      final payload = LoginRequest(inputUser: inputUser, password: password);
+      final payload = LoginRequest(
+        inputUser: inputUser,
+        password: password,
+      );
       final HttpResponse<dynamic> response = await api.requestLogin(payload);
 
       if (response.isSuccess) {
@@ -114,7 +299,7 @@ class ApiService {
       final HttpResponse<dynamic> response =
           await api.requestChangePassword(payload);
 
-      if (response.response.statusCode == 200) {
+      if (response.isSuccess) {
         ChangePasswordResponse changePasswordResponse =
             ChangePasswordResponse.fromJson(response.data);
 
@@ -129,27 +314,474 @@ class ApiService {
   }
   //endregion
 
-  //region log
-  Future<List<LogData>?> requestGetAllLog() async {
+  //region user
+  Future<Either<Failure, String>> requestCreateUser({
+    required int idRole,
+    required String name,
+    required String username,
+    required String phoneNumber,
+    required String email,
+    required String address,
+    required String city,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
     try {
-      final HttpResponse<dynamic> response = await api.requestGetAllLog();
+      final payload = CreateUserRequest(
+        idRole: idRole,
+        name: name,
+        username: username,
+        phoneNumber: phoneNumber,
+        email: email,
+        address: address,
+        city: city,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateUser(payload);
 
-      if (response.response.statusCode == 200) {
-        GetAllLogResponse getAllLog = GetAllLogResponse.fromJson(response.data);
-        return getAllLog.data.result;
+      if (response.isSuccess) {
+        final CreateUserResponse createUserResponse =
+            CreateUserResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createUserResponse.message);
       }
-      return null;
+
+      return ErrorUtils<String>().handleDomainError(response);
     } catch (e) {
-      if (e is CastError) {
-        print(e.stackTrace);
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteUser({
+    required int userId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteUser(userId);
+
+      if (response.isSuccess) {
+        final DeleteUserResponse deleteUserResponse =
+            DeleteUserResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteUserResponse.message);
       }
-      log(e.toString());
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestUpdateUser({
+    required int userId,
+    required int idRole,
+    required String name,
+    required String username,
+    required String phoneNumber,
+    required String email,
+    required String address,
+    required String city,
+  }) async {
+    try {
+      final payload = UpdateUserRequest(
+        idRole: idRole,
+        name: name,
+        username: username,
+        phoneNumber: phoneNumber,
+        email: email,
+        address: address,
+        city: city,
+      );
+      final HttpResponse<dynamic> response = await api.requestUpdateUser(
+        userId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final UpdateCustomerResponse updateCustomerResponse =
+            UpdateCustomerResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(updateCustomerResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, List<UserData>?>> requestGetAllUser({
+    required int pageSize,
+    required int currentPage,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllUser(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllUserResponse getAllUserResponse =
+            GetAllUserResponse.fromJson(response.data);
+
+        return Right<Failure, List<UserData>>(getAllUserResponse.data.result);
+      }
+      return ErrorUtils<List<UserData>>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<List<UserData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, DetailUserData>> requestUserDetail({
+    required int userId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetUserDetail(userId);
+
+      if (response.isSuccess) {
+        final UserDetailResponse userDetailResponse =
+            UserDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, DetailUserData>(userDetailResponse.data);
+      }
+
+      return ErrorUtils<DetailUserData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<DetailUserData>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region approval
+  Future<Either<Failure, String>> requestUpdateApproval({
+    required int approvalId,
+    required int approvalStatus,
+  }) async {
+    try {
+      UpdateApprovalRequest payload = UpdateApprovalRequest(
+        approvalStatus: approvalStatus,
+      );
+      final HttpResponse<dynamic> response = await api.requestUpdateApproval(
+        approvalId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final UpdateApprovalResponse updateApprovalResponse =
+            UpdateApprovalResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(updateApprovalResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, List<ApprovalData>?>> requestGetAllApproval({
+    required int pageSize,
+    required int currentPage,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllApproval(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllApprovalResponse getAllApprovalResponse =
+            GetAllApprovalResponse.fromJson(response.data);
+
+        return Right<Failure, List<ApprovalData>>(
+            getAllApprovalResponse.data.result);
+      }
+      return ErrorUtils<List<ApprovalData>>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<List<ApprovalData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, DetailApprovalData>> requestApprovalDetail({
+    required int userId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetApprovalDetail(userId);
+
+      if (response.isSuccess) {
+        final ApprovalDetailResponse approvalDetailResponse =
+            ApprovalDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, DetailApprovalData>(approvalDetailResponse.data);
+      }
+
+      return ErrorUtils<DetailApprovalData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<DetailApprovalData>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region log
+  Future<Either<Failure, List<LogData>?>> requestGetAllLog({
+    required int pageSize,
+    required int currentPage,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllLog(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllLogResponse getAllLog = GetAllLogResponse.fromJson(response.data);
+
+        return Right<Failure, List<LogData>>(getAllLog.data.result);
+      }
+      return ErrorUtils<List<LogData>>().handleDomainError(response);
+    } catch (e) {
+      return ErrorUtils<List<LogData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, DetailLogData>> requestLogDetail({
+    required int logId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetLogDetail(logId);
+
+      if (response.isSuccess) {
+        final DetailLogResponse detailLogResponse = DetailLogResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, DetailLogData>(detailLogResponse.data);
+      }
+
+      return ErrorUtils<DetailLogData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<DetailLogData>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region reminder
+  Future<Either<Failure, List<ReminderData>?>> requestGetAllReminder({
+    required int pageSize,
+    required int currentPage,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllReminder(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllReminderResponse getAllReminderResponse =
+            GetAllReminderResponse.fromJson(response.data);
+
+        return Right<Failure, List<ReminderData>>(
+            getAllReminderResponse.data.result);
+      }
+      return ErrorUtils<List<ReminderData>>().handleDomainError(response);
+    } catch (e) {
+      return ErrorUtils<List<ReminderData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestCreateReminder({
+    required int customerId,
+    required String reminderType,
+    required String reminderDate,
+    required String reminderTime,
+    required String description,
+    required String remindedNote,
+    required String afterRemindedNote,
+  }) async {
+    try {
+      final payload = CreateReminderRequest(
+        customerId: customerId,
+        reminderType: reminderType,
+        reminderDate: reminderDate,
+        reminderTime: reminderTime,
+        description: description,
+        remindedNote: remindedNote,
+        afterRemindedNote: afterRemindedNote,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateReminder(payload);
+
+      if (response.isSuccess) {
+        final CreateReminderResponse createReminderResponse =
+            CreateReminderResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createReminderResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateReminder({
+    required int reminderId,
+    required String reminderType,
+    required String reminderDate,
+    required String reminderTime,
+    required String description,
+    required String remindedNote,
+    required String afterRemindedNote,
+    required String phoneNumber,
+  }) async {
+    try {
+      final payload = UpdateReminderRequest(
+        reminderType: reminderType,
+        reminderDate: reminderDate,
+        reminderTime: reminderTime,
+        description: description,
+        remindedNote: remindedNote,
+        afterRemindedNote: afterRemindedNote,
+      );
+      final HttpResponse<dynamic> response = await api.requestUpdateReminder(
+        reminderId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<bool>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteReminder({
+    required int reminderId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteReminder(reminderId);
+
+      if (response.isSuccess) {
+        final DeleteReminderResponse deleteReminderResponse =
+            DeleteReminderResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteReminderResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
     }
   }
   //endregion
 
   //region customer
-  Future<bool> requestUpdateCustomer({
+  Future<Either<Failure, String>> requestCreateCustomer({
+    required String nama,
+    required String customerNumber,
+    required int customerType,
+    required String customerNeed,
+    required String email,
+    required String companyName,
+    required String phoneNumber,
+    required String note,
+    required int dataSource,
+    required String city,
+  }) async {
+    try {
+      final payload = CreateCustomerRequest(
+        customerName: nama,
+        customerNumber: customerNumber,
+        customerType: customerType,
+        customerNeed: customerNeed,
+        email: email,
+        phoneNumber: phoneNumber,
+        city: city,
+        companyName: companyName,
+        note: note,
+        dataSource: dataSource,
+        status: 0,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateCustomer(payload);
+
+      if (response.isSuccess) {
+        final CreateCustomerResponse createCustomerResponse =
+            CreateCustomerResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createCustomerResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteCustomer({
+    required int customerId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteCustomer(customerId);
+
+      if (response.isSuccess) {
+        final DeleteCustomerResponse deleteCustomerResponse =
+            DeleteCustomerResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteCustomerResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateCustomer({
     required String nama,
     required String customerNumber,
     required int customerType,
@@ -181,17 +813,18 @@ class ApiService {
         payload,
       );
 
-      if (response.response.statusCode == 200) {
-        return true;
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
       }
-      return false;
+
+      return ErrorUtils<bool>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
-      return false;
+      return ErrorUtils<bool>().handleError(e);
     }
   }
 
-  Future<List<CustomerData>?> getAllCustomer(
+  Future<Either<Failure, List<CustomerData>?>> getAllCustomer(
     int currentPage,
     int pageSize,
   ) async {
@@ -201,15 +834,17 @@ class ApiService {
         pageSize,
       );
 
-      if (response.response.statusCode == 200) {
+      if (response.isSuccess) {
         GetAllCustomerResponse getAllResponse =
             GetAllCustomerResponse.fromJson(response.data);
 
-        return getAllResponse.data.result;
+        return Right<Failure, List<CustomerData>?>(getAllResponse.data.result);
       }
-      return null;
+
+      return ErrorUtils<List<CustomerData>?>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
+      return ErrorUtils<List<CustomerData>?>().handleError(e);
     }
   }
 
@@ -218,8 +853,133 @@ class ApiService {
   }
   //endregion
 
+  //region unit
+  Future<Either<Failure, List<UnitData>?>> getAllUnitByCustomer({
+    required int customerId,
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllUnitByCustomer(
+        customerId,
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllUnitResponse getAllUnitResponse =
+            GetAllUnitResponse.fromJson(response.data);
+
+        return Right<Failure, List<UnitData>?>(getAllUnitResponse.data.result);
+      }
+
+      return ErrorUtils<List<UnitData>?>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<List<UnitData>?>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestCreateUnit({
+    required int customerId,
+    required int projectId,
+    required String unitName,
+    required String unitLocation,
+  }) async {
+    try {
+      final payload = CreateUnitRequest(
+        projectId: projectId,
+        unitName: unitName,
+        customerId: customerId,
+        unitLocation: unitLocation,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateUnit(payload);
+
+      if (response.isSuccess) {
+        final CreateUnitResponse createUnitResponse =
+            CreateUnitResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createUnitResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateUnit({
+    required int unitId,
+    required int customerId,
+    required int projectId,
+    required String unitName,
+    required String unitLocation,
+  }) async {
+    try {
+      final payload = UpdateUnitRequest(
+        customerId: customerId,
+        projectId: projectId,
+        unitName: unitName,
+        unitLocation: unitLocation,
+      );
+      final HttpResponse<dynamic> response = await api.requestUpdateUnit(
+        unitId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<bool>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region document
+  Future<Either<Failure, String>> requestCreateDocument({
+    required int fileType,
+    required String filePath,
+    required int customerId,
+    required String note,
+  }) async {
+    try {
+      final payload = CreateDocumentRequest(
+        fileType: fileType,
+        filePath: filePath,
+        customerId: customerId,
+        note: note,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateDocument(payload);
+
+      if (response.isSuccess) {
+        final CreateDocumentResponse createDocumentResponse =
+            CreateDocumentResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createDocumentResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+  //endregion
+
   //region maintenance
-  Future<List<MaintenanceData>?> requestGetAllMaintenance(
+  Future<Either<Failure, List<MaintenanceData>?>> requestGetAllMaintenance(
     int currentPage,
     int pageSize,
   ) async {
@@ -229,19 +989,84 @@ class ApiService {
         pageSize,
       );
 
-      if (response.response.statusCode == 200) {
+      if (response.isSuccess) {
         GetAllMaintenanceResponse getAllMaintenanceResponse =
             GetAllMaintenanceResponse.fromJson(response.data);
 
-        return getAllMaintenanceResponse.data.result;
+        return Right<Failure, List<MaintenanceData>?>(
+            getAllMaintenanceResponse.data.result);
       }
-      return null;
+      return ErrorUtils<List<MaintenanceData>?>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
+      return ErrorUtils<List<MaintenanceData>?>().handleError(e);
     }
   }
 
-  Future<List<MaintenanceData>?> requestGetAllHistoryMaintenance(
+  Future<Either<Failure, DetailMaintenanceData>> requestMaintenaceDetail({
+    required int userId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetMaintenanceDetail(userId);
+
+      if (response.isSuccess) {
+        final MaintenanceDetailResponse maintenanceDetailResponse =
+            MaintenanceDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, DetailMaintenanceData>(
+            maintenanceDetailResponse.data);
+      }
+
+      return ErrorUtils<DetailMaintenanceData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<DetailMaintenanceData>().handleError(e);
+    }
+  }
+
+  //harusnya ga akan dipake
+  Future<Either<Failure, String>> requesCreateMaintenance({
+    required int unitId,
+    required double latitude,
+    required double longitude,
+    required int maintenanceResult,
+    required String scheduleDate,
+    required String note,
+  }) async {
+    try {
+      final payload = CreateMaintenanceRequest(
+        unitId: unitId,
+        latitude: latitude,
+        longitude: longitude,
+        maintenanceResult: maintenanceResult,
+        scheduleDate: scheduleDate,
+        note: note,
+      );
+
+      final HttpResponse<dynamic> response =
+          await api.requestCreateMaintenance(payload);
+
+      if (response.isSuccess) {
+        final CreateMaintenanceResponse createMaintenanceResponse =
+            CreateMaintenanceResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createMaintenanceResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, List<HistoryMaintenanceData>>>
+      requestGetHistoryMaintenance(
     String unitId,
   ) async {
     try {
@@ -251,41 +1076,264 @@ class ApiService {
       );
 
       if (response.response.statusCode == 200) {
-        GetAllHistoryMaintenanceResponse getAllHistoryMaintenanceResponse =
-            GetAllHistoryMaintenanceResponse.fromJson(response.data);
+        GetHistoryMaintenanceResponse getHistoryMaintenanceResponse =
+            GetHistoryMaintenanceResponse.fromJson(response.data);
 
-        return getAllHistoryMaintenanceResponse.data.result;
+        return Right<Failure, List<HistoryMaintenanceData>>(
+            getHistoryMaintenanceResponse.data.result);
       }
-      return null;
+      return ErrorUtils<List<HistoryMaintenanceData>>()
+          .handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
+      return ErrorUtils<List<HistoryMaintenanceData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateMaintenace({
+    required int maintenanceId,
+    required int unitId,
+    required int userId,
+    required double longitude,
+    required double latitude,
+    required String note,
+    required int maintenanceResult,
+    required String scheduleDate,
+  }) async {
+    try {
+      final payload = UpdateMaintenanceRequest(
+        userId: userId,
+        unitId: unitId,
+        longitude: longitude,
+        latitude: latitude,
+        maintenanceResult: maintenanceResult,
+        note: note,
+        scheduleDate: scheduleDate,
+      );
+
+      final HttpResponse<dynamic> response = await api.requestUpdateMaintenance(
+        maintenanceId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<bool>().handleError(e);
     }
   }
   //endregion
 
   //region projects
+  Future<Either<Failure, List<ProjectData>?>> getAllProjects({
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllProjects(
+        currentPage,
+        pageSize,
+      );
 
-  Future<List<ProjectData>?> getAllProjects(
-    int currentPage,
-    int pageSize,
-  ) async {
-    return [];
-    // try {
-    // final HttpResponse<dynamic> response = await api.requestGetAllCustomer(
-    //   currentPage,
-    //   pageSize,
-    // );
+      if (response.isSuccess) {
+        GetAllProjectResponse getAllProjectResponse =
+            GetAllProjectResponse.fromJson(response.data);
 
-    // if (response.response.statusCode == 200) {
-    // GetAllCustomerResponse getAllResponse =
-    // GetAllCustomerResponse.fromJson(response.data);
+        return Right<Failure, List<ProjectData>?>(
+            getAllProjectResponse.data.result);
+      }
 
-    // return getAllResponse.data.result;
-    //   }
-    //   return null;
-    // } catch (e) {
-    //   log("Sequence number error");
-    // }
+      return ErrorUtils<List<ProjectData>?>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<List<ProjectData>?>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, List<ProjectData>?>>
+      requestGetAllProjectsByCustomerId({
+    required int customerId,
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllProjectsByCustomerId(
+        customerId,
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllProjectResponse getAllProjectResponse =
+            GetAllProjectResponse.fromJson(response.data);
+
+        return Right<Failure, List<ProjectData>?>(
+            getAllProjectResponse.data.result);
+      }
+
+      return ErrorUtils<List<ProjectData>?>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<List<ProjectData>?>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, int>> requestCreateProject({
+    required String projectName,
+    required int projectNeed,
+    required String address,
+    required String city,
+    required int customerId,
+  }) async {
+    try {
+      final payload = CreateProjectRequest(
+        projectName: projectName,
+        projectNeed: projectNeed,
+        address: address,
+        city: city,
+        customerId: customerId,
+      );
+      final HttpResponse<dynamic> response = await api.requestCreateProject(
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final CreateProjectResponse createProjectResponse =
+            CreateProjectResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, int>(createProjectResponse.data.projectId);
+      }
+
+      return ErrorUtils<int>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<int>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteProject({
+    required int projectId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteProject(projectId);
+
+      if (response.isSuccess) {
+        final DeleteProjectResponse deleteProjectResponse =
+            DeleteProjectResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteProjectResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateProject({
+    required String projectName,
+    required int projectNeed,
+    required String address,
+    required String city,
+    required int customerId,
+    required int projectId,
+  }) async {
+    try {
+      final payload = UpdateProjectRequest(
+        customerId: customerId,
+        projectName: projectName,
+        projectNeed: projectNeed,
+        address: address,
+        city: city,
+      );
+
+      final HttpResponse<dynamic> response = await api.requestUpdateProject(
+        projectId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<bool>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region pic project
+  Future<Either<Failure, String>> requestCreatePIC({
+    required List<PICProject> listPic,
+    required int projectId,
+  }) async {
+    try {
+      List<CreatePICProjectRequest> listPayloads = [];
+      for (var pic in listPic) {
+        listPayloads.add(
+          CreatePICProjectRequest(
+            projectId: projectId,
+            picName: pic.picName,
+            phoneNumber: pic.phoneNumber,
+          ),
+        );
+      }
+
+      final HttpResponse<dynamic> response = await api.requestCreatePICProject(
+        listPayloads,
+      );
+
+      if (response.isSuccess) {
+        final CreatePICProjectResponse createPICProjectResponse =
+            CreatePICProjectResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createPICProjectResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeletePIC({
+    required int picId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestDeletePICProject(
+        picId,
+      );
+
+      if (response.isSuccess) {
+        final DeletePICProjectResponse deletePICProjectResponse =
+            DeletePICProjectResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deletePICProjectResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
   }
   //endregion
 }
