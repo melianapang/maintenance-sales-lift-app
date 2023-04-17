@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddUserViewModel extends BaseViewModel {
   AddUserViewModel();
 
+  // Dropdown related
+  int _selectedRoleOption = 0;
+  int get selectedRoleOption => _selectedRoleOption;
+  final List<FilterOption> _roleOptions = [
+    FilterOption("Super Admin", true),
+    FilterOption("Admin", false),
+    FilterOption("Sales", false),
+    FilterOption("Teknisi", false),
+  ];
+  List<FilterOption> get roleOptions => _roleOptions;
+  //End of Dropdown related
+
   final nameController = TextEditingController();
   final usernameController = TextEditingController();
-  final roleController = TextEditingController();
   final addressController = TextEditingController();
   final cityController = TextEditingController();
   final phoneNumberController = TextEditingController();
@@ -17,9 +29,6 @@ class AddUserViewModel extends BaseViewModel {
 
   bool _isUsernameValid = true;
   bool get isUsernameValid => _isUsernameValid;
-
-  bool _isRoleValid = true;
-  bool get isRoleValid => _isRoleValid;
 
   bool _isAdressValid = true;
   bool get isAdressValid => _isAdressValid;
@@ -36,6 +45,21 @@ class AddUserViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {}
 
+  void setSelectedRole({
+    required int selectedMenu,
+  }) {
+    _selectedRoleOption = selectedMenu;
+    for (int i = 0; i < _roleOptions.length; i++) {
+      if (i == selectedMenu) {
+        _roleOptions[i].isSelected = true;
+        continue;
+      }
+      _roleOptions[i].isSelected = false;
+    }
+
+    notifyListeners();
+  }
+
   void onChangedName(String value) {
     _isNameValid = value.isNotEmpty;
     notifyListeners();
@@ -43,11 +67,6 @@ class AddUserViewModel extends BaseViewModel {
 
   void onChangedUsername(String value) {
     _isUsernameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedRole(String value) {
-    _isRoleValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -74,7 +93,6 @@ class AddUserViewModel extends BaseViewModel {
   bool isValid() {
     _isNameValid = nameController.text.isNotEmpty;
     _isUsernameValid = usernameController.text.isNotEmpty;
-    _isRoleValid = roleController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
@@ -83,7 +101,6 @@ class AddUserViewModel extends BaseViewModel {
 
     return _isNameValid &&
         _isUsernameValid &&
-        _isRoleValid &&
         _isAdressValid &&
         _isCityValid &&
         _isPhoneNumberValid &&
