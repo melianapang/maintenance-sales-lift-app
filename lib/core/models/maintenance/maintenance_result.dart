@@ -34,3 +34,18 @@ String mappingMaintenanceStatusToString(MaintenanceStatus value) {
       return "0";
   }
 }
+
+String mappingStringNumerictoString(String value) {
+  switch (value) {
+    case "0":
+      return "Belum Pemeliharaan";
+    case "-1":
+      return "Data Pemeliharaan Dihapus";
+    case "1":
+      return "Gagal";
+    case "2":
+      return "Berhasil";
+    default:
+      return "Belum Pemeliharaan";
+  }
+}
