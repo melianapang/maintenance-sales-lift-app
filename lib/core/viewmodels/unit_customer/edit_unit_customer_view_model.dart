@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditUnitCustomerViewModel extends BaseViewModel {
   EditUnitCustomerViewModel({
+    CustomerData? customerData,
     UnitData? unitData,
     required DioService dioService,
   })  : _apiService = ApiService(
@@ -16,9 +17,13 @@ class EditUnitCustomerViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
+        _customerData = customerData,
         _unitData = unitData;
 
   final ApiService _apiService;
+
+  CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
 
   UnitData? _unitData;
   UnitData? get unitData => _unitData;
@@ -33,9 +38,8 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   bool get isLocationValid => _isLocationValid;
 
   //region pilih proyek
-  //dummy pake customerData, harus ganti nanti
-  List<CustomerData>? _listCustomer;
-  List<CustomerData>? get listCustomer => _listCustomer;
+  List<ProjectData>? _listProject;
+  List<ProjectData>? get listProject => _listProject;
 
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
@@ -43,23 +47,43 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
 
-  CustomerData? _selectedProyek;
-  CustomerData? get selectedProyek => _selectedProyek;
+  ProjectData? _selectedProyek;
+  ProjectData? get selectedProyek => _selectedProyek;
   //endregion
+
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {
     setBusy(true);
 
+    handleAvailableData();
+
     paginationControl.currentPage = 1;
 
-    await requestGetAllProjects();
-    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
+    await requestGetAllProjectByCustomerId();
+    if (_listProject?.isEmpty == true || _listProject == null) {
       _isShowNoDataFoundPage = true;
       notifyListeners();
     }
 
     setBusy(false);
+  }
+
+  void handleAvailableData() {
+    namaUnitController.text = unitData?.unitName ?? "";
+    lokasiUnitController.text = unitData?.unitLocation ?? "";
+    _selectedProyek = ProjectData(
+      projectId: unitData?.projectId ?? "",
+      projectNeed: "",
+      projectName: unitData?.projectName ?? "",
+      address: "",
+      city: "",
+      customerId: "",
+      customerName: "",
+      pics: [],
+    );
   }
 
   void onChangedNama(String value) {
@@ -72,27 +96,10 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> requestGetAllProjects() async {
-    // List<CustomerData>? list = await _apiService.getAllCustomer(
-    //   _paginationControl.currentPage,
-    //   _paginationControl.pageSize,
-    // );
-
-    // if (list != null || list?.isNotEmpty == true) {
-    //   if (_paginationControl.currentPage == 1) {
-    //     _listCustomer = list;
-    //   } else {
-    //     _listCustomer?.addAll(list!);
-    //   }
-    //   _paginationControl.currentPage += 1;
-    //   notifyListeners();
-    // }
-  }
-
   void setSelectedProyek({
     required int selectedIndex,
   }) {
-    _selectedProyek = _listCustomer?[selectedIndex];
+    _selectedProyek = _listProject?[selectedIndex];
     notifyListeners();
   }
 
@@ -104,23 +111,63 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     return _isNamaValid && _isLocationValid;
   }
 
-  Future<bool> requestUpdateCustomer() async {
-    setBusy(true);
-    // final response = await _apiService.requestUpdateCustomer(
-    //   customerId: _customer?.customerId ?? 0,
-    //   nama: _customer?.customerName ?? "",
-    //   customerNumber: _customer?.customerNumber ?? "",
-    //   customerNeed: _customer?.customerNeed ?? "",
-    //   email: _customer?.email ?? "",
-    //   phoneNumber: _customer?.phoneNumber ?? "",
-    //   city: _customer?.city ?? "",
-    //   note: _customer?.note ?? "",
-    //   companyName: _customer?.companyName ?? "",
-    //   dataSource: _selectedSumberDataOption,
-    //   customerType: _selectedTipePelangganOption,
-    // );
-    setBusy(false);
-    // return response != null;
-    return true;
+  Future<void> requestGetAllProjectByCustomerId() async {
+    final response = await _apiService.requestGetAllProjectsByCustomerId(
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+    );
+
+    if (response.isRight) {
+      if (response.right != null || response.right?.isNotEmpty == true) {
+        if (_paginationControl.currentPage == 1) {
+          _listProject = response.right!;
+        } else {
+          _listProject?.addAll(response.right!);
+        }
+        _paginationControl.currentPage += 1;
+        notifyListeners();
+      }
+      return;
+    }
+
+    _errorMsg = response.left.message;
+  }
+
+  Future<bool> requestUpdateUnit() async {
+    if (!isValid()) {
+      _errorMsg = "Pastikan semua kolom terisi";
+      return false;
+    }
+
+    final response = await _apiService.requestUpdateUnit(
+      unitId: int.parse(_unitData?.unitId ?? "0"),
+      customerId: int.parse(
+        _customerData?.customerId ?? "0",
+      ),
+      projectId: int.parse(_selectedProyek?.projectId ?? "0"),
+      unitName: namaUnitController.text,
+      unitLocation: lokasiUnitController.text,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestCreateUnit() async {
+    final response = await _apiService.requestUpdateUnit(
+      unitId: int.parse(unitData?.unitId ?? "0"),
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      projectId: int.parse(_selectedProyek?.projectId ?? "0"),
+      unitName: namaUnitController.text,
+      unitLocation: lokasiUnitController.text,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }
