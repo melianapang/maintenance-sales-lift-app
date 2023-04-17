@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/detail_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
@@ -51,7 +52,13 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
           backgroundColor: MyColors.darkBlack01,
           floatingActionButton: FloatingButtonWidget(
             onTap: () {
-              Navigator.pushNamed(context, Routes.addUnit);
+              Navigator.pushNamed(
+                context,
+                Routes.addUnit,
+                arguments: AddUnitCustomerViewParam(
+                  customerData: model.customerData,
+                ),
+              );
             },
           ),
           appBar: buildDefaultAppBar(
