@@ -24,6 +24,23 @@ class TimelineWidget extends StatelessWidget {
 
   final List<TimelineData> listTimeline;
 
+  Widget _buildTheOnlyTimeline(TimelineData data) {
+    return TimelineTile(
+      indicatorStyle: const IndicatorStyle(
+        width: 14,
+        height: 14,
+        color: MyColors.yellow01,
+      ),
+      alignment: TimelineAlign.start,
+      lineXY: 0.2,
+      isFirst: true,
+      afterLineStyle: const LineStyle(
+        color: MyColors.transparent,
+      ),
+      endChild: _buildTimelineInfo(data),
+    );
+  }
+
   Widget _buildTimelineHead(TimelineData data) {
     return TimelineTile(
       indicatorStyle: const IndicatorStyle(
@@ -130,15 +147,30 @@ class TimelineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> listTimelineWidget = [];
-    for (int i = 0; i < listTimeline.length; i++) {
-      if (i == 0) {
-        listTimelineWidget.add(_buildTimelineHead(listTimeline[i]));
-      } else if (i > 0 && i != listTimeline.length - 1) {
-        listTimelineWidget.add(_buildTimeline(listTimeline[i]));
-      } else if (i == listTimeline.length - 1) {
-        listTimelineWidget.add(_buildTimelineTail(listTimeline[i]));
+    if (listTimeline.length <= 1) {
+      listTimelineWidget.add(
+        _buildTheOnlyTimeline(
+          listTimeline.first,
+        ),
+      );
+    } else {
+      for (int i = 0; i < listTimeline.length; i++) {
+        if (i == 0) {
+          listTimelineWidget.add(
+            _buildTimelineHead(
+              listTimeline[i],
+            ),
+          );
+        } else if (i > 0 && i != listTimeline.length - 1) {
+          listTimelineWidget.add(_buildTimeline(listTimeline[i]));
+        } else if (i == listTimeline.length - 1) {
+          listTimelineWidget.add(
+            _buildTimelineTail(
+              listTimeline[i],
+            ),
+          );
+        }
       }
-      ;
     }
 
     return Column(
