@@ -42,7 +42,7 @@ String mappingStringNumerictoString(String value) {
     case "-1":
       return "Data Pemeliharaan Dihapus";
     case "1":
-      return "Gagal";
+      return "Batal/Gagal";
     case "2":
       return "Berhasil";
     default:
