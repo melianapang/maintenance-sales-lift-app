@@ -4,11 +4,12 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_history_maintenance_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -17,6 +18,7 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:intl/intl.dart';
 
 class DetailHistoryMaintenanceViewParam {
   DetailHistoryMaintenanceViewParam({
@@ -42,8 +44,6 @@ class DetailHistoryMaintenanceView extends StatefulWidget {
 class _DetailHistoryMaintenanceViewState
     extends State<DetailHistoryMaintenanceView> {
   final ScrollController scrollController = ScrollController();
-  String nama = "Aldo AldoAldoo";
-  String notelp = "081234567890";
 
   List<GalleryData> galleryData = [
     GalleryData(
@@ -163,12 +163,23 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Tanggal",
-                    text: model.maintenanceData?.scheduleDate,
+                    text: DateTimeUtils.convertStringToOtherStringDateFormat(
+                      date: model.maintenanceData?.scheduleDate ??
+                          DateTimeUtils.convertDateToString(
+                            date: DateTime.now(),
+                            formatter: DateFormat(
+                              DateTimeUtils.DATE_FORMAT_2,
+                            ),
+                          ),
+                      formattedString: DateTimeUtils.DATE_FORMAT_2,
+                    ),
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Hasil Pemeliharaan",
-                    text: model.maintenanceData?.maintenanceResult,
+                    text: mappingStringNumerictoString(
+                      model.maintenanceData?.maintenanceResult ?? "0",
+                    ),
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
@@ -231,12 +242,12 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(12),
                   TextInput.disabled(
                     label: "Nama Teknisi:",
-                    // text: model.maintenanceData?.engineerName,
+                    text: model.maintenanceData?.userName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
-                    // text: model.maintenanceData?.engineerPhoneNumber,
+                    text: model.maintenanceData?.phoneNumber,
                   ),
                 ],
               ),
