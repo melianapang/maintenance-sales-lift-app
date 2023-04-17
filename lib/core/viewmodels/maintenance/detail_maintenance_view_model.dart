@@ -133,7 +133,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   }
 
   void _mappingToTimelineData() {
-    if (_historyData == null) return;
+    if (_historyData == null || _historyData?.isEmpty == true) return;
 
     for (int i = 0; i < (_historyData?.length ?? 0); i++) {
       _timelineData.add(
@@ -148,7 +148,8 @@ class DetailMaintenanceViewModel extends BaseViewModel {
                 ),
             formattedString: DateTimeUtils.DATE_FORMAT_2,
           ),
-          note: _historyData?[i].maintenanceResult ?? "0",
+          note: mappingStringNumerictoString(
+              _historyData?[i].maintenanceResult ?? "0"),
           onTap: () {
             _navigationService.navigateTo(
               Routes.detailHistoryMaintenance,

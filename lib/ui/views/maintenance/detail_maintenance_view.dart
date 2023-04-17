@@ -171,9 +171,25 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             ),
                           ),
                         ),
-                        TimelineWidget(
-                          listTimeline: model.timelineData,
-                        ),
+                        Spacings.vert(8),
+                        if (model.timelineData.isNotEmpty)
+                          TimelineWidget(
+                            listTimeline: model.timelineData,
+                          ),
+                        if (model.timelineData.isEmpty)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Belum ada Riwayat Pemeliharaan untuk unit ini.",
+                              style: buildTextStyle(
+                                fontSize: 16,
+                                fontColor: MyColors.lightBlack02.withOpacity(
+                                  0.5,
+                                ),
+                                fontWeight: 300,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   )
