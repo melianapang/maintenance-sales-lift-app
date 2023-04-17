@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dar
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -20,6 +21,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
+import 'package:intl/intl.dart';
 
 class DetailMaintenanceViewParam {
   DetailMaintenanceViewParam({
@@ -144,8 +146,18 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
-                          label: "Jadwal Pemeliharaan Selanjutnya",
-                          text: model.maintenanceData?.scheduleDate,
+                          label: "Jadwal Pemeliharaan",
+                          text: DateTimeUtils
+                              .convertStringToOtherStringDateFormat(
+                            date: model.maintenanceData?.scheduleDate ??
+                                DateTimeUtils.convertDateToString(
+                                  date: DateTime.now(),
+                                  formatter: DateFormat(
+                                    DateTimeUtils.DATE_FORMAT_2,
+                                  ),
+                                ),
+                            formattedString: DateTimeUtils.DATE_FORMAT_2,
+                          ),
                         ),
                         Spacings.vert(24),
                         Align(
