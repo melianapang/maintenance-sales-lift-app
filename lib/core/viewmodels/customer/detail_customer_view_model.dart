@@ -21,7 +21,7 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  final CustomerData? _customerData;
+  CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
   //belom bener, harusnya dari customerData lgsg
@@ -39,6 +39,9 @@ class DetailCustomerViewModel extends BaseViewModel {
   //region download berkas
   String? _exportedFileName;
   //endregion
+
+  String? _errorMsg = "";
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {}
@@ -82,5 +85,16 @@ class DetailCustomerViewModel extends BaseViewModel {
     await DownloadDataUtils.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
+  }
+
+  Future<void> requestGetDetailCustomer() async {
+    final response = await _apiService.getDetailCustomer(
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _customerData = response.right;
+      notifyListeners();
+    }
   }
 }

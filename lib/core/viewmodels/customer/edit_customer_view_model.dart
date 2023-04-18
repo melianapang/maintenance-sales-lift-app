@@ -22,17 +22,14 @@ class EditCustomerViewModel extends BaseViewModel {
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
-  Customer? _customer;
-  Customer? get customer => _customer;
-
   // TextEditingController
-
   final nomorPelangganController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final cityController = TextEditingController();
   final emailController = TextEditingController();
+  final noteController = TextEditingController();
 
   bool _isCustomerNameValid = true;
   bool get isCustomerNameValid => _isCustomerNameValid;
@@ -83,18 +80,22 @@ class EditCustomerViewModel extends BaseViewModel {
   String? _errorMsg = "";
   String? get errorMsg => _errorMsg;
 
+  String? _msg = "";
+  String? get msg => _msg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
 
     if (_customerData != null) {
-      _customer = _mappingCustomerDataToCustomerModel(_customerData!);
       _handleAvailableData();
       nomorPelangganController.text = _customerData?.customerNumber ?? "";
       namaPelangganController.text = _customerData?.customerName ?? "";
+      namaPerusahaanController.text = _customerData?.companyName ?? "";
       phoneNumberController.text = _customerData?.phoneNumber ?? "";
-      cityController.text = _customer?.city ?? "";
-      emailController.text = _customer?.email ?? "";
+      cityController.text = _customerData?.city ?? "";
+      emailController.text = _customerData?.email ?? "";
+      noteController.text = _customerData?.note ?? "";
     }
     setBusy(false);
   }
@@ -205,41 +206,26 @@ class EditCustomerViewModel extends BaseViewModel {
     }
 
     final response = await _apiService.requestUpdateCustomer(
-      customerId: _customer?.customerId ?? 0,
-      nama: _customer?.customerName ?? "",
-      customerNumber: _customer?.customerNumber ?? "",
-      customerNeed: _customer?.customerNeed ?? "",
-      email: _customer?.email ?? "",
-      phoneNumber: _customer?.phoneNumber ?? "",
-      city: _customer?.city ?? "",
-      note: _customer?.note ?? "",
-      companyName: _customer?.companyName ?? "",
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      nama: namaPelangganController.text,
+      customerNumber: _customerData?.customerNumber ?? "",
+      customerNeed: _selectedKebutuhanPelangganOption.toString(),
+      email: emailController.text,
+      phoneNumber: phoneNumberController.text,
+      city: cityController.text,
+      note: noteController.text,
+      companyName: namaPerusahaanController.text,
       dataSource: _selectedSumberDataOption,
       customerType: _selectedTipePelangganOption,
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      _msg = response.right;
+      return true;
+    }
 
     _errorMsg = response.left.message;
     return false;
-  }
-
-  Customer _mappingCustomerDataToCustomerModel(CustomerData data) {
-    return Customer(
-      customerId: int.parse(data.customerId),
-      customerName: data.customerName,
-      customerType:
-          int.parse(data.customerType) > 1 ? 1 : int.parse(data.customerType),
-      customerNumber: data.customerNumber,
-      companyName: data.companyName ?? "",
-      customerNeed: data.customerNeed,
-      city: data.city,
-      dataSource: int.parse(data.dataSource),
-      phoneNumber: data.phoneNumber,
-      note: data.note ?? "",
-      status: int.parse(data.status),
-      email: data.email,
-    );
   }
 
   bool _isValid() {

@@ -158,12 +158,13 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         showDialogWidget(
                           context,
                           title: "Ubah Data User",
-                          description: "Perubahan data user berhasil disimpan",
+                          description: model.msg ??
+                              "Perubahan data user berhasil disimpan",
                           isSuccessDialog: true,
                           positiveLabel: "OK",
                           positiveCallback: () => Navigator.of(context)
                             ..pop()
-                            ..pop(),
+                            ..pop(true),
                         );
                       },
                     );
@@ -251,9 +252,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                             label: "Nama Perusahaan",
                             hintText: "Nama Perusahaan",
                             onChangedListener: model.onChangedCompanyName,
-                            // errorText: !model.isCompanyNameValid
-                            //     ? "Kolom ini wajib diisi."
-                            //     : null,
+                            errorText: !model.isCompanyNameValid
+                                ? "Kolom ini wajib diisi."
+                                : null,
                           ),
                           Spacings.vert(24),
                         ],
@@ -315,6 +316,11 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           errorText: !model.isEmailValid
                               ? "Kolom ini wajib diisi."
                               : null,
+                        ),
+                        TextInput.editable(
+                          controller: model.noteController,
+                          label: "Catatan",
+                          hintText: "Tulis catatanmu disini...m",
                         ),
                       ],
                     ),

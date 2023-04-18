@@ -75,6 +75,13 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                     arguments: EditCustomerViewParam(
                       customerData: model.customerData,
                     ),
+                  ).then(
+                    (value) {
+                      if (value == null) return;
+                      if (value == true) {
+                        model.requestGetDetailCustomer();
+                      }
+                    },
                   );
                 },
                 child: const Padding(
@@ -167,6 +174,12 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                   TextInput.disabled(
                     label: "Email",
                     text: model.customerData?.email,
+                  ),
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Catatn",
+                    hintText: "Catatan mengenai pelanggan...",
+                    text: model.customerData?.note,
                   ),
                   Spacings.vert(24),
                   if (model.customerData?.documents.isNotEmpty == true)
@@ -358,7 +371,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           ],
           labelStyle: buildTextStyle(
               fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
+          onTap: () async {
             Navigator.pushNamed(
               context,
               Routes.listUnit,
