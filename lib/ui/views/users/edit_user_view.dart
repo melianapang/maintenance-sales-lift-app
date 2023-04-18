@@ -91,7 +91,7 @@ class _EditUserViewState extends State<EditUserView> {
                       positiveLabel: "OK",
                       positiveCallback: () => Navigator.of(context)
                         ..pop()
-                        ..pop(),
+                        ..pop(true),
                     );
                     return;
                   }

@@ -66,7 +66,12 @@ class _DetailUserViewState extends State<DetailUserView> {
                     arguments: EditUserViewParam(
                       userData: model.userData,
                     ),
-                  );
+                  ).then((value) {
+                    if (value == null) return;
+                    if (value == true) {
+                      model.requestGetDetailCustomer();
+                    }
+                  });
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(

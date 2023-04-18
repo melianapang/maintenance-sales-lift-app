@@ -52,4 +52,17 @@ class DetailUserViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
     return false;
   }
+
+  Future<void> requestGetDetailCustomer() async {
+    setBusy(true);
+    final response = await _apiService.requestUserDetail(
+      userId: int.parse(_userData?.userId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _userData = response.right;
+      notifyListeners();
+    }
+    setBusy(false);
+  }
 }
