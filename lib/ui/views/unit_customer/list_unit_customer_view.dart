@@ -58,6 +58,13 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                 arguments: AddUnitCustomerViewParam(
                   customerData: model.customerData,
                 ),
+              ).then(
+                (value) {
+                  if (value == null) return;
+                  if (value == true) {
+                    model.refreshPage();
+                  }
+                },
               );
             },
           ),

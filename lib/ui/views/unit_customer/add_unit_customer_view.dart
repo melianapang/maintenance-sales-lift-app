@@ -81,7 +81,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                 positiveLabel: "Okay",
                 positiveCallback: () => Navigator.of(context)
                   ..pop()
-                  ..pop(),
+                  ..pop(result),
               );
             },
             text: 'Simpan',
