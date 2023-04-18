@@ -77,4 +77,19 @@ class ListUnitCustomerViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
   }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listUnit = [];
+    paginationControl.currentPage = 1;
+
+    await requestGetAllUnit();
+    if (_listUnit?.isEmpty == true || _listUnit == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+
+    setBusy(false);
+  }
 }
