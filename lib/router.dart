@@ -273,8 +273,14 @@ class AppRouter {
           ),
         );
       case Routes.detailReminder:
+        final DetailReminderViewParam param =
+            settings.arguments is DetailReminderViewParam
+                ? settings.arguments as DetailReminderViewParam
+                : DetailReminderViewParam();
         return buildRoute(
-          builder: (_) => const DetailReminderView(),
+          builder: (_) => DetailReminderView(
+            param: param,
+          ),
         );
       case Routes.map:
         final MapViewParam param = settings.arguments is MapViewParam
