@@ -102,7 +102,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                   if (isSucceedCreatePIC) {
                     Navigator.of(context)
                       ..pop()
-                      ..pop();
+                      ..pop(isSucceed);
 
                     return;
                   }

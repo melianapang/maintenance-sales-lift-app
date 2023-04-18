@@ -44,7 +44,12 @@ class _ListProjectViewState extends State<ListProjectView> {
           ),
           floatingActionButton: FloatingButtonWidget(
             onTap: () {
-              Navigator.pushNamed(context, Routes.addProject);
+              Navigator.pushNamed(context, Routes.addProject).then((value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.refreshPage();
+                }
+              });
             },
           ),
           body: Column(

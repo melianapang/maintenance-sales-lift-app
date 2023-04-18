@@ -63,4 +63,19 @@ class ListProjectViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
   }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listProject = [];
+
+    paginationControl.currentPage = 1;
+    await requestGetAllProjects();
+
+    if (_listProject.isEmpty) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+    setBusy(false);
+  }
 }
