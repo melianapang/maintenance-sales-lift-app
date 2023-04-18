@@ -124,7 +124,7 @@ class ReminderData {
   Map<String, dynamic> toJson() => _$ReminderDataToJson(this);
 
   @JsonKey(name: "reminder_id")
-  final int reminderId;
+  final String reminderId;
 
   @JsonKey(name: "user_name")
   final String userName;

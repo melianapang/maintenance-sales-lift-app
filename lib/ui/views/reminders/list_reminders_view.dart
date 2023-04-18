@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/list_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -23,7 +25,9 @@ class _ListRemindersViewState extends State<ListRemindersView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: ListReminderViewModel(),
+      model: ListReminderViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (ListReminderViewModel model) async {
         await model.initModel();
       },
@@ -43,7 +47,12 @@ class _ListRemindersViewState extends State<ListRemindersView> {
                 arguments: FormSetReminderViewParam(
                   source: FormSetReminderSource.ListReminderPage,
                 ),
-              );
+              ).then((value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.refreshPage();
+                }
+              });
             },
           ),
           body: Column(
