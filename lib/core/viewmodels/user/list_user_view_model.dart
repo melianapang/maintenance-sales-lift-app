@@ -62,4 +62,19 @@ class ListUserViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
   }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listUser = [];
+
+    paginationControl.currentPage = 1;
+    await requestGetAllUserData();
+
+    if (_listUser.isEmpty) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+    setBusy(false);
+  }
 }

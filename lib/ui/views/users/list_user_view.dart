@@ -42,7 +42,12 @@ class _ListUserViewState extends State<ListUserView> {
             isBackEnabled: true,
           ),
           floatingActionButton: FloatingButtonWidget(onTap: () {
-            Navigator.pushNamed(context, Routes.addUser);
+            Navigator.pushNamed(context, Routes.addUser).then((value) {
+              if (value == null) return;
+              if (value == true) {
+                model.refreshPage();
+              }
+            });
           }),
           body: Column(
             children: [

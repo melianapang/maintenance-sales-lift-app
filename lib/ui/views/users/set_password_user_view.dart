@@ -81,7 +81,7 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
                   Navigator.of(context)
                     ..pop()
                     ..pop()
-                    ..pop();
+                    ..pop(true);
                   return;
                 }
 
