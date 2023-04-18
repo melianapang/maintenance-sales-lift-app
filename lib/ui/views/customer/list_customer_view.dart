@@ -43,7 +43,12 @@ class _ListCustomerViewState extends State<ListCustomerView> {
           backgroundColor: MyColors.darkBlack01,
           floatingActionButton: FloatingButtonWidget(
             onTap: () {
-              Navigator.pushNamed(context, Routes.addCustomer);
+              Navigator.pushNamed(context, Routes.addCustomer).then((value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.refreshPage();
+                }
+              });
             },
           ),
           appBar: buildDefaultAppBar(

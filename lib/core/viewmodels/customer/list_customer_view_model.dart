@@ -135,6 +135,22 @@ class ListCustomerViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listCustomer = [];
+
+    paginationControl.currentPage = 1;
+
+    await requestGetAllCustomer();
+    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+
+    setBusy(false);
+  }
+
   Future<bool> isUserAllowedToExportData() async {
     Role role = await _authenticationService.getUserRole();
     return role == Role.Admin;

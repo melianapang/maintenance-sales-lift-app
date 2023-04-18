@@ -131,7 +131,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                     if (result) {
                       Navigator.of(context)
                         ..pop()
-                        ..pop();
+                        ..pop(result);
 
                       return;
                     }
@@ -285,12 +285,11 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                         !model.isEmailValid ? "Kolom ini wajib diisi." : null,
                   ),
                   Spacings.vert(24),
-                  TextInput.multiline(
+                  TextInput.editable(
                     label: "Catatan",
                     hintText: "Tulis catatan disini...",
                     controller: model.noteController,
                     onChangedListener: (text) {},
-                    minLines: 5,
                     maxLines: 5,
                   ),
                 ],
