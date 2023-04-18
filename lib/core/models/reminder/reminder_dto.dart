@@ -115,7 +115,7 @@ class ReminderData {
     required this.reminderTime,
     required this.description,
     required this.remindedNote,
-    required this.afterRemindedNote,
+    required this.afterReminderNote,
   });
 
   factory ReminderData.fromJson(Map<String, dynamic> json) =>
@@ -129,7 +129,7 @@ class ReminderData {
   @JsonKey(name: "user_name")
   final String userName;
 
-  @JsonKey(name: "custemer_name")
+  @JsonKey(name: "customer_name")
   final String customerName;
 
   @JsonKey(name: "reminder_date")
@@ -144,8 +144,8 @@ class ReminderData {
   @JsonKey(name: "reminded_note")
   final String remindedNote;
 
-  @JsonKey(name: "after_reminded_note")
-  final String afterRemindedNote;
+  @JsonKey(name: "after_reminder_note")
+  final String afterReminderNote;
 }
 //endregion
 
