@@ -59,7 +59,7 @@ abstract class Api {
     @Query("page_size") int pageSize,
   );
 
-  @GET('/api/0/User/get_user_deail/{user_id}')
+  @GET('/api/0/User/get_user_detail/{user_id}')
   Future<HttpResponse<dynamic>> requestGetUserDetail(
     @Path("user_id") int userId,
   );
@@ -98,7 +98,7 @@ abstract class Api {
   //endregion
 
   //region reminder
-  @GET('/api/0/LReminderog/get_all_reminders/')
+  @GET('/api/0/Reminder/get_all_reminders/')
   Future<HttpResponse<dynamic>> requestGetAllReminder(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
@@ -117,6 +117,11 @@ abstract class Api {
 
   @DELETE('/api/0/Reminder/delete_reminder/{reminder_id}')
   Future<HttpResponse<dynamic>> requestDeleteReminder(
+    @Path("reminder_id") int reminderId,
+  );
+
+  @GET('/api/0/Reminder/get_reminder_detail/{reminder_id}')
+  Future<HttpResponse<dynamic>> requestGetDetailReminder(
     @Path("reminder_id") int reminderId,
   );
   //endregion
@@ -143,6 +148,11 @@ abstract class Api {
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
+
+  @GET('/api/0/Customer/get_customer_detail/{customer_id}')
+  Future<HttpResponse<dynamic>> requestGetDetailCustomer(
+    @Path("customer_id") int customerId,
+  );
   //endregion
 
   //region unit
@@ -166,6 +176,11 @@ abstract class Api {
 
   @DELETE('/api/0/Unit/delete_unit/{unit_id}')
   Future<HttpResponse<dynamic>> requestDeleteUnit(
+    @Path("unit_id") int unitId,
+  );
+
+  @GET('/api/0/Unit/get_unit_detail/{unit_id}')
+  Future<HttpResponse<dynamic>> requestGetDetailUnit(
     @Path("unit_id") int unitId,
   );
   //endregion
@@ -248,6 +263,11 @@ abstract class Api {
 
   @DELETE('/api/0/Project/delete_project/{project_id}')
   Future<HttpResponse<dynamic>> requestDeleteProject(
+    @Path("project_id") int projectId,
+  );
+
+  @GET('/api/0/Project/get_project_detail/{project_id}')
+  Future<HttpResponse<dynamic>> requestGetDetailProject(
     @Path("project_id") int projectId,
   );
   //endregion
@@ -444,7 +464,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, DetailUserData>> requestUserDetail({
+  Future<Either<Failure, UserData>> requestUserDetail({
     required int userId,
   }) async {
     try {
@@ -457,13 +477,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, DetailUserData>(userDetailResponse.data);
+        return Right<Failure, UserData>(userDetailResponse.data);
       }
 
-      return ErrorUtils<DetailUserData>().handleDomainError(response);
+      return ErrorUtils<UserData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<DetailUserData>().handleError(e);
+      return ErrorUtils<UserData>().handleError(e);
     }
   }
   //endregion
@@ -710,6 +730,29 @@ class ApiService {
       return ErrorUtils<String>().handleError(e);
     }
   }
+
+  Future<Either<Failure, ReminderData>> requestDetailReminder({
+    required int unitId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetDetailReminder(unitId);
+
+      if (response.isSuccess) {
+        final ReminderDetailResponse reminderDetailResponse =
+            ReminderDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, ReminderData>(reminderDetailResponse.data);
+      }
+
+      return ErrorUtils<ReminderData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ReminderData>().handleError(e);
+    }
+  }
   //endregion
 
   //region customer
@@ -781,7 +824,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, bool>> requestUpdateCustomer({
+  Future<Either<Failure, String>> requestUpdateCustomer({
     required String nama,
     required String customerNumber,
     required int customerType,
@@ -814,13 +857,16 @@ class ApiService {
       );
 
       if (response.isSuccess) {
-        return const Right<Failure, bool>(true);
+        UpdateCustomerResponse updateCustomerResponse =
+            UpdateCustomerResponse.fromJson(response.data);
+
+        return Right<Failure, String>(updateCustomerResponse.message);
       }
 
-      return ErrorUtils<bool>().handleDomainError(response);
+      return ErrorUtils<String>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
-      return ErrorUtils<bool>().handleError(e);
+      return ErrorUtils<String>().handleError(e);
     }
   }
 
@@ -845,6 +891,28 @@ class ApiService {
     } catch (e) {
       log("Sequence number error");
       return ErrorUtils<List<CustomerData>?>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, CustomerData>> getDetailCustomer({
+    required int customerId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetDetailCustomer(
+        customerId,
+      );
+
+      if (response.isSuccess) {
+        GetDetailCustomerResponse getDetailCustomerResponse =
+            GetDetailCustomerResponse.fromJson(response.data);
+
+        return Right<Failure, CustomerData>(getDetailCustomerResponse.data);
+      }
+
+      return ErrorUtils<CustomerData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e ");
+      return ErrorUtils<CustomerData>().handleError(e);
     }
   }
 
@@ -942,6 +1010,29 @@ class ApiService {
       return ErrorUtils<bool>().handleError(e);
     }
   }
+
+  Future<Either<Failure, UnitData>> requestDetailUnit({
+    required int unitId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetDetailUnit(unitId);
+
+      if (response.isSuccess) {
+        final UnitDetailResponse unitDetailResponse =
+            UnitDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, UnitData>(unitDetailResponse.data);
+      }
+
+      return ErrorUtils<UnitData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<UnitData>().handleError(e);
+    }
+  }
   //endregion
 
   //region document
@@ -1003,12 +1094,12 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, DetailMaintenanceData>> requestMaintenaceDetail({
-    required int userId,
+  Future<Either<Failure, MaintenanceData>> requestMaintenaceDetail({
+    required int maintenanceId,
   }) async {
     try {
       final HttpResponse<dynamic> response =
-          await api.requestGetMaintenanceDetail(userId);
+          await api.requestGetMaintenanceDetail(maintenanceId);
 
       if (response.isSuccess) {
         final MaintenanceDetailResponse maintenanceDetailResponse =
@@ -1016,14 +1107,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, DetailMaintenanceData>(
-            maintenanceDetailResponse.data);
+        return Right<Failure, MaintenanceData>(maintenanceDetailResponse.data);
       }
 
-      return ErrorUtils<DetailMaintenanceData>().handleDomainError(response);
+      return ErrorUtils<MaintenanceData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<DetailMaintenanceData>().handleError(e);
+      return ErrorUtils<MaintenanceData>().handleError(e);
     }
   }
 
@@ -1271,6 +1361,29 @@ class ApiService {
     } catch (e) {
       log("Sequence number error");
       return ErrorUtils<bool>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ProjectData>> requestDetailProject({
+    required int projectId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetDetailProject(projectId);
+
+      if (response.isSuccess) {
+        final ProjectDetailResponse projectDetailResponse =
+            ProjectDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, ProjectData>(projectDetailResponse.data);
+      }
+
+      return ErrorUtils<ProjectData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ProjectData>().handleError(e);
     }
   }
   //endregion
