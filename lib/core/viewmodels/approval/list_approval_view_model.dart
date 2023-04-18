@@ -30,12 +30,14 @@ class ListApprovalViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+
     paginationControl.currentPage = 1;
     await requestGetAllApproval();
     if (_listApproval?.isEmpty == true) {
       _isShowNoDataFoundPage = true;
       notifyListeners();
     }
+
     setBusy(false);
   }
 
@@ -59,5 +61,20 @@ class ListApprovalViewModel extends BaseViewModel {
     }
 
     _errorMsg = response.left.message;
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listApproval = [];
+
+    paginationControl.currentPage = 1;
+    await requestGetAllApproval();
+    if (_listApproval?.isEmpty == true) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+
+    setBusy(false);
   }
 }

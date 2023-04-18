@@ -107,7 +107,9 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                           description: "Permintaan telah ditolak.",
                           positiveLabel: "OK",
                           positiveCallback: () {
-                            Navigator.maybePop(context);
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop(true);
                           },
                         );
                       },
@@ -166,7 +168,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                           positiveCallback: () {
                             Navigator.of(context)
                               ..pop()
-                              ..pop();
+                              ..pop(true);
                           },
                         );
                       },
@@ -213,71 +215,9 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                     color: MyColors.lightBlack02,
                   ),
                   Spacings.vert(32),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Sebelum",
-                          textAlign: TextAlign.center,
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontColor: MyColors.lightBlack02,
-                            fontWeight: 800,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Sesudah",
-                          textAlign: TextAlign.center,
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontColor: MyColors.lightBlack02,
-                            fontWeight: 800,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Spacings.vert(12),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: model.approvalData?.contentsNew?.length ?? 0,
-                    separatorBuilder: (context, index) => const Divider(
-                      color: MyColors.lightBlack01,
-                      thickness: 0.4,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      final Map<String, dynamic> oldData =
-                          model.approvalData?.contentsOld ?? {};
-
-                      final Map<String, dynamic> newData =
-                          model.approvalData?.contentsNew ?? {};
-
-                      return BeforeAfterWigdet(
-                        titleBefore:
-                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          oldData.keys.toList()[index].toString(),
-                        ),
-                        descriptionBefore:
-                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          oldData.values.toList()[index].toString(),
-                        ),
-                        titleAfter:
-                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          newData.keys.toList()[index].toString(),
-                        ),
-                        descriptionAfter:
-                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
-                          newData.values.toList()[index].toString(),
-                        ),
-                        isChanged: StringUtils.isStringDifferent(
-                          oldData.values.toList()[index].toString(),
-                          newData.values.toList()[index].toString(),
-                        ),
-                      );
-                    },
+                  ...buildBeforeAfterList(
+                    oldContents: model.approvalData?.contentsOld,
+                    newContents: model.approvalData?.contentsNew,
                   ),
                 ],
               ),
