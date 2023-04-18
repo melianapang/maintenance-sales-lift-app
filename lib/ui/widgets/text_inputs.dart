@@ -240,6 +240,7 @@ class TextInput extends StatelessWidget {
           autovalidateMode: autovalidateMode,
         ),
         if (note != null) ...[
+          Spacings.vert(4),
           Text(
             note ?? "",
             style: buildTextStyle(
