@@ -82,7 +82,9 @@ class _FormChangeMaintenanceDateState
                     isSuccessDialog: true,
                     positiveLabel: "OK",
                     positiveCallback: () {
-                      Navigator.maybePop(context);
+                      Navigator.of(context)
+                        ..pop()
+                        ..pop(true);
                     },
                   );
                 },

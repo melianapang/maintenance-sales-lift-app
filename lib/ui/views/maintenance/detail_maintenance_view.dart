@@ -284,7 +284,12 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                 arguments: FormChangeMaintenanceDateViewParam(
                   maintenanceData: model.maintenanceData,
                 ),
-              );
+              ).then((value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.requestGetDetailMaintenance();
+                }
+              });
 
               setState() {
                 model.setDialChildrenVisible();
@@ -314,6 +319,13 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               arguments: FormMaintenanceViewParam(
                 maintenanceData: widget.param.maintenanceData,
               ),
+            ).then(
+              (value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.requestGetHistoryMaintenance();
+                }
+              },
             );
 
             setState() {

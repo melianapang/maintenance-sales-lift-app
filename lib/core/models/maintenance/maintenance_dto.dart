@@ -214,7 +214,7 @@ class MaintenanceDetailResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final DetailMaintenanceData data;
+  final MaintenanceData data;
 }
 
 @JsonSerializable()

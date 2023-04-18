@@ -93,6 +93,21 @@ class ListMaintenanceViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _listMaintenance = [];
+
+    paginationControl.currentPage = 1;
+    await requestGetAllMaintenance();
+
+    if (_listMaintenance?.isEmpty == true || _listMaintenance == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+    setBusy(false);
+  }
+
   Future<bool> isUserAllowedToExportData() async {
     Role role = await _authenticationService.getUserRole();
     return role == Role.Admin;

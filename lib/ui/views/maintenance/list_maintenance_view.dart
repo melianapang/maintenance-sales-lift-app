@@ -121,7 +121,12 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                                   maintenanceData:
                                       model.listMaintenance?[index],
                                 ),
-                              );
+                              ).then((value) {
+                                if (value == null) return;
+                                if (value == true) {
+                                  model.refreshPage();
+                                }
+                              });
                             },
                           );
                         }),

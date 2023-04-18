@@ -126,6 +126,21 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     if (response.isRight) {
       _historyData = response.right;
       _mappingToTimelineData();
+      notifyListeners();
+      return;
+    }
+
+    _errorMsg = response.left.message;
+  }
+
+  Future<void> requestGetDetailMaintenance() async {
+    final response = await _apiService.requestMaintenaceDetail(
+      maintenanceId: int.parse(_maintenanceData?.maintenanceId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _maintenanceData = response.right;
+      notifyListeners();
       return;
     }
 

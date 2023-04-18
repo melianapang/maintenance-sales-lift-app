@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class FormDeleteMaintenanceView extends StatefulWidget {
@@ -47,7 +48,19 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
               right: 24.0,
               top: 24,
             ),
-            onTap: () {},
+            onTap: () {
+              showDialogWidget(context,
+                  title: "Hapus Data Pemeliharaan",
+                  description:
+                      "Anda telah berhasil menghapus data pemeliharaan ini",
+                  isSuccessDialog: true,
+                  positiveLabel: "Okay", positiveCallback: () {
+                Navigator.of(context)
+                  ..pop()
+                  ..pop()
+                  ..pop(true);
+              });
+            },
             text: 'Lanjutkan',
           ),
           body: SingleChildScrollView(
