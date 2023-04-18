@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/list_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -11,6 +13,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/detail_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
@@ -67,27 +70,41 @@ class _ListRemindersViewState extends State<ListRemindersView> {
               Spacings.vert(12),
               if (!model.isShowNoDataFoundPage && !model.busy)
                 Expanded(
-                  child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      separatorBuilder: (context, index) => const Divider(
-                            color: MyColors.transparent,
-                            height: 20,
-                          ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCardWidget(
-                          cardType: CardType.list,
-                          title: "Nadia Ang",
-                          description: "PT ABC JAYA",
-                          description2: "12 March 2023",
-                          titleSize: 20,
-                          descSize: 16,
-                          desc2Size: 12,
-                          onTap: () {
-                            Navigator.pushNamed(context, Routes.detailReminder);
-                          },
-                        );
-                      }),
+                  child: LazyLoadScrollView(
+                    onEndOfPage: () => model.requestGetAllReminderData(),
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: model.listReminder.length,
+                        separatorBuilder: (context, index) => const Divider(
+                              color: MyColors.transparent,
+                              height: 20,
+                            ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return CustomCardWidget(
+                            cardType: CardType.list,
+                            title: model.listReminder[index].customerName,
+                            description: model.listReminder[index].description,
+                            description2: DateTimeUtils
+                                .convertStringToOtherStringDateFormat(
+                              date: model.listReminder[index].reminderDate,
+                              formattedString: DateTimeUtils.DATE_FORMAT_2,
+                            ),
+                            titleSize: 20,
+                            descSize: 16,
+                            desc2Size: 12,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.detailReminder,
+                                arguments: DetailReminderViewParam(
+                                  reminderData: model.listReminder[index],
+                                ),
+                              );
+                            },
+                          );
+                        }),
+                  ),
                 ),
               if (model.isShowNoDataFoundPage && !model.busy)
                 buildNoDataFoundPage(),
