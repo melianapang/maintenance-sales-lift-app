@@ -62,17 +62,17 @@ class _ListApprovalViewState extends State<ListApprovalView> {
                           title: StringUtils.removeZeroWidthSpaces(
                               model.listApproval?[index].userRequestName ?? ""),
                           description: "Permohonan Edit Data Pelanggan",
-                          description2: DateTimeUtils
-                              .convertStringToOtherStringDateFormat(
-                            date: model.listApproval?[index].approvalDate ??
-                                DateTimeUtils.convertDateToString(
-                                  date: DateTime.now(),
-                                  formatter: DateFormat(
-                                    DateTimeUtils.DATE_FORMAT_2,
-                                  ),
-                                ),
-                            formattedString: DateTimeUtils.DATE_FORMAT_2,
-                          ),
+                          description2: model
+                                      .listApproval?[index].approvalDate !=
+                                  null
+                              ? DateTimeUtils
+                                  .convertStringToOtherStringDateFormat(
+                                  date:
+                                      model.listApproval?[index].approvalDate ??
+                                          "",
+                                  formattedString: DateTimeUtils.DATE_FORMAT_2,
+                                )
+                              : "",
                           descSize: 16,
                           desc2Size: 14,
                           titleSize: 20,
@@ -83,7 +83,12 @@ class _ListApprovalViewState extends State<ListApprovalView> {
                               arguments: DetailApprovalViewParam(
                                 approvalData: model.listApproval?[index],
                               ),
-                            );
+                            ).then((value) {
+                              if (value == null) return;
+                              if (value == true) {
+                                model.refreshPage();
+                              }
+                            });
                           },
                         );
                       },
