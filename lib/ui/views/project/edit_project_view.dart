@@ -96,13 +96,13 @@ class _EditProjectViewState extends State<EditProjectView> {
                         ? "Perubahan data proyek berhasil disimpan."
                         : model.errorMsg ??
                             "Perubahan data proyek gagal disimpan.",
-                    isSuccessDialog: true,
+                    isSuccessDialog: result,
                     positiveLabel: "Ok",
                     positiveCallback: () {
                       if (result) {
                         Navigator.of(context)
                           ..pop()
-                          ..pop();
+                          ..pop(result);
                         return;
                       }
 

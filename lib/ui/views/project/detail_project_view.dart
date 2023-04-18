@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -45,6 +46,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
     return ViewModel(
       model: DetailProjectViewModel(
         projectData: widget.param.projectData,
+        dioService: Provider.of<DioService>(context),
         authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (DetailProjectViewModel model) async {
@@ -66,7 +68,12 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     arguments: EditProjectViewParam(
                       projectData: model.projectData,
                     ),
-                  );
+                  ).then((value) {
+                    if (value == null) return;
+                    if (value == true) {
+                      model.requestGetDetailProject();
+                    }
+                  });
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(
