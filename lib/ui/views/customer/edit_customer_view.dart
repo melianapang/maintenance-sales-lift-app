@@ -161,7 +161,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           description: "Perubahan data user berhasil disimpan",
                           isSuccessDialog: true,
                           positiveLabel: "OK",
-                          positiveCallback: () => Navigator.maybePop(context),
+                          positiveCallback: () => Navigator.of(context)
+                            ..pop()
+                            ..pop(),
                         );
                       },
                     );

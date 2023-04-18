@@ -70,20 +70,23 @@ class _SetPasswordUserViewState extends State<SetPasswordUserView> {
               bool result = await model.requestCreateUser();
               Navigator.pop(context);
 
-              showDialogWidget(
-                context,
-                title: "Pembuatan User Baru",
-                isSuccessDialog: result,
-                description: result
-                    ? "Pembuatan user baru telah berhasil"
-                    : model.errorMsg ?? "Pembuatan user gagal dilakukan",
-                positiveLabel: "Okay",
-                positiveCallback: () => Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.home,
-                  (route) => false,
-                ),
-              );
+              showDialogWidget(context,
+                  title: "Pembuatan User Baru",
+                  isSuccessDialog: result,
+                  description: result
+                      ? "Pembuatan user baru telah berhasil"
+                      : model.errorMsg ?? "Pembuatan user gagal dilakukan",
+                  positiveLabel: "Okay", positiveCallback: () {
+                if (result) {
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop()
+                    ..pop();
+                  return;
+                }
+
+                Navigator.maybePop(context);
+              });
             },
             text: 'Simpan',
           ),

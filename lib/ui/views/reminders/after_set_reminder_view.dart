@@ -34,11 +34,10 @@ class _AfterSetReminderViewState extends State<AfterSetReminderView> {
           right: 24.0,
         ),
         onTap: () {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            Routes.home,
-            (route) => false,
-          );
+          Navigator.of(context)
+            ..pop()
+            ..pop()
+            ..pop();
         },
         text: 'OK',
       ),

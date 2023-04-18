@@ -70,7 +70,9 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                       positiveLabel: "OK",
                       negativeLabel: "Lihat Data",
                       positiveCallback: () {
-                        Navigator.maybePop(context);
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
                       },
                       negativeCallback: () async {
                         await model.openExportedData();

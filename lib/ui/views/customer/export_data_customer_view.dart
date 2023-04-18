@@ -67,7 +67,9 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
                       positiveLabel: "OK",
                       negativeLabel: "Lihat Data",
                       positiveCallback: () {
-                        Navigator.maybePop(context);
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
                       },
                       negativeCallback: () async {
                         await model.openExportedData();

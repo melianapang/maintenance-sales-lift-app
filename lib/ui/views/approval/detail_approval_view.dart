@@ -152,9 +152,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                                 "Data permintaan gagal diubah.",
                             isSuccessDialog: false,
                             positiveLabel: "OK",
-                            positiveCallback: () {
-                              Navigator.maybePop(context);
-                            },
+                            positiveCallback: () => Navigator.maybePop(context),
                           );
                           return;
                         }
@@ -166,7 +164,9 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                           isSuccessDialog: true,
                           positiveLabel: "OK",
                           positiveCallback: () {
-                            Navigator.maybePop(context);
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop();
                           },
                         );
                       },

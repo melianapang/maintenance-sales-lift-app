@@ -98,7 +98,16 @@ class _EditProjectViewState extends State<EditProjectView> {
                             "Perubahan data proyek gagal disimpan.",
                     isSuccessDialog: true,
                     positiveLabel: "Ok",
-                    positiveCallback: () => Navigator.pop(context),
+                    positiveCallback: () {
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
+                        return;
+                      }
+
+                      Navigator.maybePop(context);
+                    },
                   );
                 },
               );

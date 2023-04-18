@@ -98,7 +98,17 @@ class _AddProjectViewState extends State<AddProjectView> {
                     : model.errorMsg ?? "Gagal menambahkan data proyek.",
                 isSuccessDialog: isSucceedCreatePIC,
                 positiveLabel: "Okay",
-                positiveCallback: () => Navigator.pop(context),
+                positiveCallback: () {
+                  if (isSucceedCreatePIC) {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+
+                    return;
+                  }
+
+                  Navigator.maybePop(context);
+                },
               );
             },
             text: 'Simpan',

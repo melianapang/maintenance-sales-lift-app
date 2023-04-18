@@ -121,16 +121,23 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                   bool result = await model.requestCreateCustomer();
                   Navigator.pop(context);
 
-                  showDialogWidget(
-                    context,
-                    title: "Tambah Pelanggan",
-                    description: result
-                        ? "Berhasil menambah data pelanggan"
-                        : model.errorMsg ?? "Gagal menambah data pelanggan",
-                    isSuccessDialog: result,
-                    positiveLabel: "OK",
-                    positiveCallback: () => Navigator.pop(context),
-                  );
+                  showDialogWidget(context,
+                      title: "Tambah Pelanggan",
+                      description: result
+                          ? "Berhasil menambah data pelanggan"
+                          : model.errorMsg ?? "Gagal menambah data pelanggan",
+                      isSuccessDialog: result,
+                      positiveLabel: "OK", positiveCallback: () {
+                    if (result) {
+                      Navigator.of(context)
+                        ..pop()
+                        ..pop();
+
+                      return;
+                    }
+
+                    Navigator.pop(context);
+                  });
                 },
                 negativeCallback: () => Navigator.pop(context),
               );

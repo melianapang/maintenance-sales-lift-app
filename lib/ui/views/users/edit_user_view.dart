@@ -89,9 +89,9 @@ class _EditUserViewState extends State<EditUserView> {
                       description: "Perubahan data user berhasil disimpan",
                       isSuccessDialog: true,
                       positiveLabel: "OK",
-                      positiveCallback: () => Navigator.pop(
-                        context,
-                      ),
+                      positiveCallback: () => Navigator.of(context)
+                        ..pop()
+                        ..pop(),
                     );
                     return;
                   }

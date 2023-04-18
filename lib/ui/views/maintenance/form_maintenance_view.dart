@@ -109,6 +109,13 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                             "Data pemeliharaan gagal ditambahkan",
                     positiveLabel: "Ok",
                     positiveCallback: () {
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
+                        return;
+                      }
+
                       Navigator.pop(context);
                     },
                   );
