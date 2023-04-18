@@ -64,7 +64,6 @@ class UpdateCustomerResponse {
   UpdateCustomerResponse({
     required this.isSuccess,
     required this.message,
-    required this.data,
   });
 
   factory UpdateCustomerResponse.fromJson(Map<String, dynamic> json) =>
@@ -77,9 +76,6 @@ class UpdateCustomerResponse {
 
   @JsonKey(name: "Message")
   final String message;
-
-  @JsonKey(name: "Data")
-  final List<String> data;
 }
 //endregion
 
@@ -280,5 +276,30 @@ class DeleteCustomerResponse {
 
   @JsonKey(name: "Message")
   final String message;
+}
+//endregion
+
+//region get detail customer
+@JsonSerializable()
+class GetDetailCustomerResponse {
+  GetDetailCustomerResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetDetailCustomerResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetDetailCustomerResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetDetailCustomerResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final CustomerData data;
 }
 //endregion

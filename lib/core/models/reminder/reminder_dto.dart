@@ -225,3 +225,28 @@ class UpdateReminderResponse {
   final String message;
 }
 //endregion
+
+//region get reminder detail
+@JsonSerializable()
+class ReminderDetailResponse {
+  ReminderDetailResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory ReminderDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReminderDetailResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReminderDetailResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final ReminderData data;
+}
+//endregion

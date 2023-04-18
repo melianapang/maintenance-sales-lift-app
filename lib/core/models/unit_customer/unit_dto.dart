@@ -178,3 +178,28 @@ class UpdateUnitResponse {
   final List<String> data;
 }
 //endregion
+
+//region get unit detail
+@JsonSerializable()
+class UnitDetailResponse {
+  UnitDetailResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory UnitDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$UnitDetailResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UnitDetailResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final UnitData data;
+}
+//endregion

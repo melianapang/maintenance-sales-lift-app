@@ -83,7 +83,7 @@ class ApprovalData {
   final Map<String, dynamic>? contentsOld;
 
   @JsonKey(name: "approval_date")
-  final String approvalDate;
+  final String? approvalDate;
 }
 //endregion
 

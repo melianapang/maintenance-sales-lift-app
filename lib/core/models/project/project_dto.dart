@@ -325,3 +325,28 @@ class DeleteProjectResponse {
   final String message;
 }
 //endregion
+
+//region get project detail
+@JsonSerializable()
+class ProjectDetailResponse {
+  ProjectDetailResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory ProjectDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProjectDetailResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProjectDetailResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final ProjectData data;
+}
+//endregion j

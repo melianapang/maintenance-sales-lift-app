@@ -259,41 +259,6 @@ class UserDetailResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final DetailUserData data;
-}
-
-@JsonSerializable()
-class DetailUserData {
-  DetailUserData({
-    required this.name,
-    required this.roleName,
-    required this.address,
-    required this.city,
-    required this.phoneNumber,
-    required this.email,
-  });
-
-  factory DetailUserData.fromJson(Map<String, dynamic> json) =>
-      _$DetailUserDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DetailUserDataToJson(this);
-
-  @JsonKey(name: "name")
-  final String name;
-
-  @JsonKey(name: "role_name")
-  final String roleName;
-
-  @JsonKey(name: "address")
-  final String address;
-
-  @JsonKey(name: "city")
-  final String city;
-
-  @JsonKey(name: "phone_number")
-  final String phoneNumber;
-
-  @JsonKey(name: "email")
-  final String email;
+  final UserData data;
 }
 //endregion
