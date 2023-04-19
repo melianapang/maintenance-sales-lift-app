@@ -74,38 +74,41 @@ class _ListRemindersViewState extends State<ListRemindersView> {
                     onEndOfPage: () => model.requestGetAllReminderData(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: model.listReminder.length,
-                        separatorBuilder: (context, index) => const Divider(
-                              color: MyColors.transparent,
-                              height: 20,
-                            ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return CustomCardWidget(
-                            cardType: CardType.list,
-                            title: model.listReminder[index].customerName,
-                            description: model.listReminder[index].description,
-                            description2: DateTimeUtils
-                                .convertStringToOtherStringDateFormat(
-                              date: model.listReminder[index].reminderDate,
-                              formattedString: DateTimeUtils.DATE_FORMAT_2,
-                            ),
-                            titleSize: 20,
-                            descSize: 16,
-                            desc2Size: 12,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.detailReminder,
-                                arguments: DetailReminderViewParam(
-                                  reminderData: model.listReminder[index],
-                                ),
-                              );
-                            },
-                          );
-                        }),
+                      shrinkWrap: true,
+                      itemCount: model.listReminder.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: MyColors.transparent,
+                        height: 20,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCardWidget(
+                          cardType: CardType.list,
+                          title: model.listReminder[index].customerName ??
+                              "(Tanpa Pelanggan)",
+                          description: model.listReminder[index].description,
+                          description2: DateTimeUtils
+                              .convertStringToOtherStringDateFormat(
+                            date: model.listReminder[index].reminderDate,
+                            formattedString: DateTimeUtils.DATE_FORMAT_2,
+                          ),
+                          titleSize: 20,
+                          descSize: 16,
+                          desc2Size: 12,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.detailReminder,
+                              arguments: DetailReminderViewParam(
+                                reminderData: model.listReminder[index],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
+              Spacings.vert(24),
               if (model.isShowNoDataFoundPage && !model.busy)
                 buildNoDataFoundPage(),
               if (model.busy) buildLoadingPage(),
