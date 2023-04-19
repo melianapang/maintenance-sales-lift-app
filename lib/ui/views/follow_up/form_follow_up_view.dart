@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -14,8 +15,21 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class FormFollowUpViewParam {
+  FormFollowUpViewParam({
+    this.customerData,
+  });
+
+  final CustomerData? customerData;
+}
+
 class FormFollowUpView extends StatefulWidget {
-  const FormFollowUpView({super.key});
+  const FormFollowUpView({
+    required this.param,
+    super.key,
+  });
+
+  final FormFollowUpViewParam param;
 
   @override
   State<FormFollowUpView> createState() => _FormFollowUpViewState();
@@ -29,7 +43,9 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormFollowUpViewModel>(
-      model: FormFollowUpViewModel(),
+      model: FormFollowUpViewModel(
+        customerData: widget.param.customerData,
+      ),
       onModelReady: (FormFollowUpViewModel model) async {
         await model.initModel();
       },
@@ -61,7 +77,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
             child: Column(
               children: [
                 DatePickerWidget(
-                  label: "Tanggal Konfirmasi Selanjutnya",
+                  label: "Tanggal Konfirmasi",
                   isRangeCalendar: false,
                   selectedDates: model.selectedDates,
                   onSelectedDates: (DateTime start, DateTime? end) {
@@ -69,24 +85,23 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     model.setSelectedDates([start]);
                   },
                 ),
-                //langsung dpt data dari detail follow up
                 Spacings.vert(24),
-                TextInput.editable(
+                TextInput.disabled(
                   label: "Nomor Pelanggan",
                   hintText: "Nomor Pelanggan",
-                  onChangedListener: (text) {},
+                  text: model.customerData?.customerNumber,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
+                TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
-                  onChangedListener: (text) {},
+                  text: model.customerData?.customerName,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
+                TextInput.disabled(
                   label: "Nama Perusahaan",
                   hintText: "Nama Perusahaan",
-                  onChangedListener: (text) {},
+                  text: model.customerData?.companyName,
                 ),
                 Spacings.vert(24),
                 Align(
