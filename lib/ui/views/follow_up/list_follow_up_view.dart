@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/list_follow_up_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -8,6 +10,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 
 class ListFollowUpView extends StatefulWidget {
@@ -21,7 +24,9 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: ListFollowUpViewModel(),
+      model: ListFollowUpViewModel(
+        dioService: Provider.of<DioService>(context),
+      ),
       onModelReady: (ListFollowUpViewModel model) async {
         await model.initModel();
       },
@@ -47,7 +52,7 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                 Expanded(
                   child: ListView.separated(
                     shrinkWrap: true,
-                    itemCount: 10,
+                    itemCount: model.listFollowUp.length,
                     separatorBuilder: (context, index) => const Divider(
                       color: MyColors.transparent,
                       height: 20,
@@ -55,14 +60,23 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                     itemBuilder: (BuildContext context, int index) {
                       return CustomCardWidget(
                         cardType: CardType.list,
-                        title: "Nadia Ang",
-                        description: "PT ABC JAYA",
-                        description2: "12 March 2023",
+                        title: model.listFollowUp[index].customerName,
+                        description: model.listFollowUp[index].companyName,
                         titleSize: 20,
                         descSize: 16,
-                        desc2Size: 12,
                         onTap: () {
-                          Navigator.pushNamed(context, Routes.detailFollowUp);
+                          Navigator.pushNamed(
+                            context,
+                            Routes.detailFollowUp,
+                            arguments: DetailFollowUpViewParam(
+                              followUpId: model.listFollowUp[index].followUpId,
+                              customerId: model.listFollowUp[index].customerId,
+                              companyName:
+                                  model.listFollowUp[index].companyName,
+                              customerName:
+                                  model.listFollowUp[index].customerName,
+                            ),
+                          );
                         },
                       );
                     },
