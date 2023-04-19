@@ -15,6 +15,9 @@ class ListApprovalViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  int _totalData = -1;
+  int get totalData => _totalData;
+
   List<ApprovalData>? _listApproval = [];
   List<ApprovalData>? get listApproval => _listApproval;
 
@@ -42,18 +45,28 @@ class ListApprovalViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllApproval() async {
+    if (_totalData != -1 &&
+        _totalData <=
+            _paginationControl.currentPage * _paginationControl.pageSize)
+      return;
+
     final response = await _apiService.requestGetAllApproval(
       pageSize: _paginationControl.pageSize,
       currentPage: _paginationControl.currentPage,
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listApproval = response.right;
+          _listApproval = response.right.result;
         } else {
-          _listApproval?.addAll(response.right!);
+          _listApproval?.addAll(response.right.result);
         }
+
+        _totalData = int.parse(
+          response.right.totalSize,
+        );
+
         _paginationControl.currentPage += 1;
         notifyListeners();
       }

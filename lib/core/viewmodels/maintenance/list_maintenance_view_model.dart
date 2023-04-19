@@ -21,6 +21,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
+  int _totalData = -1;
+  int get totalData => _totalData;
+
   List<MaintenanceData>? _listMaintenance;
   List<MaintenanceData>? get listMaintenance => _listMaintenance;
 
@@ -72,18 +75,28 @@ class ListMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllMaintenance() async {
+    if (_totalData != -1 &&
+        _totalData <=
+            _paginationControl.currentPage * _paginationControl.pageSize)
+      return;
+
     final response = await _apiService.requestGetAllMaintenance(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listMaintenance = response.right;
+          _listMaintenance = response.right.result;
         } else {
-          _listMaintenance?.addAll(response.right!);
+          _listMaintenance?.addAll(response.right.result);
         }
+
+        _totalData = int.parse(
+          response.right.totalSize,
+        );
+
         _paginationControl.currentPage += 1;
         notifyListeners();
       }

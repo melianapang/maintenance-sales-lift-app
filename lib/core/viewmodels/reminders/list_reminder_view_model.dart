@@ -15,6 +15,9 @@ class ListReminderViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  int _totalData = -1;
+  int get totalData => _totalData;
+
   List<ReminderData> _listReminder = [];
   List<ReminderData> get listReminder => _listReminder;
 
@@ -42,18 +45,26 @@ class ListReminderViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllReminderData() async {
+    if (_totalData != -1 &&
+        _totalData <=
+            _paginationControl.currentPage * _paginationControl.pageSize)
+      return;
+
     final response = await _apiService.requestGetAllReminder(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listReminder = response.right!;
+          _listReminder = response.right.result;
         } else {
-          _listReminder.addAll(response.right!);
+          _listReminder.addAll(response.right.result);
         }
+        _totalData = int.parse(
+          response.right.totalSize,
+        );
         _paginationControl.currentPage += 1;
         notifyListeners();
       }

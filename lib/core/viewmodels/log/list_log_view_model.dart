@@ -15,6 +15,9 @@ class ListLogViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  int? _totalData;
+  int? get totalData => _totalData;
+
   List<LogData>? _listLogData;
   List<LogData>? get listLogData => _listLogData;
 
@@ -43,18 +46,27 @@ class ListLogViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllLog() async {
+    if (_totalData == null) return;
+    if (_totalData! <=
+        _paginationControl.currentPage * _paginationControl.pageSize) return;
+
     final response = await _apiService.requestGetAllLog(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty == true) {
         if (_paginationControl.currentPage == 1) {
-          _listLogData = response.right!;
+          _listLogData = response.right.result;
         } else {
-          _listLogData?.addAll(response.right!);
+          _listLogData?.addAll(response.right.result);
         }
+
+        _totalData = int.parse(
+          response.right.totalSize,
+        );
+
         _paginationControl.currentPage += 1;
         notifyListeners();
       }

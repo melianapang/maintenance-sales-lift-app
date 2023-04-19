@@ -26,6 +26,10 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   List<DateTime> get selectedDates => _selectedDates;
 
   //region pilih proyek
+
+  int _totalData = -1;
+  int get totalData => _totalData;
+
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
@@ -77,18 +81,28 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjects() async {
+    if (_totalData != -1 &&
+        _totalData <=
+            _paginationControl.currentPage * _paginationControl.pageSize)
+      return;
+
     final response = await _apiService.getAllProjects(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right != null || response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listProject = response.right;
+          _listProject = response.right.result;
         } else {
-          _listProject?.addAll(response.right!);
+          _listProject?.addAll(response.right.result);
         }
+
+        _totalData = int.parse(
+          response.right.totalSize,
+        );
+
         _paginationControl.currentPage += 1;
         notifyListeners();
       }
