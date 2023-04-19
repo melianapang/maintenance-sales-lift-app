@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/open_notification_reminder_view.dart';
@@ -117,26 +121,30 @@ class OneSignalService {
     });
   }
 
-  Future<void> postNotification({
+  Future<Either<Failure, bool>> postNotification({
     required String description,
     required String time,
     required DateTime date,
     required String note,
+    required String reminderId,
   }) async {
     /// Get the Onesignal userId and update that into the firebase.
     /// So, that it can be used to send Notifications to users later.̥
     var deviceState = await OneSignal.shared.getDeviceState();
 
-    if (deviceState == null || deviceState.userId == null) return;
+    if (deviceState == null || deviceState.userId == null) {
+      return ErrorUtils<bool>().handleError("User ID tidak ada.");
+    }
 
     var playerId = deviceState.userId!;
 
     var imgUrlString = "assets/images/logo_pt_rejo.png";
     // "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg";
 
-    var notification = OSCreateNotification(
+    try {
+      var notification = OSCreateNotification(
         playerIds: [playerId],
-        heading: "PT REJO JAYA SAKTI Post Notification",
+        heading: "PT REJO JAYA SAKTI",
         content: "Mengingatkan anda untuk $description",
         androidSmallIcon: imgUrlString,
         additionalData: {
@@ -147,13 +155,22 @@ class OneSignalService {
           "time": time,
           "note": note,
           "description": description,
+          "reminderId": reminderId,
         },
         sendAfter: date.toUtc(),
         buttons: [
           OSActionButton(id: "positiveButton", text: "Ya, buka Catatan."),
           OSActionButton(id: "negativeButton", text: "Lewatkan")
-        ]);
-    var response = await OneSignal.shared.postNotification(notification);
+        ],
+      );
+
+      await OneSignal.shared.postNotification(notification);
+
+      return const Right<Failure, bool>(true);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<bool>().handleError(e);
+    }
   }
 
   Future<void> postScheduledNotification({
@@ -211,6 +228,7 @@ class OneSignalService {
         time: data?["time"],
         description: data?["description"],
         note: data?["note"],
+        reminderId: data?["reminderId"],
       ),
     );
   }
@@ -228,6 +246,7 @@ class OneSignalService {
       time: data?["time"],
       date: snoozeUntil,
       note: data?["note"],
+      reminderId: data?["reminderId"],
     );
   }
 }
