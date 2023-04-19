@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/authentication/manage_account_d
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
@@ -120,7 +121,7 @@ abstract class Api {
     @Path("reminder_id") int reminderId,
   );
 
-  @GET('/api/0/Reminder/get_reminder_detail/{reminder_id}')
+  @GET('/api/0/Reminder/get_detail_reminder/{reminder_id}')
   Future<HttpResponse<dynamic>> requestGetDetailReminder(
     @Path("reminder_id") int reminderId,
   );
@@ -182,6 +183,30 @@ abstract class Api {
   @GET('/api/0/Unit/get_unit_detail/{unit_id}')
   Future<HttpResponse<dynamic>> requestGetDetailUnit(
     @Path("unit_id") int unitId,
+  );
+  //endregion
+
+  //region follow up
+  @GET('/api/0/FollowUp/get_all_follow_ups/')
+  Future<HttpResponse<dynamic>> requestGetAllFollowUp(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/FollowUp/get_detail_follow_up/{follow_up_id}')
+  Future<HttpResponse<dynamic>> requestGetFollowUpDetail(
+    @Path("follow_up_id") int followUpId,
+  );
+
+  @GET('/api/0/FollowUp/get_history_follow_ups/{customer_id}')
+  Future<HttpResponse<dynamic>> requestGetAllHistoryFollowUp(
+    @Path("customer_id") String customerId,
+  );
+
+  @PUT('/api/0/FollowUp/update_follow_up/{follow_up_id}')
+  Future<HttpResponse<dynamic>> requestUpdateFollowUp(
+    @Path("follow_up_id") int followUpId,
+    @Body() UpdateFollowUpRequest request,
   );
   //endregion
 
@@ -441,7 +466,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<UserData>?>> requestGetAllUser({
+  Future<Either<Failure, ListUserData>> requestGetAllUser({
     required int pageSize,
     required int currentPage,
   }) async {
@@ -455,12 +480,12 @@ class ApiService {
         GetAllUserResponse getAllUserResponse =
             GetAllUserResponse.fromJson(response.data);
 
-        return Right<Failure, List<UserData>>(getAllUserResponse.data.result);
+        return Right<Failure, ListUserData>(getAllUserResponse.data);
       }
-      return ErrorUtils<List<UserData>>().handleDomainError(response);
+      return ErrorUtils<ListUserData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<List<UserData>>().handleError(e);
+      return ErrorUtils<ListUserData>().handleError(e);
     }
   }
 
@@ -518,7 +543,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<ApprovalData>?>> requestGetAllApproval({
+  Future<Either<Failure, ListApprovalData>> requestGetAllApproval({
     required int pageSize,
     required int currentPage,
   }) async {
@@ -532,13 +557,12 @@ class ApiService {
         GetAllApprovalResponse getAllApprovalResponse =
             GetAllApprovalResponse.fromJson(response.data);
 
-        return Right<Failure, List<ApprovalData>>(
-            getAllApprovalResponse.data.result);
+        return Right<Failure, ListApprovalData>(getAllApprovalResponse.data);
       }
-      return ErrorUtils<List<ApprovalData>>().handleDomainError(response);
+      return ErrorUtils<ListApprovalData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<List<ApprovalData>>().handleError(e);
+      return ErrorUtils<ListApprovalData>().handleError(e);
     }
   }
 
@@ -567,7 +591,7 @@ class ApiService {
   //endregion
 
   //region log
-  Future<Either<Failure, List<LogData>?>> requestGetAllLog({
+  Future<Either<Failure, ListLogData>> requestGetAllLog({
     required int pageSize,
     required int currentPage,
   }) async {
@@ -580,11 +604,11 @@ class ApiService {
       if (response.isSuccess) {
         GetAllLogResponse getAllLog = GetAllLogResponse.fromJson(response.data);
 
-        return Right<Failure, List<LogData>>(getAllLog.data.result);
+        return Right<Failure, ListLogData>(getAllLog.data);
       }
-      return ErrorUtils<List<LogData>>().handleDomainError(response);
+      return ErrorUtils<ListLogData>().handleDomainError(response);
     } catch (e) {
-      return ErrorUtils<List<LogData>>().handleError(e);
+      return ErrorUtils<ListLogData>().handleError(e);
     }
   }
 
@@ -612,7 +636,7 @@ class ApiService {
   //endregion
 
   //region reminder
-  Future<Either<Failure, List<ReminderData>?>> requestGetAllReminder({
+  Future<Either<Failure, ListReminderData>> requestGetAllReminder({
     required int pageSize,
     required int currentPage,
   }) async {
@@ -626,33 +650,30 @@ class ApiService {
         GetAllReminderResponse getAllReminderResponse =
             GetAllReminderResponse.fromJson(response.data);
 
-        return Right<Failure, List<ReminderData>>(
-            getAllReminderResponse.data.result);
+        return Right<Failure, ListReminderData>(getAllReminderResponse.data);
       }
-      return ErrorUtils<List<ReminderData>>().handleDomainError(response);
+      return ErrorUtils<ListReminderData>().handleDomainError(response);
     } catch (e) {
-      return ErrorUtils<List<ReminderData>>().handleError(e);
+      return ErrorUtils<ListReminderData>().handleError(e);
     }
   }
 
   Future<Either<Failure, String>> requestCreateReminder({
-    required int customerId,
-    required String reminderType,
+    int? customerId,
     required String reminderDate,
     required String reminderTime,
     required String description,
-    required String remindedNote,
-    required String afterRemindedNote,
+    String? remindedNote,
+    String? afterRemindedNote,
   }) async {
     try {
       final payload = CreateReminderRequest(
         customerId: customerId,
-        reminderType: reminderType,
         reminderDate: reminderDate,
         reminderTime: reminderTime,
         description: description,
-        remindedNote: remindedNote,
-        afterRemindedNote: afterRemindedNote,
+        remindedNote: remindedNote ?? "",
+        afterRemindedNote: afterRemindedNote ?? "",
       );
       final HttpResponse<dynamic> response =
           await api.requestCreateReminder(payload);
@@ -663,7 +684,9 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, String>(createReminderResponse.message);
+        return Right<Failure, String>(
+          createReminderResponse.data.reminderId.toString(),
+        );
       }
 
       return ErrorUtils<String>().handleDomainError(response);
@@ -675,7 +698,6 @@ class ApiService {
 
   Future<Either<Failure, bool>> requestUpdateReminder({
     required int reminderId,
-    required String reminderType,
     required String reminderDate,
     required String reminderTime,
     required String description,
@@ -685,7 +707,6 @@ class ApiService {
   }) async {
     try {
       final payload = UpdateReminderRequest(
-        reminderType: reminderType,
         reminderDate: reminderDate,
         reminderTime: reminderTime,
         description: description,
@@ -732,11 +753,11 @@ class ApiService {
   }
 
   Future<Either<Failure, ReminderData>> requestDetailReminder({
-    required int unitId,
+    required int reminderId,
   }) async {
     try {
       final HttpResponse<dynamic> response =
-          await api.requestGetDetailReminder(unitId);
+          await api.requestGetDetailReminder(reminderId);
 
       if (response.isSuccess) {
         final ReminderDetailResponse reminderDetailResponse =
@@ -870,7 +891,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<CustomerData>?>> getAllCustomer(
+  Future<Either<Failure, ListCustomerData>> getAllCustomer(
     int currentPage,
     int pageSize,
   ) async {
@@ -884,13 +905,13 @@ class ApiService {
         GetAllCustomerResponse getAllResponse =
             GetAllCustomerResponse.fromJson(response.data);
 
-        return Right<Failure, List<CustomerData>?>(getAllResponse.data.result);
+        return Right<Failure, ListCustomerData>(getAllResponse.data);
       }
 
-      return ErrorUtils<List<CustomerData>?>().handleDomainError(response);
+      return ErrorUtils<ListCustomerData>().handleDomainError(response);
     } catch (e) {
       log("Sequence number error");
-      return ErrorUtils<List<CustomerData>?>().handleError(e);
+      return ErrorUtils<ListCustomerData>().handleError(e);
     }
   }
 
@@ -922,7 +943,7 @@ class ApiService {
   //endregion
 
   //region unit
-  Future<Either<Failure, List<UnitData>?>> getAllUnitByCustomer({
+  Future<Either<Failure, ListUnitData>> getAllUnitByCustomer({
     required int customerId,
     required int currentPage,
     required int pageSize,
@@ -939,13 +960,13 @@ class ApiService {
         GetAllUnitResponse getAllUnitResponse =
             GetAllUnitResponse.fromJson(response.data);
 
-        return Right<Failure, List<UnitData>?>(getAllUnitResponse.data.result);
+        return Right<Failure, ListUnitData>(getAllUnitResponse.data);
       }
 
-      return ErrorUtils<List<UnitData>?>().handleDomainError(response);
+      return ErrorUtils<ListUnitData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
-      return ErrorUtils<List<UnitData>?>().handleError(e);
+      return ErrorUtils<ListUnitData>().handleError(e);
     }
   }
 
@@ -1035,6 +1056,115 @@ class ApiService {
   }
   //endregion
 
+  //region follow up
+  Future<Either<Failure, ListFollowUpData>> requestGetAllFollowUp({
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllFollowUp(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllFollowUpResponse getAllFollowUpResponse =
+            GetAllFollowUpResponse.fromJson(response.data);
+
+        return Right<Failure, ListFollowUpData>(getAllFollowUpResponse.data);
+      }
+      return ErrorUtils<ListFollowUpData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<ListFollowUpData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, FollowUpData>> requestFollowUpDetail({
+    required int followUpId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetFollowUpDetail(followUpId);
+
+      if (response.isSuccess) {
+        final FollowUpDetailResponse followUpDetailResponse =
+            FollowUpDetailResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, FollowUpData>(followUpDetailResponse.data);
+      }
+
+      return ErrorUtils<FollowUpData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<FollowUpData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp({
+    required String customerId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllHistoryFollowUp(
+        customerId,
+      );
+
+      if (response.isSuccess) {
+        GetHistoryFollowUpResponse getHistoryFollowUpResponse =
+            GetHistoryFollowUpResponse.fromJson(response.data);
+
+        return Right<Failure, List<HistoryFollowUpData>>(
+            getHistoryFollowUpResponse.data.result);
+      }
+      return ErrorUtils<List<HistoryFollowUpData>>()
+          .handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<List<HistoryFollowUpData>>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, bool>> requestUpdateFollowUp({
+    required int followUpId,
+    required int unitId,
+    required int userId,
+    required double longitude,
+    required double latitude,
+    required String note,
+    required int followUpResult,
+    required String scheduleDate,
+  }) async {
+    try {
+      final payload = UpdateFollowUpRequest(
+        userId: userId,
+        unitId: unitId,
+        longitude: longitude,
+        latitude: latitude,
+        followUpResult: followUpResult,
+        note: note,
+        scheduleDate: scheduleDate,
+      );
+
+      final HttpResponse<dynamic> response = await api.requestUpdateFollowUp(
+        followUpId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<bool>().handleError(e);
+    }
+  }
+  //endregion
+
   //region document
   Future<Either<Failure, String>> requestCreateDocument({
     required int fileType,
@@ -1070,7 +1200,7 @@ class ApiService {
   //endregion
 
   //region maintenance
-  Future<Either<Failure, List<MaintenanceData>?>> requestGetAllMaintenance(
+  Future<Either<Failure, ListMaintenanceData>> requestGetAllMaintenance(
     int currentPage,
     int pageSize,
   ) async {
@@ -1084,13 +1214,13 @@ class ApiService {
         GetAllMaintenanceResponse getAllMaintenanceResponse =
             GetAllMaintenanceResponse.fromJson(response.data);
 
-        return Right<Failure, List<MaintenanceData>?>(
-            getAllMaintenanceResponse.data.result);
+        return Right<Failure, ListMaintenanceData>(
+            getAllMaintenanceResponse.data);
       }
-      return ErrorUtils<List<MaintenanceData>?>().handleDomainError(response);
+      return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
     } catch (e) {
-      log("Sequence number error");
-      return ErrorUtils<List<MaintenanceData>?>().handleError(e);
+      log("Error: $e");
+      return ErrorUtils<ListMaintenanceData>().handleError(e);
     }
   }
 
@@ -1165,7 +1295,7 @@ class ApiService {
         unitId,
       );
 
-      if (response.response.statusCode == 200) {
+      if (response.isSuccess) {
         GetHistoryMaintenanceResponse getHistoryMaintenanceResponse =
             GetHistoryMaintenanceResponse.fromJson(response.data);
 
@@ -1219,7 +1349,7 @@ class ApiService {
   //endregion
 
   //region projects
-  Future<Either<Failure, List<ProjectData>?>> getAllProjects({
+  Future<Either<Failure, ListProjectData>> getAllProjects({
     required int currentPage,
     required int pageSize,
   }) async {
@@ -1233,14 +1363,13 @@ class ApiService {
         GetAllProjectResponse getAllProjectResponse =
             GetAllProjectResponse.fromJson(response.data);
 
-        return Right<Failure, List<ProjectData>?>(
-            getAllProjectResponse.data.result);
+        return Right<Failure, ListProjectData>(getAllProjectResponse.data);
       }
 
-      return ErrorUtils<List<ProjectData>?>().handleDomainError(response);
+      return ErrorUtils<ListProjectData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
-      return ErrorUtils<List<ProjectData>?>().handleError(e);
+      return ErrorUtils<ListProjectData>().handleError(e);
     }
   }
 
