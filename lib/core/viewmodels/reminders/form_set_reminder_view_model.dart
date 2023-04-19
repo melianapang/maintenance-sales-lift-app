@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:intl/intl.dart';
@@ -9,11 +13,18 @@ import 'package:intl/intl.dart';
 class FormSetReminderViewModel extends BaseViewModel {
   FormSetReminderViewModel({
     required OneSignalService oneSignalService,
+    required DioService dioService,
     CustomerData? customerData,
   })  : _oneSignalService = oneSignalService,
+        _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        ),
         _customerData = customerData;
 
   final OneSignalService _oneSignalService;
+  final ApiService _apiService;
 
   final CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
@@ -85,7 +96,41 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> requestSetReminder() async {
+  Future<bool> requestCreateReminder() async {
+    final response = await _apiService.requestCreateReminder(
+      reminderDate: DateTimeUtils.convertDateToString(
+        date: _selectedDates.first,
+        formatter: DateFormat(
+          DateTimeUtils.DATE_FORMAT_4,
+        ),
+      ),
+      reminderTime: DateTimeUtils.convertHmsTimeToString(
+        _selectedTime,
+      ),
+      description: descriptionController.text,
+      remindedNote: noteController.text,
+    );
+
+    if (response.isRight) {
+      bool isSucceed = await requestSetReminderToOneSignal(
+        reminderId: response.right,
+      );
+      return isSucceed;
+    }
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestSetReminderToOneSignal(
+      {required String reminderId}) async {
+    bool isGranted =
+        await PermissionUtils.requestPermission(Permission.notification);
+
+    if (!isGranted) {
+      _errorMsg = "Tolong ijinkan aplikasi mengakses notifikasi";
+      return false;
+    }
+
     String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
     // timeStr = "$timeStr GMT+0700";
 
@@ -96,11 +141,19 @@ class FormSetReminderViewModel extends BaseViewModel {
 
     final DateTime reminderSetAt = DateTime.parse("$dateStr $timeStr");
 
-    await _oneSignalService.postNotification(
+    final response = await _oneSignalService.postNotification(
       description: descriptionController.text,
       note: noteController.text,
       date: reminderSetAt,
       time: timeStr,
+      reminderId: reminderId,
     );
+
+    if (response.isRight) {
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

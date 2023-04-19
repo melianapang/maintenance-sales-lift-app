@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
@@ -12,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
@@ -44,6 +47,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
   Widget build(BuildContext context) {
     return ViewModel<FormSetReminderViewModel>(
       model: FormSetReminderViewModel(
+        dioService: Provider.of<DioService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         customerData: widget.param.customerData,
       ),
@@ -74,8 +78,32 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                   "save: ${model.selectedTime.toString()} -- ${model.selectedDates.toString()}");
 
               buildLoadingDialog(context);
-              await model.requestSetReminder();
-              Navigator.pushReplacementNamed(context, Routes.afterSetReminder);
+              bool result = await model.requestCreateReminder();
+              Navigator.pop(context);
+
+              if (result) {
+                Navigator.pushNamed(context, Routes.afterSetReminder);
+                return;
+              }
+
+              showDialogWidget(
+                context,
+                title: "Menambahkan Pengingat",
+                description: model.errorMsg ?? "Gagal menambahkan penginat",
+                isSuccessDialog: result,
+                positiveLabel: "Okay",
+                positiveCallback: () => Navigator.pop(context),
+                negativeLabel: model.errorMsg ==
+                        "Tolong ijinkan aplikasi mengakses notifikasi"
+                    ? "Buka pengaturan aplikasi."
+                    : null,
+                negativeCallback: () {
+                  model.errorMsg ==
+                          "Tolong ijinkan aplikasi mengakses notifikasi"
+                      ? openAppSettings()
+                      : null;
+                },
+              );
             },
             text: 'Simpan',
           ),
