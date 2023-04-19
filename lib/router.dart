@@ -203,8 +203,14 @@ class AppRouter {
           ),
         );
       case Routes.detailHistoryFollowUp:
+        final DetailHistoryFollowUpViewParam param =
+            settings.arguments is DetailHistoryFollowUpViewParam
+                ? settings.arguments as DetailHistoryFollowUpViewParam
+                : DetailHistoryFollowUpViewParam();
         return buildRoute(
-          builder: (_) => const DetailHistoryFollowUpView(),
+          builder: (_) => DetailHistoryFollowUpView(
+            param: param,
+          ),
         );
       case Routes.formFollowUp:
         final FormFollowUpViewParam param =
