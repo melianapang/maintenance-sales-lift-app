@@ -1,3 +1,4 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
@@ -26,10 +27,6 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   List<DateTime> get selectedDates => _selectedDates;
 
   //region pilih proyek
-
-  int _totalData = -1;
-  int get totalData => _totalData;
-
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
@@ -52,8 +49,8 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     setBusy(true);
     _isAllowedToOpenPage =
         await PermissionUtils.requestPermissions(listPermission: [
-      // Permission.manageExternalStorage,
-      // Permission.storage,
+      Permission.manageExternalStorage,
+      Permission.storage,
     ]);
     notifyListeners();
 
@@ -81,8 +78,8 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjects() async {
-    if (_totalData != -1 &&
-        _totalData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -101,11 +98,11 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
           _listProject?.addAll(response.right.result);
         }
 
-        _totalData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
         notifyListeners();
       }
       return;

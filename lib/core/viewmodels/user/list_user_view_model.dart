@@ -15,9 +15,6 @@ class ListUserViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  int _totalData = -1;
-  int get totalData => _totalData;
-
   List<UserData> _listUser = [];
   List<UserData> get listUser => _listUser;
 
@@ -34,7 +31,7 @@ class ListUserViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
     await requestGetAllUserData();
 
     if (_listUser.isEmpty) {
@@ -45,8 +42,8 @@ class ListUserViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllUserData() async {
-    if (_totalData != -1 &&
-        _totalData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -65,11 +62,11 @@ class ListUserViewModel extends BaseViewModel {
           _listUser.addAll(response.right.result);
         }
 
-        _totalData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
         notifyListeners();
       }
       return;

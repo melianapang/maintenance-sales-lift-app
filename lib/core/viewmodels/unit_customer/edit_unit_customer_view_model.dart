@@ -38,9 +38,6 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   bool get isLocationValid => _isLocationValid;
 
   //region pilih proyek
-  int _totalData = -1;
-  int get totalData => _totalData;
-
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
@@ -115,8 +112,8 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjectByCustomerId() async {
-    if (_totalData != -1 &&
-        _totalData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -129,13 +126,18 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listProject = response.right!;
+          _listProject = response.right.result;
         } else {
-          _listProject?.addAll(response.right!);
+          _listProject?.addAll(response.right.result);
         }
+
         _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+
         notifyListeners();
       }
       return;

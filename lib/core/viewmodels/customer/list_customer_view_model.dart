@@ -21,9 +21,6 @@ class ListCustomerViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
-  int _totalData = -1;
-  int get totalData => _totalData;
-
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
@@ -96,7 +93,7 @@ class ListCustomerViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
     if (_listCustomer?.isEmpty == true || _listCustomer == null) {
@@ -117,8 +114,8 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    if (_totalData != -1 &&
-        _totalData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -137,11 +134,11 @@ class ListCustomerViewModel extends BaseViewModel {
           _listCustomer?.addAll(response.right.result);
         }
 
-        _totalData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
         notifyListeners();
       }
       return;

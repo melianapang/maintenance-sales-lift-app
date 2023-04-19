@@ -34,7 +34,7 @@ class ListLogViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
 
     await requestGetAllLog();
 
@@ -46,9 +46,10 @@ class ListLogViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllLog() async {
-    if (_totalData == null) return;
-    if (_totalData! <=
-        (_paginationControl.currentPage - 1) * _paginationControl.pageSize) {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
       return;
     }
 
@@ -65,11 +66,11 @@ class ListLogViewModel extends BaseViewModel {
           _listLogData?.addAll(response.right.result);
         }
 
-        _totalData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
         notifyListeners();
       }
       return;

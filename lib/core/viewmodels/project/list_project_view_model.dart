@@ -24,9 +24,6 @@ class ListProjectViewModel extends BaseViewModel {
   String? _errorMsg = "";
   String? get errorMsg => _errorMsg;
 
-  int? _totalData;
-  int? get totalData => _totalData;
-
   List<ProjectData> _listProject = [];
   List<ProjectData> get listProject => _listProject;
 
@@ -34,7 +31,7 @@ class ListProjectViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
 
     await requestGetAllProjects();
 
@@ -46,9 +43,10 @@ class ListProjectViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjects() async {
-    if (_totalData == null) return;
-    if (_totalData! <=
-        (_paginationControl.currentPage - 1) * _paginationControl.pageSize) {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
       return;
     }
 
@@ -65,11 +63,11 @@ class ListProjectViewModel extends BaseViewModel {
           _listProject.addAll(response.right.result);
         }
 
-        _totalData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
         notifyListeners();
       }
       return;

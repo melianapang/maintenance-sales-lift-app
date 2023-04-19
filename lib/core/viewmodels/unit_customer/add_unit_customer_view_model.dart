@@ -22,9 +22,6 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
-  int _totalData = -1;
-  int get totalData => _totalData;
-
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
@@ -53,7 +50,7 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
 
     await requestGetAllProjectByCustomerId();
     if (_listProject?.isEmpty == true || _listProject == null) {
@@ -90,8 +87,8 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjectByCustomerId() async {
-    if (_totalData != -1 &&
-        _totalData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -104,13 +101,18 @@ class AddUnitCustomerViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right != null || response.right?.isNotEmpty == true) {
+      if (response.right.result.isNotEmpty) {
         if (_paginationControl.currentPage == 1) {
-          _listProject = response.right!;
+          _listProject = response.right.result;
         } else {
-          _listProject?.addAll(response.right!);
+          _listProject?.addAll(response.right.result);
         }
+
         _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+
         notifyListeners();
       }
       return;
