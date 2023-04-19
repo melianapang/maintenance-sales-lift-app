@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 
 part 'maintenance_dto.g.dart';
 
@@ -109,30 +110,7 @@ class MaintenanceData {
   final String unitLocation;
 
   @JsonKey(name: "maintenance_file")
-  final List<MaintenanceFileData> maintenanceFiles;
-}
-
-@JsonSerializable()
-class MaintenanceFileData {
-  MaintenanceFileData({
-    required this.filePath,
-    required this.fileType,
-    required this.createdAt,
-  });
-
-  factory MaintenanceFileData.fromJson(Map<String, dynamic> json) =>
-      _$MaintenanceFileDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MaintenanceFileDataToJson(this);
-
-  @JsonKey(name: "file_path")
-  final String filePath;
-
-  @JsonKey(name: "file_type")
-  final String fileType;
-
-  @JsonKey(name: "created_at")
-  final String? createdAt;
+  final List<DocumentData> maintenanceFiles;
 }
 
 @JsonSerializable()

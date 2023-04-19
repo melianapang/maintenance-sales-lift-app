@@ -49,3 +49,28 @@ class CreateDocumentResponse {
   final String message;
 }
 //endregion
+
+//region document data
+@JsonSerializable()
+class DocumentData {
+  DocumentData({
+    required this.filePath,
+    required this.fileType,
+    required this.createdAt,
+  });
+
+  factory DocumentData.fromJson(Map<String, dynamic> json) =>
+      _$DocumentDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DocumentDataToJson(this);
+
+  @JsonKey(name: "file_path")
+  final String filePath;
+
+  @JsonKey(name: "file_type")
+  final String fileType;
+
+  @JsonKey(name: "created_at")
+  final String? createdAt;
+}
+//endregion
