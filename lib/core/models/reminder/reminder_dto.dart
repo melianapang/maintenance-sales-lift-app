@@ -6,13 +6,12 @@ part 'reminder_dto.g.dart';
 @JsonSerializable()
 class CreateReminderRequest {
   CreateReminderRequest({
-    required this.customerId,
-    required this.reminderType,
+    this.customerId,
     required this.reminderDate,
     required this.reminderTime,
     required this.description,
-    required this.remindedNote,
-    required this.afterRemindedNote,
+    this.remindedNote,
+    this.afterRemindedNote,
   });
 
   factory CreateReminderRequest.fromJson(Map<String, dynamic> json) =>
@@ -20,11 +19,8 @@ class CreateReminderRequest {
 
   Map<String, dynamic> toJson() => _$CreateReminderRequestToJson(this);
 
-  @JsonKey(name: "custemer_id")
-  final int customerId;
-
-  @JsonKey(name: "reminder_type")
-  final String reminderType;
+  @JsonKey(name: "customer_id")
+  final int? customerId;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;
@@ -36,10 +32,10 @@ class CreateReminderRequest {
   final String description;
 
   @JsonKey(name: "reminded_note")
-  final String remindedNote;
+  final String? remindedNote;
 
   @JsonKey(name: "after_reminded_note")
-  final String afterRemindedNote;
+  final String? afterRemindedNote;
 }
 
 @JsonSerializable()
@@ -47,6 +43,7 @@ class CreateReminderResponse {
   CreateReminderResponse({
     required this.isSuccess,
     required this.message,
+    required this.data,
   });
 
   factory CreateReminderResponse.fromJson(Map<String, dynamic> json) =>
@@ -59,6 +56,24 @@ class CreateReminderResponse {
 
   @JsonKey(name: "Message")
   final String message;
+
+  @JsonKey(name: "Data")
+  final CreatedReminderIdResponse data;
+}
+
+@JsonSerializable()
+class CreatedReminderIdResponse {
+  CreatedReminderIdResponse({
+    required this.reminderId,
+  });
+
+  factory CreatedReminderIdResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreatedReminderIdResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreatedReminderIdResponseToJson(this);
+
+  @JsonKey(name: "reminder_id")
+  final int reminderId;
 }
 //endregion
 
@@ -110,6 +125,7 @@ class ReminderData {
   ReminderData({
     required this.reminderId,
     required this.userName,
+    required this.customerId,
     required this.customerName,
     required this.reminderDate,
     required this.reminderTime,
@@ -129,8 +145,11 @@ class ReminderData {
   @JsonKey(name: "user_name")
   final String userName;
 
+  @JsonKey(name: "customer_id")
+  final String? customerId;
+
   @JsonKey(name: "customer_name")
-  final String customerName;
+  final String? customerName;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;
@@ -142,10 +161,10 @@ class ReminderData {
   final String description;
 
   @JsonKey(name: "reminded_note")
-  final String remindedNote;
+  final String? remindedNote;
 
-  @JsonKey(name: "after_reminder_note")
-  final String afterReminderNote;
+  @JsonKey(name: "after_reminded_note")
+  final String? afterReminderNote;
 }
 //endregion
 
@@ -174,7 +193,6 @@ class DeleteReminderResponse {
 @JsonSerializable()
 class UpdateReminderRequest {
   UpdateReminderRequest({
-    required this.reminderType,
     required this.reminderDate,
     required this.reminderTime,
     required this.description,
@@ -186,9 +204,6 @@ class UpdateReminderRequest {
       _$UpdateReminderRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateReminderRequestToJson(this);
-
-  @JsonKey(name: "reminder_type")
-  final String reminderType;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;

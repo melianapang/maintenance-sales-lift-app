@@ -29,6 +29,7 @@ class GetAllMaintenanceResponse {
 @JsonSerializable()
 class ListMaintenanceData {
   ListMaintenanceData({
+    required this.totalSize,
     required this.result,
   });
 
@@ -36,6 +37,9 @@ class ListMaintenanceData {
       _$ListMaintenanceDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ListMaintenanceDataToJson(this);
+
+  @JsonKey(name: "total_size")
+  final String totalSize;
 
   @JsonKey(name: "result")
   final List<MaintenanceData> result;

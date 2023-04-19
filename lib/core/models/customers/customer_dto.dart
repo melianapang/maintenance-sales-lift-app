@@ -106,6 +106,7 @@ class GetAllCustomerResponse {
 @JsonSerializable()
 class ListCustomerData {
   ListCustomerData({
+    required this.totalSize,
     required this.result,
   });
 
@@ -113,6 +114,9 @@ class ListCustomerData {
       _$ListCustomerDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ListCustomerDataToJson(this);
+
+  @JsonKey(name: "total_size")
+  final String totalSize;
 
   @JsonKey(name: "result")
   final List<CustomerData> result;
