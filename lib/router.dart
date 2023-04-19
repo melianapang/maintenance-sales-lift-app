@@ -193,16 +193,28 @@ class AppRouter {
           builder: (_) => const ListFollowUpView(),
         );
       case Routes.detailFollowUp:
+        final DetailFollowUpViewParam param =
+            settings.arguments is DetailFollowUpViewParam
+                ? settings.arguments as DetailFollowUpViewParam
+                : DetailFollowUpViewParam();
         return buildRoute(
-          builder: (_) => const DetailFollowUpView(),
+          builder: (_) => DetailFollowUpView(
+            param: param,
+          ),
         );
       case Routes.detailHistoryFollowUp:
         return buildRoute(
           builder: (_) => const DetailHistoryFollowUpView(),
         );
       case Routes.formFollowUp:
+        final FormFollowUpViewParam param =
+            settings.arguments is FormFollowUpViewParam
+                ? settings.arguments as FormFollowUpViewParam
+                : FormFollowUpViewParam();
         return buildRoute(
-          builder: (_) => const FormFollowUpView(),
+          builder: (_) => FormFollowUpView(
+            param: param,
+          ),
         );
       case Routes.listMaintenance:
         return buildRoute(
