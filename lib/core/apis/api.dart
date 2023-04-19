@@ -1373,8 +1373,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<ProjectData>?>>
-      requestGetAllProjectsByCustomerId({
+  Future<Either<Failure, ListProjectData>> requestGetAllProjectsByCustomerId({
     required int customerId,
     required int currentPage,
     required int pageSize,
@@ -1391,14 +1390,13 @@ class ApiService {
         GetAllProjectResponse getAllProjectResponse =
             GetAllProjectResponse.fromJson(response.data);
 
-        return Right<Failure, List<ProjectData>?>(
-            getAllProjectResponse.data.result);
+        return Right<Failure, ListProjectData>(getAllProjectResponse.data);
       }
 
-      return ErrorUtils<List<ProjectData>?>().handleDomainError(response);
+      return ErrorUtils<ListProjectData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
-      return ErrorUtils<List<ProjectData>?>().handleError(e);
+      return ErrorUtils<ListProjectData>().handleError(e);
     }
   }
 
