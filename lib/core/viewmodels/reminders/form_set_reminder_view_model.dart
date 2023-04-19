@@ -67,7 +67,13 @@ class FormSetReminderViewModel extends BaseViewModel {
   String? get errorMsg => _errorMsg;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    nomorPelangganController.text = _customerData?.customerNumber ?? "";
+    namaPelangganController.text = _customerData?.customerName ?? "";
+    namaPerusahaanController.text = _customerData?.companyName ?? "";
+    setBusy(false);
+  }
 
   void setHasilKonfirmasi(int index) {
     _selectedSetReminderForOption = index;
@@ -97,7 +103,10 @@ class FormSetReminderViewModel extends BaseViewModel {
   }
 
   Future<bool> requestCreateReminder() async {
+    int? customerId = int.parse(_customerData?.customerId ?? "-1");
+
     final response = await _apiService.requestCreateReminder(
+      customerId: customerId > -1 ? customerId : null,
       reminderDate: DateTimeUtils.convertDateToString(
         date: _selectedDates.first,
         formatter: DateFormat(

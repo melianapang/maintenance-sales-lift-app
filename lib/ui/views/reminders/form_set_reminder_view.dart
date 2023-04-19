@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/form_set_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -112,9 +113,19 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               24.0,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.param.source !=
                     FormSetReminderSource.ListReminderPage) ...[
+                  Text(
+                    "Informasi Pelanggan",
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.yellow01,
+                      fontWeight: 600,
+                    ),
+                  ),
+                  Spacings.vert(8),
                   TextInput.editable(
                     controller: model.nomorPelangganController,
                     label: "Nomor Pelanggan",
@@ -132,7 +143,21 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
                   ),
-                  Spacings.vert(24),
+                  Spacings.vert(12),
+                  const Divider(
+                    thickness: 1,
+                    color: MyColors.darkGreyBackground,
+                  ),
+                  Spacings.vert(12),
+                  Text(
+                    "Data Pengingat",
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.yellow01,
+                      fontWeight: 600,
+                    ),
+                  ),
+                  Spacings.vert(8),
                 ],
                 DatePickerWidget(
                   label: "Tanggal Pengingat",
