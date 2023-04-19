@@ -22,6 +22,9 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
+  int _totalData = -1;
+  int get totalData => _totalData;
+
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
@@ -87,6 +90,13 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllProjectByCustomerId() async {
+    if (_totalData != -1 &&
+        _totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
     final response = await _apiService.requestGetAllProjectsByCustomerId(
       customerId: int.parse(_customerData?.customerId ?? "0"),
       currentPage: _paginationControl.currentPage,

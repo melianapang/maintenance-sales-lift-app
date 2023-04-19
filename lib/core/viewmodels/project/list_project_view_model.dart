@@ -48,7 +48,9 @@ class ListProjectViewModel extends BaseViewModel {
   Future<void> requestGetAllProjects() async {
     if (_totalData == null) return;
     if (_totalData! <=
-        _paginationControl.currentPage * _paginationControl.pageSize) return;
+        (_paginationControl.currentPage - 1) * _paginationControl.pageSize) {
+      return;
+    }
 
     final response = await _apiService.getAllProjects(
       currentPage: _paginationControl.currentPage,

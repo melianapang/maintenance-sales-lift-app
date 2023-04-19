@@ -47,8 +47,10 @@ class ListApprovalViewModel extends BaseViewModel {
   Future<void> requestGetAllApproval() async {
     if (_totalData != -1 &&
         _totalData <=
-            _paginationControl.currentPage * _paginationControl.pageSize)
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
       return;
+    }
 
     final response = await _apiService.requestGetAllApproval(
       pageSize: _paginationControl.pageSize,

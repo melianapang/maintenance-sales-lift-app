@@ -48,7 +48,9 @@ class ListLogViewModel extends BaseViewModel {
   Future<void> requestGetAllLog() async {
     if (_totalData == null) return;
     if (_totalData! <=
-        _paginationControl.currentPage * _paginationControl.pageSize) return;
+        (_paginationControl.currentPage - 1) * _paginationControl.pageSize) {
+      return;
+    }
 
     final response = await _apiService.requestGetAllLog(
       currentPage: _paginationControl.currentPage,

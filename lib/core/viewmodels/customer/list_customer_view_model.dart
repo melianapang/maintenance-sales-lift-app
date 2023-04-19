@@ -119,8 +119,10 @@ class ListCustomerViewModel extends BaseViewModel {
   Future<void> requestGetAllCustomer() async {
     if (_totalData != -1 &&
         _totalData <=
-            _paginationControl.currentPage * _paginationControl.pageSize)
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
       return;
+    }
 
     final response = await _apiService.getAllCustomer(
       _paginationControl.currentPage,
