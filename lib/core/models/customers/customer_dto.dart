@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 
 part 'customer_dto.g.dart';
@@ -182,7 +183,7 @@ class CustomerData {
   final String status;
 
   @JsonKey(name: "documents")
-  final List<MaintenanceFileData> documents;
+  final List<DocumentData> documents;
 }
 //endregion
 
