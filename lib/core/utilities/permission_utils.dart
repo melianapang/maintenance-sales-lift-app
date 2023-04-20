@@ -15,11 +15,13 @@ class PermissionUtils {
 
     if (!mapPermission.containsValue(PermissionStatus.denied) &&
             !mapPermission.containsValue(PermissionStatus.permanentlyDenied) ||
-        !mapPermission.containsValue(PermissionStatus.restricted)) return true;
+        !mapPermission.containsValue(PermissionStatus.restricted)) {
+      return true;
+    }
 
     //check if there is any permanent denied
     if (mapPermission.containsValue(PermissionStatus.permanentlyDenied)) {
-      openAppSettings();
+      await openAppSettings();
       return false;
     }
 
@@ -30,9 +32,9 @@ class PermissionUtils {
         .toList();
     Map<Permission, PermissionStatus> statuses =
         await needRequestAgain.request();
-    return !statuses.values.contains(PermissionStatus.denied) &&
-        !statuses.values.contains(PermissionStatus.permanentlyDenied) &&
-        !statuses.values.contains(PermissionStatus.restricted);
+    return !statuses.containsValue(PermissionStatus.denied) &&
+        !statuses.containsValue(PermissionStatus.permanentlyDenied) &&
+        !statuses.containsValue(PermissionStatus.restricted);
   }
 
   static Future<bool> requestPermission(Permission permission) async {
