@@ -79,6 +79,7 @@ class ListReminderViewModel extends BaseViewModel {
     setBusy(true);
 
     _listReminder = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
     await requestGetAllReminderData();

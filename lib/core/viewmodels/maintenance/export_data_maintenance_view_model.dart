@@ -85,6 +85,8 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
       return;
     }
 
+    _errorMsg = null;
+
     final response = await _apiService.getAllProjects(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,

@@ -17,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_vie
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import '../../widgets/filter_menu.dart';
 
 class ListMaintenanceView extends StatefulWidget {
@@ -36,6 +37,12 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
       ),
       onModelReady: (ListMaintenanceViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -139,6 +146,31 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListMaintenanceViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Pemeliharaan",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Pemeliharaan. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

@@ -80,6 +80,7 @@ class ListProjectViewModel extends BaseViewModel {
     setBusy(true);
 
     _listProject = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
     await requestGetAllProjects();

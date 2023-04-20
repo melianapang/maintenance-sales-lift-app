@@ -94,6 +94,8 @@ class AddUnitCustomerViewModel extends BaseViewModel {
       return;
     }
 
+    _errorMsg = null;
+
     final response = await _apiService.requestGetAllProjectsByCustomerId(
       customerId: int.parse(_customerData?.customerId ?? "0"),
       currentPage: _paginationControl.currentPage,

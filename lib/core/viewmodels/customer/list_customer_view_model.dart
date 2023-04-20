@@ -151,6 +151,7 @@ class ListCustomerViewModel extends BaseViewModel {
     setBusy(true);
 
     _listCustomer = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
 

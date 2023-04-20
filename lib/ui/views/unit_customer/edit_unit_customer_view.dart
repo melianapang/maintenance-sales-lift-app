@@ -53,6 +53,12 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
       ),
       onModelReady: (EditUnitCustomerViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, _) {
         return !model.busy
@@ -215,6 +221,31 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
               ),
             )
           : buildNoDataFoundPage(),
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    EditUnitCustomerViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Unit",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Unit. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.requestGetAllProjectByCustomerId();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

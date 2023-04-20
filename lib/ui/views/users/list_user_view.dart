@@ -15,6 +15,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListUserView extends StatefulWidget {
   const ListUserView({super.key});
@@ -32,6 +33,12 @@ class _ListUserViewState extends State<ListUserView> {
       ),
       onModelReady: (ListUserViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -97,6 +104,31 @@ class _ListUserViewState extends State<ListUserView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListUserViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Users",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar pengguna. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

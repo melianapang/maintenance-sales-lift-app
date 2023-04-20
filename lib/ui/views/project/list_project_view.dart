@@ -14,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListProjectView extends StatefulWidget {
   const ListProjectView({
@@ -33,6 +34,12 @@ class _ListProjectViewState extends State<ListProjectView> {
       ),
       onModelReady: (ListProjectViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -101,6 +108,31 @@ class _ListProjectViewState extends State<ListProjectView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListProjectViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Proyek",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Proyek. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

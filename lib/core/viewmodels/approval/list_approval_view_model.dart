@@ -80,6 +80,7 @@ class ListApprovalViewModel extends BaseViewModel {
     setBusy(true);
 
     _listApproval = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
     await requestGetAllApproval();

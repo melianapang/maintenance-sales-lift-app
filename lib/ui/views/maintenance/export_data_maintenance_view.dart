@@ -35,7 +35,13 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
       ),
       onModelReady: (ExportDataMaintenanceViewModel model) async {
         await model.initModel();
+
         if (!model.isAllowedToOpenPage) Navigator.pop(context);
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -189,6 +195,31 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
               ),
             )
           : buildNoDataFoundPage(),
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ExportDataMaintenanceViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Log",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar log. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.requestGetAllProjects();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

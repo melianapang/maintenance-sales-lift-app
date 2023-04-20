@@ -109,6 +109,7 @@ class ListMaintenanceViewModel extends BaseViewModel {
     setBusy(true);
 
     _listMaintenance = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
     await requestGetAllMaintenance();

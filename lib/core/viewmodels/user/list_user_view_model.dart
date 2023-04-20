@@ -79,6 +79,7 @@ class ListUserViewModel extends BaseViewModel {
     setBusy(true);
 
     _listUser = [];
+    _errorMsg = null;
 
     paginationControl.currentPage = 1;
     await requestGetAllUserData();

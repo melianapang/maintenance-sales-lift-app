@@ -16,6 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/detail_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListRemindersView extends StatefulWidget {
   const ListRemindersView({super.key});
@@ -33,6 +34,12 @@ class _ListRemindersViewState extends State<ListRemindersView> {
       ),
       onModelReady: (ListReminderViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -116,6 +123,31 @@ class _ListRemindersViewState extends State<ListRemindersView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListReminderViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Pengingat",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Pengingat. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

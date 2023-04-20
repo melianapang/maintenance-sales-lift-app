@@ -94,6 +94,7 @@ class ListUnitCustomerViewModel extends BaseViewModel {
     setBusy(true);
 
     _listUnit = [];
+    _errorMsg = null;
     paginationControl.currentPage = 1;
 
     await requestGetAllUnit();

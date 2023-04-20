@@ -15,6 +15,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:intl/intl.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListApprovalView extends StatefulWidget {
   const ListApprovalView({super.key});
@@ -32,6 +33,12 @@ class _ListApprovalViewState extends State<ListApprovalView> {
       ),
       onModelReady: (ListApprovalViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -104,6 +111,31 @@ class _ListApprovalViewState extends State<ListApprovalView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListApprovalViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Permohonan",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar permohonan. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

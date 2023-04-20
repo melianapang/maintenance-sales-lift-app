@@ -15,6 +15,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/detail_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListUnitCustomerViewParam {
   ListUnitCustomerViewParam({
@@ -46,6 +47,12 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
       ),
       onModelReady: (ListUnitCustomerViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -119,6 +126,31 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListUnitCustomerViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Unit",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Unit. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

@@ -16,6 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class ListCustomerView extends StatefulWidget {
@@ -37,6 +38,12 @@ class _ListCustomerViewState extends State<ListCustomerView> {
       ),
       onModelReady: (ListCustomerViewModel model) async {
         await model.initModel();
+
+        if (model.errorMsg != null)
+          _buildErrorDialog(
+            context,
+            model,
+          );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -145,6 +152,31 @@ class _ListCustomerViewState extends State<ListCustomerView> {
           ),
         );
       },
+    );
+  }
+
+  void _buildErrorDialog(
+    BuildContext context,
+    ListCustomerViewModel model,
+  ) {
+    showDialogWidget(
+      context,
+      title: "Daftar Pelanggan",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Pelanggan. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _buildErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }
