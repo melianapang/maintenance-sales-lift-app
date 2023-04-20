@@ -1,3 +1,10 @@
+enum FollowUpStatus {
+  Loss,
+  Win,
+  Hot,
+  In_Progress,
+}
+
 String mappingFollowUpStringNumericToString(String value) {
   switch (value) {
     case "0":
