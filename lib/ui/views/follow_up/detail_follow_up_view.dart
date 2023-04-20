@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewParam {
@@ -108,28 +109,27 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
             child: !model.busy
                 ? Column(
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          model.customerName ?? "",
-                          style: buildTextStyle(
-                            fontSize: 26,
-                            fontWeight: 800,
-                            fontColor: MyColors.yellow01,
-                          ),
+                      Text(
+                        model.customerName ?? "",
+                        style: buildTextStyle(
+                          fontSize: 26,
+                          fontWeight: 800,
+                          fontColor: MyColors.yellow01,
                         ),
                       ),
-                      Spacings.vert(10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          model.companyName ?? "",
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontWeight: 400,
-                            fontColor: MyColors.lightBlack02,
-                          ),
+                      Spacings.vert(8),
+                      Text(
+                        model.companyName ?? "",
+                        style: buildTextStyle(
+                          fontSize: 20,
+                          fontWeight: 400,
+                          fontColor: MyColors.lightBlack02,
                         ),
+                      ),
+                      Spacings.vert(24),
+                      StatusCardWidget(
+                        cardType: model.statusCardType,
+                        onTap: () {},
                       ),
                       Spacings.vert(38),
                       Align(

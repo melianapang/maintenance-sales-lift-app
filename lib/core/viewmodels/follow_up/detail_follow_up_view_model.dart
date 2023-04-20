@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewModel extends BaseViewModel {
@@ -44,6 +45,9 @@ class DetailFollowUpViewModel extends BaseViewModel {
   List<TimelineData> _timelineData = [];
   List<TimelineData> get timelineData => _timelineData;
 
+  StatusCardType _statusCardType = StatusCardType.InProgress;
+  StatusCardType get statusCardType => _statusCardType;
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
@@ -52,6 +56,27 @@ class DetailFollowUpViewModel extends BaseViewModel {
     setBusy(true);
     await requestGetHistoryFollowUp();
     setBusy(false);
+  }
+
+  void setStatusCard() {
+    FollowUpStatus status = FollowUpStatus.values[int.parse(
+      _historyData.first.followUpResult,
+    )];
+
+    switch (status) {
+      case FollowUpStatus.Loss:
+        _statusCardType = StatusCardType.Loss;
+        break;
+      case FollowUpStatus.Win:
+        _statusCardType = StatusCardType.Win;
+        break;
+      case FollowUpStatus.Hot:
+        _statusCardType = StatusCardType.Hot;
+        break;
+      case FollowUpStatus.In_Progress:
+      default:
+        _statusCardType = StatusCardType.InProgress;
+    }
   }
 
   Future<void> requestGetHistoryFollowUp() async {
