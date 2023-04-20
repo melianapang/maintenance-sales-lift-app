@@ -360,8 +360,8 @@ class HistoryMaintenanceData {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "maintenance_files")
-  final List<MaintenanceData>? maintenanceFiles;
+  @JsonKey(name: "maintenance_file")
+  final List<DocumentData>? maintenanceFiles;
 }
 //endregion
 
