@@ -49,20 +49,12 @@ class ListFollowUpData {
 class FollowUpData {
   FollowUpData({
     required this.followUpId,
-    required this.userName,
-    required this.phoneNumber,
     required this.customerId,
     required this.customerName,
     required this.companyName,
-    required this.unitId,
-    required this.unitName,
-    required this.unitLocation,
-    required this.latitude,
-    required this.longitude,
-    required this.followUpResult,
     required this.scheduleDate,
     required this.note,
-    required this.followUpFiles,
+    required this.documents,
   });
 
   factory FollowUpData.fromJson(Map<String, dynamic> json) =>
@@ -73,9 +65,6 @@ class FollowUpData {
   @JsonKey(name: "follow_up_id")
   final String followUpId;
 
-  @JsonKey(name: "user_name")
-  final String userName;
-
   @JsonKey(name: "customer_id")
   final String customerId;
 
@@ -85,35 +74,14 @@ class FollowUpData {
   @JsonKey(name: "company_name")
   final String? companyName;
 
-  @JsonKey(name: "phone_number")
-  final String phoneNumber;
-
-  @JsonKey(name: "latitude")
-  final String? latitude;
-
-  @JsonKey(name: "longitude")
-  final String? longitude;
-
-  @JsonKey(name: "followUp_result")
-  final String followUpResult;
-
   @JsonKey(name: "note")
   final String note;
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "unit_id")
-  final String unitId;
-
-  @JsonKey(name: "unit_name")
-  final String unitName;
-
-  @JsonKey(name: "unit_location")
-  final String unitLocation;
-
-  @JsonKey(name: "followUp_file")
-  final List<FollowUpFileData> followUpFiles;
+  @JsonKey(name: "documents")
+  final List<FollowUpFileData> documents;
 }
 
 @JsonSerializable()
@@ -229,17 +197,11 @@ class FollowUpDetailResponse {
 class DetailFollowUpData {
   DetailFollowUpData({
     required this.followUpId,
-    required this.userName,
-    required this.phoneNumber,
     required this.customerName,
-    required this.unitName,
-    required this.unitLocation,
-    required this.latitude,
-    required this.longitude,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
-    required this.followUpFiles,
+    required this.documents,
   });
 
   factory DetailFollowUpData.fromJson(Map<String, dynamic> json) =>
@@ -250,20 +212,8 @@ class DetailFollowUpData {
   @JsonKey(name: "follow_up_id")
   final String followUpId;
 
-  @JsonKey(name: "user_name")
-  final String userName;
-
   @JsonKey(name: "customer_name")
   final String customerName;
-
-  @JsonKey(name: "phone_number")
-  final String phoneNumber;
-
-  @JsonKey(name: "latitude")
-  final String? latitude;
-
-  @JsonKey(name: "longitude")
-  final String? longitude;
 
   @JsonKey(name: "follow_up_result")
   final String followUpResult;
@@ -274,14 +224,8 @@ class DetailFollowUpData {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "unit_name")
-  final String unitName;
-
-  @JsonKey(name: "unit_location")
-  final String unitLocation;
-
-  @JsonKey(name: "followUp_files")
-  final List<FollowUpData>? followUpFiles;
+  @JsonKey(name: "documentss")
+  final List<FollowUpData>? documents;
 }
 //endregion
 
@@ -331,7 +275,6 @@ class HistoryFollowUpData {
     required this.customerId,
     required this.customerName,
     required this.companyName,
-    required this.unitId,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
@@ -354,9 +297,6 @@ class HistoryFollowUpData {
 
   @JsonKey(name: "company_name")
   final String? companyName;
-
-  @JsonKey(name: "unit_id")
-  final String unitId;
 
   @JsonKey(name: "follow_up_result")
   final String followUpResult;
