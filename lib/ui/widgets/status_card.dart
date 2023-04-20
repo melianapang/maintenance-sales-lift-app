@@ -51,8 +51,8 @@ extension StatusCardTypeStyleExt on StatusCardType {
 
   static Map<StatusCardType, String> titles = <StatusCardType, String>{
     StatusCardType.Pending: "Pending",
-    StatusCardType.Confirmed: "Confirmed",
-    StatusCardType.Canceled: "Canceled",
+    StatusCardType.Confirmed: "Berhasil",
+    StatusCardType.Canceled: "Gagal / Batal",
     StatusCardType.Normal: "Normal",
     StatusCardType.Defect: "Bermasalah",
     StatusCardType.OnFix: "Sedang Diperbaiki",
