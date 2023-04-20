@@ -3,6 +3,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/log/log_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListLogViewModel extends BaseViewModel {
   ListLogViewModel({
@@ -14,9 +15,6 @@ class ListLogViewModel extends BaseViewModel {
         );
 
   final ApiService _apiService;
-
-  int? _totalData;
-  int? get totalData => _totalData;
 
   List<LogData>? _listLogData;
   List<LogData>? get listLogData => _listLogData;
@@ -32,25 +30,15 @@ class ListLogViewModel extends BaseViewModel {
 
   @override
   Future<void> initModel() async {
-    setBusy(true);
-
-    _paginationControl.currentPage = 1;
-
-    await requestGetAllLog();
-
-    if (_listLogData?.isEmpty == true || _listLogData == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
-    setBusy(false);
+    await refreshPage();
   }
 
-  Future<void> requestGetAllLog() async {
+  Future<bool> requestGetAllLog() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
-      return;
+      return false;
     }
 
     final response = await _apiService.requestGetAllLog(
@@ -73,9 +61,25 @@ class ListLogViewModel extends BaseViewModel {
 
         notifyListeners();
       }
-      return;
+      return true;
     }
 
     _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _errorMsg = null;
+    _paginationControl.currentPage = 1;
+
+    await requestGetAllLog();
+
+    if (_listLogData?.isEmpty == true || _listLogData == null) {
+      _isShowNoDataFoundPage = true;
+      notifyListeners();
+    }
+    setBusy(false);
   }
 }
