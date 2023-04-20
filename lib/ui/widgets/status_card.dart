@@ -5,12 +5,19 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
 enum StatusCardType {
+  //maintenance
   Pending,
   Confirmed,
   Canceled,
+  //unit
   Normal,
   Defect,
   OnFix,
+  //follow up
+  Loss,
+  Win,
+  Hot,
+  InProgress,
 }
 
 extension StatusCardTypeStyleExt on StatusCardType {
@@ -21,6 +28,10 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.OnFix: MyColors.greyBackgroundStatusCard,
     StatusCardType.Normal: MyColors.greenBackgroundStatusCard,
     StatusCardType.Defect: MyColors.redBackgroundStatusCard,
+    StatusCardType.Loss: MyColors.redBackgroundStatusCard,
+    StatusCardType.Win: MyColors.greenBackgroundStatusCard,
+    StatusCardType.Hot: MyColors.redBackgroundStatusCard,
+    StatusCardType.InProgress: MyColors.greyBackgroundStatusCard,
   };
   Color get backgroundColor => backgroundColors[this] ?? MyColors.lightGrey;
 
@@ -31,8 +42,12 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.OnFix: MyColors.greyFontStatusCard,
     StatusCardType.Normal: MyColors.greenFontStatusCard,
     StatusCardType.Defect: MyColors.redFontStatusCard,
+    StatusCardType.Loss: MyColors.redFontStatusCard,
+    StatusCardType.Win: MyColors.greenFontStatusCard,
+    StatusCardType.Hot: MyColors.redFontStatusCard,
+    StatusCardType.InProgress: MyColors.greyFontStatusCard,
   };
-  Color get fontColor => fontColors[this] ?? Colors.transparent;
+  Color get fontColor => fontColors[this] ?? MyColors.greyFontStatusCard;
 
   static Map<StatusCardType, String> titles = <StatusCardType, String>{
     StatusCardType.Pending: "Pending",
@@ -41,6 +56,10 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.Normal: "Normal",
     StatusCardType.Defect: "Bermasalah",
     StatusCardType.OnFix: "Sedang Diperbaiki",
+    StatusCardType.Loss: "Loss",
+    StatusCardType.Win: "Win",
+    StatusCardType.Hot: "Hot",
+    StatusCardType.InProgress: "In Progress",
   };
   String get title => titles[this] ?? "Pending";
 
@@ -52,6 +71,10 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.Normal: PhosphorIcons.checkCircleBold,
     StatusCardType.Defect: PhosphorIcons.xCircleBold,
     StatusCardType.OnFix: PhosphorIcons.clockClockwiseBold,
+    StatusCardType.Loss: PhosphorIcons.xCircleBold,
+    StatusCardType.Win: PhosphorIcons.checkCircleBold,
+    StatusCardType.Hot: PhosphorIcons.clockClockwiseBold,
+    StatusCardType.InProgress: PhosphorIcons.clockClockwiseBold,
   };
   PhosphorIconData get icon => icons[this] ?? PhosphorIcons.clockClockwiseBold;
 }
