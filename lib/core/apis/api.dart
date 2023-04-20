@@ -1080,7 +1080,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, FollowUpData>> requestFollowUpDetail({
+  Future<Either<Failure, FollowUpFrontData>> requestFollowUpDetail({
     required int followUpId,
   }) async {
     try {
@@ -1093,13 +1093,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, FollowUpData>(followUpDetailResponse.data);
+        return Right<Failure, FollowUpFrontData>(followUpDetailResponse.data);
       }
 
-      return ErrorUtils<FollowUpData>().handleDomainError(response);
+      return ErrorUtils<FollowUpFrontData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<FollowUpData>().handleError(e);
+      return ErrorUtils<FollowUpFrontData>().handleError(e);
     }
   }
 

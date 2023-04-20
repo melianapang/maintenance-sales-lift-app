@@ -15,8 +15,8 @@ class ListFollowUpViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  List<FollowUpData> _listFollowUp = [];
-  List<FollowUpData> get listFollowUp => _listFollowUp;
+  List<FollowUpFrontData> _listFollowUp = [];
+  List<FollowUpFrontData> get listFollowUp => _listFollowUp;
 
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
@@ -48,6 +48,8 @@ class ListFollowUpViewModel extends BaseViewModel {
                 _paginationControl.pageSize) {
       return;
     }
+
+    _errorMsg = null;
 
     final response = await _apiService.requestGetAllFollowUp(
       pageSize: _paginationControl.pageSize,

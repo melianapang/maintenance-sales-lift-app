@@ -16,13 +16,11 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewParam {
   DetailFollowUpViewParam({
-    this.followUpId,
     this.customerId,
     this.customerName,
     this.companyName,
   });
 
-  final String? followUpId;
   final String? customerId;
   final String? customerName;
   final String? companyName;
@@ -76,7 +74,6 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
 
     return ViewModel(
       model: DetailFollowUpViewModel(
-        followUpId: widget.param.followUpId,
         customerId: widget.param.customerId,
         customerName: widget.param.customerName,
         companyName: widget.param.companyName,

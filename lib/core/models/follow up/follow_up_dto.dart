@@ -42,28 +42,21 @@ class ListFollowUpData {
   final String totalSize;
 
   @JsonKey(name: "result")
-  final List<FollowUpData> result;
+  final List<FollowUpFrontData> result;
 }
 
 @JsonSerializable()
-class FollowUpData {
-  FollowUpData({
-    required this.followUpId,
+class FollowUpFrontData {
+  FollowUpFrontData({
     required this.customerId,
     required this.customerName,
     required this.companyName,
-    required this.scheduleDate,
-    required this.note,
-    required this.documents,
   });
 
-  factory FollowUpData.fromJson(Map<String, dynamic> json) =>
-      _$FollowUpDataFromJson(json);
+  factory FollowUpFrontData.fromJson(Map<String, dynamic> json) =>
+      _$FollowUpFrontDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FollowUpDataToJson(this);
-
-  @JsonKey(name: "follow_up_id")
-  final String followUpId;
+  Map<String, dynamic> toJson() => _$FollowUpFrontDataToJson(this);
 
   @JsonKey(name: "customer_id")
   final String customerId;
@@ -73,15 +66,6 @@ class FollowUpData {
 
   @JsonKey(name: "company_name")
   final String? companyName;
-
-  @JsonKey(name: "note")
-  final String note;
-
-  @JsonKey(name: "schedule_date")
-  final String scheduleDate;
-
-  @JsonKey(name: "documents")
-  final List<FollowUpFileData> documents;
 }
 
 @JsonSerializable()
@@ -190,7 +174,7 @@ class FollowUpDetailResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final FollowUpData data;
+  final FollowUpFrontData data;
 }
 
 @JsonSerializable()
@@ -225,7 +209,7 @@ class DetailFollowUpData {
   final String scheduleDate;
 
   @JsonKey(name: "documentss")
-  final List<FollowUpData>? documents;
+  final List<FollowUpFrontData>? documents;
 }
 //endregion
 

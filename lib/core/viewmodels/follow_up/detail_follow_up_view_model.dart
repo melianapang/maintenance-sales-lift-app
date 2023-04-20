@@ -11,14 +11,12 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewModel extends BaseViewModel {
   DetailFollowUpViewModel({
-    String? followUpId,
     String? customerId,
     String? customerName,
     String? companyName,
     required DioService dioService,
     required NavigationService navigationService,
-  })  : _followUpId = followUpId,
-        _customerId = customerId,
+  })  : _customerId = customerId,
         _companyName = companyName,
         _customerName = customerName,
         _navigationService = navigationService,
@@ -30,9 +28,6 @@ class DetailFollowUpViewModel extends BaseViewModel {
 
   final ApiService _apiService;
   final NavigationService _navigationService;
-
-  String? _followUpId;
-  String? get followUpId => _followUpId;
 
   String? _customerId;
   String? get customerId => _customerId;
