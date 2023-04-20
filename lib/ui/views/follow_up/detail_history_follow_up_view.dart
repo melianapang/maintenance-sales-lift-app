@@ -35,19 +35,6 @@ class DetailHistoryFollowUpView extends StatefulWidget {
 }
 
 class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
-  List<GalleryData> galleryData = [
-    GalleryData(
-      filepath:
-          "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ViewModel(
@@ -129,11 +116,21 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                       ),
                     ),
                     Spacings.vert(8),
-                    GalleryThumbnailWidget(
-                      isCRUD: false,
-                      galleryData: galleryData,
-                      galleryType: GalleryType.PHOTO,
-                    ),
+                    if (model.galleryData.isNotEmpty)
+                      GalleryThumbnailWidget(
+                        isCRUD: false,
+                        galleryData: model.galleryData,
+                        galleryType: GalleryType.PHOTO,
+                      ),
+                    if (model.galleryData.isEmpty)
+                      Text(
+                        "Tidak ada foto untuk riwayat konfirmasi ini.",
+                        style: buildTextStyle(
+                          fontSize: 16,
+                          fontColor: MyColors.lightBlack01,
+                          fontWeight: 500,
+                        ),
+                      ),
                   ],
                 ),
               ),
