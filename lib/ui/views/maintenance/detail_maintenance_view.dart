@@ -48,37 +48,6 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
 
   @override
   Widget build(BuildContext context) {
-    final List<TimelineData> list1 = [
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryMaintenance);
-        },
-      ),
-    ];
-
     return ViewModel(
       model: DetailMaintenanceViewModel(
         maintenanceData: widget.param.maintenanceData,

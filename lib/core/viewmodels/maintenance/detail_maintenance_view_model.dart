@@ -165,7 +165,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
             _navigationService.navigateTo(
               Routes.detailHistoryMaintenance,
               arguments: DetailHistoryMaintenanceViewParam(
-                maintenanceData: _maintenanceData,
+                historyData: _historyData?[i],
               ),
             );
           },

@@ -22,10 +22,10 @@ import 'package:intl/intl.dart';
 
 class DetailHistoryMaintenanceViewParam {
   DetailHistoryMaintenanceViewParam({
-    this.maintenanceData,
+    this.historyData,
   });
 
-  final MaintenanceData? maintenanceData;
+  final HistoryMaintenanceData? historyData;
 }
 
 class DetailHistoryMaintenanceView extends StatefulWidget {
@@ -94,7 +94,7 @@ class _DetailHistoryMaintenanceViewState
   Widget build(BuildContext context) {
     return ViewModel(
       model: DetailHistoryMaintenanceViewModel(
-        maintenanceData: widget.param.maintenanceData,
+        historyMaintenanceData: widget.param.historyData,
         dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (DetailHistoryMaintenanceViewModel model) async {
@@ -121,10 +121,10 @@ class _DetailHistoryMaintenanceViewState
             onTap: () {
               Navigator.pushNamed(context, Routes.map,
                   arguments: MapViewParam(
-                    longitude:
-                        double.parse(model.maintenanceData?.longitude ?? "0"),
-                    latitude:
-                        double.parse(model.maintenanceData?.latitude ?? "0"),
+                    longitude: double.parse(
+                        model.historyMaintenanceData?.longitude ?? "0"),
+                    latitude: double.parse(
+                        model.historyMaintenanceData?.latitude ?? "0"),
                   ));
             },
             text: 'Lihat Lokasi di Peta',
@@ -140,7 +140,7 @@ class _DetailHistoryMaintenanceViewState
                 children: [
                   Spacings.vert(20),
                   Text(
-                    model.maintenanceData?.unitName ?? "",
+                    model.historyMaintenanceData?.unitName ?? "",
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
@@ -148,7 +148,7 @@ class _DetailHistoryMaintenanceViewState
                     ),
                   ),
                   Text(
-                    model.maintenanceData?.customerName ?? "",
+                    model.historyMaintenanceData?.customerName ?? "",
                     style: buildTextStyle(
                       fontSize: 20,
                       fontWeight: 400,
@@ -164,7 +164,7 @@ class _DetailHistoryMaintenanceViewState
                   TextInput.disabled(
                     label: "Tanggal",
                     text: DateTimeUtils.convertStringToOtherStringDateFormat(
-                      date: model.maintenanceData?.scheduleDate ??
+                      date: model.historyMaintenanceData?.scheduleDate ??
                           DateTimeUtils.convertDateToString(
                             date: DateTime.now(),
                             formatter: DateFormat(
@@ -178,13 +178,14 @@ class _DetailHistoryMaintenanceViewState
                   TextInput.disabled(
                     label: "Hasil Pemeliharaan",
                     text: mappingStringNumerictoString(
-                      model.maintenanceData?.maintenanceResult ?? "0",
+                      model.historyMaintenanceData?.maintenanceResult ?? "0",
                     ),
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Catatan",
-                    text: model.maintenanceData?.note,
+                    hintText: "Tidak ada catatan...",
+                    text: model.historyMaintenanceData?.note,
                   ),
                   Spacings.vert(24),
                   Align(
@@ -199,11 +200,21 @@ class _DetailHistoryMaintenanceViewState
                     ),
                   ),
                   Spacings.vert(8),
-                  GalleryThumbnailWidget(
-                    isCRUD: false,
-                    galleryData: galleryData,
-                    galleryType: GalleryType.PHOTO,
-                  ),
+                  if (model.galleryPhotoData.isNotEmpty)
+                    GalleryThumbnailWidget(
+                      isCRUD: false,
+                      galleryData: model.galleryPhotoData,
+                      galleryType: GalleryType.PHOTO,
+                    ),
+                  if (model.galleryPhotoData.isEmpty)
+                    Text(
+                      "Tidak ada foto untuk riwayat pemeliharaan ini.",
+                      style: buildTextStyle(
+                        fontSize: 16,
+                        fontColor: MyColors.lightBlack01,
+                        fontWeight: 500,
+                      ),
+                    ),
                   Spacings.vert(24),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -217,11 +228,21 @@ class _DetailHistoryMaintenanceViewState
                     ),
                   ),
                   Spacings.vert(8),
-                  GalleryThumbnailWidget(
-                    isCRUD: false,
-                    galleryData: videoData,
-                    galleryType: GalleryType.VIDEO,
-                  ),
+                  if (model.galleryVideoData.isNotEmpty)
+                    GalleryThumbnailWidget(
+                      isCRUD: false,
+                      galleryData: model.galleryVideoData,
+                      galleryType: GalleryType.VIDEO,
+                    ),
+                  if (model.galleryVideoData.isEmpty)
+                    Text(
+                      "Tidak ada video untuk riwayat pemeliharaan ini.",
+                      style: buildTextStyle(
+                        fontSize: 16,
+                        fontColor: MyColors.lightBlack01,
+                        fontWeight: 500,
+                      ),
+                    ),
                   Spacings.vert(32),
                   const Divider(
                     thickness: 0.5,
@@ -242,12 +263,12 @@ class _DetailHistoryMaintenanceViewState
                   Spacings.vert(12),
                   TextInput.disabled(
                     label: "Nama Teknisi:",
-                    text: model.maintenanceData?.userName,
+                    text: model.historyMaintenanceData?.userName,
                   ),
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "No Telepon:",
-                    text: model.maintenanceData?.phoneNumber,
+                    text: model.historyMaintenanceData?.phoneNumber,
                   ),
                 ],
               ),
