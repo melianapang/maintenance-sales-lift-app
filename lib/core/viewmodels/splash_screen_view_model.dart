@@ -1,5 +1,7 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class SplashScreenViewModel extends BaseViewModel {
@@ -15,6 +17,10 @@ class SplashScreenViewModel extends BaseViewModel {
   @override
   void initModel() async {
     setBusy(true);
+    await PermissionUtils.requestPermission(
+      Permission.notification,
+    );
+
     await _oneSignalService.initOneSignal();
     setBusy(false);
   }
