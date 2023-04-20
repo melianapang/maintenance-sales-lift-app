@@ -28,13 +28,6 @@ class Customer {
   int? status;
 }
 
-enum CustomerStatus {
-  Loss,
-  Win,
-  Hot,
-  In_Progress,
-}
-
 String mappingCustomerTypeToString(int value) {
   switch (value) {
     case 0:
