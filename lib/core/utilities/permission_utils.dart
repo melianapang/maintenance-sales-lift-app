@@ -1,5 +1,3 @@
-// import 'package:permission_handler/permission_handler.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionUtils {
@@ -48,8 +46,9 @@ class PermissionUtils {
         return false;
       case PermissionStatus.denied:
       default:
-        permission.request();
-        return false;
+        final status = await permission.request();
+        return status == PermissionStatus.granted ||
+            status == PermissionStatus.limited;
     }
   }
 }
