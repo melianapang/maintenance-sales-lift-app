@@ -42,8 +42,10 @@ class PermissionUtils {
       case PermissionStatus.limited:
         return true;
       case PermissionStatus.permanentlyDenied:
-        openAppSettings();
-        return false;
+        await openAppSettings();
+        final status = await permission.status;
+        return status == PermissionStatus.granted ||
+            status == PermissionStatus.limited;
       case PermissionStatus.denied:
       default:
         final status = await permission.request();
