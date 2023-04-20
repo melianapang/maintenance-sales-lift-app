@@ -6,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 
 class DetailCustomerViewModel extends BaseViewModel {
   DetailCustomerViewModel({
@@ -50,19 +49,6 @@ class DetailCustomerViewModel extends BaseViewModel {
     return await PermissionUtils.requestPermission(
       Permission.manageExternalStorage,
     );
-  }
-
-  StatusCardType get customerStatusCardType {
-    switch (_customerData?.status ?? "") {
-      case "0":
-        return StatusCardType.Normal;
-      case "1":
-        return StatusCardType.Confirmed;
-      case "2":
-        return StatusCardType.Canceled;
-      default:
-        return StatusCardType.Normal;
-    }
   }
 
   void setDialChildrenVisible() {

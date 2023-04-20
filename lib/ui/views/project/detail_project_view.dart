@@ -154,11 +154,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     ),
                   ),
                   Spacings.vert(35),
-                  StatusCardWidget(
-                    cardType: StatusCardType.Defect,
-                    onTap: () {},
-                  ),
-                  Spacings.vert(35),
                   TextInput.disabled(
                     label: "Keperluan Proyek",
                     text: mappingProjectNeedTypeToString(

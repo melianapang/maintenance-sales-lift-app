@@ -129,11 +129,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       fontColor: MyColors.lightBlack02,
                     ),
                   ),
-                  Spacings.vert(32),
-                  StatusCardWidget(
-                    cardType: model.customerStatusCardType,
-                    onTap: () {},
-                  ),
                   Spacings.vert(35),
                   TextInput.disabled(
                     label: "Nomor Customer",
