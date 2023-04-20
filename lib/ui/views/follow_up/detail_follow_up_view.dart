@@ -42,37 +42,6 @@ class DetailFollowUpView extends StatefulWidget {
 class _DetailFollowUpViewState extends State<DetailFollowUpView> {
   @override
   Widget build(BuildContext context) {
-    final List<TimelineData> list1 = [
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryFollowUp);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryFollowUp);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryFollowUp);
-        },
-      ),
-      TimelineData(
-        date: "12 Maret 2021",
-        note: "Butuh konfirmasi lagi.",
-        onTap: () {
-          Navigator.pushNamed(context, Routes.detailHistoryFollowUp);
-        },
-      ),
-    ];
-
     return ViewModel(
       model: DetailFollowUpViewModel(
         customerId: widget.param.customerId,

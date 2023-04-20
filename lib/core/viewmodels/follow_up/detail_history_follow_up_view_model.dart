@@ -1,4 +1,3 @@
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
