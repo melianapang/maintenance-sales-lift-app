@@ -17,12 +17,19 @@ class SplashScreenViewModel extends BaseViewModel {
   @override
   void initModel() async {
     setBusy(true);
+    await _oneSignalService.initOneSignal();
+    setBusy(false);
+
     await PermissionUtils.requestPermission(
       Permission.notification,
     );
 
-    await _oneSignalService.initOneSignal();
-    setBusy(false);
+    await PermissionUtils.requestPermissions(listPermission: [
+      Permission.manageExternalStorage,
+      Permission.storage,
+      Permission.photos,
+      Permission.videos,
+    ]);
   }
 
   Future<bool> isLoggedIn() async {
