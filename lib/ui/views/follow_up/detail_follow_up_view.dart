@@ -90,7 +90,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
           backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
-            title: "Riwayat Konfitmasi",
+            title: "Daftar Riwayat Konfitmasi",
             isBackEnabled: true,
           ),
           floatingActionButton: FloatingButtonWidget(
