@@ -152,7 +152,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Belum ada Riwayat Pemeliharaan untuk unit ini.",
+                      "Belum ada Riwayat Konfirmasi untuk unit ini.",
                       style: buildTextStyle(
                         fontSize: 16,
                         fontColor: MyColors.lightBlack02.withOpacity(
