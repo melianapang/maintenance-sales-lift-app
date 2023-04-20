@@ -81,7 +81,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   void setStatusCard() {
     MaintenanceStatus status = mappingStringtoMaintenanceStatus(
-        _maintenanceData?.maintenanceResult ?? "0");
+        _historyData?.first.maintenanceResult ?? "0");
     switch (status) {
       case MaintenanceStatus.NOT_MAINTENANCED:
         _statusCardType = StatusCardType.Pending;
