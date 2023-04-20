@@ -87,16 +87,12 @@ class DetailMaintenanceViewModel extends BaseViewModel {
         _statusCardType = StatusCardType.Pending;
         break;
       case MaintenanceStatus.FAILED:
-        _statusCardType = StatusCardType.Canceled;
-        break;
-      case MaintenanceStatus.SUCCESS:
-        _statusCardType = StatusCardType.Normal;
-        break;
       case MaintenanceStatus.DELETED:
         _statusCardType = StatusCardType.Canceled;
         break;
+      case MaintenanceStatus.SUCCESS:
       default:
-        _statusCardType = StatusCardType.Normal;
+        _statusCardType = StatusCardType.Confirmed;
     }
   }
 
