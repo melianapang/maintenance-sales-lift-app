@@ -93,7 +93,7 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                     ),
                     Spacings.vert(35),
                     StatusCardWidget(
-                      cardType: StatusCardType.Pending,
+                      cardType: model.statusCardType,
                       onTap: () {},
                     ),
                     Spacings.vert(35),
