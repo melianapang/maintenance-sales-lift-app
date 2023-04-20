@@ -43,7 +43,7 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   ProjectData? _selectedProyek;
   ProjectData? get selectedProyek => _selectedProyek;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

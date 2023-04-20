@@ -39,7 +39,7 @@ class DetailCustomerViewModel extends BaseViewModel {
   String? _exportedFileName;
   //endregion
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

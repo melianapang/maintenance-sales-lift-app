@@ -77,7 +77,7 @@ class EditCustomerViewModel extends BaseViewModel {
   List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
   // End of Dropdown related
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   String? _msg = "";

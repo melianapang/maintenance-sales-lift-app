@@ -62,7 +62,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   bool get isDialChildrenVisible => _isDialChildrenVisible;
   //endregion
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

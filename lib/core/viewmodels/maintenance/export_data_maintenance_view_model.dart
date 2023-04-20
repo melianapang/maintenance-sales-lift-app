@@ -41,7 +41,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
 
   String? _exportedFileName;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

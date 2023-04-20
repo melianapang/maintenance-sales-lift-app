@@ -41,7 +41,7 @@ class SetPasswordViewUserModel extends BaseViewModel {
   bool _showConfirmNewPassword = false;
   bool get showConfirmNewPassword => _showConfirmNewPassword;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

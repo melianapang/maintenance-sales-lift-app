@@ -62,7 +62,7 @@ class EditProfileViewModel extends BaseViewModel {
   bool _isEmailValid = true;
   bool get isEmailValid => _isEmailValid;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

@@ -32,7 +32,7 @@ class UploadDocumentViewModel extends BaseViewModel {
   ];
   List<FilterOption> get tipeDokumentOption => _tipeDokumentOption;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

@@ -27,7 +27,7 @@ class DetailUserViewModel extends BaseViewModel {
   bool _isAllowedToDeleteUser = false;
   bool get isAllowedToDeleteUser => _isAllowedToDeleteUser;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

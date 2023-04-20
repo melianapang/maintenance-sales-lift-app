@@ -63,7 +63,7 @@ class FormSetReminderViewModel extends BaseViewModel {
   ];
   List<DateTime> get selectedDates => _selectedDates;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

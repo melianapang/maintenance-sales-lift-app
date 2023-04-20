@@ -73,7 +73,7 @@ class EditProjectViewModel extends BaseViewModel {
   List<FilterOption> get keperluanProyekOptions => _keperluanProyekOptions;
   //endregion
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

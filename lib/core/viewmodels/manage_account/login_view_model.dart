@@ -40,7 +40,7 @@ class LoginViewModel extends BaseViewModel {
   String _password = "Hello789";
   String get password => _password;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

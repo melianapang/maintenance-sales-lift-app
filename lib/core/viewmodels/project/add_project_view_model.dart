@@ -68,7 +68,7 @@ class AddProjectViewModel extends BaseViewModel {
   int? _createdProjectId;
   int? get createdProjectId => _createdProjectId;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

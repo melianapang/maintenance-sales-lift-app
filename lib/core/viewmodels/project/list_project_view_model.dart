@@ -21,7 +21,7 @@ class ListProjectViewModel extends BaseViewModel {
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   List<ProjectData> _listProject = [];

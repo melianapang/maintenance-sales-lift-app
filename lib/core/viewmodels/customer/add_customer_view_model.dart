@@ -70,7 +70,7 @@ class AddCustomerViewModel extends BaseViewModel {
   bool get isCityValid => _isCityValid;
   //endregion
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

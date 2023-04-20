@@ -86,7 +86,7 @@ class ListCustomerViewModel extends BaseViewModel {
   List<FilterOption> get sortOptions => _sortOptions;
   // End of filter related
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

@@ -63,7 +63,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
   final List<GalleryData> _compressedFiles = [];
   List<GalleryData> get compressedFiles => _compressedFiles;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

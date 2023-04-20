@@ -51,7 +51,7 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   ProjectData? get selectedProyek => _selectedProyek;
   //endregion
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override

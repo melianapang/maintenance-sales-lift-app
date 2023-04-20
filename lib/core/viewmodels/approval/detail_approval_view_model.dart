@@ -19,7 +19,7 @@ class DetailApprovalViewModel extends BaseViewModel {
   ApprovalData? _approvalData;
   ApprovalData? get approvalData => _approvalData;
 
-  String? _errorMsg = "";
+  String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override
