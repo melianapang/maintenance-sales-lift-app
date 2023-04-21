@@ -40,10 +40,9 @@ class ListUnitCustomerViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
 
     await requestGetAllUnit();
-    if (_listUnit?.isEmpty == true || _listUnit == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+
+    _isShowNoDataFoundPage = _listUnit?.isEmpty == true || _listUnit == null;
+    notifyListeners();
 
     setBusy(false);
   }
@@ -98,10 +97,8 @@ class ListUnitCustomerViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
 
     await requestGetAllUnit();
-    if (_listUnit?.isEmpty == true || _listUnit == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listUnit?.isEmpty == true || _listUnit == null;
+    notifyListeners();
 
     setBusy(false);
   }

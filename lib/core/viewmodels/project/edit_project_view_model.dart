@@ -27,9 +27,6 @@ class EditProjectViewModel extends BaseViewModel {
   List<PICProject> get listPic => _listPic;
 
   //region pilih customer proyek
-  int _totalCustomerData = -1;
-  int get totalCustomerData => _totalCustomerData;
-
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
@@ -84,10 +81,6 @@ class EditProjectViewModel extends BaseViewModel {
 
     paginationControl.currentPage = 1;
     await requestGetAllCustomer();
-    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
 
     setBusy(false);
   }
@@ -144,8 +137,8 @@ class EditProjectViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetAllCustomer() async {
-    if (_totalCustomerData != -1 &&
-        _totalCustomerData <=
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
       return;
@@ -164,11 +157,14 @@ class EditProjectViewModel extends BaseViewModel {
           _listCustomer?.addAll(response.right.result);
         }
 
-        _totalCustomerData = int.parse(
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
 
-        _paginationControl.currentPage += 1;
+        _isShowNoDataFoundPage =
+            _listCustomer?.isEmpty == true || _listCustomer == null;
+
         notifyListeners();
       }
       return;

@@ -34,10 +34,9 @@ class ListUserViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
     await requestGetAllUserData();
 
-    if (_listUser.isEmpty) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listUser.isEmpty;
+    notifyListeners();
+
     setBusy(false);
   }
 
@@ -84,10 +83,9 @@ class ListUserViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
     await requestGetAllUserData();
 
-    if (_listUser.isEmpty) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listUser.isEmpty;
+    notifyListeners();
+
     setBusy(false);
   }
 }

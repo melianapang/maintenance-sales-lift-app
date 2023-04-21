@@ -34,10 +34,9 @@ class ListFollowUpViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
 
     await requestGetAllFollowUp();
-    if (_listFollowUp.isEmpty) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listFollowUp.isEmpty == true;
+    notifyListeners();
+
     setBusy(false);
   }
 
@@ -68,6 +67,8 @@ class ListFollowUpViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
+
+        _isShowNoDataFoundPage = _listFollowUp.isEmpty == true;
 
         notifyListeners();
       }

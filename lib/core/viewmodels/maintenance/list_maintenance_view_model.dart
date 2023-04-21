@@ -61,10 +61,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
 
     await requestGetAllMaintenance();
-    if (_listMaintenance?.isEmpty == true || _listMaintenance == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+
+    _isShowNoDataFoundPage =
+        _listMaintenance?.isEmpty == true || _listMaintenance == null;
+    notifyListeners();
 
     _isAllowedToExportData = await isUserAllowedToExportData();
 
@@ -114,10 +114,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
     await requestGetAllMaintenance();
 
-    if (_listMaintenance?.isEmpty == true || _listMaintenance == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listMaintenance?.isEmpty == true || _listMaintenance == null;
+    notifyListeners();
+
     setBusy(false);
   }
 

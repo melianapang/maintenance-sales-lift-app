@@ -76,10 +76,10 @@ class ListLogViewModel extends BaseViewModel {
 
     await requestGetAllLog();
 
-    if (_listLogData?.isEmpty == true || _listLogData == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listLogData?.isEmpty == true || _listLogData == null;
+    notifyListeners();
+
     setBusy(false);
   }
 }

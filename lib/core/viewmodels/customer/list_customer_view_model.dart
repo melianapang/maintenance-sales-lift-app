@@ -96,10 +96,9 @@ class ListCustomerViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
-    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listCustomer?.isEmpty == true || _listCustomer == null;
+    notifyListeners();
 
     _isAllowedToExportData = await isUserAllowedToExportData();
 
@@ -156,10 +155,9 @@ class ListCustomerViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
-    if (_listCustomer?.isEmpty == true || _listCustomer == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listCustomer?.isEmpty == true || _listCustomer == null;
+    notifyListeners();
 
     setBusy(false);
   }

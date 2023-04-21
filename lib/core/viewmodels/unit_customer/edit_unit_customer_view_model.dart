@@ -63,10 +63,6 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
 
     await requestGetAllProjectByCustomerId();
-    if (_listProject?.isEmpty == true || _listProject == null) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
 
     setBusy(false);
   }
@@ -139,6 +135,9 @@ class EditUnitCustomerViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
+
+        _isShowNoDataFoundPage =
+            _listProject?.isEmpty == true || _listProject == null;
 
         notifyListeners();
       }

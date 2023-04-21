@@ -34,10 +34,9 @@ class ListApprovalViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
 
     await requestGetAllApproval();
-    if (_listApproval?.isEmpty == true) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listApproval?.isEmpty == true || _listApproval == null;
+    notifyListeners();
 
     setBusy(false);
   }
@@ -84,10 +83,9 @@ class ListApprovalViewModel extends BaseViewModel {
 
     paginationControl.currentPage = 1;
     await requestGetAllApproval();
-    if (_listApproval?.isEmpty == true) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage =
+        _listApproval?.isEmpty == true || _listApproval == null;
+    notifyListeners();
 
     setBusy(false);
   }

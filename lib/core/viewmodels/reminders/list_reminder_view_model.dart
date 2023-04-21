@@ -34,10 +34,8 @@ class ListReminderViewModel extends BaseViewModel {
     _paginationControl.currentPage = 1;
 
     await requestGetAllReminderData();
-    if (_listReminder.isEmpty) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listReminder.isEmpty;
+    notifyListeners();
     setBusy(false);
   }
 

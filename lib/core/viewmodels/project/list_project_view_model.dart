@@ -35,10 +35,9 @@ class ListProjectViewModel extends BaseViewModel {
 
     await requestGetAllProjects();
 
-    if (_listProject.isEmpty == true) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listProject.isEmpty == true;
+    notifyListeners();
+
     setBusy(false);
   }
 
@@ -85,10 +84,9 @@ class ListProjectViewModel extends BaseViewModel {
     paginationControl.currentPage = 1;
     await requestGetAllProjects();
 
-    if (_listProject.isEmpty) {
-      _isShowNoDataFoundPage = true;
-      notifyListeners();
-    }
+    _isShowNoDataFoundPage = _listProject.isEmpty == true;
+    notifyListeners();
+
     setBusy(false);
   }
 }
