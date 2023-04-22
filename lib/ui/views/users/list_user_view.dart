@@ -49,12 +49,17 @@ class _ListUserViewState extends State<ListUserView> {
             isBackEnabled: true,
           ),
           floatingActionButton: FloatingButtonWidget(onTap: () {
-            Navigator.pushNamed(context, Routes.addUser).then((value) {
-              if (value == null) return;
-              if (value == true) {
-                model.refreshPage();
-              }
-            });
+            Navigator.pushNamed(
+              context,
+              Routes.addUser,
+            ).then(
+              (value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.refreshPage();
+                }
+              },
+            );
           }),
           body: Column(
             children: [
@@ -90,6 +95,13 @@ class _ListUserViewState extends State<ListUserView> {
                               arguments: DetailUserViewParam(
                                 userData: model.listUser[index],
                               ),
+                            ).then(
+                              (value) {
+                                if (value == null) return;
+                                if (value == true) {
+                                  model.refreshPage();
+                                }
+                              },
                             );
                           },
                         );

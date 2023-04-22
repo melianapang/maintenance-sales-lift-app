@@ -57,6 +57,7 @@ class _DetailUserViewState extends State<DetailUserView> {
             context,
             title: "Data User",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -67,10 +68,10 @@ class _DetailUserViewState extends State<DetailUserView> {
                       userData: model.userData,
                     ),
                   ).then((value) {
-                    if (value == null) return;
-                    if (value == true) {
-                      model.requestGetDetailCustomer();
-                    }
+                    if (value == null || value == false) return;
+
+                    model.requestGetDetailCustomer();
+                    model.setPreviousPageNeedRefresh(true);
                   });
                 },
                 child: const Padding(

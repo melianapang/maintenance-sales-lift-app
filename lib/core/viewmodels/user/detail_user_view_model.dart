@@ -21,6 +21,9 @@ class DetailUserViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   UserData? _userData;
   UserData? get userData => _userData;
 
@@ -35,6 +38,10 @@ class DetailUserViewModel extends BaseViewModel {
     setBusy(true);
     await _checkIsAllowedToDeleteUser();
     setBusy(false);
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   Future<void> _checkIsAllowedToDeleteUser() async {
