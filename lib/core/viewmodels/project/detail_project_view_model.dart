@@ -21,6 +21,9 @@ class DetailProjectViewModel extends BaseViewModel {
   final ApiService _apiService;
   AuthenticationService _authenticationService;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
 
@@ -36,6 +39,10 @@ class DetailProjectViewModel extends BaseViewModel {
     _listPic.addAll(projectData?.pics ?? []);
     _checkIsAllowedToDeleteData();
     setBusy(false);
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   void _checkIsAllowedToDeleteData() {

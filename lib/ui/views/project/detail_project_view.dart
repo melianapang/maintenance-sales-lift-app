@@ -59,6 +59,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             context,
             title: "Data Proyek",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -72,6 +73,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     if (value == null) return;
                     if (value == true) {
                       model.requestGetDetailProject();
+                      model.setPreviousPageNeedRefresh(true);
                     }
                   });
                 },
@@ -115,6 +117,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                           description: "Proyek telah dihapus.",
                           positiveLabel: "OK",
                           positiveCallback: () {
+                            model.setPreviousPageNeedRefresh(true);
                             Navigator.maybePop(context);
                           },
                         );

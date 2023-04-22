@@ -94,6 +94,13 @@ class _ListProjectViewState extends State<ListProjectView> {
                               arguments: DetailProjectViewParam(
                                 projectData: model.listProject[index],
                               ),
+                            ).then(
+                              (value) {
+                                if (value == null) return;
+                                if (value == true) {
+                                  model.refreshPage();
+                                }
+                              },
                             );
                           },
                         );
