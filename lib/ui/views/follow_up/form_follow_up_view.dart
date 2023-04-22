@@ -85,24 +85,28 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     model.setSelectedDates([start]);
                   },
                 ),
-                Spacings.vert(24),
-                TextInput.disabled(
-                  label: "Nomor Pelanggan",
-                  hintText: "Nomor Pelanggan",
-                  text: model.customerData?.customerNumber,
-                ),
+                if (model.customerData?.customerNumber.isNotEmpty == true) ...[
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Nomor Pelanggan",
+                    hintText: "Nomor Pelanggan",
+                    text: model.customerData?.customerNumber,
+                  ),
+                ],
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
                   text: model.customerData?.customerName,
                 ),
-                Spacings.vert(24),
-                TextInput.disabled(
-                  label: "Nama Perusahaan",
-                  hintText: "Nama Perusahaan",
-                  text: model.customerData?.companyName,
-                ),
+                if (model.customerData?.companyName?.isNotEmpty == true) ...[
+                  Spacings.vert(24),
+                  TextInput.disabled(
+                    label: "Nama Perusahaan",
+                    hintText: "Nama Perusahaan",
+                    text: model.customerData?.companyName,
+                  ),
+                ],
                 Spacings.vert(24),
                 Align(
                   alignment: Alignment.centerLeft,
