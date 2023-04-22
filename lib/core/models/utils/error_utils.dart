@@ -18,6 +18,16 @@ class ErrorUtils<T> {
           message = 'Tolong cek koneksi internet anda lagi.';
           break;
         case DioErrorType.other:
+          if (error.message.contains("Network is unreachable")) {
+            message = 'Tolong cek koneksi internet anda lagi.';
+            break;
+          } else if (error.message.contains("SocketException")) {
+            message =
+                'Koneksi Server sedang bermasalah. Coba beberapa saat lagi.';
+            break;
+          }
+          message = error.message;
+          break;
         case DioErrorType.response:
           message = error.message;
           break;
