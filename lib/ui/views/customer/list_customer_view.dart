@@ -136,7 +136,12 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                               arguments: DetailCustomerViewParam(
                                 customerData: model.listCustomer?[index],
                               ),
-                            );
+                            ).then((value) {
+                              if (value == null) return;
+                              if (value == true) {
+                                model.refreshPage();
+                              }
+                            });
                           },
                         );
                       },

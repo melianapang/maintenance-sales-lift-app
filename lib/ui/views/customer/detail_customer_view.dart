@@ -66,6 +66,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
             context,
             title: "Data Pelanggan",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -80,6 +81,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       if (value == null) return;
                       if (value == true) {
                         model.requestGetDetailCustomer();
+                        model.setPreviousPageNeedRefresh(true);
                       }
                     },
                   );

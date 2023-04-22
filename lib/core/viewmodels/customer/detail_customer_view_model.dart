@@ -20,6 +20,9 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
@@ -44,6 +47,10 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   @override
   Future<void> initModel() async {}
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
+  }
 
   Future<bool> checkPermissions() async {
     return await PermissionUtils.requestPermission(
