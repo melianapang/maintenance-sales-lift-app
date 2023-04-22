@@ -55,7 +55,10 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
               if (model.isAllowedToExportData)
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.exportMaintenance);
+                    Navigator.pushNamed(
+                      context,
+                      Routes.exportMaintenance,
+                    );
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(

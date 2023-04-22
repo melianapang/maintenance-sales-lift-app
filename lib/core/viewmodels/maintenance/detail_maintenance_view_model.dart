@@ -34,9 +34,8 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   final NavigationService _navigationService;
   final AuthenticationService _authenticationService;
 
-  bool _isAllowedToDeleteNextMaintenance = false;
-  bool get isAllowedToDeleteNextMaintenance =>
-      _isAllowedToDeleteNextMaintenance;
+  bool _isAllowedToDeleteMaintenance = false;
+  bool get isAllowedToDeleteMaintenance => _isAllowedToDeleteMaintenance;
 
   bool _isAllowedToChangeNextMaintenanceDate = false;
   bool get isAllowedToChangeNextMaintenanceDate =>
@@ -101,7 +100,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     bool isNotMaintenanced = mappingStringtoMaintenanceStatus(
             _maintenanceData?.maintenanceResult ?? "0") ==
         MaintenanceStatus.NOT_MAINTENANCED;
-    _isAllowedToDeleteNextMaintenance =
+    _isAllowedToDeleteMaintenance =
         role == Role.SuperAdmin && isNotMaintenanced;
   }
 
