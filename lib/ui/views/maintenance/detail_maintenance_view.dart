@@ -202,14 +202,14 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
         borderRadius: BorderRadius.circular(100),
       ),
       children: [
-        if (model.isAllowedToDeleteNextMaintenance) ...[
+        if (model.isAllowedToDeleteMaintenance) ...[
           SpeedDialChild(
             child: !model.isDialChildrenVisible
                 ? const Icon(PhosphorIcons.trashBold)
                 : null,
             backgroundColor: MyColors.yellow02,
             foregroundColor: MyColors.white,
-            label: 'Hapus Tanggal Pemeliharaan',
+            label: 'Hapus Pemeliharaan',
             labelBackgroundColor: MyColors.lightBlack01,
             labelShadow: [
               const BoxShadow(
