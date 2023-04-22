@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -67,7 +68,21 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
               Navigator.pushNamed(
                 context,
                 Routes.formFollowUp,
-                arguments: FormFollowUpViewParam(),
+                arguments: FormFollowUpViewParam(
+                    customerData: CustomerData(
+                  customerId: model.customerId ?? "",
+                  customerName: model.customerName ?? "",
+                  companyName: model.companyName,
+                  city: "",
+                  customerNeed: "",
+                  customerNumber: "",
+                  customerType: "",
+                  phoneNumber: "",
+                  email: "",
+                  dataSource: "",
+                  documents: [],
+                  status: "",
+                )),
               ).then((value) {
                 if (value == null) return;
                 if (value == true) {
