@@ -16,9 +16,33 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
 
-  final UnitData? _unitData;
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
+  UnitData? _unitData;
   UnitData? get unitData => _unitData;
 
   @override
   Future<void> initModel() async {}
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+    await requestGetDetailUnit();
+    setBusy(false);
+  }
+
+  Future<void> requestGetDetailUnit() async {
+    final response = await _apiService.requestDetailUnit(
+      unitId: int.parse(_unitData?.unitId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _unitData = response.right;
+      notifyListeners();
+    }
+  }
 }

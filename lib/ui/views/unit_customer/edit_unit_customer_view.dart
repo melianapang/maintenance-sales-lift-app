@@ -108,7 +108,7 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                           positiveLabel: "Okay",
                           positiveCallback: () => Navigator.of(context)
                             ..pop()
-                            ..pop(),
+                            ..pop(result),
                         );
                       },
                     );

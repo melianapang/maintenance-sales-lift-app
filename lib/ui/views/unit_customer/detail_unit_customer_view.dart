@@ -58,6 +58,7 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
             context,
             title: "Data Unit",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -68,6 +69,14 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                       unitData: model.unitData,
                       customerData: widget.param.customerData,
                     ),
+                  ).then(
+                    (value) {
+                      if (value == null) return;
+                      if (value == true) {
+                        model.refreshPage();
+                        model.setPreviousPageNeedRefresh(true);
+                      }
+                    },
                   );
                 },
                 child: const Padding(
@@ -109,6 +118,7 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                     description: "Unit telah dihapus.",
                     positiveLabel: "OK",
                     positiveCallback: () {
+                      model.setPreviousPageNeedRefresh(true);
                       Navigator.maybePop(context);
                     },
                   );

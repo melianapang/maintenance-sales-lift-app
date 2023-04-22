@@ -110,6 +110,13 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                                 unitData: model.listUnit?[index],
                                 customerData: model.customerData,
                               ),
+                            ).then(
+                              (value) {
+                                if (value == null) return;
+                                if (value == true) {
+                                  model.refreshPage();
+                                }
+                              },
                             );
                           },
                         );
