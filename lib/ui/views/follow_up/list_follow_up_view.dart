@@ -87,6 +87,13 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                                 customerName:
                                     model.listFollowUp[index].customerName,
                               ),
+                            ).then(
+                              (value) {
+                                if (value == null) return;
+                                if (value == true) {
+                                  model.refreshPage();
+                                }
+                              },
                             );
                           },
                         );

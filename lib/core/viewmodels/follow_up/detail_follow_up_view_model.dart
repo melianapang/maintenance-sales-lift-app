@@ -30,6 +30,9 @@ class DetailFollowUpViewModel extends BaseViewModel {
   final ApiService _apiService;
   final NavigationService _navigationService;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   String? _customerId;
   String? get customerId => _customerId;
 
@@ -56,6 +59,10 @@ class DetailFollowUpViewModel extends BaseViewModel {
     setBusy(true);
     await requestGetHistoryFollowUp();
     setBusy(false);
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   void setStatusCard() {

@@ -40,6 +40,19 @@ class ListFollowUpViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  Future<void> refreshPage() async {
+    setBusy(true);
+
+    _paginationControl.currentPage = 1;
+    _listFollowUp = [];
+
+    await requestGetAllFollowUp();
+    _isShowNoDataFoundPage = _listFollowUp.isEmpty == true;
+    notifyListeners();
+
+    setBusy(false);
+  }
+
   Future<void> requestGetAllFollowUp() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=

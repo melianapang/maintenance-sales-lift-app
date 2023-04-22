@@ -60,15 +60,19 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
             context,
             title: "Daftar Riwayat Konfitmasi",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
           floatingActionButton: FloatingButtonWidget(
             onTap: () {
-              Navigator.pushNamed(context, Routes.formFollowUp,
-                      arguments: FormFollowUpViewParam())
-                  .then((value) {
+              Navigator.pushNamed(
+                context,
+                Routes.formFollowUp,
+                arguments: FormFollowUpViewParam(),
+              ).then((value) {
                 if (value == null) return;
                 if (value == true) {
                   model.requestGetHistoryFollowUp();
+                  model.setPreviousPageNeedRefresh(true);
                 }
               });
             },
