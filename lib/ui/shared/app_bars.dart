@@ -9,6 +9,7 @@ PreferredSizeWidget buildDefaultAppBar(
   required String title,
   bool centerTitle = true,
   bool isBackEnabled = false,
+  bool isPreviousPageNeedRefresh = false,
   List<Widget>? actions,
 }) {
   return AppBar(
@@ -27,7 +28,12 @@ PreferredSizeWidget buildDefaultAppBar(
     leading: isBackEnabled
         ? GestureDetector(
             onTap: () {
-              Navigator.maybePop(context);
+              if (!isPreviousPageNeedRefresh) {
+                Navigator.maybePop(context);
+                return;
+              }
+
+              Navigator.of(context)..pop(true);
             },
             child: const Icon(
               PhosphorIcons.caretLeftBold,
