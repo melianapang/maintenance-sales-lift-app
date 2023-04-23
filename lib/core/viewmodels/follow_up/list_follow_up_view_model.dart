@@ -48,6 +48,12 @@ class ListFollowUpViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   void resetPage() {
     _listFollowUp = [];
     _errorMsg = null;

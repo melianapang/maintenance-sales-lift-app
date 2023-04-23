@@ -40,6 +40,12 @@ class ListLogViewModel extends BaseViewModel {
     await refreshPage();
   }
 
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   void resetPage() {
     _listLogData = [];
     _errorMsg = null;

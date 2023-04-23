@@ -47,6 +47,12 @@ class ListReminderViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   Future<void> searchOnChanged(String value) async {
     isLoading = true;
     if (searchController.text.isEmpty) {
