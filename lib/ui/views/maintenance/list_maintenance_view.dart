@@ -77,8 +77,8 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.isShowNoDataFoundPage ||
-                    model.searchController.text.isNotEmpty,
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
                 textSearchOnChanged: model.searchOnChanged,
                 searchController: model.searchController,
                 isFilterShown: true,

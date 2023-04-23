@@ -85,8 +85,8 @@ class _ListCustomerViewState extends State<ListCustomerView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.isShowNoDataFoundPage ||
-                    model.searchController.text.isNotEmpty,
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
                 textSearchOnChanged: model.searchOnChanged,
                 searchController: model.searchController,
                 isFilterShown: true,
