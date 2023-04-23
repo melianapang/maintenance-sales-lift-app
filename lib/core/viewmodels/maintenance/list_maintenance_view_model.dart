@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
@@ -21,6 +24,8 @@ class ListMaintenanceViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
+  bool isLoading = false;
+
   List<MaintenanceData>? _listMaintenance;
   List<MaintenanceData>? get listMaintenance => _listMaintenance;
 
@@ -32,6 +37,11 @@ class ListMaintenanceViewModel extends BaseViewModel {
 
   bool _isAllowedToExportData = false;
   bool get isAllowedToExportData => _isAllowedToExportData;
+
+  //region search
+  TextEditingController searchController = TextEditingController();
+  Timer? _debounce;
+  //endregion
 
   // Filter related
   int _selectedMaintenanceStatusOption = 0;
@@ -71,19 +81,50 @@ class ListMaintenanceViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   Future<bool> isUserAllowedToExportData() async {
     Role role = await _authenticationService.getUserRole();
     return role == Role.Admin;
   }
 
+  Future<void> searchOnChanged(String value) async {
+    isLoading = true;
+    if (searchController.text.isEmpty) {
+      await requestGetAllMaintenance();
+
+      isLoading = false;
+      return;
+    }
+
+    resetPage();
+    resetFilter();
+    searchMaintenance();
+    isLoading = false;
+  }
+
+  Future<void> onLazyLoad() async {
+    if (searchController.text.isNotEmpty) {
+      await searchMaintenance();
+      return;
+    }
+
+    await requestGetAllMaintenance();
+  }
+
   void terapkanFilter({
-    required int selectedHandledBy,
+    required int selectedMaintenanceStatus,
     required int selectedSort,
+    bool needSync = true,
   }) {
-    _selectedMaintenanceStatusOption = selectedHandledBy;
+    _selectedMaintenanceStatusOption = selectedMaintenanceStatus;
     _selectedSortOption = selectedSort;
     for (int i = 0; i < _maintenanceStatusOptions.length; i++) {
-      if (i == selectedHandledBy) {
+      if (i == selectedMaintenanceStatus) {
         _maintenanceStatusOptions[i].isSelected = true;
         continue;
       }
@@ -98,26 +139,42 @@ class ListMaintenanceViewModel extends BaseViewModel {
       _sortOptions[i].isSelected = false;
     }
 
-    resetPagination();
-    syncFilterCustomer();
+    if (needSync) {
+      resetPage();
+      resetSearchBar();
+      syncFilterMaintenance();
+    }
     notifyListeners();
   }
 
-  void resetPagination() {
+  void resetSearchBar() {
+    searchController.text = "";
+  }
+
+  void resetFilter() {
+    terapkanFilter(
+      selectedMaintenanceStatus: 0,
+      selectedSort: 0,
+      needSync: false,
+    );
+  }
+
+  void resetPage() {
+    _listMaintenance = [];
+    _errorMsg = null;
+
     _paginationControl.currentPage = 1;
     _paginationControl.totalData = -1;
   }
 
-  Future<void> syncFilterCustomer() async {
+  Future<void> syncFilterMaintenance() async {
     setBusy(true);
-
-    _listMaintenance = [];
-    _errorMsg = null;
 
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
+      setBusy(false);
       return;
     }
 
@@ -140,11 +197,11 @@ class ListMaintenanceViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        notifyListeners();
       }
-
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
       setBusy(false);
+      notifyListeners();
+
       return;
     }
 
@@ -200,5 +257,42 @@ class ListMaintenanceViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
+  }
+
+  Future<void> searchMaintenance() async {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
+    final response = await _apiService.searchMaintenance(
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+      inputUser: searchController.text,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listMaintenance = response.right.result;
+        } else {
+          _listMaintenance?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+      }
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
+      return;
+    }
+
+    _errorMsg = response.left.message;
+    _isShowNoDataFoundPage = true;
+    notifyListeners();
   }
 }

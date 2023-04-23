@@ -77,23 +77,30 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {},
+                isEnabled: !model.isShowNoDataFoundPage ||
+                    model.searchController.text.isNotEmpty,
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: true,
                 onTapFilter: () {
-                  showMaintenanceFilterMenu(context,
-                      listMaintenanceStatusMenu: model.maintenanceStatusOptions,
-                      listSortMenu: model.sortOptions,
-                      selectedHandledBy: model.selectedMaintenanceStatusOption,
-                      selectedSort: model.selectedSortOption,
-                      terapkanCallback: model.terapkanFilter);
+                  showMaintenanceFilterMenu(
+                    context,
+                    listMaintenanceStatusMenu: model.maintenanceStatusOptions,
+                    listSortMenu: model.sortOptions,
+                    selectedMaintenanceStatus:
+                        model.selectedMaintenanceStatusOption,
+                    selectedSort: model.selectedSortOption,
+                    terapkanCallback: model.terapkanFilter,
+                  );
                 },
               ),
               Spacings.vert(12),
-              if (!model.isShowNoDataFoundPage && !model.busy)
+              if (!model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllMaintenance(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                         shrinkWrap: true,
@@ -142,9 +149,11 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                         }),
                   ),
                 ),
-              if (model.isShowNoDataFoundPage && !model.busy)
+              if (model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 buildNoDataFoundPage(),
-              if (model.busy) buildLoadingPage(),
+              if (model.busy || model.isLoading) buildLoadingPage(),
             ],
           ),
         );
