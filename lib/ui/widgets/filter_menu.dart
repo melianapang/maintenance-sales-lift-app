@@ -231,17 +231,17 @@ void showMaintenanceFilterMenu(
   BuildContext context, {
   required List<FilterOption> listMaintenanceStatusMenu,
   required List<FilterOption> listSortMenu,
-  required int selectedHandledBy,
+  required int selectedMaintenanceStatus,
   required int selectedSort,
   required void Function({
-    required int selectedHandledBy,
+    required int selectedMaintenanceStatus,
     required int selectedSort,
   })
       terapkanCallback,
 }) {
-  final List<FilterOption> handledByLocal =
+  final List<FilterOption> maintenanceStatusLocal =
       convertToNewList(listMaintenanceStatusMenu);
-  int handledBy = selectedHandledBy;
+  int maintenanceStatus = selectedMaintenanceStatus;
 
   final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
   int sort = selectedSort;
@@ -266,16 +266,16 @@ void showMaintenanceFilterMenu(
             ),
             Spacings.vert(8),
             _buildFilterOptionsWidget(
-              handledByLocal,
+              maintenanceStatusLocal,
               (int selectedIndex) {
-                handledBy = selectedIndex;
-                for (int i = 0; i < handledByLocal.length; i++) {
+                maintenanceStatus = selectedIndex;
+                for (int i = 0; i < maintenanceStatusLocal.length; i++) {
                   if (i == selectedIndex) {
-                    handledByLocal[i].isSelected = true;
+                    maintenanceStatusLocal[i].isSelected = true;
                     continue;
                   }
 
-                  handledByLocal[i].isSelected = false;
+                  maintenanceStatusLocal[i].isSelected = false;
                 }
                 setState(() {});
               },
@@ -312,7 +312,7 @@ void showMaintenanceFilterMenu(
               text: "Terapkan",
               onTap: () {
                 terapkanCallback(
-                  selectedHandledBy: handledBy,
+                  selectedMaintenanceStatus: maintenanceStatus,
                   selectedSort: sort,
                 );
                 Navigator.maybePop(context);
