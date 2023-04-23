@@ -38,6 +38,19 @@ abstract class Api {
   //endregion
 
   //region user
+  @GET('/api/0/User/get_all_users/')
+  Future<HttpResponse<dynamic>> requestGetAllUser(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/User/search_user/')
+  Future<HttpResponse<dynamic>> searchUser(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
+  );
+
   @POST('/api/0/User/create_user')
   Future<HttpResponse<dynamic>> requestCreateUser(
     @Body() CreateUserRequest request,
@@ -52,12 +65,6 @@ abstract class Api {
   @DELETE('/api/0/User/delete_user/{user_id}')
   Future<HttpResponse<dynamic>> requestDeleteUser(
     @Path("user_id") int userId,
-  );
-
-  @GET('/api/0/User/get_all_users/')
-  Future<HttpResponse<dynamic>> requestGetAllUser(
-    @Query("current_page") int currentPage,
-    @Query("page_size") int pageSize,
   );
 
   @GET('/api/0/User/get_user_detail/{user_id}')
@@ -92,6 +99,13 @@ abstract class Api {
     @Query("page_size") int pageSize,
   );
 
+  @GET('/api/0/Log/search_log/')
+  Future<HttpResponse<dynamic>> searchLog(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
+  );
+
   @GET('/api/0/Log/get_log_detail/{log_id}')
   Future<HttpResponse<dynamic>> requestGetLogDetail(
     @Path("log_id") int logId,
@@ -103,6 +117,13 @@ abstract class Api {
   Future<HttpResponse<dynamic>> requestGetAllReminder(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Reminder/search_reminder/')
+  Future<HttpResponse<dynamic>> searchReminder(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
   );
 
   @POST('/api/0/Reminder/create_reminder')
@@ -155,6 +176,13 @@ abstract class Api {
     @Path("customer_id") int customerId,
   );
 
+  @GET('/api/0/Customer/search_customer/')
+  Future<HttpResponse<dynamic>> searchCustomer(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
+  );
+
   @GET('/api/0/Customer/filter_customer/')
   Future<HttpResponse<dynamic>> requestFilterCustomer(
     @Query("current_page") int currentPage,
@@ -167,6 +195,13 @@ abstract class Api {
   //endregion
 
   //region unit
+  @GET('/api/0/Customer/search_customer/')
+  Future<HttpResponse<dynamic>> searchUnit(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
+  );
+
   @GET('/api/0/Unit/get_all_units/{customer_id}')
   Future<HttpResponse<dynamic>> requestGetAllUnitByCustomer(
     @Path("customer_id") int customerId,
@@ -213,6 +248,13 @@ abstract class Api {
     @Path("customer_id") String customerId,
   );
 
+  @GET('/api/0/FollowUp/search_follow_up/')
+  Future<HttpResponse<dynamic>> searchFollowUp(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
+  );
+
   @PUT('/api/0/FollowUp/update_follow_up/{follow_up_id}')
   Future<HttpResponse<dynamic>> requestUpdateFollowUp(
     @Path("follow_up_id") int followUpId,
@@ -242,6 +284,13 @@ abstract class Api {
   @GET('/api/0/Maintenance/get_history_maintenances/{unit_id}')
   Future<HttpResponse<dynamic>> requestGetAllHistoryMaintenance(
     @Path("unit_id") String customerId,
+  );
+
+  @GET('/api/0/Maintenance/search_maintenance/')
+  Future<HttpResponse<dynamic>> searchMaintenance(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
   );
 
   @POST('project-lift/api/0/Maintenance/create_maintenance')
@@ -281,6 +330,13 @@ abstract class Api {
   @GET('/api/0/Project/get_project_detail/{project_id}')
   Future<HttpResponse<dynamic>> requestProjectDetail(
     @Path("project_id") int projectId,
+  );
+
+  @GET('/api/0/Project/search_project/')
+  Future<HttpResponse<dynamic>> searchProject(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
   );
 
   @POST('/api/0/Project/create_project')
@@ -529,6 +585,31 @@ class ApiService {
       return ErrorUtils<UserData>().handleError(e);
     }
   }
+
+  Future<Either<Failure, ListUserData>> searchUser({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchUser(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllUserResponse getAllUserResponse =
+            GetAllUserResponse.fromJson(response.data);
+
+        return Right<Failure, ListUserData>(getAllUserResponse.data);
+      }
+      return ErrorUtils<ListUserData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ListUserData>().handleError(e);
+    }
+  }
   //endregion
 
   //region approval
@@ -651,6 +732,31 @@ class ApiService {
       return ErrorUtils<DetailLogData>().handleError(e);
     }
   }
+
+  Future<Either<Failure, ListLogData>> searchLog({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchLog(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllLogResponse getAllLogResponse =
+            GetAllLogResponse.fromJson(response.data);
+
+        return Right<Failure, ListLogData>(getAllLogResponse.data);
+      }
+      return ErrorUtils<ListLogData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ListLogData>().handleError(e);
+    }
+  }
   //endregion
 
   //region reminder
@@ -672,6 +778,31 @@ class ApiService {
       }
       return ErrorUtils<ListReminderData>().handleDomainError(response);
     } catch (e) {
+      return ErrorUtils<ListReminderData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListReminderData>> searchReminder({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchReminder(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllReminderResponse getAllReminderResponse =
+            GetAllReminderResponse.fromJson(response.data);
+
+        return Right<Failure, ListReminderData>(getAllReminderResponse.data);
+      }
+      return ErrorUtils<ListReminderData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
       return ErrorUtils<ListReminderData>().handleError(e);
     }
   }
@@ -822,6 +953,31 @@ class ApiService {
       return ErrorUtils<ListCustomerData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
+      return ErrorUtils<ListCustomerData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListCustomerData>> searchCustomer({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchCustomer(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerResponse getAllCustomerResponse =
+            GetAllCustomerResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerData>(getAllCustomerResponse.data);
+      }
+      return ErrorUtils<ListCustomerData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
       return ErrorUtils<ListCustomerData>().handleError(e);
     }
   }
@@ -1017,6 +1173,31 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, ListUnitData>> searchUnit({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchUnit(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllUnitResponse getAllUnitResponse =
+            GetAllUnitResponse.fromJson(response.data);
+
+        return Right<Failure, ListUnitData>(getAllUnitResponse.data);
+      }
+      return ErrorUtils<ListUnitData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ListUnitData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateUnit({
     required int customerId,
     required int projectId,
@@ -1150,6 +1331,31 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, ListFollowUpData>> searchFollowUp({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchFollowUp(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllFollowUpResponse getAllFollowUpResponse =
+            GetAllFollowUpResponse.fromJson(response.data);
+
+        return Right<Failure, ListFollowUpData>(getAllFollowUpResponse.data);
+      }
+      return ErrorUtils<ListFollowUpData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ListFollowUpData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp({
     required String customerId,
   }) async {
@@ -1273,6 +1479,33 @@ class ApiService {
       return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
+      return ErrorUtils<ListMaintenanceData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListMaintenanceData>> searchMaintenance({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchMaintenance(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllMaintenanceResponse getAllMaintenanceResponse =
+            GetAllMaintenanceResponse.fromJson(response.data);
+
+        return Right<Failure, ListMaintenanceData>(
+          getAllMaintenanceResponse.data,
+        );
+      }
+      return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
       return ErrorUtils<ListMaintenanceData>().handleError(e);
     }
   }
@@ -1473,6 +1706,33 @@ class ApiService {
       return ErrorUtils<ListProjectData>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
+      return ErrorUtils<ListProjectData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListProjectData>> searchProject({
+    required int pageSize,
+    required int currentPage,
+    required String inputUser,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.searchProject(
+        currentPage,
+        pageSize,
+        inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllProjectResponse getAllProjectResponse =
+            GetAllProjectResponse.fromJson(response.data);
+
+        return Right<Failure, ListProjectData>(
+          getAllProjectResponse.data,
+        );
+      }
+      return ErrorUtils<ListProjectData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
       return ErrorUtils<ListProjectData>().handleError(e);
     }
   }
