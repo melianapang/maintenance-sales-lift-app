@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
@@ -37,6 +39,7 @@ class ListCustomerViewModel extends BaseViewModel {
   bool get isAllowedToExportData => _isAllowedToExportData;
 
   TextEditingController searchController = TextEditingController();
+  Timer? _debounce;
 
   // Filter related
   int _selectedTipePelangganOption = 0;
@@ -90,6 +93,12 @@ class ListCustomerViewModel extends BaseViewModel {
     _isAllowedToExportData = await isUserAllowedToExportData();
 
     setBusy(false);
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   Future<bool> isUserAllowedToExportData() async {
@@ -171,15 +180,19 @@ class ListCustomerViewModel extends BaseViewModel {
       return;
     }
 
-    resetPage();
-    resetFilter();
-    await searchCustomer();
-    isLoading = false;
+    invokeDebouncer(
+      () {
+        resetPage();
+        resetFilter();
+        searchCustomer();
+        isLoading = false;
+      },
+    );
   }
 
   Future<void> onLazyLoad() async {
     if (searchController.text.isNotEmpty) {
-      await searchCustomer();
+      invokeDebouncer(searchCustomer);
       return;
     }
 
@@ -325,5 +338,15 @@ class ListCustomerViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
     _isShowNoDataFoundPage = true;
     notifyListeners();
+  }
+
+  void invokeDebouncer(Function() function) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(
+      const Duration(
+        milliseconds: 500,
+      ),
+      function,
+    );
   }
 }

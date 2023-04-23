@@ -101,15 +101,19 @@ class ListMaintenanceViewModel extends BaseViewModel {
       return;
     }
 
-    resetPage();
-    resetFilter();
-    searchMaintenance();
-    isLoading = false;
+    invokeDebouncer(
+      () {
+        resetPage();
+        resetFilter();
+        searchMaintenance();
+        isLoading = false;
+      },
+    );
   }
 
   Future<void> onLazyLoad() async {
     if (searchController.text.isNotEmpty) {
-      await searchMaintenance();
+      invokeDebouncer(searchMaintenance);
       return;
     }
 
@@ -294,5 +298,15 @@ class ListMaintenanceViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
     _isShowNoDataFoundPage = true;
     notifyListeners();
+  }
+
+  void invokeDebouncer(Function() function) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(
+      const Duration(
+        milliseconds: 500,
+      ),
+      function,
+    );
   }
 }
