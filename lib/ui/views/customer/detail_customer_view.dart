@@ -19,6 +19,8 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -398,7 +400,15 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           labelStyle: buildTextStyle(
               fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
           onTap: () {
-            Navigator.pushNamed(context, Routes.detailFollowUp);
+            Navigator.pushNamed(
+              context,
+              Routes.detailFollowUp,
+              arguments: DetailFollowUpViewParam(
+                customerId: model.customerData?.customerId,
+                companyName: model.customerData?.companyName,
+                customerName: model.customerData?.customerName,
+              ),
+            );
 
             setState() {
               model.setDialChildrenVisible();
