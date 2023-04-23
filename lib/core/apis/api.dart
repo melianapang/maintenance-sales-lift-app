@@ -154,6 +154,16 @@ abstract class Api {
   Future<HttpResponse<dynamic>> requestGetDetailCustomer(
     @Path("customer_id") int customerId,
   );
+
+  @GET('/api/0/Customer/filter_customer/')
+  Future<HttpResponse<dynamic>> requestFilterCustomer(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("customer_type") int customerType,
+    @Query("data_source") int dataSource,
+    @Query("customer_need") int customerNeed,
+    @Query("sort_by") int sortBy,
+  );
   //endregion
 
   //region unit
@@ -243,6 +253,14 @@ abstract class Api {
   Future<HttpResponse<dynamic>> requestUpdateMaintenance(
     @Path("maintenance_id") int maintenanceId,
     @Body() UpdateMaintenanceRequest request,
+  );
+
+  @GET('/api/0/Maintenance/filter_maintenance/')
+  Future<HttpResponse<dynamic>> requestFilterMaintenance(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("status") int status,
+    @Query("sort_by") int sortBy,
   );
   //endregion
 
@@ -777,6 +795,37 @@ class ApiService {
   //endregion
 
   //region customer
+  Future<Either<Failure, ListCustomerData>> requestFilterCustomer(
+      int currentPage,
+      int pageSize,
+      int customerType,
+      int dataSource,
+      int customerNeed,
+      int sortBy) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestFilterCustomer(
+        currentPage,
+        pageSize,
+        customerType,
+        dataSource,
+        customerNeed,
+        sortBy,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerResponse getAllResponse =
+            GetAllCustomerResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<ListCustomerData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateCustomer({
     required String nama,
     required String customerNumber,
@@ -786,7 +835,6 @@ class ApiService {
     required String companyName,
     required String phoneNumber,
     required String note,
-    required int dataSource,
     required String city,
   }) async {
     try {
@@ -800,7 +848,6 @@ class ApiService {
         city: city,
         companyName: companyName,
         note: note,
-        dataSource: dataSource,
         status: 0,
       );
       final HttpResponse<dynamic> response =
@@ -1200,6 +1247,36 @@ class ApiService {
   //endregion
 
   //region maintenance
+  Future<Either<Failure, ListMaintenanceData>> requestFilterMaintenance(
+    int currentPage,
+    int pageSize,
+    int status,
+    int sortBy,
+  ) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestFilterMaintenance(
+        currentPage,
+        pageSize,
+        status,
+        sortBy,
+      );
+
+      if (response.isSuccess) {
+        GetAllMaintenanceResponse getAllMaintenanceResponse =
+            GetAllMaintenanceResponse.fromJson(response.data);
+
+        return Right<Failure, ListMaintenanceData>(
+          getAllMaintenanceResponse.data,
+        );
+      }
+
+      return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<ListMaintenanceData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, ListMaintenanceData>> requestGetAllMaintenance(
     int currentPage,
     int pageSize,

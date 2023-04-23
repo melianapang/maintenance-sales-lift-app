@@ -198,7 +198,6 @@ class CreateCustomerRequest {
     required this.email,
     required this.phoneNumber,
     required this.city,
-    required this.dataSource,
     required this.note,
     required this.companyName,
     required this.status,
@@ -229,9 +228,6 @@ class CreateCustomerRequest {
 
   @JsonKey(name: "city")
   final String city;
-
-  @JsonKey(name: "data_source")
-  final int dataSource;
 
   @JsonKey(name: "note")
   final String note;

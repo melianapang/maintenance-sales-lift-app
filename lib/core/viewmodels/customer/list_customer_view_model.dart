@@ -50,29 +50,11 @@ class ListCustomerViewModel extends BaseViewModel {
   ];
   List<FilterOption> get sumberDataOptions => _sumberDataOptions;
 
-  int _selectedTahapKonfirmasiOption = 0;
-  int get selectedTahapKonfirmasiOption => _selectedTahapKonfirmasiOption;
-  final List<FilterOption> _tahapKonfirmasiOptions = [
-    FilterOption("Butuh Konfirmasi", true),
-    FilterOption("Konfirmasi kedua", false),
-    FilterOption("Konfirmasi ketiga", false),
-    FilterOption("Nego", false),
-    FilterOption("Instalasi", false),
-    FilterOption("Selesai", false),
-    FilterOption("Batal", false),
-  ];
-  List<FilterOption> get tahapKonfirmasiOptions => _tahapKonfirmasiOptions;
-
   int _selectedKebutuhanPelangganOption = 0;
   int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
   final List<FilterOption> _kenbutuhanPelangganOptions = [
-    FilterOption("Butuh Konfirmasi", true),
-    FilterOption("Konfirmasi kedua", false),
-    FilterOption("Konfirmasi ketiga", false),
-    FilterOption("Nego", false),
-    FilterOption("Instalasi", false),
-    FilterOption("Selesai", false),
-    FilterOption("Batal", false),
+    FilterOption("Pembelian Unit", true),
+    FilterOption("Perawatan/Troubleshooting", false),
   ];
   List<FilterOption> get kenbutuhanPelangganOptions =>
       _kenbutuhanPelangganOptions;
@@ -105,10 +87,113 @@ class ListCustomerViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  Future<bool> isUserAllowedToExportData() async {
+    Role role = await _authenticationService.getUserRole();
+    return role == Role.Admin;
+  }
+
+  void terapkanFilter({
+    required int selectedPelanggan,
+    required int selectedSumberData,
+    required int selectedKebutuhanPelanggan,
+    required int selectedSort,
+  }) {
+    _selectedTipePelangganOption = selectedPelanggan;
+    _selectedSumberDataOption = selectedSumberData;
+    _selectedKebutuhanPelangganOption = selectedKebutuhanPelanggan;
+    _selectedSortOption = selectedSort;
+    for (int i = 0; i < _tipePelangganOptions.length; i++) {
+      if (i == selectedPelanggan) {
+        _tipePelangganOptions[i].isSelected = true;
+        continue;
+      }
+      _tipePelangganOptions[i].isSelected = false;
+    }
+
+    for (int i = 0; i < _sumberDataOptions.length; i++) {
+      if (i == selectedSumberData) {
+        _sumberDataOptions[i].isSelected = true;
+        continue;
+      }
+      _sumberDataOptions[i].isSelected = false;
+    }
+
+    for (int i = 0; i < _kenbutuhanPelangganOptions.length; i++) {
+      if (i == selectedKebutuhanPelanggan) {
+        _kenbutuhanPelangganOptions[i].isSelected = true;
+        continue;
+      }
+      _kenbutuhanPelangganOptions[i].isSelected = false;
+    }
+
+    for (int i = 0; i < _sortOptions.length; i++) {
+      if (i == selectedSort) {
+        _sortOptions[i].isSelected = true;
+        continue;
+      }
+      _sortOptions[i].isSelected = false;
+    }
+
+    resetPagination();
+    syncFilterCustomer();
+    notifyListeners();
+  }
+
+  void resetPagination() {
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
+  }
+
   void search(String text) {
     if (busy || _listCustomer?.isEmpty == true || _listCustomer == null) return;
     setBusy(true);
 
+    setBusy(false);
+  }
+
+  Future<void> syncFilterCustomer() async {
+    setBusy(true);
+
+    _listCustomer = [];
+    _errorMsg = null;
+
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
+    final response = await _apiService.requestFilterCustomer(
+      _paginationControl.currentPage,
+      _paginationControl.pageSize,
+      _selectedTipePelangganOption,
+      _selectedSumberDataOption,
+      _selectedKebutuhanPelangganOption,
+      _selectedSortOption,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right.result;
+        } else {
+          _listCustomer?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+
+        notifyListeners();
+      }
+
+      setBusy(false);
+      return;
+    }
+
+    _errorMsg = response.left.message;
     setBusy(false);
   }
 
@@ -151,8 +236,14 @@ class ListCustomerViewModel extends BaseViewModel {
 
     _listCustomer = [];
     _errorMsg = null;
+    terapkanFilter(
+      selectedKebutuhanPelanggan: 0,
+      selectedPelanggan: 0,
+      selectedSort: 0,
+      selectedSumberData: 0,
+    );
 
-    paginationControl.currentPage = 1;
+    _paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
     _isShowNoDataFoundPage =
@@ -160,64 +251,5 @@ class ListCustomerViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
-  }
-
-  Future<bool> isUserAllowedToExportData() async {
-    Role role = await _authenticationService.getUserRole();
-    return role == Role.Admin;
-  }
-
-  void terapkanFilter({
-    required int selectedPelanggan,
-    required int selectedSumberData,
-    required int selectedTahapKonfirmasi,
-    required int selectedKebutuhanPelanggan,
-    required int selectedSort,
-  }) {
-    _selectedTipePelangganOption = selectedPelanggan;
-    _selectedSumberDataOption = selectedSumberData;
-    _selectedTahapKonfirmasiOption = selectedTahapKonfirmasi;
-    _selectedKebutuhanPelangganOption = selectedKebutuhanPelanggan;
-    _selectedSortOption = selectedSort;
-    for (int i = 0; i < _tipePelangganOptions.length; i++) {
-      if (i == selectedPelanggan) {
-        _tipePelangganOptions[i].isSelected = true;
-        continue;
-      }
-      _tipePelangganOptions[i].isSelected = false;
-    }
-
-    for (int i = 0; i < _sumberDataOptions.length; i++) {
-      if (i == selectedSumberData) {
-        _sumberDataOptions[i].isSelected = true;
-        continue;
-      }
-      _sumberDataOptions[i].isSelected = false;
-    }
-
-    for (int i = 0; i < _tahapKonfirmasiOptions.length; i++) {
-      if (i == selectedTahapKonfirmasi) {
-        _tahapKonfirmasiOptions[i].isSelected = true;
-        continue;
-      }
-      _tahapKonfirmasiOptions[i].isSelected = false;
-    }
-
-    for (int i = 0; i < _kenbutuhanPelangganOptions.length; i++) {
-      if (i == selectedKebutuhanPelanggan) {
-        _kenbutuhanPelangganOptions[i].isSelected = true;
-        continue;
-      }
-      _kenbutuhanPelangganOptions[i].isSelected = false;
-    }
-
-    for (int i = 0; i < _sortOptions.length; i++) {
-      if (i == selectedSort) {
-        _sortOptions[i].isSelected = true;
-        continue;
-      }
-      _sortOptions[i].isSelected = false;
-    }
-    notifyListeners();
   }
 }

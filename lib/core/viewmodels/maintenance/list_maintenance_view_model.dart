@@ -37,9 +37,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
   int _selectedMaintenanceStatusOption = 0;
   int get selectedMaintenanceStatusOption => _selectedMaintenanceStatusOption;
   final List<FilterOption> _maintenanceStatusOptions = [
-    FilterOption("NOT MAINTENANCE", true),
-    FilterOption("DONE", false),
-    FilterOption("PENDING", false),
+    FilterOption("Belum Perawatan", true),
+    FilterOption("Gagal/Batal", false),
+    FilterOption("Selesai", false),
   ];
   List<FilterOption> get maintenanceStatusOptions => _maintenanceStatusOptions;
 
@@ -68,6 +68,87 @@ class ListMaintenanceViewModel extends BaseViewModel {
 
     _isAllowedToExportData = await isUserAllowedToExportData();
 
+    setBusy(false);
+  }
+
+  Future<bool> isUserAllowedToExportData() async {
+    Role role = await _authenticationService.getUserRole();
+    return role == Role.Admin;
+  }
+
+  void terapkanFilter({
+    required int selectedHandledBy,
+    required int selectedSort,
+  }) {
+    _selectedMaintenanceStatusOption = selectedHandledBy;
+    _selectedSortOption = selectedSort;
+    for (int i = 0; i < _maintenanceStatusOptions.length; i++) {
+      if (i == selectedHandledBy) {
+        _maintenanceStatusOptions[i].isSelected = true;
+        continue;
+      }
+      _maintenanceStatusOptions[i].isSelected = false;
+    }
+
+    for (int i = 0; i < _sortOptions.length; i++) {
+      if (i == selectedSort) {
+        _sortOptions[i].isSelected = true;
+        continue;
+      }
+      _sortOptions[i].isSelected = false;
+    }
+
+    resetPagination();
+    syncFilterCustomer();
+    notifyListeners();
+  }
+
+  void resetPagination() {
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
+  }
+
+  Future<void> syncFilterCustomer() async {
+    setBusy(true);
+
+    _listMaintenance = [];
+    _errorMsg = null;
+
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
+    final response = await _apiService.requestFilterMaintenance(
+      _paginationControl.currentPage,
+      _paginationControl.pageSize,
+      _selectedMaintenanceStatusOption,
+      _selectedSortOption,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listMaintenance = response.right.result;
+        } else {
+          _listMaintenance?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+
+        notifyListeners();
+      }
+
+      setBusy(false);
+      return;
+    }
+
+    _errorMsg = response.left.message;
     setBusy(false);
   }
 
@@ -119,34 +200,5 @@ class ListMaintenanceViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
-  }
-
-  Future<bool> isUserAllowedToExportData() async {
-    Role role = await _authenticationService.getUserRole();
-    return role == Role.Admin;
-  }
-
-  void terapkanFilter({
-    required int selectedHandledBy,
-    required int selectedSort,
-  }) {
-    _selectedMaintenanceStatusOption = selectedHandledBy;
-    _selectedSortOption = selectedSort;
-    for (int i = 0; i < _maintenanceStatusOptions.length; i++) {
-      if (i == selectedHandledBy) {
-        _maintenanceStatusOptions[i].isSelected = true;
-        continue;
-      }
-      _maintenanceStatusOptions[i].isSelected = false;
-    }
-
-    for (int i = 0; i < _sortOptions.length; i++) {
-      if (i == selectedSort) {
-        _sortOptions[i].isSelected = true;
-        continue;
-      }
-      _sortOptions[i].isSelected = false;
-    }
-    notifyListeners();
   }
 }
