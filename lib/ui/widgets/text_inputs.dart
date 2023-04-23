@@ -93,25 +93,6 @@ class TextInput extends StatelessWidget {
     );
   }
 
-  factory TextInput.disabledMultiline({
-    required String label,
-    required String text,
-    Color backgroundColor = MyColors.darkBlack02,
-    String? hintText,
-  }) {
-    final controller = TextEditingController();
-    controller.text = text;
-    return TextInput(
-      controller: controller,
-      backgroundColor: backgroundColor,
-      maxLines: null,
-      label: label,
-      enabled: false,
-      hintText: hintText,
-      keyboardType: TextInputType.multiline,
-    );
-  }
-
   const TextInput({
     this.controller,
     this.enabled = true,
