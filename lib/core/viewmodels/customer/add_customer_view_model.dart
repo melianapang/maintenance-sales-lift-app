@@ -16,14 +16,6 @@ class AddCustomerViewModel extends BaseViewModel {
   final ApiService _apiService;
 
   // Dropdown related
-  int _selectedSumberDataOption = 0;
-  int get selectedSumberDataOption => _selectedSumberDataOption;
-  final List<FilterOption> _sumberDataOptions = [
-    FilterOption("Leads", true),
-    FilterOption("Non-Leads", false),
-  ];
-  List<FilterOption> get sumberDataOptions => _sumberDataOptions;
-
   int _selectedKebutuhanPelangganOption = 0;
   int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
   final List<FilterOption> _kebutuhanPelangganOptions = [
@@ -106,21 +98,6 @@ class AddCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedSumberData({
-    required int selectedMenu,
-  }) {
-    _selectedSumberDataOption = selectedMenu;
-    for (int i = 0; i < _sumberDataOptions.length; i++) {
-      if (i == selectedMenu) {
-        _sumberDataOptions[i].isSelected = true;
-        continue;
-      }
-      _sumberDataOptions[i].isSelected = false;
-    }
-
-    notifyListeners();
-  }
-
   void setSelectedTipePelanggan({
     required int selectedMenu,
   }) {
@@ -192,7 +169,6 @@ class AddCustomerViewModel extends BaseViewModel {
         companyName: companyNameController.text,
         phoneNumber: phoneNumberController.text,
         note: noteController.text,
-        dataSource: _selectedSumberDataOption,
         city: cityController.text);
 
     if (response.isRight) return true;

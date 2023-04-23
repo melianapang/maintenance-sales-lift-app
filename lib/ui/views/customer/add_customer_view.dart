@@ -156,30 +156,6 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                       _showBottomDialog(
                         context,
                         model,
-                        title: "Sumber Data",
-                        listMenu: model.sumberDataOptions,
-                        selectedMenu: model.selectedSumberDataOption,
-                        setSelectedMenu: model.setSelectedSumberData,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Sumber Data",
-                      text: model.sumberDataOptions
-                          .where((element) => element.isSelected)
-                          .first
-                          .title,
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {
-                      _showBottomDialog(
-                        context,
-                        model,
                         title: "Tipe Pelanggan",
                         listMenu: model.tipePelangganOptions,
                         selectedMenu: model.selectedTipePelangganOption,
