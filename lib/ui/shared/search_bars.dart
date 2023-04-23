@@ -7,6 +7,7 @@ Widget buildSearchBar(
   BuildContext context, {
   bool? isEnabled,
   required bool isFilterShown,
+  required TextEditingController searchController,
   required void Function(String) textSearchOnChanged,
   VoidCallback? onTapFilter,
 }) {
@@ -17,6 +18,7 @@ Widget buildSearchBar(
         Expanded(
           child: TextInput.editable(
             onChangedListener: textSearchOnChanged,
+            controller: searchController,
             hintText: "Search",
             isEnabled: isEnabled,
             prefixIcon: const Icon(
