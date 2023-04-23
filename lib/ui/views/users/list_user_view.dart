@@ -65,15 +65,19 @@ class _ListUserViewState extends State<ListUserView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {},
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: false,
               ),
               Spacings.vert(12),
-              if (!model.isShowNoDataFoundPage && !model.busy)
+              if (!model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllUserData(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -109,9 +113,11 @@ class _ListUserViewState extends State<ListUserView> {
                     ),
                   ),
                 ),
-              if (model.isShowNoDataFoundPage && !model.busy)
+              if (model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 buildNoDataFoundPage(),
-              if (model.busy) buildLoadingPage(),
+              if (model.busy || model.isLoading) buildLoadingPage(),
             ],
           ),
         );
@@ -125,7 +131,7 @@ class _ListUserViewState extends State<ListUserView> {
   ) {
     showDialogWidget(
       context,
-      title: "Daftar Users",
+      title: "Daftar Pengguna",
       isSuccessDialog: false,
       description: model.errorMsg ??
           "Gagal mendapatkan daftar pengguna. \n Coba beberappa saat lagi.",

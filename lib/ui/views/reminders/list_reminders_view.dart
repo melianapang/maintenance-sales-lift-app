@@ -69,16 +69,20 @@ class _ListRemindersViewState extends State<ListRemindersView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {},
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: false,
                 onTapFilter: () {},
               ),
               Spacings.vert(12),
-              if (!model.isShowNoDataFoundPage && !model.busy)
+              if (!model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllReminderData(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -116,9 +120,11 @@ class _ListRemindersViewState extends State<ListRemindersView> {
                   ),
                 ),
               Spacings.vert(24),
-              if (model.isShowNoDataFoundPage && !model.busy)
+              if (model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 buildNoDataFoundPage(),
-              if (model.busy) buildLoadingPage(),
+              if (model.busy || model.isLoading) buildLoadingPage(),
             ],
           ),
         );

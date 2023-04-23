@@ -50,16 +50,20 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {},
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: false,
                 onTapFilter: () {},
               ),
               Spacings.vert(12),
-              if (!model.isShowNoDataFoundPage && !model.busy) ...[
+              if (!model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading) ...[
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllFollowUp(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -103,9 +107,11 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                 ),
                 Spacings.vert(16),
               ],
-              if (model.isShowNoDataFoundPage && !model.busy)
+              if (model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 buildNoDataFoundPage(),
-              if (model.busy) buildLoadingPage(),
+              if (model.busy || model.isLoading) buildLoadingPage(),
             ],
           ),
         );

@@ -53,8 +53,10 @@ class _ListLogViewState extends State<ListLogView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {},
+                isEnabled: !(model.isShowNoDataFoundPage &&
+                    model.searchController.text.isEmpty),
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: false,
                 onTapFilter: () {},
               ),
@@ -62,7 +64,7 @@ class _ListLogViewState extends State<ListLogView> {
                 Spacings.vert(12),
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllLog(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                         shrinkWrap: true,
