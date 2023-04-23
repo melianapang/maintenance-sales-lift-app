@@ -64,35 +64,6 @@ class TextInput extends StatelessWidget {
     );
   }
 
-  factory TextInput.multiline({
-    TextEditingController? controller,
-    void Function(String text)? onChangedListener,
-    required String label,
-    String? text,
-    required int minLines,
-    required int maxLines,
-    int? maxLength,
-    String? note,
-    Color backgroundColor = MyColors.darkBlack02,
-    String? hintText,
-  }) {
-    // final controller = TextEditingController();
-    controller?.text = text ?? '';
-    return TextInput(
-      controller: controller,
-      onChangedListener: onChangedListener,
-      backgroundColor: backgroundColor,
-      minLines: minLines,
-      maxLines: maxLines,
-      maxLength: maxLength,
-      label: label,
-      note: note,
-      enabled: true,
-      hintText: hintText,
-      keyboardType: TextInputType.multiline,
-    );
-  }
-
   const TextInput({
     this.controller,
     this.enabled = true,
