@@ -122,7 +122,6 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                     ),
                     child: Column(
                       children: [
-                        Spacings.vert(24),
                         TextInput.editable(
                           controller: model.namaUnitController,
                           label: "Nama Unit",

@@ -10,6 +10,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/detail_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -136,28 +137,34 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
               bottom: 24.0,
               left: 24.0,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Spacings.vert(40),
-                  TextInput.disabled(
-                    label: "Nama Unit",
-                    text: model.unitData?.unitName,
+            child: !model.busy
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Spacings.vert(40),
+                        TextInput.disabled(
+                          label: "Nama Unit",
+                          text: model.unitData?.unitName,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Lokasi Unit",
+                          text: model.unitData?.unitLocation,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Proyek",
+                          text: model.unitData?.projectName,
+                        ),
+                        Spacings.vert(24),
+                      ],
+                    ),
+                  )
+                : Column(
+                    children: [
+                      buildLoadingPage(),
+                    ],
                   ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Lokasi Unit",
-                    text: model.unitData?.unitLocation,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Proyek",
-                    text: model.unitData?.projectName,
-                  ),
-                  Spacings.vert(24),
-                ],
-              ),
-            ),
           ),
         );
       },
