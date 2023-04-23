@@ -85,10 +85,10 @@ class _ListCustomerViewState extends State<ListCustomerView> {
             children: [
               buildSearchBar(
                 context,
-                isEnabled: !model.busy && !model.isShowNoDataFoundPage,
-                textSearchOnChanged: (text) {
-                  model.search(text);
-                },
+                isEnabled: !model.isShowNoDataFoundPage ||
+                    model.searchController.text.isNotEmpty,
+                textSearchOnChanged: model.searchOnChanged,
+                searchController: model.searchController,
                 isFilterShown: true,
                 onTapFilter: () {
                   showCustomerFilterMenu(
@@ -107,10 +107,12 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                 },
               ),
               Spacings.vert(12),
-              if (!model.isShowNoDataFoundPage && !model.busy) ...[
+              if (!model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading) ...[
                 Expanded(
                   child: LazyLoadScrollView(
-                    onEndOfPage: () => model.requestGetAllCustomer(),
+                    onEndOfPage: () => model.onLazyLoad(),
                     scrollDirection: Axis.vertical,
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -147,9 +149,11 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                 ),
                 Spacings.vert(16),
               ],
-              if (model.isShowNoDataFoundPage && !model.busy)
+              if (model.isShowNoDataFoundPage &&
+                  !model.busy &&
+                  !model.isLoading)
                 buildNoDataFoundPage(),
-              if (model.busy) buildLoadingPage(),
+              if (model.busy || model.isLoading) buildLoadingPage(),
             ],
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
@@ -21,6 +22,8 @@ class ListCustomerViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
+  bool isLoading = false;
+
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
@@ -32,6 +35,8 @@ class ListCustomerViewModel extends BaseViewModel {
 
   bool _isAllowedToExportData = false;
   bool get isAllowedToExportData => _isAllowedToExportData;
+
+  TextEditingController searchController = TextEditingController();
 
   // Filter related
   int _selectedTipePelangganOption = 0;
@@ -97,6 +102,7 @@ class ListCustomerViewModel extends BaseViewModel {
     required int selectedSumberData,
     required int selectedKebutuhanPelanggan,
     required int selectedSort,
+    bool needSync = true,
   }) {
     _selectedTipePelangganOption = selectedPelanggan;
     _selectedSumberDataOption = selectedSumberData;
@@ -134,33 +140,68 @@ class ListCustomerViewModel extends BaseViewModel {
       _sortOptions[i].isSelected = false;
     }
 
-    resetPagination();
-    syncFilterCustomer();
+    if (needSync) {
+      resetPage();
+      resetSearchBar();
+      syncFilterCustomer();
+    }
     notifyListeners();
   }
 
-  void resetPagination() {
-    _paginationControl.currentPage = 1;
-    _paginationControl.totalData = -1;
+  void resetSearchBar() {
+    searchController.text = "";
   }
 
-  void search(String text) {
-    if (busy || _listCustomer?.isEmpty == true || _listCustomer == null) return;
-    setBusy(true);
+  void resetFilter() {
+    terapkanFilter(
+      selectedKebutuhanPelanggan: 0,
+      selectedPelanggan: 0,
+      selectedSort: 0,
+      selectedSumberData: 0,
+      needSync: false,
+    );
+  }
 
-    setBusy(false);
+  Future<void> searchOnChanged(String text) async {
+    isLoading = true;
+    if (searchController.text.isEmpty) {
+      await requestGetAllCustomer();
+
+      isLoading = false;
+      return;
+    }
+
+    resetPage();
+    resetFilter();
+    await searchCustomer();
+    isLoading = false;
+  }
+
+  Future<void> onLazyLoad() async {
+    if (searchController.text.isNotEmpty) {
+      await searchCustomer();
+      return;
+    }
+
+    await requestGetAllCustomer();
+  }
+
+  void resetPage() {
+    _listCustomer = [];
+    _errorMsg = null;
+
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
   }
 
   Future<void> syncFilterCustomer() async {
     setBusy(true);
 
-    _listCustomer = [];
-    _errorMsg = null;
-
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
+      setBusy(false);
       return;
     }
 
@@ -185,11 +226,11 @@ class ListCustomerViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        notifyListeners();
       }
-
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
       setBusy(false);
+      notifyListeners();
+
       return;
     }
 
@@ -236,12 +277,7 @@ class ListCustomerViewModel extends BaseViewModel {
 
     _listCustomer = [];
     _errorMsg = null;
-    terapkanFilter(
-      selectedKebutuhanPelanggan: 0,
-      selectedPelanggan: 0,
-      selectedSort: 0,
-      selectedSumberData: 0,
-    );
+    resetFilter();
 
     _paginationControl.currentPage = 1;
 
@@ -251,5 +287,43 @@ class ListCustomerViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
+  }
+
+  Future<void> searchCustomer() async {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
+    final response = await _apiService.searchCustomer(
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+      inputUser: searchController.text,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right.result;
+        } else {
+          _listCustomer?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+      }
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
+
+      return;
+    }
+
+    _errorMsg = response.left.message;
+    _isShowNoDataFoundPage = true;
+    notifyListeners();
   }
 }
