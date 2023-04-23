@@ -66,18 +66,15 @@ void showCustomerFilterMenu(
   BuildContext context, {
   required List<FilterOption> listPelangganMenu,
   required List<FilterOption> listSumberDataMenu,
-  required List<FilterOption> listTahapKonfirmasiMenu,
   required List<FilterOption> listKebutuhanPelanggan,
   required List<FilterOption> listSortMenu,
   required int selectedPelanggan,
   required int selectedSumberData,
-  required int selectedTahapKonfirmasi,
   required int selectedKebutuhanPelanggan,
   required int selectedSort,
   required void Function({
     required int selectedPelanggan,
     required int selectedSumberData,
-    required int selectedTahapKonfirmasi,
     required int selectedKebutuhanPelanggan,
     required int selectedSort,
   })
@@ -90,10 +87,6 @@ void showCustomerFilterMenu(
   final List<FilterOption> sumberDataLocal =
       convertToNewList(listSumberDataMenu);
   int sumberData = selectedSumberData;
-
-  final List<FilterOption> tahapKonfirmasiLocal =
-      convertToNewList(listTahapKonfirmasiMenu);
-  int tahapKonfirmasi = selectedTahapKonfirmasi;
 
   final List<FilterOption> kebutuhanPelangganLocal =
       convertToNewList(listKebutuhanPelanggan);
@@ -188,31 +181,6 @@ void showCustomerFilterMenu(
             ),
             Spacings.vert(20),
             Text(
-              "Tahap Konfirmasi",
-              style: buildTextStyle(
-                fontSize: 14,
-                fontWeight: 400,
-                fontColor: MyColors.lightBlack02,
-              ),
-            ),
-            Spacings.vert(8),
-            _buildFilterOptionsWidget(
-              tahapKonfirmasiLocal,
-              (int selectedIndex) {
-                tahapKonfirmasi = selectedIndex;
-                for (int i = 0; i < tahapKonfirmasiLocal.length; i++) {
-                  if (i == selectedIndex) {
-                    tahapKonfirmasiLocal[i].isSelected = true;
-                    continue;
-                  }
-
-                  tahapKonfirmasiLocal[i].isSelected = false;
-                }
-                setState(() {});
-              },
-            ),
-            Spacings.vert(20),
-            Text(
               "Urutkan",
               style: buildTextStyle(
                 fontSize: 14,
@@ -245,7 +213,6 @@ void showCustomerFilterMenu(
                 terapkanCallback(
                   selectedPelanggan: tipePelanggan,
                   selectedSumberData: sumberData,
-                  selectedTahapKonfirmasi: tahapKonfirmasi,
                   selectedKebutuhanPelanggan: kebutuhanPelanggan,
                   selectedSort: sort,
                 );
