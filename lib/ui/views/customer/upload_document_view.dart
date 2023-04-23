@@ -184,10 +184,9 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                   },
                 ),
                 Spacings.vert(24),
-                TextInput.multiline(
+                TextInput.editable(
                   controller: model.noteController,
                   label: "Catatan",
-                  minLines: 5,
                   maxLines: 5,
                   hintText: "Tulis keterangan disini...",
                 ),

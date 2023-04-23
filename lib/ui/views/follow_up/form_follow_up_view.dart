@@ -170,12 +170,11 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   },
                 ),
                 Spacings.vert(24),
-                TextInput.multiline(
+                TextInput.editable(
                   onChangedListener: (text) {},
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
                   maxLines: 5,
-                  minLines: 5,
                 ),
               ],
             ),

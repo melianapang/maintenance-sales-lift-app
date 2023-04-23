@@ -99,12 +99,11 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
                 ),
                 Spacings.vert(32),
                 if (model.selectedReason == "Lainnya") ...[
-                  TextInput.multiline(
+                  TextInput.editable(
                     onChangedListener: (text) {},
                     label: "Alasan Lainnya",
                     hintText: "Tulis alasan anda disini..",
                     maxLines: 5,
-                    minLines: 5,
                   ),
                   Spacings.vert(24),
                 ],
