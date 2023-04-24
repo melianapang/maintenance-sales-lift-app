@@ -103,7 +103,7 @@ class ListCustomerViewModel extends BaseViewModel {
 
   Future<bool> isUserAllowedToExportData() async {
     Role role = await _authenticationService.getUserRole();
-    return role == Role.Admin;
+    return role == Role.Admin || role == Role.SuperAdmin;
   }
 
   void terapkanFilter({
