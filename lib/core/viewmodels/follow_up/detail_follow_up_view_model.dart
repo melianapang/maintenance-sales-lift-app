@@ -65,7 +65,7 @@ class DetailFollowUpViewModel extends BaseViewModel {
     _isPreviousPageNeedRefresh = value;
   }
 
-  void setStatusCard() {
+  void _setStatusCard() {
     FollowUpStatus status = FollowUpStatus.values[int.parse(
       _historyData.first.followUpResult,
     )];
@@ -86,24 +86,10 @@ class DetailFollowUpViewModel extends BaseViewModel {
     }
   }
 
-  Future<void> requestGetHistoryFollowUp() async {
-    final response = await _apiService.requestGetHistoryFollowUp(
-      customerId: _customerId ?? "0",
-    );
-
-    if (response.isRight) {
-      _historyData = response.right;
-      _mappingToTimelineData();
-      notifyListeners();
-      return;
-    }
-
-    _errorMsg = response.left.message;
-  }
-
   void _mappingToTimelineData() {
     if (_historyData.isEmpty) return;
 
+    _timelineData = [];
     for (int i = 0; i < _historyData.length; i++) {
       _timelineData.add(
         TimelineData(
@@ -126,5 +112,21 @@ class DetailFollowUpViewModel extends BaseViewModel {
       );
     }
     notifyListeners();
+  }
+
+  Future<void> requestGetHistoryFollowUp() async {
+    final response = await _apiService.requestGetHistoryFollowUp(
+      customerId: _customerId ?? "0",
+    );
+
+    if (response.isRight) {
+      _historyData = response.right;
+      _mappingToTimelineData();
+      _setStatusCard();
+      notifyListeners();
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 }
