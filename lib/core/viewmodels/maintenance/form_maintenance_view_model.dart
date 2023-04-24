@@ -106,13 +106,8 @@ class FormMaintenanceViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<Position?> requestCurrentPosition() async {
-    Position? position = await LocationUtils.getCurrentPosition();
-    return position;
-  }
-
   Future<bool> requestUpdateMaintenanceData() async {
-    Position? position = await requestCurrentPosition();
+    Position? position = await LocationUtils.getCurrentPosition();
     if (position == null) {
       _errorMsg = "Tolong ijinkan aplikasi untuk mengakses lokasi anda.";
       return false;
