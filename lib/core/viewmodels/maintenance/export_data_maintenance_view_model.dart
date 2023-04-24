@@ -1,5 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -115,13 +116,11 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  Future<void> requestExportData({
-    required String filePath,
-  }) async {
+  Future<void> requestExportData() async {
     _exportedFileName = await _downloadService.downloadData(
       prefixString: "maintenance_data",
       filePath:
-          "http://192.168.100.120/project-lift/api/0/Maintenance/create_maintenance_excel",
+          "${EnvConstants.baseURL}/api/0/Maintenance/create_maintenance_excel",
     );
   }
 

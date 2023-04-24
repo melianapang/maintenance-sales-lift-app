@@ -1,4 +1,5 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
@@ -49,8 +50,7 @@ class ExportDataCustomerViewModel extends BaseViewModel {
     //_apiService.requestExportCustomerData();
     _exportedFileName = await _downloadService.downloadData(
       prefixString: "customer_data",
-      filePath:
-          "http://192.168.100.120/project-lift/api/0/Customer/create_customer_excel",
+      filePath: "${EnvConstants.baseURL}/api/0/Customer/create_customer_excel",
     );
     setBusy(false);
   }
