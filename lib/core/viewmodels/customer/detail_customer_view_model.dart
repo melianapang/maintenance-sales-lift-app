@@ -70,8 +70,9 @@ class DetailCustomerViewModel extends BaseViewModel {
   }) async {
     setBusy(true);
     _exportedFileName = await _downloadService.downloadData(
-      prefixString: "customer_document",
+      prefixString: "${_customerData?.customerNumber}_customer_document",
       filePath: customerData?.documents[index].filePath ?? "",
+      extension: "pdf",
     );
     setBusy(false);
   }

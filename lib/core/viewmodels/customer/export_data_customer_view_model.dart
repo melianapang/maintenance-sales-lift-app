@@ -46,21 +46,13 @@ class ExportDataCustomerViewModel extends BaseViewModel {
 
   Future<void> requestExportData() async {
     setBusy(true);
-    // String filePath = await _apiService.requestExportCustomerData();
-    await _exportData(
+    //_apiService.requestExportCustomerData();
+    _exportedFileName = await _downloadService.downloadData(
+      prefixString: "customer_data",
       filePath:
           "http://192.168.100.120/project-lift/api/0/Customer/create_customer_excel",
     );
     setBusy(false);
-  }
-
-  Future<void> _exportData({
-    required String filePath,
-  }) async {
-    _exportedFileName = await _downloadService.downloadData(
-      prefixString: "customer_data",
-      filePath: filePath,
-    );
   }
 
   Future<void> openExportedData() async {

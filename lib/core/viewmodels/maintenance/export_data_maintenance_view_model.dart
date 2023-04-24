@@ -115,19 +115,13 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  Future<void> requestExportData() async {
-    String filePath = await _apiService.requestExportCustomerData();
-    await _exportData(
-      filePath: filePath,
-    );
-  }
-
-  Future<void> _exportData({
+  Future<void> requestExportData({
     required String filePath,
   }) async {
     _exportedFileName = await _downloadService.downloadData(
       prefixString: "maintenance_data",
-      filePath: filePath,
+      filePath:
+          "http://192.168.100.120/project-lift/api/0/Maintenance/create_maintenance_excel",
     );
   }
 
