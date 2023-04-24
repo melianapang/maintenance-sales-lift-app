@@ -255,6 +255,11 @@ abstract class Api {
     @Query("input_search") String inputSearch,
   );
 
+  @POST('/api/0/FollowUp/create_follow_up/')
+  Future<HttpResponse<dynamic>> requestCreateFollowUp(
+    @Body() CreateFollowUpRequest request,
+  );
+
   @PUT('/api/0/FollowUp/update_follow_up/{follow_up_id}')
   Future<HttpResponse<dynamic>> requestUpdateFollowUp(
     @Path("follow_up_id") int followUpId,
@@ -1380,22 +1385,49 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, String>> requestCreateFollowUp({
+    required int customerId,
+    required String scheduleDate,
+    required int followUpResult,
+    required String note,
+  }) async {
+    try {
+      final payload = CreateFollowUpRequest(
+        customerId: customerId,
+        followUpResult: followUpResult,
+        scheduleDate: scheduleDate,
+        note: note,
+      );
+      final HttpResponse<dynamic> response = await api.requestCreateFollowUp(
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final CreateFollowUpResponse createFollowUpResponse =
+            CreateFollowUpResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createFollowUpResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, bool>> requestUpdateFollowUp({
     required int followUpId,
-    required int unitId,
-    required int userId,
-    required double longitude,
-    required double latitude,
+    required int customerId,
     required String note,
     required int followUpResult,
     required String scheduleDate,
   }) async {
     try {
       final payload = UpdateFollowUpRequest(
-        userId: userId,
-        unitId: unitId,
-        longitude: longitude,
-        latitude: latitude,
+        customerId: customerId,
         followUpResult: followUpResult,
         note: note,
         scheduleDate: scheduleDate,
