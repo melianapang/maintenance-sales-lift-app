@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/form_follow_up_view_model.dart';
@@ -9,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
@@ -45,6 +49,9 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
     return ViewModel<FormFollowUpViewModel>(
       model: FormFollowUpViewModel(
         customerData: widget.param.customerData,
+        dioService: Provider.of<DioService>(context),
+        sharedPreferencesService:
+            Provider.of<SharedPreferencesService>(context),
       ),
       onModelReady: (FormFollowUpViewModel model) async {
         await model.initModel();
@@ -67,7 +74,44 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
               left: 24.0,
               right: 24.0,
             ),
-            onTap: () {},
+            onTap: () async {
+              showDialogWidget(
+                context,
+                title: "Laporan Hasil Konfirmasi",
+                description:
+                    "Apakah anda yakin ingin menyimpan data konfirmasi ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                negativeCallback: () => Navigator.pop(context),
+                positiveCallback: () async {
+                  Navigator.pop(context);
+
+                  buildLoadingDialog(context);
+                  bool result = await model.requestUpdateFollowUp();
+                  Navigator.pop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Laporan Hasil Konfirmasi",
+                    description: result
+                        ? "Laporan berhasil disimpan"
+                        : model.errorMsg ??
+                            "Laporan gagal disimpan. Coba beberapa saat lagi.",
+                    positiveLabel: "Okay",
+                    positiveCallback: () {
+                      if (!result) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      Navigator.of(context)
+                        ..pop()
+                        ..pop(true);
+                    },
+                  );
+                },
+              );
+            },
             text: 'Simpan',
           ),
           body: SingleChildScrollView(
@@ -171,7 +215,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
-                  onChangedListener: (text) {},
+                  controller: model.noteController,
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
                   maxLines: 5,

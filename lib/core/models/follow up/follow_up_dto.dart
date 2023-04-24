@@ -94,10 +94,7 @@ class FollowUpFileData {
 @JsonSerializable()
 class UpdateFollowUpRequest {
   UpdateFollowUpRequest({
-    required this.userId,
-    required this.unitId,
-    required this.latitude,
-    required this.longitude,
+    required this.customerId,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
@@ -108,17 +105,8 @@ class UpdateFollowUpRequest {
 
   Map<String, dynamic> toJson() => _$UpdateFollowUpRequestToJson(this);
 
-  @JsonKey(name: "user_id")
-  final int userId;
-
-  @JsonKey(name: "unit_id")
-  final int unitId;
-
-  @JsonKey(name: "latitude")
-  final double? latitude;
-
-  @JsonKey(name: "longitude")
-  final double? longitude;
+  @JsonKey(name: "customer_id")
+  final int customerId;
 
   @JsonKey(name: "follow_up_result")
   final int followUpResult;
@@ -293,5 +281,53 @@ class HistoryFollowUpData {
 
   @JsonKey(name: "documents")
   final List<DocumentData>? documents;
+}
+//endregion
+
+//region create follow up
+@JsonSerializable()
+class CreateFollowUpRequest {
+  CreateFollowUpRequest({
+    required this.customerId,
+    required this.followUpResult,
+    required this.scheduleDate,
+    required this.note,
+  });
+
+  factory CreateFollowUpRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateFollowUpRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateFollowUpRequestToJson(this);
+
+  @JsonKey(name: "customer_id")
+  final int customerId;
+
+  @JsonKey(name: "follow_up_result")
+  final int followUpResult;
+
+  @JsonKey(name: "note")
+  final String note;
+
+  @JsonKey(name: "schedule_date")
+  final String scheduleDate;
+}
+
+@JsonSerializable()
+class CreateFollowUpResponse {
+  CreateFollowUpResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory CreateFollowUpResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateFollowUpResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateFollowUpResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
 }
 //endregion
