@@ -40,8 +40,12 @@ class SharedPreferencesService {
         if (raw == null) {
           return null;
         }
-        final Map<String, dynamic> result = json.decode(raw);
-        return ProfileData.fromJson(result);
+        try {
+          final Map<String, dynamic> result = json.decode(raw);
+          return ProfileData.fromJson(result);
+        } catch (e) {
+          return null;
+        }
       case SharedPrefKeys.authenticationToken:
         final String? raw = _sharedPreferences.getString(
           SharedPrefKeys.authenticationToken.label,
