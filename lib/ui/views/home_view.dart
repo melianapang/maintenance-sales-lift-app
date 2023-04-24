@@ -180,6 +180,11 @@ class _HomeViewState extends State<HomeView> {
       ),
       onModelReady: (HomeViewModel model) async {
         await model.initModel();
+        if (model.profileData == null)
+          Navigator.pushReplacementNamed(
+            context,
+            Routes.login,
+          );
       },
       builder: (context, model, child) {
         return Scaffold(
