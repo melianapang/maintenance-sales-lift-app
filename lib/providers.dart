@@ -3,6 +3,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/alice_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
@@ -60,6 +61,17 @@ List<SingleChildWidget> dependentProviders = [
         AuthenticationService(
           navigationService: navigationService,
           sharedPreferencesService: sharedPreferencesService,
+        ),
+  ),
+  ProxyProvider<AuthenticationService, DownloadService>(
+    update: (
+      _,
+      AuthenticationService authenticationService,
+      DownloadService? downloadService,
+    ) =>
+        downloadService ??
+        DownloadService(
+          authenticationService: authenticationService,
         ),
   ),
   ProxyProvider3<AuthenticationService, AliceService, GlobalConfigService,
