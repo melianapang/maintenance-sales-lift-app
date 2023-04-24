@@ -30,7 +30,7 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.Defect: MyColors.redBackgroundStatusCard,
     StatusCardType.Loss: MyColors.redBackgroundStatusCard,
     StatusCardType.Win: MyColors.greenBackgroundStatusCard,
-    StatusCardType.Hot: MyColors.redBackgroundStatusCard,
+    StatusCardType.Hot: MyColors.greenBackgroundStatusCard,
     StatusCardType.InProgress: MyColors.greyBackgroundStatusCard,
   };
   Color get backgroundColor => backgroundColors[this] ?? MyColors.lightGrey;
@@ -44,7 +44,7 @@ extension StatusCardTypeStyleExt on StatusCardType {
     StatusCardType.Defect: MyColors.redFontStatusCard,
     StatusCardType.Loss: MyColors.redFontStatusCard,
     StatusCardType.Win: MyColors.greenFontStatusCard,
-    StatusCardType.Hot: MyColors.redFontStatusCard,
+    StatusCardType.Hot: MyColors.greenFontStatusCard,
     StatusCardType.InProgress: MyColors.greyFontStatusCard,
   };
   Color get fontColor => fontColors[this] ?? MyColors.greyFontStatusCard;
