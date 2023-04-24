@@ -15,6 +15,7 @@ class DownloadService {
   Future<String> downloadData({
     required String prefixString,
     required String filePath,
+    String extension = "xlsx",
   }) async {
     final storageIO = InternetFileStorageIO();
 
@@ -26,7 +27,8 @@ class DownloadService {
     );
 
     // final finalFileName = "${prefixString}_${currDateString}_exported.pdf";
-    final finalFileName = "${prefixString}_${currDateString}_exported.xlsx";
+    final finalFileName =
+        "${prefixString}_${currDateString}_exported.$extension";
 
     await InternetFile.get(
       filePath,
