@@ -20,12 +20,8 @@ class SplashScreenViewModel extends BaseViewModel {
     await _oneSignalService.initOneSignal();
     setBusy(false);
 
-    await PermissionUtils.requestPermission(
-      Permission.notification,
-    );
-
     await PermissionUtils.requestPermissions(listPermission: [
-      Permission.manageExternalStorage,
+      Permission.notification,
       Permission.storage,
       Permission.photos,
       Permission.videos,

@@ -34,7 +34,6 @@ class ExportDataCustomerViewModel extends BaseViewModel {
   Future<void> initModel() async {
     _isAllowedToOpenPage =
         await PermissionUtils.requestPermissions(listPermission: [
-      Permission.manageExternalStorage,
       Permission.storage,
     ]);
     notifyListeners();

@@ -53,7 +53,6 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     setBusy(true);
     _isAllowedToOpenPage =
         await PermissionUtils.requestPermissions(listPermission: [
-      Permission.manageExternalStorage,
       Permission.storage,
     ]);
     notifyListeners();
