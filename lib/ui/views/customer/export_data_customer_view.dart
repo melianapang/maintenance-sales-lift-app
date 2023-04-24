@@ -3,6 +3,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/export_data_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -12,7 +13,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class ExportDataCustomerView extends StatefulWidget {
   const ExportDataCustomerView({super.key});
@@ -29,6 +29,7 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
     return ViewModel(
       model: ExportDataCustomerViewModel(
         dioService: Provider.of<DioService>(context),
+        downloadService: Provider.of<DownloadService>(context),
       ),
       onModelReady: (ExportDataCustomerViewModel model) async {
         await model.initModel();
@@ -56,8 +57,8 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
                 ? () async {
                     buildLoadingDialog(context);
                     await model.requestExportData();
-
                     Navigator.pop(context);
+
                     showDialogWidget(
                       context,
                       title: "Unduh Data",
@@ -98,18 +99,6 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
                         if (end != null) end,
                       ]);
                     },
-                  ),
-                  Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {},
-                    child: TextInput.disabled(
-                      label: "Tipe Pelanggan",
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.darkBlue01,
-                        size: 16,
-                      ),
-                    ),
                   ),
                   Spacings.vert(24),
                 ],

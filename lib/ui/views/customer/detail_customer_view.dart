@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -56,6 +57,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
     return ViewModel(
       model: DetailCustomerViewModel(
         dioService: Provider.of<DioService>(context),
+        downloadService: Provider.of<DownloadService>(context),
         customerData: widget.param.customerData,
       ),
       onModelReady: (DetailCustomerViewModel model) async {

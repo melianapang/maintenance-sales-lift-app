@@ -3,20 +3,23 @@ import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class ExportDataMaintenanceViewModel extends BaseViewModel {
   ExportDataMaintenanceViewModel({
     required DioService dioService,
-  }) : _apiService = ApiService(
+    required DownloadService downloadService,
+  })  : _downloadService = downloadService,
+        _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         );
 
   final ApiService _apiService;
+  final DownloadService _downloadService;
 
   bool _isAllowedToOpenPage = false;
   bool get isAllowedToOpenPage => _isAllowedToOpenPage;
@@ -122,7 +125,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   Future<void> _exportData({
     required String filePath,
   }) async {
-    _exportedFileName = await DownloadDataUtils.downloadData(
+    _exportedFileName = await _downloadService.downloadData(
       prefixString: "maintenance_data",
       filePath: filePath,
     );
@@ -130,7 +133,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
 
   Future<void> openExportedData() async {
     if (_exportedFileName == null) return;
-    await DownloadDataUtils.openDownloadedData(
+    await _downloadService.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
   }

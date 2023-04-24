@@ -1,6 +1,6 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,13 +8,16 @@ import 'package:permission_handler/permission_handler.dart';
 class ExportDataCustomerViewModel extends BaseViewModel {
   ExportDataCustomerViewModel({
     required DioService dioService,
-  }) : _apiService = ApiService(
+    required DownloadService downloadService,
+  })  : _downloadService = downloadService,
+        _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         );
 
   final ApiService _apiService;
+  final DownloadService _downloadService;
 
   bool _isAllowedToOpenPage = false;
   bool get isAllowedToOpenPage => _isAllowedToOpenPage;
@@ -43,9 +46,10 @@ class ExportDataCustomerViewModel extends BaseViewModel {
 
   Future<void> requestExportData() async {
     setBusy(true);
-    String filePath = await _apiService.requestExportCustomerData();
+    // String filePath = await _apiService.requestExportCustomerData();
     await _exportData(
-      filePath: filePath,
+      filePath:
+          "http://192.168.100.120/project-lift/api/0/Customer/create_customer_excel",
     );
     setBusy(false);
   }
@@ -53,7 +57,7 @@ class ExportDataCustomerViewModel extends BaseViewModel {
   Future<void> _exportData({
     required String filePath,
   }) async {
-    _exportedFileName = await DownloadDataUtils.downloadData(
+    _exportedFileName = await _downloadService.downloadData(
       prefixString: "customer_data",
       filePath: filePath,
     );
@@ -61,7 +65,7 @@ class ExportDataCustomerViewModel extends BaseViewModel {
 
   Future<void> openExportedData() async {
     if (_exportedFileName == null) return;
-    await DownloadDataUtils.openDownloadedData(
+    await _downloadService.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
   }

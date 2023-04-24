@@ -3,7 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/download_files_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
@@ -11,7 +11,9 @@ class DetailCustomerViewModel extends BaseViewModel {
   DetailCustomerViewModel({
     CustomerData? customerData,
     required DioService dioService,
-  })  : _apiService = ApiService(
+    required DownloadService downloadService,
+  })  : _downloadService = downloadService,
+        _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
@@ -19,6 +21,7 @@ class DetailCustomerViewModel extends BaseViewModel {
         _customerData = customerData;
 
   final ApiService _apiService;
+  final DownloadService _downloadService;
 
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
@@ -66,8 +69,8 @@ class DetailCustomerViewModel extends BaseViewModel {
     required int index,
   }) async {
     setBusy(true);
-    _exportedFileName = await DownloadDataUtils.downloadData(
-      prefixString: "maintenance_data",
+    _exportedFileName = await _downloadService.downloadData(
+      prefixString: "customer_document",
       filePath: customerData?.documents[index].filePath ?? "",
     );
     setBusy(false);
@@ -75,7 +78,7 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   Future<void> openDownloadedData() async {
     if (_exportedFileName == null) return;
-    await DownloadDataUtils.openDownloadedData(
+    await _downloadService.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
   }
