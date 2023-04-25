@@ -202,12 +202,14 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
     BuildContext context,
     AddUnitCustomerViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
-      title: "Daftar Unit",
+      title: "Daftar Proyek",
       isSuccessDialog: false,
       description: model.errorMsg ??
-          "Gagal mendapatkan daftar Unit. \n Coba beberappa saat lagi.",
+          "Gagal mendapatkan daftar Proyek. \n Coba beberappa saat lagi.",
       positiveLabel: "Coba Lagi",
       positiveCallback: () async {
         Navigator.pop(context);
