@@ -93,6 +93,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   showDialogWidget(
                     context,
                     title: "Laporan Hasil Konfirmasi",
+                    isSuccessDialog: result,
                     description: result
                         ? "Laporan berhasil disimpan"
                         : model.errorMsg ??
