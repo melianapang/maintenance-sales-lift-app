@@ -11,6 +11,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/detail_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/edit_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -106,8 +107,11 @@ class _DetailUserViewState extends State<DetailUserView> {
                       positiveLabel: "Iya",
                       negativeLabel: "Tidak",
                       positiveCallback: () async {
-                        bool isSucceed = await model.requestDeleteUser();
                         await Navigator.maybePop(context);
+
+                        buildLoadingDialog(context);
+                        bool isSucceed = await model.requestDeleteUser();
+                        Navigator.pop(context);
 
                         showDialogWidget(
                           context,

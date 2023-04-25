@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.da
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/manage_account/edit_profile_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -68,7 +69,9 @@ class _EditProfileViewState extends State<EditProfileView> {
               right: 24.0,
             ),
             onTap: () async {
+              buildLoadingDialog(context);
               bool result = await model.requestUpdateUser();
+              Navigator.pop(context);
 
               if (result) {
                 showDialogWidget(
