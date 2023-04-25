@@ -261,8 +261,14 @@ class AppRouter {
           ),
         );
       case Routes.formDeleteMaintenance:
+        final FormDeleteMaintenanceViewParam param =
+            settings.arguments is FormDeleteMaintenanceViewParam
+                ? settings.arguments as FormDeleteMaintenanceViewParam
+                : FormDeleteMaintenanceViewParam();
         return buildRoute(
-          builder: (_) => const FormDeleteMaintenanceView(),
+          builder: (_) => FormDeleteMaintenanceView(
+            param: param,
+          ),
         );
       case Routes.formChangeMaintenanceDate:
         final FormChangeMaintenanceDateViewParam param =

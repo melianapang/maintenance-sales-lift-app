@@ -440,3 +440,75 @@ class CreatedMaintenanceIdData {
   final bool createdMaintenanceId;
 }
 //endregion
+
+//region delete maintenance
+@JsonSerializable()
+class DeleteMaintenanceRequest {
+  DeleteMaintenanceRequest({
+    required this.reason,
+  });
+
+  factory DeleteMaintenanceRequest.fromJson(Map<String, dynamic> json) =>
+      _$DeleteMaintenanceRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteMaintenanceRequestToJson(this);
+
+  @JsonKey(name: "reason")
+  final String reason;
+}
+
+@JsonSerializable()
+class DeleteMaintenanceResponse {
+  DeleteMaintenanceResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory DeleteMaintenanceResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteMaintenanceResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteMaintenanceResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion
+
+//region change maintenance date
+@JsonSerializable()
+class ChangeMaintenanceDateRequest {
+  ChangeMaintenanceDateRequest({
+    required this.scheduleDate,
+  });
+
+  factory ChangeMaintenanceDateRequest.fromJson(Map<String, dynamic> json) =>
+      _$ChangeMaintenanceDateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChangeMaintenanceDateRequestToJson(this);
+
+  @JsonKey(name: "schedule_date")
+  final String scheduleDate;
+}
+
+@JsonSerializable()
+class ChangeMaintenanceDateResponse {
+  ChangeMaintenanceDateResponse({
+    required this.isSuccess,
+    required this.message,
+  });
+
+  factory ChangeMaintenanceDateResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChangeMaintenanceDateResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChangeMaintenanceDateResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+}
+//endregion

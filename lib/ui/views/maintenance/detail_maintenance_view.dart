@@ -17,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -222,6 +223,9 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               Navigator.pushNamed(
                 context,
                 Routes.formDeleteMaintenance,
+                arguments: FormDeleteMaintenanceViewParam(
+                  maintenanceData: model.maintenanceData,
+                ),
               );
 
               setState() {
@@ -230,7 +234,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
             },
           ),
         ],
-        if (model.isAllowedToChangeNextMaintenanceDate) ...[
+        if (model.isAllowedToChangeMaintenanceDate) ...[
           SpeedDialChild(
             child: !model.isDialChildrenVisible
                 ? const Icon(PhosphorIcons.calendarBold)

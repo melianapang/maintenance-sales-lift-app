@@ -37,9 +37,9 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   bool _isAllowedToDeleteMaintenance = false;
   bool get isAllowedToDeleteMaintenance => _isAllowedToDeleteMaintenance;
 
-  bool _isAllowedToChangeNextMaintenanceDate = false;
-  bool get isAllowedToChangeNextMaintenanceDate =>
-      _isAllowedToChangeNextMaintenanceDate;
+  bool _isAllowedToChangeMaintenanceDate = false;
+  bool get isAllowedToChangeMaintenanceDate =>
+      _isAllowedToChangeMaintenanceDate;
 
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
@@ -68,8 +68,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     await requestGetHistoryMaintenance();
-    await isUserAllowedToDeleteNextMaintenance();
-    await isUserAllowedToChangeNextMaintenanceDate();
+    await isUserAllowedToEditMaintenance();
     setStatusCard();
     setBusy(false);
   }
@@ -95,22 +94,21 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     }
   }
 
-  Future<void> isUserAllowedToDeleteNextMaintenance() async {
+  Future<void> isUserAllowedToEditMaintenance() async {
     Role role = await _authenticationService.getUserRole();
+    bool isAfterToday = DateTimeUtils.isDateStringAfterToday(
+        _maintenanceData?.scheduleDate ?? "");
     bool isNotMaintenanced = mappingStringtoMaintenanceStatus(
             _maintenanceData?.maintenanceResult ?? "0") ==
         MaintenanceStatus.NOT_MAINTENANCED;
-    _isAllowedToDeleteMaintenance =
-        role == Role.SuperAdmin && isNotMaintenanced;
-  }
 
-  Future<void> isUserAllowedToChangeNextMaintenanceDate() async {
-    Role role = await _authenticationService.getUserRole();
-    bool isNotMaintenanced = mappingStringtoMaintenanceStatus(
-            _maintenanceData?.maintenanceResult ?? "0") ==
-        MaintenanceStatus.NOT_MAINTENANCED;
-    _isAllowedToChangeNextMaintenanceDate =
-        (role == Role.Admin || role == Role.SuperAdmin) && isNotMaintenanced;
+    _isAllowedToDeleteMaintenance =
+        role == Role.SuperAdmin && isNotMaintenanced && isAfterToday;
+
+    _isAllowedToChangeMaintenanceDate =
+        (role == Role.Admin || role == Role.SuperAdmin) &&
+            isNotMaintenanced &&
+            isAfterToday;
   }
 
   Future<void> requestGetHistoryMaintenance() async {

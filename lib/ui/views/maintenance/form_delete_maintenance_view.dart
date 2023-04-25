@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/form_delete_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class FormDeleteMaintenanceViewParam {
+  FormDeleteMaintenanceViewParam({
+    this.maintenanceData,
+  });
+
+  final MaintenanceData? maintenanceData;
+}
+
 class FormDeleteMaintenanceView extends StatefulWidget {
-  const FormDeleteMaintenanceView({super.key});
+  const FormDeleteMaintenanceView({
+    required this.param,
+    super.key,
+  });
+
+  final FormDeleteMaintenanceViewParam param;
 
   @override
   State<FormDeleteMaintenanceView> createState() =>
@@ -26,7 +43,10 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormDeleteMaintenanceViewModel>(
-      model: FormDeleteMaintenanceViewModel(),
+      model: FormDeleteMaintenanceViewModel(
+        dioService: Provider.of<DioService>(context),
+        maintenanceData: widget.param.maintenanceData,
+      ),
       onModelReady: (FormDeleteMaintenanceViewModel model) async {
         await model.initModel();
       },
@@ -49,17 +69,46 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
               top: 24,
             ),
             onTap: () {
-              showDialogWidget(context,
-                  title: "Hapus Data Pemeliharaan",
-                  description:
-                      "Anda telah berhasil menghapus data pemeliharaan ini",
-                  isSuccessDialog: true,
-                  positiveLabel: "Okay", positiveCallback: () {
-                Navigator.of(context)
-                  ..pop()
-                  ..pop()
-                  ..pop(true);
-              });
+              showDialogWidget(
+                context,
+                title: "Ubah Tanggal Pemeliharaan",
+                description:
+                    "Apakahh anda yakin ingin mengubah tanggal pemeliharaan ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
+
+                  buildLoadingDialog(context);
+                  bool result = await model.requestDeleteMaintenanceDate();
+                  Navigator.pop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Hapus Data Pemeliharaan",
+                    description: result
+                        ? "Anda telah berhasil menghapus data pemeliharaan ini"
+                        : model.errorMsg ??
+                            "Anda gagal mengapus data pemeliharaan ini. Coba beberapa saaat lagi.",
+                    isSuccessDialog: result,
+                    positiveLabel: "Okay",
+                    positiveCallback: () {
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
+
+                      Navigator.maybePop(context);
+                    },
+                  );
+                },
+                negativeCallback: () {
+                  Navigator.maybePop(context);
+                },
+              );
             },
             text: 'Lanjutkan',
           ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/form_change_maintenance_date_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
@@ -42,6 +45,7 @@ class _FormChangeMaintenanceDateState
     return ViewModel<FormChangeMaintenanceDateViewModel>(
       model: FormChangeMaintenanceDateViewModel(
         maintenanceData: widget.param.maintenanceData,
+        dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (FormChangeMaintenanceDateViewModel model) async {
         await model.initModel();
@@ -75,16 +79,28 @@ class _FormChangeMaintenanceDateState
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
+                  buildLoadingDialog(context);
+                  bool result = await model.requestChangeMaintenanceDate();
+                  Navigator.pop(context);
+
                   showDialogWidget(
                     context,
                     title: "Ubah Tanggal Pemeliharaan",
-                    description: "Perubahan data telah disetujui.",
-                    isSuccessDialog: true,
+                    description: result
+                        ? "Perubahan data telah disetujui."
+                        : model.errorMsg ??
+                            "Perubahan data gagal diajukan. Coba beberapa saat lagi.",
+                    isSuccessDialog: result,
                     positiveLabel: "OK",
                     positiveCallback: () {
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop(true);
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
+
+                      Navigator.pop(context);
                     },
                   );
                 },

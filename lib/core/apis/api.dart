@@ -309,6 +309,18 @@ abstract class Api {
     @Body() UpdateMaintenanceRequest request,
   );
 
+  @PUT('/api/0/Maintenance/change_maintenance_date/{maintenance_id}')
+  Future<HttpResponse<dynamic>> requestChangeeMaintenanceDate(
+    @Path("maintenance_id") int maintenanceId,
+    @Body() ChangeMaintenanceDateRequest request,
+  );
+
+  @DELETE('/api/0/Maintenance/delete_maintenance/{maintenance_id}')
+  Future<HttpResponse<dynamic>> requestDeleteMaintenance(
+    @Path("maintenance_id") int maintenanceId,
+    @Body() DeleteMaintenanceRequest request,
+  );
+
   @GET('/api/0/Maintenance/filter_maintenance/')
   Future<HttpResponse<dynamic>> requestFilterMaintenance(
     @Query("current_page") int currentPage,
@@ -1688,6 +1700,66 @@ class ApiService {
       return ErrorUtils<bool>().handleError(e);
     }
   }
+
+  Future<Either<Failure, String>> requestChangeMaintenanceDate({
+    required int maintenanceId,
+    required String scheduleDate,
+  }) async {
+    try {
+      final payload = ChangeMaintenanceDateRequest(
+        scheduleDate: scheduleDate,
+      );
+
+      final HttpResponse<dynamic> response =
+          await api.requestChangeeMaintenanceDate(
+        maintenanceId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final DeleteProjectResponse deleteProjectResponse =
+            DeleteProjectResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteProjectResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteMaintenance({
+    required int maintenanceId,
+    required String reason,
+  }) async {
+    try {
+      final payload = DeleteMaintenanceRequest(reason: reason);
+
+      final HttpResponse<dynamic> response = await api.requestDeleteMaintenance(
+        maintenanceId,
+        payload,
+      );
+
+      if (response.isSuccess) {
+        final DeleteMaintenanceResponse deleteMaintenanceResponse =
+            DeleteMaintenanceResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteMaintenanceResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
   //endregion
 
   //region projects
