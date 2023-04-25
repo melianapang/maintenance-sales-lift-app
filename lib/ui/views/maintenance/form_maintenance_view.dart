@@ -112,7 +112,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                       if (result) {
                         Navigator.of(context)
                           ..pop()
-                          ..pop();
+                          ..pop(true);
                         return;
                       }
 
