@@ -346,10 +346,10 @@ class HistoryMaintenanceData {
   final String unitLocation;
 
   @JsonKey(name: "latitude")
-  final String latitude;
+  final String? latitude;
 
   @JsonKey(name: "longitude")
-  final String longitude;
+  final String? longitude;
 
   @JsonKey(name: "maintenance_result")
   final String maintenanceResult;
@@ -366,7 +366,6 @@ class HistoryMaintenanceData {
 //endregion
 
 //region create maintenance
-
 @JsonSerializable()
 class CreateMaintenanceRequest {
   CreateMaintenanceRequest({
@@ -387,10 +386,10 @@ class CreateMaintenanceRequest {
   final int unitId;
 
   @JsonKey(name: "latitude")
-  final double latitude;
+  final double? latitude;
 
   @JsonKey(name: "longitude")
-  final double longitude;
+  final double? longitude;
 
   @JsonKey(name: "maintenance_result")
   final int maintenanceResult;
