@@ -130,15 +130,10 @@ class ListLogViewModel extends BaseViewModel {
   }
 
   Future<void> searchLog() async {
-    if (busy) return;
-
-    setBusy(true);
-
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
-      setBusy(false);
       return;
     }
 
@@ -160,21 +155,15 @@ class ListLogViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        _isShowNoDataFoundPage = false;
       }
-      _isShowNoDataFoundPage = true;
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
       notifyListeners();
-
-      setBusy(false);
       return;
     }
 
     _errorMsg = response.left.message;
     _isShowNoDataFoundPage = true;
     notifyListeners();
-
-    setBusy(false);
   }
 
   void invokeDebouncer(Function() function) {
