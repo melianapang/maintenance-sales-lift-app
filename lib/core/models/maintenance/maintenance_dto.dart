@@ -445,7 +445,7 @@ class CreatedMaintenanceIdData {
 @JsonSerializable()
 class DeleteMaintenanceRequest {
   DeleteMaintenanceRequest({
-    required this.reason,
+    required this.noteDeleted,
   });
 
   factory DeleteMaintenanceRequest.fromJson(Map<String, dynamic> json) =>
@@ -453,8 +453,8 @@ class DeleteMaintenanceRequest {
 
   Map<String, dynamic> toJson() => _$DeleteMaintenanceRequestToJson(this);
 
-  @JsonKey(name: "reason")
-  final String reason;
+  @JsonKey(name: "note_deleted")
+  final String noteDeleted;
 }
 
 @JsonSerializable()

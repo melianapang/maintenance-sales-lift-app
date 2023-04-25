@@ -309,8 +309,8 @@ abstract class Api {
     @Body() UpdateMaintenanceRequest request,
   );
 
-  @PUT('/api/0/Maintenance/change_maintenance_date/{maintenance_id}')
-  Future<HttpResponse<dynamic>> requestChangeeMaintenanceDate(
+  @PUT('/api/0/Maintenance/update_maintenance_date/{maintenance_id}')
+  Future<HttpResponse<dynamic>> requestUpdateMaintenanceDate(
     @Path("maintenance_id") int maintenanceId,
     @Body() ChangeMaintenanceDateRequest request,
   );
@@ -1729,7 +1729,7 @@ class ApiService {
       );
 
       final HttpResponse<dynamic> response =
-          await api.requestChangeeMaintenanceDate(
+          await api.requestUpdateMaintenanceDate(
         maintenanceId,
         payload,
       );
@@ -1755,7 +1755,7 @@ class ApiService {
     required String reason,
   }) async {
     try {
-      final payload = DeleteMaintenanceRequest(reason: reason);
+      final payload = DeleteMaintenanceRequest(noteDeleted: reason);
 
       final HttpResponse<dynamic> response = await api.requestDeleteMaintenance(
         maintenanceId,
