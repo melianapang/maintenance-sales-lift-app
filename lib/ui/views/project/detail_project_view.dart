@@ -12,6 +12,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
@@ -111,13 +112,26 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       positiveCallback: () async {
                         await Navigator.maybePop(context);
 
+                        buildLoadingDialog(context);
+                        bool result = await model.requestDeleteProject();
+                        Navigator.pop(context);
+
                         showDialogWidget(
                           context,
                           title: "Menghapus Data Proyek",
-                          description: "Proyek telah dihapus.",
+                          isSuccessDialog: result,
+                          description: result
+                              ? "Proyek telah dihapus."
+                              : model.errorMsg ??
+                                  "Proyek gagal dihapus. Coba beberapa saat lagi.",
                           positiveLabel: "OK",
                           positiveCallback: () {
-                            model.setPreviousPageNeedRefresh(true);
+                            if (result) {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop(true);
+                              return;
+                            }
                             Navigator.maybePop(context);
                           },
                         );

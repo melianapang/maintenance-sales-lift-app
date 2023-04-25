@@ -33,6 +33,9 @@ class DetailProjectViewModel extends BaseViewModel {
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
 
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -59,5 +62,16 @@ class DetailProjectViewModel extends BaseViewModel {
       _projectData = response.right;
       notifyListeners();
     }
+  }
+
+  Future<bool> requestDeleteProject() async {
+    final response = await _apiService.requestDeleteProject(
+      projectId: int.parse(_projectData?.projectId ?? "0"),
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

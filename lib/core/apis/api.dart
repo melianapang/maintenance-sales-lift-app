@@ -1299,6 +1299,24 @@ class ApiService {
       return ErrorUtils<UnitData>().handleError(e);
     }
   }
+
+  Future<Either<Failure, bool>> requestDeleteUnit({
+    required int unitId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteUnit(unitId);
+
+      if (response.isSuccess) {
+        return const Right<Failure, bool>(true);
+      }
+
+      return ErrorUtils<bool>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<bool>().handleError(e);
+    }
+  }
   //endregion
 
   //region follow up

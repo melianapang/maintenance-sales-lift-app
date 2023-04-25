@@ -113,13 +113,26 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
+                  buildLoadingDialog(context);
+                  bool result = await model.requestDeleteUnit();
+                  Navigator.pop(context);
+
                   showDialogWidget(
                     context,
                     title: "Menghapus Data Unit",
-                    description: "Unit telah dihapus.",
+                    description: result
+                        ? "Unit telah berhasil dihapus."
+                        : model.errorMsg ??
+                            "Unit gagal dihapus. Coba beberapa saat lagi.",
+                    isSuccessDialog: result,
                     positiveLabel: "OK",
                     positiveCallback: () {
-                      model.setPreviousPageNeedRefresh(true);
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
                       Navigator.maybePop(context);
                     },
                   );

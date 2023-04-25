@@ -22,6 +22,9 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
   UnitData? _unitData;
   UnitData? get unitData => _unitData;
 
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {}
 
@@ -44,5 +47,16 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
       _unitData = response.right;
       notifyListeners();
     }
+  }
+
+  Future<bool> requestDeleteUnit() async {
+    final response = await _apiService.requestDeleteUnit(
+      unitId: int.parse(unitData?.unitId ?? "0"),
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }
