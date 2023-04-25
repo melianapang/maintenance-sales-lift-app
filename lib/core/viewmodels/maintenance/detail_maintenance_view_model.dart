@@ -44,7 +44,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
 
-  StatusCardType _statusCardType = StatusCardType.Normal;
+  StatusCardType _statusCardType = StatusCardType.Pending;
   StatusCardType get statusCardType => _statusCardType;
 
   List<HistoryMaintenanceData>? _historyData;
@@ -78,6 +78,8 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   }
 
   void setStatusCard() {
+    if (_historyData == null || _historyData?.isEmpty == true) return;
+
     MaintenanceStatus status = mappingStringtoMaintenanceStatus(
         _historyData?.first.maintenanceResult ?? "0");
     switch (status) {
@@ -89,8 +91,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
         _statusCardType = StatusCardType.Canceled;
         break;
       case MaintenanceStatus.SUCCESS:
-      default:
         _statusCardType = StatusCardType.Confirmed;
+        break;
+      default:
+        _statusCardType = StatusCardType.Pending;
     }
   }
 
@@ -143,6 +147,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   void _mappingToTimelineData() {
     if (_historyData == null || _historyData?.isEmpty == true) return;
 
+    _timelineData = [];
     for (int i = 0; i < (_historyData?.length ?? 0); i++) {
       _timelineData.add(
         TimelineData(
