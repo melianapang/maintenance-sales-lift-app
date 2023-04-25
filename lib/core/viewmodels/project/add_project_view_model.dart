@@ -177,6 +177,10 @@ class AddProjectViewModel extends BaseViewModel {
       _errorMsg = "Isi semua data dengan benar.";
       return false;
     }
+    if (_listPic.isEmpty) {
+      _errorMsg = "Belum ada PIC untuk proyek ini.";
+      return false;
+    }
 
     final response = await _apiService.requestCreateProject(
       customerId: int.parse(selectedCustomer?.customerId ?? "0"),
@@ -196,11 +200,6 @@ class AddProjectViewModel extends BaseViewModel {
   }
 
   Future<bool> requestCreatePICs() async {
-    if (_listPic.isEmpty) {
-      _errorMsg = "Belum ada PIC untuk proyek ini.";
-      return false;
-    }
-
     final response = await _apiService.requestCreatePIC(
       projectId: _createdProjectId ?? 0,
       listPic: _listPic,
