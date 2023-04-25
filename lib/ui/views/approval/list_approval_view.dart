@@ -34,11 +34,10 @@ class _ListApprovalViewState extends State<ListApprovalView> {
       onModelReady: (ListApprovalViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -114,10 +113,12 @@ class _ListApprovalViewState extends State<ListApprovalView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListApprovalViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Permohonan",
@@ -132,7 +133,7 @@ class _ListApprovalViewState extends State<ListApprovalView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

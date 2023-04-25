@@ -54,11 +54,10 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
       onModelReady: (EditUnitCustomerViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, _) {
         return !model.busy
@@ -223,7 +222,7 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     EditUnitCustomerViewModel model,
   ) {
@@ -241,7 +240,7 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
         await model.requestGetAllProjectByCustomerId();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

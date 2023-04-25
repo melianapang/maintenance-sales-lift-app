@@ -34,11 +34,10 @@ class _ListUserViewState extends State<ListUserView> {
       onModelReady: (ListUserViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -67,7 +66,14 @@ class _ListUserViewState extends State<ListUserView> {
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
-                textSearchOnChanged: model.searchOnChanged,
+                textSearchOnChanged: (_) async {
+                  await model.searchOnChanged();
+
+                  _handleErrorDialog(
+                    context,
+                    model,
+                  );
+                },
                 searchController: model.searchController,
                 isFilterShown: false,
               ),
@@ -125,10 +131,12 @@ class _ListUserViewState extends State<ListUserView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListUserViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Pengguna",
@@ -143,7 +151,7 @@ class _ListUserViewState extends State<ListUserView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

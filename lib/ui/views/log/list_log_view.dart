@@ -35,11 +35,10 @@ class _ListLogViewState extends State<ListLogView> {
       onModelReady: (ListLogViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -55,7 +54,14 @@ class _ListLogViewState extends State<ListLogView> {
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
-                textSearchOnChanged: model.searchOnChanged,
+                textSearchOnChanged: (_) async {
+                  await model.searchOnChanged();
+
+                  _handleErrorDialog(
+                    context,
+                    model,
+                  );
+                },
                 searchController: model.searchController,
                 isFilterShown: false,
                 onTapFilter: () {},
@@ -119,10 +125,12 @@ class _ListLogViewState extends State<ListLogView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListLogViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Log",
@@ -137,7 +145,7 @@ class _ListLogViewState extends State<ListLogView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

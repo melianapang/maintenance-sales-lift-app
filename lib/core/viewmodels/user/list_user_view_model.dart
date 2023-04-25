@@ -53,7 +53,7 @@ class ListUserViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
       await requestGetAllUserData();
@@ -63,9 +63,9 @@ class ListUserViewModel extends BaseViewModel {
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
-        searchUser();
+        await searchUser();
         isLoading = false;
       },
     );
@@ -117,10 +117,7 @@ class ListUserViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listUser = [];
-    _errorMsg = null;
-
-    paginationControl.currentPage = 1;
+    resetPage();
     await requestGetAllUserData();
 
     _isShowNoDataFoundPage = _listUser.isEmpty;

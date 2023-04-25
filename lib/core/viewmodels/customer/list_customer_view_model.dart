@@ -171,7 +171,7 @@ class ListCustomerViewModel extends BaseViewModel {
     );
   }
 
-  Future<void> searchOnChanged(String text) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
       await requestGetAllCustomer();
@@ -181,10 +181,10 @@ class ListCustomerViewModel extends BaseViewModel {
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
         resetFilter();
-        searchCustomer();
+        await searchCustomer();
         isLoading = false;
       },
     );
@@ -288,11 +288,8 @@ class ListCustomerViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listCustomer = [];
-    _errorMsg = null;
+    resetPage();
     resetFilter();
-
-    _paginationControl.currentPage = 1;
 
     await requestGetAllCustomer();
     _isShowNoDataFoundPage =
@@ -344,7 +341,7 @@ class ListCustomerViewModel extends BaseViewModel {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 300,
       ),
       function,
     );

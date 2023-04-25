@@ -62,19 +62,19 @@ class ListFollowUpViewModel extends BaseViewModel {
     _paginationControl.totalData = -1;
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
-      requestGetAllFollowUp();
+      await requestGetAllFollowUp();
 
       isLoading = false;
       return;
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
-        searchFollowUp();
+        await searchFollowUp();
         isLoading = false;
       },
     );
@@ -92,9 +92,7 @@ class ListFollowUpViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _paginationControl.currentPage = 1;
-    _listFollowUp = [];
-
+    resetPage();
     await requestGetAllFollowUp();
     _isShowNoDataFoundPage = _listFollowUp.isEmpty == true;
     notifyListeners();

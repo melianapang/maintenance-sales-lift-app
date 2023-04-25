@@ -48,11 +48,10 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
       onModelReady: (ListUnitCustomerViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -136,10 +135,12 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListUnitCustomerViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Unit",
@@ -154,7 +155,7 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

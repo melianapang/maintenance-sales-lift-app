@@ -92,7 +92,7 @@ class ListMaintenanceViewModel extends BaseViewModel {
     return role == Role.Admin || role == Role.SuperAdmin;
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
       await requestGetAllMaintenance();
@@ -102,10 +102,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
         resetFilter();
-        searchMaintenance();
+        await searchMaintenance();
         isLoading = false;
       },
     );
@@ -250,10 +250,7 @@ class ListMaintenanceViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listMaintenance = [];
-    _errorMsg = null;
-
-    paginationControl.currentPage = 1;
+    resetPage();
     await requestGetAllMaintenance();
 
     _isShowNoDataFoundPage =

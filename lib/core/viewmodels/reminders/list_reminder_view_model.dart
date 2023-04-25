@@ -53,7 +53,7 @@ class ListReminderViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
       await requestGetAllReminderData();
@@ -63,9 +63,9 @@ class ListReminderViewModel extends BaseViewModel {
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
-        searchReminder();
+        await searchReminder();
         isLoading = false;
       },
     );
@@ -125,10 +125,7 @@ class ListReminderViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listReminder = [];
-    _errorMsg = null;
-
-    paginationControl.currentPage = 1;
+    resetPage();
     await requestGetAllReminderData();
 
     if (_listReminder.isEmpty) {

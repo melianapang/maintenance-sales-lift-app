@@ -92,14 +92,19 @@ class ListUnitCustomerViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listUnit = [];
-    _errorMsg = null;
-    paginationControl.currentPage = 1;
-
+    resetPage();
     await requestGetAllUnit();
     _isShowNoDataFoundPage = _listUnit?.isEmpty == true || _listUnit == null;
     notifyListeners();
 
     setBusy(false);
+  }
+
+  void resetPage() {
+    _listUnit = [];
+    _errorMsg = null;
+
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
   }
 }

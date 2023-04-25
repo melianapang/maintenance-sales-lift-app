@@ -32,11 +32,10 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
       onModelReady: (ListFollowUpViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -52,7 +51,14 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
-                textSearchOnChanged: model.searchOnChanged,
+                textSearchOnChanged: (_) async {
+                  await model.searchOnChanged();
+
+                  _handleErrorDialog(
+                    context,
+                    model,
+                  );
+                },
                 searchController: model.searchController,
                 isFilterShown: false,
                 onTapFilter: () {},
@@ -119,10 +125,12 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListFollowUpViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Riwayat Konfirmasi",
@@ -137,7 +145,7 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
         await model.requestGetAllFollowUp();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

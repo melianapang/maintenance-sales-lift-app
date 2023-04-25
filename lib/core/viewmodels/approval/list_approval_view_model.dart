@@ -78,15 +78,20 @@ class ListApprovalViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listApproval = [];
-    _errorMsg = null;
-
-    paginationControl.currentPage = 1;
+    resetPage();
     await requestGetAllApproval();
     _isShowNoDataFoundPage =
         _listApproval?.isEmpty == true || _listApproval == null;
     notifyListeners();
 
     setBusy(false);
+  }
+
+  void resetPage() {
+    _listApproval = [];
+    _errorMsg = null;
+
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
   }
 }

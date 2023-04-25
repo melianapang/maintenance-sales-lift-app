@@ -38,11 +38,10 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
       onModelReady: (ListMaintenanceViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -79,7 +78,14 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
-                textSearchOnChanged: model.searchOnChanged,
+                textSearchOnChanged: (_) async {
+                  await model.searchOnChanged();
+
+                  _handleErrorDialog(
+                    context,
+                    model,
+                  );
+                },
                 searchController: model.searchController,
                 isFilterShown: true,
                 onTapFilter: () {
@@ -161,10 +167,12 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListMaintenanceViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Pemeliharaan",
@@ -179,7 +187,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

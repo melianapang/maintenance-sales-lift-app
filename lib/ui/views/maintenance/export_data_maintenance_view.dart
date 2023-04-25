@@ -39,11 +39,10 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
         await model.initModel();
 
         if (!model.isAllowedToOpenPage) Navigator.pop(context);
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -200,7 +199,7 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ExportDataMaintenanceViewModel model,
   ) {
@@ -218,7 +217,7 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
         await model.requestGetAllProjects();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

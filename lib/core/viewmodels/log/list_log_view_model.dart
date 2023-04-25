@@ -54,19 +54,19 @@ class ListLogViewModel extends BaseViewModel {
     _paginationControl.totalData = -1;
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
-      requestGetAllLog();
+      await requestGetAllLog();
 
       isLoading = false;
       return;
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
-        searchLog();
+        await searchLog();
         isLoading = false;
       },
     );
@@ -119,9 +119,7 @@ class ListLogViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _errorMsg = null;
-    _paginationControl.currentPage = 1;
-
+    resetPage();
     await requestGetAllLog();
 
     _isShowNoDataFoundPage =

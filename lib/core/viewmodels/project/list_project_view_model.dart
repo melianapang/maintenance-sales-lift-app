@@ -55,7 +55,7 @@ class ListProjectViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  Future<void> searchOnChanged(String value) async {
+  Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
       await requestGetAllProjects();
@@ -65,9 +65,9 @@ class ListProjectViewModel extends BaseViewModel {
     }
 
     invokeDebouncer(
-      () {
+      () async {
         resetPage();
-        searchProject();
+        await searchProject();
         isLoading = false;
       },
     );
@@ -127,10 +127,7 @@ class ListProjectViewModel extends BaseViewModel {
   Future<void> refreshPage() async {
     setBusy(true);
 
-    _listProject = [];
-    _errorMsg = null;
-
-    paginationControl.currentPage = 1;
+    resetPage();
     await requestGetAllProjects();
 
     _isShowNoDataFoundPage = _listProject.isEmpty == true;

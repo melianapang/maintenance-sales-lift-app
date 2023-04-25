@@ -35,11 +35,10 @@ class _ListProjectViewState extends State<ListProjectView> {
       onModelReady: (ListProjectViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -65,7 +64,14 @@ class _ListProjectViewState extends State<ListProjectView> {
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
-                textSearchOnChanged: model.searchOnChanged,
+                textSearchOnChanged: (_) async {
+                  await model.searchOnChanged();
+
+                  _handleErrorDialog(
+                    context,
+                    model,
+                  );
+                },
                 searchController: model.searchController,
                 isFilterShown: false,
               ),
@@ -124,10 +130,12 @@ class _ListProjectViewState extends State<ListProjectView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     ListProjectViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Proyek",
@@ -142,7 +150,7 @@ class _ListProjectViewState extends State<ListProjectView> {
         await model.refreshPage();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),

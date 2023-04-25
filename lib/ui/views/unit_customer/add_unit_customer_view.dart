@@ -49,11 +49,10 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
       onModelReady: (AddUnitCustomerViewModel model) async {
         await model.initModel();
 
-        if (model.errorMsg != null)
-          _buildErrorDialog(
-            context,
-            model,
-          );
+        _handleErrorDialog(
+          context,
+          model,
+        );
       },
       builder: (context, model, _) {
         return Scaffold(
@@ -199,7 +198,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
     );
   }
 
-  void _buildErrorDialog(
+  void _handleErrorDialog(
     BuildContext context,
     AddUnitCustomerViewModel model,
   ) {
@@ -217,7 +216,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
         await model.requestGetAllProjectByCustomerId();
         Navigator.pop(context);
 
-        if (model.errorMsg != null) _buildErrorDialog(context, model);
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
       },
       negativeLabel: "Okay",
       negativeCallback: () => Navigator.pop(context),
