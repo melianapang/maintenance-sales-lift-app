@@ -45,15 +45,22 @@ class FormDeleteMaintenanceViewModel extends BaseViewModel {
   }
 
   String mappingSelectedReasonOption() {
-    if (_selectedReason != reasonItems.last) return reasonController.text;
+    if (_selectedReason == reasonItems.last) return reasonController.text;
 
     return _selectedReason;
   }
 
   Future<bool> requestDeleteMaintenanceDate() async {
+    String reason = mappingSelectedReasonOption();
+    if (reason.isEmpty) {
+      _errorMsg =
+          "Alasan tidak boleh kosong. Wajib memilih salah satu alasan atau menulis alasannya.";
+      return false;
+    }
+
     final response = await _apiService.requestDeleteMaintenance(
       maintenanceId: int.parse(_maintenanceData?.maintenanceId ?? "0"),
-      reason: mappingSelectedReasonOption(),
+      reason: reason,
     );
 
     if (response.isRight) return true;
