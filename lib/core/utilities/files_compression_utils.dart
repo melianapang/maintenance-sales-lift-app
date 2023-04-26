@@ -14,7 +14,8 @@ class FilesCompressionUtils {
             file.path;
 
     print("before image compression: ${await File(file.path).lengthSync()}");
-    final lastIdxPath = absolutePath.lastIndexOf(RegExp(r'.png|.jpg|.jpeg'));
+    final lastIdxPath =
+        absolutePath.lastIndexOf(RegExp(r'.png|.jpg|.jpeg|.webp'));
     final splitted = absolutePath.substring(0, (lastIdxPath));
     final targetPath =
         '${splitted}_compressed${absolutePath.substring(lastIdxPath)}';
@@ -23,6 +24,7 @@ class FilesCompressionUtils {
       absolutePath,
       targetPath,
       quality: 50,
+      format: _getCompressFormat(absolutePath),
     );
 
     print("after image compression: ${result?.lengthSync()}");
@@ -57,5 +59,19 @@ class FilesCompressionUtils {
 
   static Future<void> cancelCompressVideo() async {
     VideoCompress.cancelCompression();
+  }
+
+  static CompressFormat _getCompressFormat(String path) {
+    String format = path.split('.').last;
+    switch (format) {
+      case "png":
+        return CompressFormat.png;
+      case "webp":
+        return CompressFormat.webp;
+      case "jpeg":
+      case "jpg":
+      default:
+        return CompressFormat.jpeg;
+    }
   }
 }
