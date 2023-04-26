@@ -1420,6 +1420,7 @@ class ApiService {
     required String scheduleDate,
     required int followUpResult,
     required String note,
+    required List<DocumentData>? documents,
   }) async {
     try {
       final payload = CreateFollowUpRequest(
@@ -1427,6 +1428,7 @@ class ApiService {
         followUpResult: followUpResult,
         scheduleDate: scheduleDate,
         note: note,
+        documents: documents,
       );
       final HttpResponse<dynamic> response = await api.requestCreateFollowUp(
         payload,
@@ -1682,16 +1684,16 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, bool>> requestUpdateMaintenace({
-    required int maintenanceId,
-    required int unitId,
-    required int userId,
-    required double longitude,
-    required double latitude,
-    required String note,
-    required int maintenanceResult,
-    required String scheduleDate,
-  }) async {
+  Future<Either<Failure, bool>> requestUpdateMaintenace(
+      {required int maintenanceId,
+      required int unitId,
+      required int userId,
+      required double longitude,
+      required double latitude,
+      required String note,
+      required int maintenanceResult,
+      required String scheduleDate,
+      required List<MaintenanceFile>? maintenanceFiles}) async {
     try {
       final payload = UpdateMaintenanceRequest(
         userId: userId,
@@ -1701,6 +1703,7 @@ class ApiService {
         maintenanceResult: maintenanceResult,
         note: note,
         scheduleDate: scheduleDate,
+        maintenanceFiles: maintenanceFiles,
       );
 
       final HttpResponse<dynamic> response = await api.requestUpdateMaintenance(
