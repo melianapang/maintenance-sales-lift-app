@@ -12,6 +12,10 @@ class EnvConstants {
   static String get baseURL {
     return dotenv.env['BASE_URL'] ?? '';
   }
+
+  static String get baseGCloudPublicUrl {
+    return dotenv.env['BASE_URL_GCLOUD'] ?? '';
+  }
 }
 
 enum EnvironmentEnum {

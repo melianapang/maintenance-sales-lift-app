@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/alice_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
@@ -23,6 +24,9 @@ List<SingleChildWidget> independentProviders = [
   ),
   Provider<GlobalConfigService>(
     create: (_) => GlobalConfigService(),
+  ),
+  Provider<GCloudService>(
+    create: (_) => GCloudService(),
   ),
 ];
 
