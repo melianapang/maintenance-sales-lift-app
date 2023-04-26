@@ -1,8 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -13,16 +19,19 @@ class FormFollowUpViewModel extends BaseViewModel {
     CustomerData? customerData,
     required DioService dioService,
     required SharedPreferencesService sharedPreferencesService,
+    required GCloudService gCloudService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
         _sharedPreferenceService = sharedPreferencesService,
-        _customerData = customerData;
+        _customerData = customerData,
+        _gCloudService = gCloudService;
 
   final ApiService _apiService;
   final SharedPreferencesService _sharedPreferenceService;
+  final GCloudService _gCloudService;
 
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
@@ -38,6 +47,14 @@ class FormFollowUpViewModel extends BaseViewModel {
   ];
   List<FilterOption> get hasilKonfirmasiOption => _hasilKonfirmasiOption;
   // End of filter related
+
+  //region gallery
+  final List<GalleryData> _galleryData = [];
+  List<GalleryData> get galleryData => _galleryData;
+
+  List<DocumentData> _uploadedFiles = [];
+  List<DocumentData> get uploadedFiles => _uploadedFiles;
+  //endregion
 
   List<DateTime> _selectedDates = [
     DateTime.now(),
@@ -72,7 +89,7 @@ class FormFollowUpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> requestUpdateFollowUp() async {
+  Future<bool> _requestUpdateFollowUp() async {
     final response = await _apiService.requestCreateFollowUp(
       customerId: int.parse(_customerData?.customerId ?? "0"),
       followUpResult: _selectedHasilKonfirmasiOption,
@@ -83,11 +100,52 @@ class FormFollowUpViewModel extends BaseViewModel {
         ),
       ),
       note: noteController.text,
+      documents: _uploadedFiles,
     );
 
     if (response.isRight) return true;
 
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<void> _saveGalleryToCloud() async {
+    try {
+      final currDateString = DateTimeUtils.convertDateToString(
+        date: DateTime.now(),
+        formatter: DateFormat(DateTimeUtils.DATE_FORMAT_3),
+      );
+
+      for (GalleryData gallery in galleryData) {
+        File file = File(gallery.filepath);
+        String ext = gallery.filepath.split('.').last;
+
+        final response = await _gCloudService.save(
+          '${customerData?.customerId}_follow_up_data_$currDateString.$ext',
+          file.readAsBytesSync(),
+        );
+        print("LINK GCLOUD: ${response?.downloadLink}");
+
+        //Save the link that will be sent to api
+        _uploadedFiles.add(
+          DocumentData(
+            filePath:
+                "${EnvConstants.baseGCloudPublicUrl}${_customerData?.customerId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
+            fileType: DocumentType.FollowUp.index.toString(),
+            createdAt: currDateString,
+          ),
+        );
+        print("LINK UPLOADED SERVER: ${gallery.filepath}");
+      }
+    } catch (e) {
+      _errorMsg = "$e";
+    }
+  }
+
+  Future<bool> requestSaveFollowUpData() async {
+    await _saveGalleryToCloud();
+    if (_errorMsg != null) return false;
+
+    return await _requestUpdateFollowUp();
   }
 }

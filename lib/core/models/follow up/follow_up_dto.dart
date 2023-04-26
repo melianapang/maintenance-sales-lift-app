@@ -196,8 +196,8 @@ class DetailFollowUpData {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "documentss")
-  final List<FollowUpFrontData>? documents;
+  @JsonKey(name: "documents")
+  final List<DocumentData>? documents;
 }
 //endregion
 
@@ -292,6 +292,7 @@ class CreateFollowUpRequest {
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
+    required this.documents,
   });
 
   factory CreateFollowUpRequest.fromJson(Map<String, dynamic> json) =>
@@ -310,6 +311,9 @@ class CreateFollowUpRequest {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "documents")
+  final List<DocumentData>? documents;
 }
 
 @JsonSerializable()

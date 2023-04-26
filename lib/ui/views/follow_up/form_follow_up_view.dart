@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -42,8 +43,6 @@ class FormFollowUpView extends StatefulWidget {
 class _FormFollowUpViewState extends State<FormFollowUpView> {
   final ScrollController buktiFotoController = ScrollController();
 
-  List<GalleryData> galleryData = [];
-
   @override
   Widget build(BuildContext context) {
     return ViewModel<FormFollowUpViewModel>(
@@ -52,6 +51,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
         dioService: Provider.of<DioService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
+        gCloudService: Provider.of<GCloudService>(context),
       ),
       onModelReady: (FormFollowUpViewModel model) async {
         await model.initModel();
@@ -87,7 +87,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   Navigator.pop(context);
 
                   buildLoadingDialog(context);
-                  bool result = await model.requestUpdateFollowUp();
+                  bool result = await model.requestSaveFollowUpData();
                   Navigator.pop(context);
 
                   showDialogWidget(
@@ -156,7 +156,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Bukti PO",
+                    "Bukti Dokumen",
                     style: buildTextStyle(
                       fontSize: 14,
                       fontWeight: 400,
@@ -165,7 +165,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   ),
                 ),
                 GalleryThumbnailWidget(
-                  galleryData: galleryData,
+                  galleryData: model.galleryData,
                   galleryType: GalleryType.PHOTO,
                   scrollController: buktiFotoController,
                   callbackCompressedFiles: (compressedFile, isCompressing) {
@@ -176,7 +176,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
 
                     Navigator.pop(context);
                     if (compressedFile != null) {
-                      galleryData.add(compressedFile);
+                      model.galleryData.add(compressedFile);
                       setState(() {});
 
                       //scroll to last index of bukti foto
@@ -190,7 +190,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     }
                   },
                   callbackDeleteAddedGallery: (data) {
-                    galleryData.remove(data);
+                    model.galleryData.remove(data);
 
                     setState(() {});
                   },
