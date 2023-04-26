@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 
 part 'maintenance_dto.g.dart';
 
@@ -95,7 +93,7 @@ class MaintenanceData {
   final String maintenanceResult;
 
   @JsonKey(name: "note")
-  final String note;
+  final String? note;
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
@@ -110,7 +108,7 @@ class MaintenanceData {
   final String unitLocation;
 
   @JsonKey(name: "maintenance_file")
-  final List<DocumentData> maintenanceFiles;
+  final List<MaintenanceFile> maintenanceFiles;
 }
 
 @JsonSerializable()
@@ -123,6 +121,7 @@ class UpdateMaintenanceRequest {
     required this.maintenanceResult,
     required this.scheduleDate,
     required this.note,
+    required this.maintenanceFiles,
   });
 
   factory UpdateMaintenanceRequest.fromJson(Map<String, dynamic> json) =>
@@ -150,7 +149,31 @@ class UpdateMaintenanceRequest {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "maintenance_file")
+  final List<MaintenanceFile>? maintenanceFiles;
 }
+
+//region document data
+@JsonSerializable()
+class MaintenanceFile {
+  MaintenanceFile({
+    required this.filePath,
+    required this.fileType,
+  });
+
+  factory MaintenanceFile.fromJson(Map<String, dynamic> json) =>
+      _$MaintenanceFileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MaintenanceFileToJson(this);
+
+  @JsonKey(name: "file_path")
+  final String filePath;
+
+  @JsonKey(name: "file_type")
+  final String fileType;
+}
+//endregion
 
 @JsonSerializable()
 class UpdateMaintenanceResponse {
@@ -361,7 +384,7 @@ class HistoryMaintenanceData {
   final String scheduleDate;
 
   @JsonKey(name: "maintenance_file")
-  final List<DocumentData>? maintenanceFiles;
+  final List<MaintenanceFile>? maintenanceFiles;
 }
 //endregion
 

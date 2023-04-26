@@ -296,7 +296,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               (value) {
                 if (value == null) return;
                 if (value == true) {
-                  model.requestGetHistoryMaintenance();
+                  Navigator.of(context)..pop(true);
                 }
               },
             );

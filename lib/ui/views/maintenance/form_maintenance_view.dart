@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -54,6 +55,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
         dioService: Provider.of<DioService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
+        gCloudService: Provider.of<GCloudService>(context),
       ),
       onModelReady: (FormMaintenanceViewModel model) async {
         await model.initModel();
@@ -96,7 +98,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   await Navigator.maybePop(context);
 
                   buildLoadingDialog(context);
-                  bool result = await model.requestUpdateMaintenanceData();
+                  bool result = await model.requestSaveMaintenanceData();
                   Navigator.pop(context);
 
                   showDialogWidget(
