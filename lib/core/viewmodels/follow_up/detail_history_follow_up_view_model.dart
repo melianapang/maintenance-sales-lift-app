@@ -48,13 +48,13 @@ class DetailHistoryFollowUpViewModel extends BaseViewModel {
   }
 
   void setGalleryData() {
-    if (_historyData?.documents?.isEmpty == true ||
-        _historyData?.documents == null) return;
+    if (_historyData?.followUpFiles?.isEmpty == true ||
+        _historyData?.followUpFiles == null) return;
 
-    for (int i = 0; i < (_historyData?.documents?.length ?? 0); i++) {
+    for (int i = 0; i < (_historyData?.followUpFiles?.length ?? 0); i++) {
       _galleryData.add(
         GalleryData(
-          filepath: _historyData?.documents?[i].filePath ?? "",
+          filepath: _historyData?.followUpFiles?[i].filePath ?? "",
           galleryType: GalleryType.PHOTO,
         ),
       );
