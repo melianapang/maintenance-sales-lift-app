@@ -13,10 +13,14 @@ class MapViewParam {
   MapViewParam({
     this.longitude,
     this.latitude,
+    this.titleNote,
+    this.descNote,
   });
 
   final double? longitude;
   final double? latitude;
+  final String? titleNote;
+  final String? descNote;
 }
 
 class MapView extends StatefulWidget {
@@ -145,7 +149,9 @@ class _MapViewState extends State<MapView> {
             child: Column(
               children: [
                 Text(
-                  StringUtils.removeZeroWidthSpaces("title"),
+                  StringUtils.removeZeroWidthSpaces(
+                    widget.param.titleNote ?? "Judul",
+                  ),
                   overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontSize: 16,
@@ -155,7 +161,9 @@ class _MapViewState extends State<MapView> {
                 ),
                 Spacings.vert(6),
                 Text(
-                  StringUtils.removeZeroWidthSpaces("descriptiondescription"),
+                  StringUtils.removeZeroWidthSpaces(
+                    widget.param.descNote ?? "Deskripsi",
+                  ),
                   overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontSize: 16,
