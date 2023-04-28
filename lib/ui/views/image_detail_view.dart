@@ -37,7 +37,8 @@ class ImageDetailView extends StatelessWidget {
         return Scaffold(
           appBar: buildDefaultAppBar(
             context,
-            title: param.galleryType == GalleryType.PHOTO
+            title: param.galleryType == GalleryType.PHOTO ||
+                    param.galleryType == GalleryType.PDF
                 ? 'Image Detail'
                 : 'Video Detail',
             isBackEnabled: true,
@@ -49,7 +50,8 @@ class ImageDetailView extends StatelessWidget {
   }
 
   Widget _buildDetailMedia(ImageDetailViewModel model) {
-    if (param.galleryType == GalleryType.PHOTO) {
+    if (param.galleryType == GalleryType.PHOTO ||
+        param.galleryType == GalleryType.PDF) {
       return GallerySlider(
         urls: param.urls ?? [],
         pageController: model.pageController,

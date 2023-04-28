@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -152,6 +153,13 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     );
   }
 
+  Widget _showPdfThumbnail(GalleryData data) {
+    return const Icon(
+      PhosphorIcons.filePdfBold,
+      size: 48,
+    );
+  }
+
   Widget _buildGalleryThumbnail(
     GalleryData data, {
     int? hiddenGalleryCount,
@@ -181,7 +189,9 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
               ),
               child: widget.galleryType == GalleryType.PHOTO
                   ? _showPhotoThumbnail(data)
-                  : _showVideoThumbnail(data),
+                  : widget.galleryType == GalleryType.VIDEO
+                      ? _showVideoThumbnail(data)
+                      : _showPdfThumbnail(data),
             ),
           ),
           if (widget.isCRUD)
@@ -242,17 +252,44 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
 
   Future<void> _onTapAddGallery(
     BuildContext context, {
-    required bool isPhoto,
+    required GalleryType galleryType,
     void Function(
       GalleryData? compressedFile,
       bool isCompressing,
     )?
         callbackCompressedFiles,
   }) async {
+    //pick pdf
+    if (galleryType == GalleryType.PDF) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        PlatformFile file = result.files.first;
+
+        print(file.name);
+        print(file.bytes);
+        print(file.size);
+        print(file.extension);
+        print(file.path);
+
+        if (callbackCompressedFiles != null) {
+          callbackCompressedFiles(
+            GalleryData(
+              galleryType: GalleryType.PDF,
+              filepath: file.path ?? "",
+              isGalleryPicked: true,
+            ),
+            false,
+          );
+        }
+      }
+      return;
+    }
+
     //pick file (image / photo)
-    final ImagePicker _picker = ImagePicker();
+    final _picker = ImagePicker();
     final XFile? file;
-    if (isPhoto) {
+    if (galleryType == GalleryType.PHOTO) {
       file = await _picker.pickImage(source: ImageSource.gallery);
     } else {
       file = await _picker.pickVideo(source: ImageSource.gallery);
@@ -273,7 +310,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
       }
 
       //start compressing
-      if (isPhoto) {
+      if (galleryType == GalleryType.PHOTO) {
         compressedImage = await FilesCompressionUtils.compressAndGetFileImage(
           file,
         );
@@ -312,7 +349,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     return GestureDetector(
       onTap: () => _onTapAddGallery(
         context,
-        isPhoto: widget.galleryType == GalleryType.PHOTO,
+        galleryType: widget.galleryType,
         callbackCompressedFiles: widget.callbackCompressedFiles,
       ),
       child: Container(
