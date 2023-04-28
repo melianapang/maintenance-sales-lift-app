@@ -55,6 +55,8 @@ class DetailHistoryMaintenanceViewModel extends BaseViewModel {
         GalleryData(
           filepath:
               _historyMaintenanceData?.maintenanceFiles?[i].filePath ?? "",
+          thumbnailPath:
+              _historyMaintenanceData?.maintenanceFiles?[i].thumbnailPath,
           galleryType: GalleryType.VIDEO,
         ),
       );
