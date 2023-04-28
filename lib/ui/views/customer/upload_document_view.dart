@@ -5,7 +5,9 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/upload_document_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -59,6 +61,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
       model: UploadDocumentViewModel(
         customerData: widget.param.customerData,
         dioService: Provider.of<DioService>(context),
+        gCloudService: Provider.of<GCloudService>(context),
       ),
       onModelReady: (UploadDocumentViewModel model) async {
         await model.initModel();
@@ -82,7 +85,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
             ),
             onTap: () async {
               buildLoadingDialog(context);
-              bool isSucceed = await model.requestCreateCustomer();
+              bool isSucceed = await model.requestUploadDocumentData();
               Navigator.pop(context);
 
               showDialogWidget(
@@ -143,31 +146,44 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                 Spacings.vert(24),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Bukti Dokumen",
-                    style: buildTextStyle(
-                      fontSize: 14,
-                      fontWeight: 400,
-                      fontColor: MyColors.lightBlack02,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Bukti Dokumen",
+                        style: buildTextStyle(
+                          fontSize: 14,
+                          fontWeight: 400,
+                          fontColor: MyColors.lightBlack02,
+                        ),
+                      ),
+                      Spacings.horz(6),
+                      Text(
+                        "(Berkas dalam bentuk .pdf saja)",
+                        style: buildTextStyle(
+                          fontSize: 10,
+                          fontWeight: 300,
+                          fontColor: MyColors.lightBlack02,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 GalleryThumbnailWidget(
-                  galleryData: galleryData,
-                  galleryType: GalleryType.PHOTO,
+                  galleryData: model.galleryData,
+                  galleryType: GalleryType.PDF,
                   scrollController: buktiFotoController,
                   callbackCompressedFiles: (compressedFile, isCompressing) {
-                    if (isCompressing) {
-                      buildLoadingDialog(context);
+                    if (model.galleryData.length == 1) {
+                      SnackbarUtils.showSimpleSnackbar(
+                          text: 'Anda hanya bisa menambahkan 1 file PDF saja');
                       return;
                     }
 
-                    Navigator.pop(context);
                     if (compressedFile != null) {
-                      galleryData.add(compressedFile);
+                      model.galleryData.add(compressedFile);
 
                       setState(() {});
-                      //scroll to last index of bukti video
+                      //scroll to last index of bukti pdf
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) => buktiFotoController.animateTo(
                           buktiFotoController.position.maxScrollExtent,
@@ -178,7 +194,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                     }
                   },
                   callbackDeleteAddedGallery: (data) {
-                    galleryData.remove(data);
+                    model.galleryData.remove(data);
 
                     setState(() {});
                   },
