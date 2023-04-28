@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
@@ -57,7 +60,7 @@ class DetailCustomerViewModel extends BaseViewModel {
 
   Future<bool> checkPermissions() async {
     return await PermissionUtils.requestPermission(
-      Permission.manageExternalStorage,
+      Permission.storage,
     );
   }
 
@@ -65,26 +68,69 @@ class DetailCustomerViewModel extends BaseViewModel {
     _isDialChildrenVisible = !isDialChildrenVisible;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> downloadData({
     required int index,
   }) async {
     setBusy(true);
-    _exportedFileName = await _downloadService.downloadData(
-      prefixString: "${_customerData?.customerNumber}_customer_document",
-      filePath: customerData?.documents[index].filePath ?? "",
-      extension: "pdf",
+
+    resetErrorMsg();
+
+    String filePath = customerData?.documents[index].filePath ?? "";
+    final fileName = filePath.split('/').last.split('?').first;
+    _exportedFileName = await _downloadService.setFilePath(fileName);
+
+    if (_downloadService.isFileExist(filePath: _exportedFileName ?? "")) {
+      openDownloadedData();
+      setBusy(false);
+      return;
+    }
+
+    bool result = await _downloadService.downloadFile(
+      filePath,
+      _exportedFileName ?? "",
     );
+    if (result) openDownloadedData();
+
     setBusy(false);
   }
 
   Future<void> openDownloadedData() async {
-    if (_exportedFileName == null) return;
-    await _downloadService.openDownloadedData(
+    if (_exportedFileName == null) {
+      _errorMsg = "Berkas yang diunduh tidak ditemukan";
+      return;
+    }
+
+    OpenResult result = await _downloadService.openPdfData(
       fileName: _exportedFileName ?? "",
+      type: "application/pdf",
     );
+
+    switch (result.type) {
+      case ResultType.done:
+        break;
+      case ResultType.fileNotFound:
+        _errorMsg = "Tidak menemukan berkas yang diinginkan.";
+        break;
+      case ResultType.noAppToOpen:
+        _errorMsg =
+            "Tidak ada aplikasi yang mendukung untuk membuka jenis berkas ini.";
+        break;
+      case ResultType.error:
+        _errorMsg = "Tidak dapat membuka berkas.";
+        break;
+      case ResultType.permissionDenied:
+        _errorMsg = "Tidak ada ijin mengakses untuk data.";
+        break;
+    }
   }
 
   Future<void> requestGetDetailCustomer() async {
+    resetErrorMsg();
+
     final response = await _apiService.getDetailCustomer(
       customerId: int.parse(_customerData?.customerId ?? "0"),
     );
@@ -93,5 +139,7 @@ class DetailCustomerViewModel extends BaseViewModel {
       _customerData = response.right;
       notifyListeners();
     }
+
+    _errorMsg = response.left.message;
   }
 }
