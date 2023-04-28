@@ -12,4 +12,8 @@ class GalleryData {
   final bool isGalleryPicked;
 }
 
-enum GalleryType { PHOTO, VIDEO }
+enum GalleryType {
+  PHOTO,
+  VIDEO,
+  PDF,
+}
