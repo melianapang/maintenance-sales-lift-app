@@ -2,6 +2,7 @@ import 'package:internet_file/internet_file.dart';
 import 'package:internet_file/storage_io.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 
@@ -15,20 +16,13 @@ class DownloadService {
   Future<String> downloadData({
     required String prefixString,
     required String filePath,
-    String extension = "xlsx",
   }) async {
     final storageIO = InternetFileStorageIO();
 
     final jwtToken = await _authenticationService.getJwtToken();
 
-    final currDateString = DateTimeUtils.convertDateToString(
-      date: DateTime.now(),
-      formatter: DateFormat(DateTimeUtils.DATE_FORMAT_3),
-    );
-
-    // final finalFileName = "${prefixString}_${currDateString}_exported.pdf";
     final finalFileName =
-        "${prefixString}_${currDateString}_exported.$extension";
+        filePath.replaceAll(EnvConstants.baseGCloudPublicUrl, '');
 
     await InternetFile.get(
       filePath,
@@ -53,10 +47,56 @@ class DownloadService {
     return finalFileName;
   }
 
-  Future<void> openDownloadedData({required String fileName}) async {
+  Future<String> downloadExportedData({
+    required String prefixString,
+    required String filePath,
+    String extension = "xlsx",
+  }) async {
+    final storageIO = InternetFileStorageIO();
+
+    final jwtToken = await _authenticationService.getJwtToken();
+
+    final currDateString = DateTimeUtils.convertDateToString(
+      date: DateTime.now(),
+      formatter: DateFormat(DateTimeUtils.DATE_FORMAT_2),
+    );
+
+    // final finalFileName = "${prefixString}_${currDateString}_exported.pdf";
+    final finalFileName =
+        "${prefixString}_${currDateString}_exported.$extension";
+
+    await InternetFile.get(
+      filePath,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $jwtToken',
+      },
+      storage: storageIO,
+      storageAdditional: storageIO.additional(
+        filename: finalFileName,
+        location: '/storage/emulated/0/Download/',
+      ),
+      force: true,
+      progress: (receivedLength, contentLength) {
+        final percentage = receivedLength / contentLength * 100;
+        print(
+            'download progress: $receivedLength of $contentLength ($percentage%)');
+      },
+    );
+
+    return finalFileName;
+  }
+
+  Future<OpenResult> openDownloadedData({
+    required String fileName,
+    String? type,
+  }) async {
     // var filePath = r'/storage/emulated/0/update.apk';
-    final openFile =
-        await OpenFilex.open("/storage/emulated/0/Download/$fileName");
+    final openFile = await OpenFilex.open(
+      "/storage/emulated/0/Download/$fileName",
+      type: type,
+    );
     print("type=${openFile.type}  message=${openFile.message}");
+    return openFile;
   }
 }
