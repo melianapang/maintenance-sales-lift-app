@@ -120,6 +120,11 @@ class DetailFollowUpViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
+      if (response.right.isEmpty) {
+        _errorMsg = "Tidak ada data riwayat yang bisa ditampilkan.";
+        return;
+      }
+
       _historyData = response.right;
       _mappingToTimelineData();
       _setStatusCard();
@@ -128,5 +133,12 @@ class DetailFollowUpViewModel extends BaseViewModel {
     }
 
     _errorMsg = response.left.message;
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+    _errorMsg = null;
+    await requestGetHistoryFollowUp();
+    setBusy(false);
   }
 }

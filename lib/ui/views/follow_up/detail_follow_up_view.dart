@@ -13,6 +13,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
@@ -53,13 +54,14 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
       ),
       onModelReady: (DetailFollowUpViewModel model) async {
         await model.initModel();
+        _handleErrorDialog(context, model);
       },
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
-            title: "Daftar Riwayat Konfitmasi",
+            title: "Daftar Riwayat Konfirmasi",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
@@ -92,10 +94,10 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
               });
             },
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: !model.busy
-                ? Column(
+          body: !model.busy
+              ? SingleChildScrollView(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
                     children: [
                       Text(
                         model.customerName ?? "",
@@ -150,11 +152,42 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                           ),
                         ),
                     ],
-                  )
-                : buildLoadingPage(),
-          ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    buildLoadingPage(),
+                  ],
+                ),
         );
       },
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailFollowUpViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Daftar Riwayat Konfirmasi",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Riwayat. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }
