@@ -21,11 +21,9 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:intl/intl.dart';
 
@@ -86,6 +84,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       if (value == true) {
                         model.requestGetDetailCustomer();
                         model.setPreviousPageNeedRefresh(true);
+                        _handleErrorDialog(context, model);
                       }
                     },
                   );
@@ -266,21 +265,21 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         await model.downloadData(
                           index: index,
                         );
-
                         Navigator.pop(context);
+
+                        if (model.errorMsg != null) {
+                          _handleErrorDialog(context, model);
+                          return;
+                        }
+
                         showDialogWidget(
                           context,
                           title: "Unduh Data",
                           isSuccessDialog: true,
                           description:
-                              "Unduh data berhasil. \n Anda bisa melihat berkasnya di folder Download perangkat anda. Atau dengan klik tombol dibawah ini.",
+                              "Unduh data berhasil. \n Anda juga bisa melihat berkasnya di folder Download perangkat anda.",
                           positiveLabel: "OK",
-                          negativeLabel: "Lihat Data",
                           positiveCallback: () {
-                            Navigator.maybePop(context);
-                          },
-                          negativeCallback: () async {
-                            await model.openDownloadedData();
                             Navigator.maybePop(context);
                           },
                         );
@@ -477,6 +476,26 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           },
         ),
       ],
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailCustomerViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Daftar Data Pelanggan",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
+      positiveLabel: "OK",
+      positiveCallback: () async {
+        model.resetErrorMsg();
+        Navigator.pop(context);
+      },
     );
   }
 }
