@@ -128,6 +128,7 @@ class FormFollowUpViewModel extends BaseViewModel {
         print("LINK GCLOUD: ${response?.downloadLink}");
 
         //Save the link that will be sent to api
+        //We wont be used the downloadLink, because we only need to show the photo/ video to the user. No need to download it.
         _uploadedFiles.add(
           FollowUpFile(
             filePath:

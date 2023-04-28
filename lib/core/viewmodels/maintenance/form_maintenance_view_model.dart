@@ -186,6 +186,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
         }
 
         //Save the link that will be sent to api
+        //We wont be used the downloadLink, because we only need to show the photo/ video to the user. No need to download it.
         final gCloudFileName =
             "${EnvConstants.baseGCloudPublicUrl}${maintenanceData?.maintenanceId}_maintenance_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}$nFile";
 
