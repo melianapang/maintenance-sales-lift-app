@@ -157,6 +157,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     return const Icon(
       PhosphorIcons.filePdfBold,
       size: 48,
+      color: MyColors.lightBlack02,
     );
   }
 
