@@ -176,10 +176,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
         print("LINK GCLOUD: ${response?.downloadLink}");
 
         if (gallery.galleryType == GalleryType.VIDEO) {
+          File thumbnailFile = File(gallery.thumbnailPath ?? "");
           // Upload to Google cloud for thumbnail video
           final response = await _gCloudService.save(
-            '${maintenanceData?.maintenanceId}_maintenance_data_$currDateString${nFile}_thumbnail.$ext',
-            file.readAsBytesSync(),
+            '${maintenanceData?.maintenanceId}_maintenance_data_$currDateString${nFile}_thumbnail.jpg',
+            thumbnailFile.readAsBytesSync(),
           );
           print("LINK GCLOUD THUMBNAIL VIDEO: ${response?.downloadLink}");
         }
@@ -192,8 +193,8 @@ class FormMaintenanceViewModel extends BaseViewModel {
           MaintenanceFile(
             filePath: "$gCloudFileName.$ext",
             thumbnailPath: gallery.galleryType == GalleryType.PHOTO
-                ? null
-                : "${gCloudFileName}_thumbnail.$ext",
+                ? ""
+                : "${gCloudFileName}_thumbnail.jpg",
             fileType: gallery.galleryType == GalleryType.PHOTO ? "1" : "2",
           ),
         );
@@ -205,6 +206,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<bool> requestSaveMaintenanceData() async {
+    _errorMsg = null;
     await _saveGalleryToCloud();
     if (_errorMsg != null) return false;
 
