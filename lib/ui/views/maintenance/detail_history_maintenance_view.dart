@@ -119,13 +119,18 @@ class _DetailHistoryMaintenanceViewState
             ),
             buttonType: ButtonType.primary,
             onTap: () {
-              Navigator.pushNamed(context, Routes.map,
-                  arguments: MapViewParam(
-                    longitude: double.parse(
-                        model.historyMaintenanceData?.longitude ?? "0"),
-                    latitude: double.parse(
-                        model.historyMaintenanceData?.latitude ?? "0"),
-                  ));
+              Navigator.pushNamed(
+                context,
+                Routes.map,
+                arguments: MapViewParam(
+                  longitude: double.parse(
+                    model.historyMaintenanceData?.longitude ?? "0",
+                  ),
+                  latitude: double.parse(
+                    model.historyMaintenanceData?.latitude ?? "0",
+                  ),
+                ),
+              );
             },
             text: 'Lihat Lokasi di Peta',
           ),
