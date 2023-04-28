@@ -34,28 +34,12 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   late AnchorPos<dynamic> anchorPos;
   final mapController = MapController();
+  List<Marker> markers = <Marker>[];
 
   @override
   void initState() {
-    super.initState();
     anchorPos = AnchorPos.align(AnchorAlign.center);
-  }
-
-  void _setAnchorAlignPos(AnchorAlign alignOpt) {
-    setState(() {
-      anchorPos = AnchorPos.align(alignOpt);
-    });
-  }
-
-  void _setAnchorExactlyPos(Anchor anchor) {
-    setState(() {
-      anchorPos = AnchorPos.exactly(anchor);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final markers = <Marker>[
+    markers.add(
       Marker(
         width: 40,
         height: 40,
@@ -77,8 +61,25 @@ class _MapViewState extends State<MapView> {
         ),
         anchorPos: anchorPos,
       ),
-    ];
+    );
 
+    super.initState();
+  }
+
+  void _setAnchorAlignPos(AnchorAlign alignOpt) {
+    setState(() {
+      anchorPos = AnchorPos.align(alignOpt);
+    });
+  }
+
+  void _setAnchorExactlyPos(Anchor anchor) {
+    setState(() {
+      anchorPos = AnchorPos.exactly(anchor);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildDefaultAppBar(
         context,
@@ -88,7 +89,11 @@ class _MapViewState extends State<MapView> {
       body: FlutterMap(
         mapController: mapController,
         options: MapOptions(
-          center: LatLng(-7.250445, 112.768845),
+          // center: LatLng(-7.250445, 112.768845),
+          center: LatLng(
+            widget.param.latitude ?? 0,
+            widget.param.longitude ?? 0,
+          ),
           zoom: 13,
           maxZoom: 19,
           interactiveFlags: InteractiveFlag.all,
