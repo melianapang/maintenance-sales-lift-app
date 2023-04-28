@@ -159,6 +159,7 @@ class UpdateMaintenanceRequest {
 class MaintenanceFile {
   MaintenanceFile({
     required this.filePath,
+    required this.thumbnailPath,
     required this.fileType,
   });
 
@@ -169,6 +170,9 @@ class MaintenanceFile {
 
   @JsonKey(name: "file_path")
   final String filePath;
+
+  @JsonKey(name: "thumbnail_path")
+  final String? thumbnailPath;
 
   @JsonKey(name: "file_type")
   final String fileType;

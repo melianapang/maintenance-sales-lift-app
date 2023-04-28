@@ -175,11 +175,25 @@ class FormMaintenanceViewModel extends BaseViewModel {
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
 
+        if (gallery.galleryType == GalleryType.VIDEO) {
+          // Upload to Google cloud for thumbnail video
+          final response = await _gCloudService.save(
+            '${maintenanceData?.maintenanceId}_maintenance_data_$currDateString${nFile}_thumbnail.$ext',
+            file.readAsBytesSync(),
+          );
+          print("LINK GCLOUD THUMBNAIL VIDEO: ${response?.downloadLink}");
+        }
+
         //Save the link that will be sent to api
+        final gCloudFileName =
+            "${EnvConstants.baseGCloudPublicUrl}${maintenanceData?.maintenanceId}_maintenance_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}$nFile";
+
         _uploadedFiles.add(
           MaintenanceFile(
-            filePath:
-                "${EnvConstants.baseGCloudPublicUrl}${maintenanceData?.maintenanceId}_maintenance_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}$nFile.$ext",
+            filePath: "$gCloudFileName.$ext",
+            thumbnailPath: gallery.galleryType == GalleryType.PHOTO
+                ? null
+                : "${gCloudFileName}_thumbnail.$ext",
             fileType: gallery.galleryType == GalleryType.PHOTO ? "1" : "2",
           ),
         );
