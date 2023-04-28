@@ -1420,7 +1420,7 @@ class ApiService {
     required String scheduleDate,
     required int followUpResult,
     required String note,
-    required List<DocumentData>? documents,
+    required List<FollowUpFile>? documents,
   }) async {
     try {
       final payload = CreateFollowUpRequest(
@@ -1428,7 +1428,7 @@ class ApiService {
         followUpResult: followUpResult,
         scheduleDate: scheduleDate,
         note: note,
-        documents: documents,
+        followUpFiles: documents,
       );
       final HttpResponse<dynamic> response = await api.requestCreateFollowUp(
         payload,

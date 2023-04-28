@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
@@ -52,8 +53,8 @@ class FormFollowUpViewModel extends BaseViewModel {
   final List<GalleryData> _galleryData = [];
   List<GalleryData> get galleryData => _galleryData;
 
-  List<DocumentData> _uploadedFiles = [];
-  List<DocumentData> get uploadedFiles => _uploadedFiles;
+  List<FollowUpFile> _uploadedFiles = [];
+  List<FollowUpFile> get uploadedFiles => _uploadedFiles;
   //endregion
 
   List<DateTime> _selectedDates = [
@@ -128,11 +129,9 @@ class FormFollowUpViewModel extends BaseViewModel {
 
         //Save the link that will be sent to api
         _uploadedFiles.add(
-          DocumentData(
+          FollowUpFile(
             filePath:
                 "${EnvConstants.baseGCloudPublicUrl}${_customerData?.customerId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
-            fileType: DocumentType.FollowUp.index.toString(),
-            createdAt: currDateString,
           ),
         );
         print("LINK UPLOADED SERVER: ${gallery.filepath}");

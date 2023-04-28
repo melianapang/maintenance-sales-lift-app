@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 
 part 'follow_up_dto.g.dart';
 
@@ -173,7 +172,7 @@ class DetailFollowUpData {
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
-    required this.documents,
+    required this.followUpFiles,
   });
 
   factory DetailFollowUpData.fromJson(Map<String, dynamic> json) =>
@@ -196,8 +195,8 @@ class DetailFollowUpData {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "documents")
-  final List<DocumentData>? documents;
+  @JsonKey(name: "follow_up_files")
+  final List<FollowUpFile>? followUpFiles;
 }
 //endregion
 
@@ -250,7 +249,7 @@ class HistoryFollowUpData {
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
-    required this.documents,
+    required this.followUpFiles,
   });
 
   factory HistoryFollowUpData.fromJson(Map<String, dynamic> json) =>
@@ -279,8 +278,8 @@ class HistoryFollowUpData {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "documents")
-  final List<DocumentData>? documents;
+  @JsonKey(name: "follow_up_files")
+  final List<FollowUpFile>? followUpFiles;
 }
 //endregion
 
@@ -292,7 +291,7 @@ class CreateFollowUpRequest {
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
-    required this.documents,
+    required this.followUpFiles,
   });
 
   factory CreateFollowUpRequest.fromJson(Map<String, dynamic> json) =>
@@ -312,8 +311,8 @@ class CreateFollowUpRequest {
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
 
-  @JsonKey(name: "documents")
-  final List<DocumentData>? documents;
+  @JsonKey(name: "follow_up_files")
+  final List<FollowUpFile>? followUpFiles;
 }
 
 @JsonSerializable()
@@ -333,5 +332,22 @@ class CreateFollowUpResponse {
 
   @JsonKey(name: "Message")
   final String message;
+}
+//endregion
+
+//region follow up data
+@JsonSerializable()
+class FollowUpFile {
+  FollowUpFile({
+    required this.filePath,
+  });
+
+  factory FollowUpFile.fromJson(Map<String, dynamic> json) =>
+      _$FollowUpFileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FollowUpFileToJson(this);
+
+  @JsonKey(name: "file_path")
+  final String filePath;
 }
 //endregion
