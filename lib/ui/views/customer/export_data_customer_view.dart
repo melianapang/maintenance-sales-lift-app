@@ -73,8 +73,20 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
                           ..pop();
                       },
                       negativeCallback: () async {
-                        await model.openExportedData();
+                        bool result = await model.openExportedData();
                         Navigator.maybePop(context);
+
+                        if (!result) {
+                          showDialogWidget(
+                            context,
+                            title: "Unduh Data",
+                            description:
+                                model.errorMsg ?? "Tidak dapat membuka berkas.",
+                            isSuccessDialog: false,
+                            positiveLabel: "Okay",
+                            positiveCallback: () => Navigator.pop(context),
+                          );
+                        }
                       },
                     );
                   }

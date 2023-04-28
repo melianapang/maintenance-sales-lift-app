@@ -1,3 +1,4 @@
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
@@ -116,17 +117,39 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> requestExportData() async {
-    _exportedFileName = await _downloadService.downloadData(
+    _exportedFileName = await _downloadService.downloadExportedData(
       prefixString: "maintenance_data",
       filePath:
           "${EnvConstants.baseURL}/api/0/Maintenance/create_maintenance_excel",
     );
   }
 
-  Future<void> openExportedData() async {
-    if (_exportedFileName == null) return;
-    await _downloadService.openDownloadedData(
+  Future<bool> openExportedData() async {
+    if (_exportedFileName == null) {
+      _errorMsg = "Berkas yang diunduh tidak ditemukan";
+      return false;
+    }
+
+    OpenResult result = await _downloadService.openDownloadedData(
       fileName: _exportedFileName ?? "",
     );
+
+    switch (result.type) {
+      case ResultType.done:
+        return true;
+      case ResultType.fileNotFound:
+        _errorMsg = "Tidak menemukan berkas yang diinginkan.";
+        return false;
+      case ResultType.noAppToOpen:
+        _errorMsg =
+            "Tidak ada aplikasi yang mendukung untuk membuka jenis berkas ini.";
+        return false;
+      case ResultType.error:
+        _errorMsg = "Tidak dapat membuka berkas.";
+        return false;
+      case ResultType.permissionDenied:
+        _errorMsg = "Tidak ada ijin mengakses untuk data.";
+        return false;
+    }
   }
 }

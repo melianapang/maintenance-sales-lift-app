@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -82,8 +81,20 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                           ..pop();
                       },
                       negativeCallback: () async {
-                        await model.openExportedData();
+                        bool result = await model.openExportedData();
                         Navigator.maybePop(context);
+
+                        if (!result) {
+                          showDialogWidget(
+                            context,
+                            title: "Unduh Data",
+                            description:
+                                model.errorMsg ?? "Tidak dapat membuka berkas.",
+                            isSuccessDialog: false,
+                            positiveLabel: "Okay",
+                            positiveCallback: () => Navigator.pop(context),
+                          );
+                        }
                       },
                     );
                   }
