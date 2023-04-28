@@ -129,6 +129,8 @@ class _DetailHistoryMaintenanceViewState
                   latitude: double.parse(
                     model.historyMaintenanceData?.latitude ?? "0",
                   ),
+                  titleNote: model.historyMaintenanceData?.userName,
+                  descNote: model.historyMaintenanceData?.note,
                 ),
               );
             },
