@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
@@ -102,9 +100,9 @@ class UploadDocumentViewModel extends BaseViewModel {
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
 
-        //Save the link that will be sent to api
+        //Save the link that will be sent to api (ONLY FOR PDF use downloadLink)
         _uploadedFilesLink.add(
-          "${EnvConstants.baseGCloudPublicUrl}${_customerData?.customerId}_customer_document_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
+          response?.downloadLink.toString() ?? "",
         );
         print("LINK UPLOADED SERVER: ${gallery.filepath}");
       }
