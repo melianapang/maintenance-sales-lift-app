@@ -75,8 +75,6 @@ class DetailCustomerViewModel extends BaseViewModel {
   Future<void> downloadData({
     required int index,
   }) async {
-    setBusy(true);
-
     resetErrorMsg();
 
     String filePath = customerData?.documents[index].filePath ?? "";
@@ -94,8 +92,6 @@ class DetailCustomerViewModel extends BaseViewModel {
       _exportedFileName ?? "",
     );
     if (result) openDownloadedData();
-
-    setBusy(false);
   }
 
   Future<void> openDownloadedData() async {
@@ -129,6 +125,7 @@ class DetailCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> requestGetDetailCustomer() async {
+    setBusy(true);
     resetErrorMsg();
 
     final response = await _apiService.getDetailCustomer(
@@ -138,8 +135,12 @@ class DetailCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       _customerData = response.right;
       notifyListeners();
+      setBusy(false);
+      return;
     }
 
     _errorMsg = response.left.message;
+
+    setBusy(false);
   }
 }

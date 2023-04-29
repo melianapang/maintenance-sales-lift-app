@@ -97,6 +97,13 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                     : model.errorMsg ?? "Dokumen gagal disimpan.",
                 positiveLabel: "OK",
                 positiveCallback: () {
+                  if (isSucceed) {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop(true);
+                    return;
+                  }
+
                   Navigator.maybePop(context);
                 },
               );

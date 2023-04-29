@@ -109,86 +109,92 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               bottom: 24.0,
               left: 24.0,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Spacings.vert(40),
-                  Text(
-                    StringUtils.removeZeroWidthSpaces(
-                      model.customerData?.customerName ?? "",
+            child: !model.busy
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Spacings.vert(40),
+                        Text(
+                          StringUtils.removeZeroWidthSpaces(
+                            model.customerData?.customerName ?? "",
+                          ),
+                          style: buildTextStyle(
+                            fontSize: 32,
+                            fontWeight: 800,
+                            fontColor: MyColors.yellow01,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          model.customerData?.companyName ?? "",
+                          style: buildTextStyle(
+                            fontSize: 20,
+                            fontWeight: 400,
+                            fontColor: MyColors.lightBlack02,
+                          ),
+                        ),
+                        Spacings.vert(35),
+                        TextInput.disabled(
+                          label: "Nomor Customer",
+                          text: model.customerData?.customerNumber,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Tipe Pelanggan",
+                          text: mappingCustomerTypeToString(
+                            int.parse(model.customerData?.customerType ?? "0"),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Sumber Data",
+                          text: mappingDataSourceToString(
+                            int.parse(model.customerData?.dataSource ?? "0"),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Kebutuhan Pelanggan",
+                          text: mappingCustomerNeedToString(
+                            int.parse(model.customerData?.customerNeed ?? "0"),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Kota",
+                          text: model.customerData?.city,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "No Telepon",
+                          text: model.customerData?.phoneNumber,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Email",
+                          text: model.customerData?.email,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Catatan",
+                          hintText: "Catatan mengenai pelanggan...",
+                          text: model.customerData?.note,
+                        ),
+                        Spacings.vert(24),
+                        if (model.customerData?.documents.isNotEmpty == true)
+                          ..._buildDocumentList(
+                            model: model,
+                          ),
+                      ],
                     ),
-                    style: buildTextStyle(
-                      fontSize: 32,
-                      fontWeight: 800,
-                      fontColor: MyColors.yellow01,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  )
+                : Column(
+                    children: [
+                      buildLoadingPage(),
+                    ],
                   ),
-                  Text(
-                    model.customerData?.companyName ?? "",
-                    style: buildTextStyle(
-                      fontSize: 20,
-                      fontWeight: 400,
-                      fontColor: MyColors.lightBlack02,
-                    ),
-                  ),
-                  Spacings.vert(35),
-                  TextInput.disabled(
-                    label: "Nomor Customer",
-                    text: model.customerData?.customerNumber,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Tipe Pelanggan",
-                    text: mappingCustomerTypeToString(
-                      int.parse(model.customerData?.customerType ?? "0"),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Sumber Data",
-                    text: mappingDataSourceToString(
-                      int.parse(model.customerData?.dataSource ?? "0"),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Kebutuhan Pelanggan",
-                    text: mappingCustomerNeedToString(
-                      int.parse(model.customerData?.customerNeed ?? "0"),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Kota",
-                    text: model.customerData?.city,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "No Telepon",
-                    text: model.customerData?.phoneNumber,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Email",
-                    text: model.customerData?.email,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Catatan",
-                    hintText: "Catatan mengenai pelanggan...",
-                    text: model.customerData?.note,
-                  ),
-                  Spacings.vert(24),
-                  if (model.customerData?.documents.isNotEmpty == true)
-                    ..._buildDocumentList(
-                      model: model,
-                    ),
-                ],
-              ),
-            ),
           ),
         );
       },
@@ -267,17 +273,14 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         );
                         Navigator.pop(context);
 
-                        if (model.errorMsg != null) {
-                          _handleErrorDialog(context, model);
-                          return;
-                        }
-
                         showDialogWidget(
                           context,
                           title: "Unduh Data",
-                          isSuccessDialog: true,
-                          description:
-                              "Unduh data berhasil. \n Anda juga bisa melihat berkasnya di folder Download perangkat anda.",
+                          isSuccessDialog: model.errorMsg == null,
+                          description: model.errorMsg == null
+                              ? "Unduh data berhasil. \n Anda juga bisa melihat berkasnya di folder Download perangkat anda."
+                              : model.errorMsg ??
+                                  "Gagal mengunduh berkas. Coba beberapa saat lagi.",
                           positiveLabel: "OK",
                           positiveCallback: () {
                             Navigator.maybePop(context);
@@ -438,7 +441,14 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               arguments: UploadDocumentViewParam(
                 customerData: model.customerData,
               ),
-            );
+            ).then((value) {
+              if (value == null) return;
+              if (value == true) {
+                model.requestGetDetailCustomer();
+                model.setPreviousPageNeedRefresh(true);
+                _handleErrorDialog(context, model);
+              }
+            });
 
             setState() {
               model.setDialChildrenVisible();
@@ -493,7 +503,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
           "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
       positiveLabel: "OK",
       positiveCallback: () async {
-        model.resetErrorMsg();
+        model.requestGetDetailCustomer();
         Navigator.pop(context);
       },
     );
