@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
