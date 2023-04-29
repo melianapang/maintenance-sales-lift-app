@@ -1,0 +1,5 @@
+flutter_icons:
+  image_path: "assets/images/logo_pt_rejo.png"
+  android: true
+  ios: true
+  adaptive_icon_background: "#ffffff" # only available for Android 8.0 devices and above
