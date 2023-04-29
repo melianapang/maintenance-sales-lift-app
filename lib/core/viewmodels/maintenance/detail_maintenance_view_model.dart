@@ -115,6 +115,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
             isAfterToday;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> requestGetHistoryMaintenance() async {
     final response = await _apiService.requestGetHistoryMaintenance(
       _maintenanceData?.unitId ?? "",
@@ -175,5 +179,12 @@ class DetailMaintenanceViewModel extends BaseViewModel {
       );
     }
     notifyListeners();
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+    resetErrorMsg();
+    await requestGetDetailMaintenance();
+    setBusy(false);
   }
 }

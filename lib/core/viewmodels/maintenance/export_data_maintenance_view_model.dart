@@ -77,6 +77,10 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> requestGetAllProjects() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=

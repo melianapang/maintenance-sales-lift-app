@@ -147,6 +147,10 @@ class EditUserViewModel extends BaseViewModel {
         _isEmailValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestEditUser() async {
     if (!_isValid()) {
       _errorMsg = "Pastikan semua kolom terisi";

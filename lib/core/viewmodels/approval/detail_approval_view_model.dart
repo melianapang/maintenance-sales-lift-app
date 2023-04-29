@@ -28,6 +28,10 @@ class DetailApprovalViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestChangeApprovalStatus({
     required bool isApprove,
   }) async {

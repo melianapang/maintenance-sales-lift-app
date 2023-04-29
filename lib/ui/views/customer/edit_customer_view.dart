@@ -143,15 +143,15 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         Navigator.pop(context);
 
                         if (!result) {
-                          showDialogWidget(
-                            context,
-                            title: "Ubah Data User",
-                            description:
-                                model.errorMsg ?? "Perubahan data user gagal.",
-                            isSuccessDialog: false,
-                            positiveLabel: "OK",
-                            positiveCallback: () => Navigator.maybePop(context),
-                          );
+                          showDialogWidget(context,
+                              title: "Ubah Data User",
+                              description: model.errorMsg ??
+                                  "Perubahan data user gagal.",
+                              isSuccessDialog: false,
+                              positiveLabel: "OK", positiveCallback: () {
+                            model.resetErrorMsg();
+                            Navigator.maybePop(context);
+                          });
                           return;
                         }
 

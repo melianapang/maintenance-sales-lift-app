@@ -82,23 +82,23 @@ class _EditUserViewState extends State<EditUserView> {
                   bool isSucceed = await model.requestEditUser();
                   Navigator.pop(context);
 
-                  if (isSucceed) {
-                    showDialogWidget(
-                      context,
-                      title: "Ubah Data User",
-                      description: "Perubahan data user berhasil disimpan",
-                      isSuccessDialog: true,
-                      positiveLabel: "OK",
-                      positiveCallback: () => Navigator.of(context)
-                        ..pop()
-                        ..pop(true),
-                    );
-                    return;
-                  }
-
-                  showErrorDialog(
+                  showDialogWidget(
                     context,
-                    text: model.errorMsg,
+                    title: "Ubah Data User",
+                    description: "Perubahan data user berhasil disimpan",
+                    isSuccessDialog: isSucceed,
+                    positiveLabel: "OK",
+                    positiveCallback: () {
+                      if (isSucceed) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
+
+                      model.resetErrorMsg();
+                      Navigator.maybePop(context);
+                    },
                   );
                 },
               );

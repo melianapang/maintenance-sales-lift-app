@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -18,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailUserViewParam {
   DetailUserViewParam({
@@ -71,8 +71,10 @@ class _DetailUserViewState extends State<DetailUserView> {
                   ).then((value) {
                     if (value == null || value == false) return;
 
-                    model.requestGetDetailCustomer();
+                    model.refreshPage();
                     model.setPreviousPageNeedRefresh(true);
+
+                    _handleErrorDialog(context, model);
                   });
                 },
                 child: const Padding(
@@ -122,6 +124,7 @@ class _DetailUserViewState extends State<DetailUserView> {
                               : "User gagal dihapus. \n ${model.errorMsg}.",
                           positiveLabel: "OK",
                           positiveCallback: () {
+                            model.resetErrorMsg();
                             Navigator.maybePop(context);
                           },
                         );
@@ -182,6 +185,33 @@ class _DetailUserViewState extends State<DetailUserView> {
           ),
         );
       },
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailUserViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Daftar Riwayat Konfirmasi",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Riwayat. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

@@ -199,6 +199,10 @@ class EditCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestUpdateCustomer() async {
     if (!_isValid()) {
       _errorMsg = "Pastikan semua kolom terisi";

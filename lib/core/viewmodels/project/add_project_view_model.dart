@@ -172,6 +172,10 @@ class AddProjectViewModel extends BaseViewModel {
     return _isNameValid && _isAdressValid && _isCityValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestCreateProject() async {
     if (!isValid()) {
       _errorMsg = "Isi semua data dengan benar.";

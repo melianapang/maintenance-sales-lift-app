@@ -92,7 +92,10 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
                                 model.errorMsg ?? "Tidak dapat membuka berkas.",
                             isSuccessDialog: false,
                             positiveLabel: "Okay",
-                            positiveCallback: () => Navigator.pop(context),
+                            positiveCallback: () {
+                              model.resetErrorMsg();
+                              Navigator.pop(context);
+                            },
                           );
                         }
                       },

@@ -43,6 +43,10 @@ class FormChangeMaintenanceDateViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestChangeMaintenanceDate() async {
     if (!DateTimeUtils.isDateAfterToday(_selectedNextMaintenanceDates.first)) {
       _errorMsg =

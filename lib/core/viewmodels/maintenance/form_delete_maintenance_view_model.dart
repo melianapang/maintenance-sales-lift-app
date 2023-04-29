@@ -50,6 +50,10 @@ class FormDeleteMaintenanceViewModel extends BaseViewModel {
     return _selectedReason;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestDeleteMaintenanceDate() async {
     String reason = mappingSelectedReasonOption();
     if (reason.isEmpty) {

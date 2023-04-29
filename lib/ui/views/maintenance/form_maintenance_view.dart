@@ -118,6 +118,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                         return;
                       }
 
+                      model.resetErrorMsg();
                       Navigator.pop(context);
                     },
                   );

@@ -84,9 +84,17 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                     : model.errorMsg ?? "Perubahan data unit gagal.",
                 isSuccessDialog: result,
                 positiveLabel: "Okay",
-                positiveCallback: () => Navigator.of(context)
-                  ..pop()
-                  ..pop(result),
+                positiveCallback: () {
+                  if (result) {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop(result);
+                    return;
+                  }
+
+                  model.resetErrorMsg();
+                  Navigator.pop(context);
+                },
               );
             },
             text: 'Simpan',

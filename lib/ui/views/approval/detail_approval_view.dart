@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/approval/approval_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/approval/detail_approval_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -94,6 +93,7 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                             isSuccessDialog: false,
                             positiveLabel: "OK",
                             positiveCallback: () {
+                              model.resetErrorMsg();
                               Navigator.maybePop(context);
                             },
                           );
@@ -154,7 +154,10 @@ class _DetailApprovalViewState extends State<DetailApprovalView> {
                                 "Data permintaan gagal diubah.",
                             isSuccessDialog: false,
                             positiveLabel: "OK",
-                            positiveCallback: () => Navigator.maybePop(context),
+                            positiveCallback: () {
+                              model.resetErrorMsg();
+                              Navigator.maybePop(context);
+                            },
                           );
                           return;
                         }

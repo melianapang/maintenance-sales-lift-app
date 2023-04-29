@@ -180,9 +180,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
       positiveCallback: () async {
         Navigator.pop(context);
 
-        buildLoadingDialog(context);
         await model.refreshPage();
-        Navigator.pop(context);
 
         if (model.errorMsg != null) _handleErrorDialog(context, model);
       },

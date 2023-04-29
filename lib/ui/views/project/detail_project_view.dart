@@ -17,9 +17,9 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailProjectViewParam {
   DetailProjectViewParam({
@@ -73,8 +73,10 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   ).then((value) {
                     if (value == null) return;
                     if (value == true) {
-                      model.requestGetDetailProject();
+                      model.refreshPage();
                       model.setPreviousPageNeedRefresh(true);
+
+                      _handleErrorDialog(context, model);
                     }
                   });
                 },
@@ -132,6 +134,8 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                 ..pop(true);
                               return;
                             }
+
+                            model.resetErrorMsg();
                             Navigator.maybePop(context);
                           },
                         );
@@ -282,6 +286,33 @@ class _DetailProjectViewState extends State<DetailProjectView> {
           ),
         );
       },
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailProjectViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Daftar Riwayat Konfirmasi",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Riwayat. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

@@ -43,6 +43,10 @@ class ExportDataCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   void setSelectedDates(List<DateTime> value) {
     _selectedDates = value;
     notifyListeners();

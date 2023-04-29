@@ -73,24 +73,26 @@ class _EditProfileViewState extends State<EditProfileView> {
               bool result = await model.requestUpdateUser();
               Navigator.pop(context);
 
-              if (result) {
-                showDialogWidget(
-                  context,
-                  title: "Edit Data Profil",
-                  description: "Berhasil mengubah data.",
-                  isSuccessDialog: true,
-                  positiveLabel: "OK",
-                  positiveCallback: () =>
-                      Navigator.pushNamed(context, Routes.home),
-                );
-
-                return;
-              }
-
-              showErrorDialog(
+              showDialogWidget(
                 context,
-                text: model.errorMsg,
+                title: "Edit Data Profil",
+                description: result
+                    ? "Berhasil mengubah data."
+                    : model.errorMsg ?? "Gagal mengubah data.",
+                isSuccessDialog: result,
+                positiveLabel: "OK",
+                positiveCallback: () {
+                  if (result) {
+                    Navigator.pushNamed(context, Routes.home);
+                    return;
+                  }
+
+                  model.resetErrorMsg();
+                  Navigator.pop(context);
+                },
               );
+
+              return;
             },
             text: 'Simpan',
           ),

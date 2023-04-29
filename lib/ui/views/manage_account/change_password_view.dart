@@ -76,6 +76,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         ? "Perubahan kata sandi berhasil disimpan"
                         : "Perubahan kata sandi gagal disimpan",
                     isSuccessDialog: isSuccess,
+                    positiveLabel: "Ok",
+                    positiveCallback: () {
+                      model.resetErrorMsg();
+                      Navigator.pop(context);
+                    },
                   );
                 },
               );

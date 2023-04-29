@@ -54,6 +54,10 @@ class UploadDocumentViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {}
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   void setTipeDokumen({
     required int selectedMenu,
   }) {

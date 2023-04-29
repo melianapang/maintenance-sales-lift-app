@@ -82,7 +82,10 @@ class _AddProjectViewState extends State<AddProjectView> {
                       model.errorMsg ?? "Gagal menambahkan data proyek.",
                   isSuccessDialog: false,
                   positiveLabel: "Okay",
-                  positiveCallback: () => Navigator.pop(context),
+                  positiveCallback: () {
+                    model.resetErrorMsg();
+                    Navigator.pop(context);
+                  },
                 );
                 return;
               }
@@ -107,6 +110,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                     return;
                   }
 
+                  model.resetErrorMsg();
                   Navigator.maybePop(context);
                 },
               );

@@ -146,6 +146,10 @@ class EditProfileViewModel extends BaseViewModel {
         _isEmailValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> _saveNewData() async {
     await _sharedPreferencesService.set(
       SharedPrefKeys.profileData,

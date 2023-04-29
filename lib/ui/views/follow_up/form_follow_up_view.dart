@@ -101,6 +101,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     positiveLabel: "Okay",
                     positiveCallback: () {
                       if (!result) {
+                        model.resetErrorMsg();
                         Navigator.pop(context);
                         return;
                       }

@@ -105,9 +105,17 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                               : model.errorMsg ??
                                   "Perubahan data unit gagal disimpan.",
                           positiveLabel: "Okay",
-                          positiveCallback: () => Navigator.of(context)
-                            ..pop()
-                            ..pop(result),
+                          positiveCallback: () {
+                            if (result) {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop(result);
+                              return;
+                            }
+
+                            model.resetErrorMsg();
+                            Navigator.pop(context);
+                          },
                         );
                       },
                     );

@@ -85,6 +85,10 @@ class SetPasswordViewUserModel extends BaseViewModel {
     return _isNewPasswordValid && _isConfirmPasswordValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestCreateUser() async {
     setBusy(true);
 

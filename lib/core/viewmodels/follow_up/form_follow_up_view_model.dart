@@ -88,6 +88,10 @@ class FormFollowUpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> _requestUpdateFollowUp() async {
     final response = await _apiService.requestCreateFollowUp(
       customerId: int.parse(_customerData?.customerId ?? "0"),

@@ -136,6 +136,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                       return;
                     }
 
+                    model.resetErrorMsg();
                     Navigator.pop(context);
                   });
                 },

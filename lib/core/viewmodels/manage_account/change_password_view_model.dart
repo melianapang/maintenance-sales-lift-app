@@ -36,6 +36,9 @@ class ChangePasswordViewModel extends BaseViewModel {
   bool _isConfirmPasswordValid = true;
   bool get isConfirmPasswordValid => _isConfirmPasswordValid;
 
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
+
   @override
   Future<void> initModel() async {}
 
@@ -80,6 +83,10 @@ class ChangePasswordViewModel extends BaseViewModel {
         _isConfirmPasswordValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestChangePassword() async {
     if (_isOldPasswordValid && _isNewPasswordValid && _isConfirmPasswordValid) {
       var result = await _apiService.requestChangePassword(
@@ -89,8 +96,12 @@ class ChangePasswordViewModel extends BaseViewModel {
       );
 
       if (result.isRight) return result.right;
+
+      _errorMsg = result.left.message;
       return false;
     }
+
+    _errorMsg = "Tolong isi semua informasi dengan benar.";
     return false;
   }
 }

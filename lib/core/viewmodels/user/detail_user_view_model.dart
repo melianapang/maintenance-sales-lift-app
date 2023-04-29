@@ -49,6 +49,10 @@ class DetailUserViewModel extends BaseViewModel {
     _isAllowedToDeleteUser = role == Role.Admin || role == Role.SuperAdmin;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestDeleteUser() async {
     final response = await _apiService.requestDeleteUser(
       userId: int.parse(_userData?.userId ?? "0"),
@@ -70,6 +74,13 @@ class DetailUserViewModel extends BaseViewModel {
       _userData = response.right;
       notifyListeners();
     }
+    setBusy(false);
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+    resetErrorMsg();
+    await requestGetDetailCustomer();
     setBusy(false);
   }
 }

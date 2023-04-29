@@ -101,6 +101,7 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
                         return;
                       }
 
+                      model.resetErrorMsg();
                       Navigator.maybePop(context);
                     },
                   );

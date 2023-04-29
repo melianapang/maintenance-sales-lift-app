@@ -19,6 +19,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
@@ -260,7 +261,9 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               ).then((value) {
                 if (value == null) return;
                 if (value == true) {
-                  model.requestGetDetailMaintenance();
+                  model.refreshPage();
+
+                  _handleErrorDialog(context, model);
                 }
               });
 
@@ -307,6 +310,31 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
           },
         ),
       ],
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailMaintenanceViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Data Pemeliharaan",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan Data Pemeliharaan. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        await model.refreshPage();
+
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

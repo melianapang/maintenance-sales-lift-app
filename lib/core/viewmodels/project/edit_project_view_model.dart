@@ -215,6 +215,10 @@ class EditProjectViewModel extends BaseViewModel {
     return _isNameValid && _isAdressValid && _isCityValid && _isCustomerValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestUpdateProject() async {
     if (!isValid()) {
       _errorMsg = "Pastikan semua kolom terisi";

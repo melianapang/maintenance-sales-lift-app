@@ -104,6 +104,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                     return;
                   }
 
+                  model.resetErrorMsg();
                   Navigator.maybePop(context);
                 },
               );

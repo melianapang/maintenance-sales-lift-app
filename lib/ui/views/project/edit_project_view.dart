@@ -106,6 +106,7 @@ class _EditProjectViewState extends State<EditProjectView> {
                         return;
                       }
 
+                      model.resetErrorMsg();
                       Navigator.maybePop(context);
                     },
                   );

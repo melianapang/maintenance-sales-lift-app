@@ -32,8 +32,13 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
     _isPreviousPageNeedRefresh = value;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> refreshPage() async {
     setBusy(true);
+    resetErrorMsg();
     await requestGetDetailUnit();
     setBusy(false);
   }
@@ -46,7 +51,10 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       _unitData = response.right;
       notifyListeners();
+      return;
     }
+
+    _errorMsg = response.left.message;
   }
 
   Future<bool> requestDeleteUnit() async {

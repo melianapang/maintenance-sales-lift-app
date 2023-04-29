@@ -119,6 +119,10 @@ class FormMaintenanceViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> _requestUpdateMaintenanceData() async {
     Position? position = await LocationUtils.getCurrentPosition();
     if (position == null) {

@@ -100,6 +100,7 @@ class _FormChangeMaintenanceDateState
                         return;
                       }
 
+                      model.resetErrorMsg();
                       Navigator.pop(context);
                     },
                   );

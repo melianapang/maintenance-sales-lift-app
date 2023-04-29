@@ -82,6 +82,10 @@ class AddUnitCustomerViewModel extends BaseViewModel {
     return _isNameValid && _isLocationValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> requestGetAllProjectByCustomerId() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=

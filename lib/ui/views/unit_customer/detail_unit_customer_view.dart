@@ -16,6 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_v
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailUnitCustomerViewParam {
   DetailUnitCustomerViewParam({
@@ -76,6 +77,7 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                       if (value == true) {
                         model.refreshPage();
                         model.setPreviousPageNeedRefresh(true);
+                        _handleErrorDialog(context, model);
                       }
                     },
                   );
@@ -133,6 +135,8 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                           ..pop(true);
                         return;
                       }
+
+                      model.resetErrorMsg();
                       Navigator.maybePop(context);
                     },
                   );
@@ -181,6 +185,33 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
           ),
         );
       },
+    );
+  }
+
+  void _handleErrorDialog(
+    BuildContext context,
+    DetailUnitCustomerViewModel model,
+  ) {
+    if (model.errorMsg == null) return;
+
+    showDialogWidget(
+      context,
+      title: "Daftar Riwayat Konfirmasi",
+      isSuccessDialog: false,
+      description: model.errorMsg ??
+          "Gagal mendapatkan daftar Riwayat. \n Coba beberappa saat lagi.",
+      positiveLabel: "Coba Lagi",
+      positiveCallback: () async {
+        Navigator.pop(context);
+
+        buildLoadingDialog(context);
+        await model.refreshPage();
+        Navigator.pop(context);
+
+        if (model.errorMsg != null) _handleErrorDialog(context, model);
+      },
+      negativeLabel: "Okay",
+      negativeCallback: () => Navigator.pop(context),
     );
   }
 }

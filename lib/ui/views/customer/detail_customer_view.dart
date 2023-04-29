@@ -495,17 +495,18 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
   ) {
     if (model.errorMsg == null) return;
 
-    showDialogWidget(
-      context,
-      title: "Daftar Data Pelanggan",
-      isSuccessDialog: false,
-      description: model.errorMsg ??
-          "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
-      positiveLabel: "OK",
-      positiveCallback: () async {
-        model.requestGetDetailCustomer();
-        Navigator.pop(context);
-      },
-    );
+    showDialogWidget(context,
+        title: "Daftar Data Pelanggan",
+        isSuccessDialog: false,
+        description: model.errorMsg ??
+            "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
+        positiveLabel: "Coba Lagi",
+        negativeLabel: "Ok", positiveCallback: () async {
+      model.requestGetDetailCustomer();
+      Navigator.pop(context);
+    }, negativeCallback: () {
+      model.resetErrorMsg();
+      Navigator.pop(context);
+    });
   }
 }

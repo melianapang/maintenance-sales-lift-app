@@ -154,6 +154,10 @@ class AddCustomerViewModel extends BaseViewModel {
         _isCityValid;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<bool> requestCreateCustomer() async {
     if (!isValid()) {
       _errorMsg = "Isi semua data dengan benar.";

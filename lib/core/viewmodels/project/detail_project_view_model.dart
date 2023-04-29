@@ -53,6 +53,10 @@ class DetailProjectViewModel extends BaseViewModel {
         _authenticationService.getUserRole() == Role.SuperAdmin;
   }
 
+  void resetErrorMsg() {
+    _errorMsg = null;
+  }
+
   Future<void> requestGetDetailProject() async {
     final response = await _apiService.requestDetailProject(
       projectId: int.parse(_projectData?.projectId ?? "0"),
@@ -73,5 +77,12 @@ class DetailProjectViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<void> refreshPage() async {
+    setBusy(true);
+    resetErrorMsg();
+    await requestGetDetailProject();
+    setBusy(false);
   }
 }
