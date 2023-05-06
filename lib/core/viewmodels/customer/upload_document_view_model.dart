@@ -6,6 +6,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -15,19 +16,26 @@ class UploadDocumentViewModel extends BaseViewModel {
     CustomerData? customerData,
     required DioService dioService,
     required GCloudService gCloudService,
+    required RemoteConfigService remoteConfigService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
         _customerData = customerData,
-        _gCloudService = gCloudService;
+        _gCloudService = gCloudService,
+        _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
   final GCloudService _gCloudService;
+  final RemoteConfigService _remoteConfigService;
 
   final CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
+
+  //region Feature flag values
+  bool _isGCloudStorageEnabled = false;
+  //endregion
 
   final noteController = TextEditingController();
 
@@ -52,7 +60,12 @@ class UploadDocumentViewModel extends BaseViewModel {
   String? get errorMsg => _errorMsg;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    _isGCloudStorageEnabled =
+        _remoteConfigService.isGCloudStorageEnabled ?? false;
+    setBusy(false);
+  }
 
   void resetErrorMsg() {
     _errorMsg = null;
@@ -94,7 +107,7 @@ class UploadDocumentViewModel extends BaseViewModel {
         formatter: DateFormat(DateTimeUtils.DATE_FORMAT_3),
       );
 
-      for (GalleryData gallery in galleryData) {
+      for (GalleryData gallery in _galleryData) {
         File file = File(gallery.filepath);
         String ext = gallery.filepath.split('.').last;
 
@@ -115,7 +128,34 @@ class UploadDocumentViewModel extends BaseViewModel {
     }
   }
 
+  Future<bool> _requestCreateDocumentDummy() async {
+    final response = await _apiService.requestCreateDocument(
+      //if use this document, after creating the document,
+      //user cannot download it on 'daftar dokumen' section in detail customer view page.
+      filePath: 'http://www.africau.edu/images/default/sample.pdf',
+      fileType: _selectedTipeDokumentOption + 1,
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      note: noteController.text,
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
   Future<bool> requestUploadDocumentData() async {
+    _errorMsg = null;
+
+    if (!_isGCloudStorageEnabled) {
+      return await _requestCreateDocumentDummy();
+    }
+
+    if (_galleryData.isEmpty) {
+      _errorMsg = "Bukti Dokumen tidak boleh kosong";
+      return false;
+    }
+
     await _saveGalleryToCloud();
     if (_errorMsg != null) return false;
 
