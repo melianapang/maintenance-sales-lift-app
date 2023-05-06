@@ -275,10 +275,10 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
 
                         showDialogWidget(
                           context,
-                          title: "Unduh Data",
+                          title: "Bukti Dokument",
                           isSuccessDialog: model.errorMsg == null,
                           description: model.errorMsg == null
-                              ? "Unduh data berhasil. \n Anda juga bisa melihat berkasnya di folder Download perangkat anda."
+                              ? "Bukti Dokumen berhasil diunduh. Untuk menyimpan ke perangkat anda, Anda bisa menekan tombol unduh saat berkas berhasil dibuka."
                               : model.errorMsg ??
                                   "Gagal mengunduh berkas. Coba beberapa saat lagi.",
                           positiveLabel: "OK",
