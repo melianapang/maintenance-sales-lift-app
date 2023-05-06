@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/export_data_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -111,51 +112,66 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
               ),
               child: Column(
                 children: [
-                  DatePickerWidget(
-                    label: "Rentang Tanggal",
-                    isRangeCalendar: true,
-                    selectedDates: model.selectedDates,
-                    onSelectedDates: (DateTime start, DateTime? end) {
-                      print('$start $end');
-                      model.setSelectedDates([
-                        start,
-                        if (end != null) end,
-                      ]);
-                    },
-                  ),
-                  Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {},
-                    child: TextInput.disabled(
-                      label: "Status Pemeliharaan",
-                      text: 'Semua',
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.darkBlue01,
-                        size: 16,
-                      ),
+                  // DatePickerWidget(
+                  //   label: "Rentang Tanggal",
+                  //   isRangeCalendar: true,
+                  //   selectedDates: model.selectedDates,
+                  //   onSelectedDates: (DateTime start, DateTime? end) {
+                  //     print('$start $end');
+                  //     model.setSelectedDates([
+                  //       start,
+                  //       if (end != null) end,
+                  //     ]);
+                  //   },
+                  // ),
+                  // Spacings.vert(24),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: TextInput.disabled(
+                  //     label: "Status Pemeliharaan",
+                  //     text: 'Semua',
+                  //     suffixIcon: const Icon(
+                  //       PhosphorIcons.caretDownBold,
+                  //       color: MyColors.darkBlue01,
+                  //       size: 16,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Spacings.vert(24),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     _showPilihProyekBottomDialog(
+                  //       context,
+                  //       model,
+                  //       setSelectedMenu: model.setSelectedProyek,
+                  //     );
+                  //   },
+                  //   child: TextInput.disabled(
+                  //     label: "Pilih Proyek",
+                  //     hintText: "Pilih proyek yang diinginkan",
+                  //     text: model.selectedProject?.projectName,
+                  //     suffixIcon: const Icon(
+                  //       PhosphorIcons.caretDownBold,
+                  //       color: MyColors.lightBlack02,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Spacings.vert(24),
+                  Text(
+                    "Tekan tombol 'Unduh Data' dibawah halaman ini untuk mengunduh data pemeliharaan,",
+                    textAlign: TextAlign.center,
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.lightBlack02,
+                      fontWeight: 600,
                     ),
                   ),
-                  Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {
-                      _showPilihProyekBottomDialog(
-                        context,
-                        model,
-                        setSelectedMenu: model.setSelectedProyek,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Pilih Proyek",
-                      hintText: "Pilih proyek yang diinginkan",
-                      text: model.selectedProject?.projectName,
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(24),
+                  Spacings.vert(32),
+                  const Icon(
+                    PhosphorIcons.arrowFatLinesDownBold,
+                    size: 60,
+                    color: MyColors.lightBlack02,
+                  )
                 ],
               ),
             ),
@@ -217,9 +233,11 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
     BuildContext context,
     ExportDataMaintenanceViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
-      title: "Daftar Log",
+      title: "Export Data Pemeliharaan",
       isSuccessDialog: false,
       description: model.errorMsg ??
           "Gagal mendapatkan daftar log. \n Coba beberappa saat lagi.",

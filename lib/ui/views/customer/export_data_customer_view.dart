@@ -5,13 +5,13 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/export_data_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ExportDataCustomerView extends StatefulWidget {
@@ -95,24 +95,27 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(
-                24.0,
+              padding: PaddingUtils.getPadding(
+                context,
+                defaultPadding: 12,
               ),
               child: Column(
                 children: [
-                  DatePickerWidget(
-                    label: "Rentang Tanggal",
-                    isRangeCalendar: true,
-                    selectedDates: model.selectedDates,
-                    onSelectedDates: (DateTime start, DateTime? end) {
-                      print('$start $end');
-                      model.setSelectedDates([
-                        start,
-                        if (end != null) end,
-                      ]);
-                    },
+                  Text(
+                    "Tekan tombol 'Unduh Data' dibawah halaman ini untuk mengunduh data pelanggan,",
+                    textAlign: TextAlign.center,
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.lightBlack02,
+                      fontWeight: 600,
+                    ),
                   ),
-                  Spacings.vert(24),
+                  Spacings.vert(32),
+                  const Icon(
+                    PhosphorIcons.arrowFatLinesDownBold,
+                    size: 60,
+                    color: MyColors.lightBlack02,
+                  )
                 ],
               ),
             ),
