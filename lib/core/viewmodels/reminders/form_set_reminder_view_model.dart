@@ -102,7 +102,26 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> _refreshOneSignal() async {
+    await _oneSignalService.initOneSignal();
+  }
+
   Future<bool> requestCreateReminder() async {
+    bool isGranted = await PermissionUtils.requestPermission(
+      Permission.notification,
+    );
+
+    if (!isGranted) {
+      _errorMsg = "Tolong ijinkan aplikasi mengakses notifikasi";
+      return false;
+    }
+
+    //after notification granted, then refresh onesignal
+    if (_errorMsg == "Tolong ijinkan aplikasi mengakses notifikasi") {
+      await _refreshOneSignal();
+      _errorMsg = null;
+    }
+
     int? customerId = int.parse(_customerData?.customerId ?? "-1");
 
     final response = await _apiService.requestCreateReminder(
@@ -132,14 +151,6 @@ class FormSetReminderViewModel extends BaseViewModel {
 
   Future<bool> requestSetReminderToOneSignal(
       {required String reminderId}) async {
-    bool isGranted =
-        await PermissionUtils.requestPermission(Permission.notification);
-
-    if (!isGranted) {
-      _errorMsg = "Tolong ijinkan aplikasi mengakses notifikasi";
-      return false;
-    }
-
     String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
     // timeStr = "$timeStr GMT+0700";
 

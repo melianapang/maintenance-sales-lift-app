@@ -98,12 +98,13 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                         "Tolong ijinkan aplikasi mengakses notifikasi"
                     ? "Buka pengaturan aplikasi."
                     : null,
-                negativeCallback: () {
-                  model.errorMsg ==
-                          "Tolong ijinkan aplikasi mengakses notifikasi"
-                      ? openAppSettings()
-                      : null;
-                },
+                negativeCallback: model.errorMsg ==
+                        "Tolong ijinkan aplikasi mengakses notifikasi"
+                    ? () {
+                        openAppSettings();
+                        Navigator.maybePop(context);
+                      }
+                    : null,
               );
             },
             text: 'Simpan',
