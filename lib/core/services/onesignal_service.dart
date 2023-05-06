@@ -29,7 +29,7 @@ class OneSignalService {
     // Store it into shared prefs, So that later we can use it.
     // OneSignPreferences.setOnesignalUserId(osUserID);
 
-    _setOneSignalConfiguration();
+    await _setOneSignalConfiguration();
     _initOneSignalListener();
   }
 
