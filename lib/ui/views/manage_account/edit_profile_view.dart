@@ -124,29 +124,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                         : null,
                   ),
                   Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {
-                      _showBottomDialog(
-                        context,
-                        model,
-                        listMenu: model.roleOptions,
-                        selectedMenu: model.selectedRoleOption,
-                        setSelectedMenu: model.setSelectedRole,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Peran",
-                      text: model.roleOptions
-                          .where((element) => element.isSelected)
-                          .first
-                          .title,
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(24),
                   TextInput.editable(
                     controller: model.phoneNumberController,
                     label: "Nomor Telepon",

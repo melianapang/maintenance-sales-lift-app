@@ -5,7 +5,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class EditProfileViewModel extends BaseViewModel {
   EditProfileViewModel({
@@ -24,18 +23,6 @@ class EditProfileViewModel extends BaseViewModel {
   final SharedPreferencesService _sharedPreferencesService;
 
   final ProfileData? _profileData;
-
-  // Dropdown related
-  int _selectedRoleOption = 0;
-  int get selectedRoleOption => _selectedRoleOption;
-  final List<FilterOption> _roleOptions = [
-    FilterOption("Super Admin", true),
-    FilterOption("Admin", false),
-    FilterOption("Sales", true),
-    FilterOption("Teknisi", false),
-  ];
-  List<FilterOption> get roleOptions => _roleOptions;
-  //End of Dropdown related
 
   final namaLengkapController = TextEditingController();
   final usernameController = TextEditingController();
@@ -79,26 +66,6 @@ class EditProfileViewModel extends BaseViewModel {
     alamatController.text = _profileData?.address ?? "";
     kotaController.text = _profileData?.city ?? "";
     emailController.text = _profileData?.email ?? "";
-
-    _selectedRoleOption = (_profileData?.role.index ?? 1 + 1);
-    setSelectedRole(
-      selectedMenu: int.parse(_selectedRoleOption.toString()),
-    );
-  }
-
-  void setSelectedRole({
-    required int selectedMenu,
-  }) {
-    _selectedRoleOption = selectedMenu;
-    for (int i = 0; i < _roleOptions.length; i++) {
-      if (i == selectedMenu) {
-        _roleOptions[i].isSelected = true;
-        continue;
-      }
-      _roleOptions[i].isSelected = false;
-    }
-
-    notifyListeners();
   }
 
   void onChangedName(String value) {
@@ -160,7 +127,7 @@ class EditProfileViewModel extends BaseViewModel {
         phoneNumber: phoneNumberController.text,
         address: alamatController.text,
         city: kotaController.text,
-        role: Role.values[_selectedRoleOption],
+        role: _profileData?.role ?? Role.Engineers,
       ),
     );
   }
@@ -175,7 +142,8 @@ class EditProfileViewModel extends BaseViewModel {
 
     final response = await _apiService.requestUpdateUser(
         userId: int.parse(userId),
-        idRole: _selectedRoleOption + 1,
+        //default if null: Role.Engineer
+        idRole: _profileData?.role.index ?? 3 + 1,
         name: namaLengkapController.text,
         username: usernameController.text,
         phoneNumber: phoneNumberController.text,
