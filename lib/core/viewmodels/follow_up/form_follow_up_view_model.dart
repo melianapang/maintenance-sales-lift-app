@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart'
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -19,6 +20,7 @@ class FormFollowUpViewModel extends BaseViewModel {
     required DioService dioService,
     required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
+    required RemoteConfigService remoteConfigService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
@@ -26,14 +28,20 @@ class FormFollowUpViewModel extends BaseViewModel {
         ),
         _sharedPreferenceService = sharedPreferencesService,
         _customerData = customerData,
-        _gCloudService = gCloudService;
+        _gCloudService = gCloudService,
+        _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
   final SharedPreferencesService _sharedPreferenceService;
   final GCloudService _gCloudService;
+  final RemoteConfigService _remoteConfigService;
 
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
+
+  //region Feature flag values
+  bool _isGCloudStorageEnabled = false;
+  //endregion
 
   // Filter related
   int _selectedHasilKonfirmasiOption = 0;
@@ -68,6 +76,8 @@ class FormFollowUpViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    _isGCloudStorageEnabled =
+        _remoteConfigService.isGCloudStorageEnabled ?? false;
     setBusy(false);
   }
 
@@ -144,10 +154,41 @@ class FormFollowUpViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> requestSaveFollowUpData() async {
-    await _saveGalleryToCloud();
-    if (_errorMsg != null) return false;
+  Future<bool> _requestUpdateFollowUpDummy() async {
+    final response = await _apiService.requestCreateFollowUp(
+      customerId: int.parse(_customerData?.customerId ?? "0"),
+      followUpResult: _selectedHasilKonfirmasiOption,
+      scheduleDate: DateTimeUtils.convertDateToString(
+        date: _selectedDates.first,
+        formatter: DateFormat(
+          DateTimeUtils.DATE_FORMAT_3,
+        ),
+      ),
+      note: noteController.text,
+      documents: <FollowUpFile>[
+        FollowUpFile(
+          filePath:
+              "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+        ),
+      ],
+    );
 
-    return await _requestUpdateFollowUp();
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestSaveFollowUpData() async {
+    _errorMsg = null;
+
+    if (_isGCloudStorageEnabled) {
+      await _saveGalleryToCloud();
+      if (_errorMsg != null) return false;
+
+      return await _requestUpdateFollowUp();
+    }
+
+    return await _requestUpdateFollowUpDummy();
   }
 }
