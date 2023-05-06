@@ -85,46 +85,44 @@ class OpenNotificationReminderView extends StatelessWidget {
                     },
                   )
                 : null,
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(
-                24.0,
-              ),
-              child: Column(
-                children: [
-                  if (!model.busy) ...[
-                    TextInput.disabled(
-                      label: "Tanggal Pengingat",
-                      hintText: "Tanggal Pengingat",
-                      text: model.param?.date,
+            body: !model.busy
+                ? SingleChildScrollView(
+                    padding: const EdgeInsets.all(
+                      24.0,
                     ),
-                    Spacings.vert(24),
-                    TextInput.disabled(
-                      label: "Waktu Pengingat",
-                      hintText: "Waktu Pengingat",
-                      text: model.param?.time,
-                    ),
-                    Spacings.vert(24),
-                    TextInput.disabled(
-                      label: "Deskripsi Pengingat",
-                      hintText: "Tidak ada Deskripsi Pengingat",
-                      text: model.param?.description,
-                    ),
-                    Spacings.vert(24),
-                    TextInput.disabled(
-                      label: "Catatan",
-                      hintText: "Tidak ada Catatan Pengingat",
-                      text: model.param?.note,
-                    ),
-                  ],
-                  if (model.busy)
-                    Column(
+                    child: Column(
                       children: [
-                        buildLoadingPage(),
+                        TextInput.disabled(
+                          label: "Tanggal Pengingat",
+                          hintText: "Tanggal Pengingat",
+                          text: model.param?.date,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Waktu Pengingat",
+                          hintText: "Waktu Pengingat",
+                          text: model.param?.time,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Deskripsi Pengingat",
+                          hintText: "Tidak ada Deskripsi Pengingat",
+                          text: model.param?.description,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Catatan",
+                          hintText: "Tidak ada Catatan Pengingat",
+                          text: model.param?.note,
+                        ),
                       ],
                     ),
-                ],
-              ),
-            ),
+                  )
+                : Column(
+                    children: [
+                      buildLoadingPage(),
+                    ],
+                  ),
           ),
         );
       },
