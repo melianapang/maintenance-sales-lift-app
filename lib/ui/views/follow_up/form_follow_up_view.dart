@@ -159,9 +159,9 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Bukti Dokumen",
+                    "Foto",
                     style: buildTextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: 400,
                       fontColor: MyColors.lightBlack02,
                     ),
