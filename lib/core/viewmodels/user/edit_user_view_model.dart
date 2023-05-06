@@ -79,7 +79,7 @@ class EditUserViewModel extends BaseViewModel {
     setBusy(false);
 
     _selectedRoleOption =
-        mappingStringToRole(_userData?.roleName ?? "Sales").index;
+        mappingStringToRole(_userData?.roleName ?? "Teknisi").index;
     setSelectedRole(
       selectedMenu: int.parse(_selectedRoleOption.toString()),
     );
