@@ -51,13 +51,8 @@ class _HomeViewState extends State<HomeView> {
                 child: Icon(
                   PhosphorIcons.userCircle,
                   color: MyColors.yellow01,
-                  size: 60,
+                  size: 64,
                 ),
-                // child: Image.network(
-                //   "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
-                //   width: 48,
-                //   height: 48,
-                // ),
               ),
               Spacings.horz(10),
               Expanded(
@@ -74,6 +69,29 @@ class _HomeViewState extends State<HomeView> {
                         fontSize: 16,
                         fontColor: MyColors.yellow01,
                       ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          PhosphorIcons.userGearBold,
+                          size: 12,
+                          color: MyColors.lightBlack02,
+                        ),
+                        Spacings.horz(6),
+                        Text(
+                          StringUtils.removeZeroWidthSpaces(
+                            mappingRoleToString(
+                              userData?.role ?? Role.Engineers,
+                            ),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: buildTextStyle(
+                            fontSize: 14,
+                            fontColor: MyColors.lightBlack02,
+                          ),
+                        ),
+                      ],
                     ),
                     Row(
                       children: [
