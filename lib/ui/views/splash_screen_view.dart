@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/splash_screen_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -41,6 +42,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         apisService: Provider.of<AuthenticationService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         gCloudService: Provider.of<GCloudService>(context),
+        remoteConfigService: Provider.of<RemoteConfigService>(context),
       ),
       onModelReady: (SplashScreenViewModel model) async {
         model.initModel();
