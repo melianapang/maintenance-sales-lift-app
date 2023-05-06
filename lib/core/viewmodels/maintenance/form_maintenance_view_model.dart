@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/location_utils.dart';
@@ -21,6 +21,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
     required DioService dioService,
     required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
+    required RemoteConfigService remoteConfigService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
@@ -28,16 +29,22 @@ class FormMaintenanceViewModel extends BaseViewModel {
         ),
         _maintenanceData = maintenanceData,
         _sharedPreferenceService = sharedPreferencesService,
-        _gCloudService = gCloudService;
+        _gCloudService = gCloudService,
+        _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
   final SharedPreferencesService _sharedPreferenceService;
   final GCloudService _gCloudService;
+  final RemoteConfigService _remoteConfigService;
 
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
 
   GalleryData? gallery;
+
+  //region Feature flag values
+  bool _isGCloudStorageEnabled = false;
+  //endregion
 
   final noteController = TextEditingController();
 
@@ -80,7 +87,12 @@ class FormMaintenanceViewModel extends BaseViewModel {
   String? get errorMsg => _errorMsg;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    _isGCloudStorageEnabled =
+        _remoteConfigService.isGCloudStorageEnabled ?? false;
+    setBusy(false);
+  }
 
   List<GalleryData> getPhotosData() {
     return _compressedFiles
@@ -210,11 +222,85 @@ class FormMaintenanceViewModel extends BaseViewModel {
     }
   }
 
+  Future<bool> _requestUpdateMaintenanceDataDummy() async {
+    Position? position = await LocationUtils.getCurrentPosition();
+    if (position == null) {
+      _errorMsg = "Tolong ijinkan aplikasi untuk mengakses lokasi anda.";
+      return false;
+    }
+
+    String userId = await _sharedPreferenceService.get(SharedPrefKeys.userId);
+
+    final response = await _apiService.requestUpdateMaintenace(
+      maintenanceId: int.parse(_maintenanceData?.maintenanceId ?? "0"),
+      unitId: int.parse(_maintenanceData?.unitId ?? "0"),
+      userId: int.parse(userId),
+      latitude: position.latitude,
+      longitude: position.longitude,
+      maintenanceResult: _selectedHasilMaintenanceOption + 1,
+      scheduleDate: DateTimeUtils.convertDateToString(
+        date: _selectedNextMaintenanceDates.first,
+        formatter: DateFormat(
+          DateTimeUtils.DATE_FORMAT_3,
+        ),
+      ),
+      note: noteController.text,
+      maintenanceFiles: <MaintenanceFile>[
+        //photo
+        MaintenanceFile(
+          filePath:
+              "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
+          thumbnailPath: "",
+          fileType: "1",
+        ),
+        //photo
+        MaintenanceFile(
+          filePath:
+              "https://www.rollingstone.com/wp-content/uploads/2019/12/TaylorSwiftTimIngham.jpg?w=1581&h=1054&crop=1",
+          thumbnailPath: "",
+          fileType: "1",
+        ),
+        //photo
+        MaintenanceFile(
+          filePath:
+              "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+          thumbnailPath: "",
+          fileType: "1",
+        ),
+        //photo
+        MaintenanceFile(
+          filePath:
+              "https://i.guim.co.uk/img/media/a48e88b98455a5b118d3c1d34870a1d3aaa1b5c6/0_41_3322_1994/master/3322.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=b95f25e4e31f132166006345fd87b5ae",
+          thumbnailPath: "",
+          fileType: "1",
+        ),
+        //video
+        MaintenanceFile(
+          filePath:
+              'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+          thumbnailPath:
+              "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+          fileType: "2",
+        ),
+      ],
+    );
+
+    if (response.isRight) return true;
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
   Future<bool> requestSaveMaintenanceData() async {
     _errorMsg = null;
-    await _saveGalleryToCloud();
-    if (_errorMsg != null) return false;
 
-    return await _requestUpdateMaintenanceData();
+    if (_isGCloudStorageEnabled) {
+      await _saveGalleryToCloud();
+      if (_errorMsg != null) return false;
+
+      return await _requestUpdateMaintenanceData();
+    }
+
+    return await _requestUpdateMaintenanceDataDummy();
   }
 }
