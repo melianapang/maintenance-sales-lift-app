@@ -33,11 +33,16 @@ class LoginViewModel extends BaseViewModel {
   bool _showPassword = false;
   bool get showPassword => _showPassword;
 
-  String _inputUser = "Uname22";
-  // String _inputUser = "Ananta99";
+  // String _inputUser = "Uname22";
+  // String get inputUser => _inputUser;
+
+  // String _password = "Hello789";
+  // String get password => _password;
+
+  String _inputUser = "";
   String get inputUser => _inputUser;
 
-  String _password = "Hello789";
+  String _password = "";
   String get password => _password;
 
   String? _errorMsg;
@@ -46,11 +51,8 @@ class LoginViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
-
-    // Dummy
     usernameController.text = _inputUser;
     passwordController.text = _password;
-    // await _fetchDataHasLogin();
     setBusy(false);
   }
 
