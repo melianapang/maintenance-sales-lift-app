@@ -1,4 +1,4 @@
-package com.example.rejo_jaya_sakti_apps
+package com.rejojayasakti.internal
 
 import io.flutter.embedding.android.FlutterActivity
 
