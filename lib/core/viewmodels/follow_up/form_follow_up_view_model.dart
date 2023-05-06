@@ -182,13 +182,13 @@ class FormFollowUpViewModel extends BaseViewModel {
   Future<bool> requestSaveFollowUpData() async {
     _errorMsg = null;
 
-    if (_isGCloudStorageEnabled) {
-      await _saveGalleryToCloud();
-      if (_errorMsg != null) return false;
-
-      return await _requestUpdateFollowUp();
+    if (!_isGCloudStorageEnabled) {
+      return await _requestUpdateFollowUpDummy();
     }
 
-    return await _requestUpdateFollowUpDummy();
+    await _saveGalleryToCloud();
+    if (_errorMsg != null) return false;
+
+    return await _requestUpdateFollowUp();
   }
 }

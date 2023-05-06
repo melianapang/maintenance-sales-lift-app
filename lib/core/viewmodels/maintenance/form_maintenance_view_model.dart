@@ -294,13 +294,13 @@ class FormMaintenanceViewModel extends BaseViewModel {
   Future<bool> requestSaveMaintenanceData() async {
     _errorMsg = null;
 
-    if (_isGCloudStorageEnabled) {
-      await _saveGalleryToCloud();
-      if (_errorMsg != null) return false;
-
-      return await _requestUpdateMaintenanceData();
+    if (!_isGCloudStorageEnabled) {
+      return await _requestUpdateMaintenanceDataDummy();
     }
 
-    return await _requestUpdateMaintenanceDataDummy();
+    await _saveGalleryToCloud();
+    if (_errorMsg != null) return false;
+
+    return await _requestUpdateMaintenanceData();
   }
 }
