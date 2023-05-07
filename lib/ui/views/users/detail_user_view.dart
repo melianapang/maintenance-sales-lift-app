@@ -17,7 +17,6 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailUserViewParam {
   DetailUserViewParam({
