@@ -120,7 +120,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                             cardType: CardType.list,
                             title: model.listMaintenance?[index].unitName ?? "",
                             description:
-                                "${model.listMaintenance?[index].companyName} ${model.listMaintenance?[index].companyName != null ? "|" : ""} ${model.listMaintenance?[index].customerName}",
+                                "${model.listMaintenance?[index].projectName} ${model.listMaintenance?[index].companyName != null ? "|" : ""} ${model.listMaintenance?[index].companyName}",
                             description2: DateTimeUtils
                                 .convertStringToOtherStringDateFormat(
                                     date: model.listMaintenance?[index]
@@ -134,8 +134,8 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                                     formattedString:
                                         DateTimeUtils.DATE_FORMAT_2),
                             titleSize: 20,
-                            descSize: 16,
-                            desc2Size: 12,
+                            descSize: 15,
+                            desc2Size: 14,
                             onTap: () {
                               Navigator.pushNamed(
                                 context,
