@@ -141,15 +141,16 @@ class EditProfileViewModel extends BaseViewModel {
     String userId = await _sharedPreferencesService.get(SharedPrefKeys.userId);
 
     final response = await _apiService.requestUpdateUser(
-        userId: int.parse(userId),
-        //default if null: Role.Engineer
-        idRole: _profileData?.role.index ?? 3 + 1,
-        name: namaLengkapController.text,
-        username: usernameController.text,
-        phoneNumber: phoneNumberController.text,
-        address: alamatController.text,
-        city: kotaController.text,
-        email: emailController.text);
+      userId: int.parse(userId),
+      //default if null: Role.Engineer
+      idRole: (_profileData?.role.index ?? 3) + 1,
+      name: namaLengkapController.text,
+      username: usernameController.text,
+      phoneNumber: phoneNumberController.text,
+      address: alamatController.text,
+      city: kotaController.text,
+      email: emailController.text,
+    );
 
     if (response.isRight) {
       await _saveNewData();
