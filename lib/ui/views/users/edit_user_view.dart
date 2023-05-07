@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/edit_user_view_model.dart';
@@ -43,6 +43,7 @@ class _EditUserViewState extends State<EditUserView> {
       model: EditUserViewModel(
         userData: widget.param.userData,
         dioService: Provider.of<DioService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (EditUserViewModel model) async {
         await model.initModel();
@@ -129,29 +130,31 @@ class _EditUserViewState extends State<EditUserView> {
                       !model.isUsernameValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
-                GestureDetector(
-                  onTap: () {
-                    _showBottomDialog(
-                      context,
-                      model,
-                      listMenu: model.roleOptions,
-                      selectedMenu: model.selectedRoleOption,
-                      setSelectedMenu: model.setSelectedRole,
-                    );
-                  },
-                  child: TextInput.disabled(
-                    label: "Peran",
-                    text: model.roleOptions
-                        .where((element) => element.isSelected)
-                        .first
-                        .title,
-                    suffixIcon: const Icon(
-                      PhosphorIcons.caretDownBold,
-                      color: MyColors.lightBlack02,
+                if (model.isUserAllowedToChangeRole) ...[
+                  GestureDetector(
+                    onTap: () {
+                      _showBottomDialog(
+                        context,
+                        model,
+                        listMenu: model.roleOptions,
+                        selectedMenu: model.selectedRoleOption,
+                        setSelectedMenu: model.setSelectedRole,
+                      );
+                    },
+                    child: TextInput.disabled(
+                      label: "Peran",
+                      text: model.roleOptions
+                          .where((element) => element.isSelected)
+                          .first
+                          .title,
+                      suffixIcon: const Icon(
+                        PhosphorIcons.caretDownBold,
+                        color: MyColors.lightBlack02,
+                      ),
                     ),
                   ),
-                ),
-                Spacings.vert(24),
+                  Spacings.vert(24),
+                ],
                 TextInput.editable(
                   label: "Alamat",
                   hintText: "Alamat User",

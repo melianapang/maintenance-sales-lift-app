@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -10,17 +11,25 @@ class EditUserViewModel extends BaseViewModel {
   EditUserViewModel({
     UserData? userData,
     required DioService dioService,
+    required AuthenticationService authenticationService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
-        _userData = userData;
+        _userData = userData,
+        _authenticationService = authenticationService;
 
   final ApiService _apiService;
+  final AuthenticationService _authenticationService;
 
   UserData? _userData;
   UserData? get userData => _userData;
+
+  Role? userRole;
+
+  bool _isUserAllowedToChangeRole = false;
+  bool get isUserAllowedToChangeRole => _isUserAllowedToChangeRole;
 
   // Dropdown related
   int _selectedRoleOption = 0;
@@ -69,6 +78,8 @@ class EditUserViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    await checkUserEligibility();
+
     nameController.text = _userData?.name ?? "";
     usernameController.text = _userData?.username ?? "";
     roleController.text = _userData?.roleName ?? "";
@@ -79,10 +90,34 @@ class EditUserViewModel extends BaseViewModel {
     setBusy(false);
 
     _selectedRoleOption =
-        mappingStringToRole(_userData?.roleName ?? "Teknisi").index;
+        mappingStringToRole(_userData?.roleName ?? "Teknisi").index -
+            (userRole == Role.Admin ? 1 : 0);
     setSelectedRole(
       selectedMenu: int.parse(_selectedRoleOption.toString()),
     );
+  }
+
+  Future<void> checkUserEligibility() async {
+    userRole = await _authenticationService.getUserRole();
+    //If the user data already super admin, and account's Role is Admin
+    //then this account can not change the user's role
+    _isUserAllowedToChangeRole =
+        !(mappingStringToRole(_userData?.roleName ?? "Teknisi") ==
+                Role.SuperAdmin &&
+            userRole == Role.Admin);
+    if (!_isUserAllowedToChangeRole) return;
+
+    //update role option
+    //Admin just can change user's role to Admin, Sales, Engineer
+    //SuperAdmin can change user's role to Super Admin, Admin, Sales, Engineer
+    if (userRole == Role.Admin) {
+      _roleOptions.removeAt(0);
+      _roleOptions.first.isSelected = true;
+    }
+  }
+
+  int getSelectedIdRole() {
+    return selectedRoleOption + (userRole == Role.Admin ? 2 : 1);
   }
 
   void setSelectedRole({
@@ -159,10 +194,7 @@ class EditUserViewModel extends BaseViewModel {
 
     final response = await _apiService.requestUpdateUser(
         userId: int.parse(_userData?.userId ?? "0"),
-        idRole: (mappingStringToRole(
-              _userData?.roleName ?? "",
-            ).index) +
-            1,
+        idRole: getSelectedIdRole(),
         name: nameController.text,
         username: usernameController.text,
         phoneNumber: phoneNumberController.text,
