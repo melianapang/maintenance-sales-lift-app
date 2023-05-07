@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddUserViewModel extends BaseViewModel {
-  AddUserViewModel();
+  AddUserViewModel({
+    required AuthenticationService authenticationService,
+  }) : _authenticationService = authenticationService;
+
+  final AuthenticationService _authenticationService;
+
+  Role? userRole;
 
   // Dropdown related
   int _selectedRoleOption = 0;
@@ -43,7 +51,22 @@ class AddUserViewModel extends BaseViewModel {
   bool get isEmailValid => _isEmailValid;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    userRole = await _authenticationService.getUserRole();
+    //update role option
+    if (userRole == Role.Admin) {
+      _roleOptions.removeAt(0);
+      _roleOptions.first.isSelected = true;
+    }
+    setBusy(false);
+  }
+
+  Role getSelectedRole() {
+    return mappingStringNumberToRole(
+      (selectedRoleOption + (userRole == Role.Admin ? 2 : 1)).toString(),
+    );
+  }
 
   void setSelectedRole({
     required int selectedMenu,

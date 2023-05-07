@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/user/add_user_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -26,7 +27,9 @@ class _AddUserViewState extends State<AddUserView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: AddUserViewModel(),
+      model: AddUserViewModel(
+        authenticationService: Provider.of<AuthenticationService>(context),
+      ),
       onModelReady: (AddUserViewModel model) async {
         await model.initModel();
       },
@@ -60,7 +63,7 @@ class _AddUserViewState extends State<AddUserView> {
                       name: model.nameController.text,
                       city: model.cityController.text,
                       address: model.addressController.text,
-                      role: Role.Admin,
+                      role: model.getSelectedRole(),
                       phoneNumber: model.phoneNumberController.text,
                       email: model.emailController.text,
                     ),

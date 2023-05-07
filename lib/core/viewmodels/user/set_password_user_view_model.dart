@@ -100,7 +100,7 @@ class SetPasswordViewUserModel extends BaseViewModel {
     final response = await _apiService.requestCreateUser(
       idRole: int.parse(
         mappingRoleToNumberString(
-          Role.Admin,
+          _profileData?.role ?? Role.Engineers,
         ),
       ),
       name: _profileData?.name ?? "",
