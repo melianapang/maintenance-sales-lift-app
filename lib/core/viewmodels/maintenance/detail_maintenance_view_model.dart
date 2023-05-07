@@ -42,6 +42,9 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   bool get isAllowedToChangeMaintenanceDate =>
       _isAllowedToChangeMaintenanceDate;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
 
@@ -197,6 +200,10 @@ class DetailMaintenanceViewModel extends BaseViewModel {
       );
     }
     notifyListeners();
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   Future<void> refreshPage() async {

@@ -69,6 +69,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
             context,
             title: "Data Pemeliharaan",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
           floatingActionButton: _buildExtendedFAB(model),
           body: Padding(
@@ -116,7 +117,15 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               arguments: DetailProjectViewParam(
                                 projectData: model.projectData,
                               ),
-                            );
+                            ).then((value) async {
+                              if (value == null) return;
+                              if (value == true) {
+                                await model.refreshPage();
+                                model.setPreviousPageNeedRefresh(true);
+
+                                _handleErrorDialog(context, model);
+                              }
+                            });
                           },
                           child: Text(
                             model.maintenanceData?.projectName ?? "",
