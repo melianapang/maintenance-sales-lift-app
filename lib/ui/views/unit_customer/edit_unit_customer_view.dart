@@ -234,6 +234,8 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
     BuildContext context,
     EditUnitCustomerViewModel model,
   ) {
+    if (model.errorMsg == null) return;
+
     showDialogWidget(
       context,
       title: "Daftar Unit",
