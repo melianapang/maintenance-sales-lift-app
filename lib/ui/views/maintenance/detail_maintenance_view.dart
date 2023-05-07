@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
@@ -19,6 +20,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -88,7 +90,46 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             fontColor: MyColors.yellow01,
                           ),
                         ),
-                        if (model.maintenanceData?.companyName != null)
+                        GestureDetector(
+                          onTap: () async {
+                            buildLoadingDialog(context);
+                            bool isSucceed =
+                                await model.requestGetProjectData();
+                            Navigator.pop(context);
+
+                            if (!isSucceed) {
+                              showDialogWidget(
+                                context,
+                                title: "Data Proyek",
+                                isSuccessDialog: false,
+                                description: model.errorMsg ??
+                                    "Gagal mendapatkan Data Proyek. \n Coba beberappa saat lagi.",
+                                positiveLabel: "Okay",
+                                positiveCallback: () => Navigator.pop(context),
+                              );
+                              return;
+                            }
+
+                            Navigator.pushNamed(
+                              context,
+                              Routes.detailProject,
+                              arguments: DetailProjectViewParam(
+                                projectData: model.projectData,
+                              ),
+                            );
+                          },
+                          child: Text(
+                            model.maintenanceData?.projectName ?? "",
+                            style: buildTextStyle(
+                              fontSize: 24,
+                              fontWeight: 700,
+                              fontColor: MyColors.blueLihatSelengkapnya,
+                              isUnderlined: true,
+                            ),
+                          ),
+                        ),
+                        if (model.maintenanceData?.companyName != null) ...[
+                          Spacings.vert(4),
                           Text(
                             model.maintenanceData?.companyName ?? "",
                             style: buildTextStyle(
@@ -97,20 +138,13 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               fontColor: MyColors.lightBlack02,
                             ),
                           ),
-                        Text(
-                          model.maintenanceData?.customerName ?? "",
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontWeight: 400,
-                            fontColor: MyColors.lightBlack02,
-                          ),
-                        ),
-                        Spacings.vert(35),
+                        ],
+                        Spacings.vert(24),
                         StatusCardWidget(
                           cardType: model.statusCardType,
                           onTap: () {},
                         ),
-                        Spacings.vert(35),
+                        Spacings.vert(24),
                         TextInput.disabled(
                           label: "Lokasi",
                           text: model.maintenanceData?.unitLocation,

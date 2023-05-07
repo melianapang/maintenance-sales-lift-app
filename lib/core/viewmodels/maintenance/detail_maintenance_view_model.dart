@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -43,6 +44,9 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
+
+  ProjectData? _projectData;
+  ProjectData? get projectData => _projectData;
 
   StatusCardType _statusCardType = StatusCardType.Pending;
   StatusCardType get statusCardType => _statusCardType;
@@ -146,6 +150,20 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     }
 
     _errorMsg = response.left.message;
+  }
+
+  Future<bool> requestGetProjectData() async {
+    final response = await _apiService.requestDetailProject(
+      projectId: int.parse(_maintenanceData?.projectId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _projectData = response.right;
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
   }
 
   void _mappingToTimelineData() {
