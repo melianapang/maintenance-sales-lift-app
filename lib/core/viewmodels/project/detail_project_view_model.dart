@@ -40,7 +40,7 @@ class DetailProjectViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     _listPic.addAll(projectData?.pics ?? []);
-    _checkIsAllowedToDeleteData();
+    await _checkIsAllowedToDeleteData();
     setBusy(false);
   }
 
@@ -48,9 +48,9 @@ class DetailProjectViewModel extends BaseViewModel {
     _isPreviousPageNeedRefresh = value;
   }
 
-  void _checkIsAllowedToDeleteData() {
+  Future<void> _checkIsAllowedToDeleteData() async {
     _isAllowedToDeleteData =
-        _authenticationService.getUserRole() == Role.SuperAdmin;
+        await _authenticationService.getUserRole() == Role.SuperAdmin;
   }
 
   void resetErrorMsg() {
@@ -83,6 +83,7 @@ class DetailProjectViewModel extends BaseViewModel {
     setBusy(true);
     resetErrorMsg();
     await requestGetDetailProject();
+    notifyListeners();
     setBusy(false);
   }
 }
