@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -20,7 +21,8 @@ class OneSignalService {
 
   final NavigationService _navigationService;
 
-  Future<void> initOneSignal() async {
+  Future<String> initOneSignal() async {
+    final completer = Completer<String>();
     await OneSignal.shared.setAppId("5819ec6f-0196-4e71-b042-49478c0ed81e");
 
     // We will update this once he logged in and goes to dashboard.
@@ -29,8 +31,12 @@ class OneSignalService {
     // Store it into shared prefs, So that later we can use it.
     // OneSignPreferences.setOnesignalUserId(osUserID);
 
-    await _setOneSignalConfiguration();
-    _initOneSignalListener();
+    await _setOneSignalConfiguration().then((value) {
+      _initOneSignalListener();
+      completer.complete("Succeed");
+    });
+
+    return completer.future;
   }
 
   Future<void> _setOneSignalConfiguration() async {

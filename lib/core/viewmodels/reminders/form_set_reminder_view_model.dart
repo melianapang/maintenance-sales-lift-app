@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
@@ -28,6 +30,8 @@ class FormSetReminderViewModel extends BaseViewModel {
 
   final CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
+
+  bool _isNotificationPermissionGrantedBefore = true;
 
   // TextEditingController
   final nomorPelangganController = TextEditingController();
@@ -102,10 +106,6 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> _refreshOneSignal() async {
-    await _oneSignalService.initOneSignal();
-  }
-
   Future<bool> requestCreateReminder() async {
     bool isGranted = await PermissionUtils.requestPermission(
       Permission.notification,
@@ -113,12 +113,18 @@ class FormSetReminderViewModel extends BaseViewModel {
 
     if (!isGranted) {
       _errorMsg = "Tolong ijinkan aplikasi mengakses notifikasi";
+      _isNotificationPermissionGrantedBefore = false;
       return false;
     }
 
     //after notification granted, then refresh onesignal
-    if (_errorMsg == "Tolong ijinkan aplikasi mengakses notifikasi") {
-      await _refreshOneSignal();
+    if (!_isNotificationPermissionGrantedBefore) {
+      await _oneSignalService
+          .initOneSignal()
+          .then((value) => _isNotificationPermissionGrantedBefore = true);
+      //sometimes need to wait until the onesignal is cleary refreshed.
+      await Future.delayed(const Duration(seconds: 5));
+
       _errorMsg = null;
     }
 

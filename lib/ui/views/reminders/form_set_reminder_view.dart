@@ -90,7 +90,9 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               showDialogWidget(
                 context,
                 title: "Menambahkan Pengingat",
-                description: model.errorMsg ?? "Gagal menambahkan penginat",
+                description: model.errorMsg == "Unexpected Error"
+                    ? "Tolong tunggu beberapa saat sebelum mencoba kembali."
+                    : model.errorMsg ?? "Gagal menambahkan penginat",
                 isSuccessDialog: result,
                 positiveLabel: "Okay",
                 positiveCallback: () => Navigator.pop(context),
