@@ -135,7 +135,7 @@ class CustomCardWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: buildTextStyle(
                           fontColor: cardType.fontColor,
-                          fontSize: desc2Size ?? 16,
+                          fontSize: descSize ?? 16,
                           fontWeight: 400,
                         ),
                       ),
