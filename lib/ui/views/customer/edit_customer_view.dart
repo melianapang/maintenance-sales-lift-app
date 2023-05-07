@@ -317,6 +317,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                               ? "Kolom ini wajib diisi."
                               : null,
                         ),
+                        Spacings.vert(24),
                         TextInput.editable(
                           controller: model.noteController,
                           label: "Catatan",
