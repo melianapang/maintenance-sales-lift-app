@@ -14,12 +14,14 @@ class MapViewParam {
     this.longitude,
     this.latitude,
     this.titleNote,
+    this.dateTime,
     this.descNote,
   });
 
   final double? longitude;
   final double? latitude;
   final String? titleNote;
+  final String? dateTime;
   final String? descNote;
 }
 
@@ -162,11 +164,23 @@ class _MapViewState extends State<MapView> {
                 Spacings.vert(6),
                 Text(
                   StringUtils.removeZeroWidthSpaces(
-                    widget.param.descNote ?? "Deskripsi",
+                    widget.param.dateTime ?? "Waktu Pemeliharaan",
                   ),
                   overflow: TextOverflow.ellipsis,
                   style: buildTextStyle(
                     fontSize: 16,
+                    fontColor: MyColors.lightBlack02,
+                    fontWeight: 600,
+                  ),
+                ),
+                Spacings.vert(6),
+                Text(
+                  StringUtils.removeZeroWidthSpaces(
+                    widget.param.descNote ?? "Deskripsi",
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  style: buildTextStyle(
+                    fontSize: 14,
                     fontColor: MyColors.lightBlack02,
                     fontWeight: 400,
                   ),

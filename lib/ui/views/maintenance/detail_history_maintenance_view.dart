@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_history_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -130,6 +131,17 @@ class _DetailHistoryMaintenanceViewState
                     model.historyMaintenanceData?.latitude ?? "0",
                   ),
                   titleNote: model.historyMaintenanceData?.userName,
+                  dateTime: DateTimeUtils.convertStringToOtherStringDateFormat(
+                    date: model.historyMaintenanceData
+                            ?.updateMaintenanceDateTime ??
+                        DateTimeUtils.convertDateToString(
+                          date: DateTime.now(),
+                          formatter: DateFormat(
+                            DateTimeUtils.DATE_FORMAT_5,
+                          ),
+                        ),
+                    formattedString: DateTimeUtils.DATE_FORMAT_5,
+                  ),
                   descNote: model.historyMaintenanceData?.note,
                 ),
               );

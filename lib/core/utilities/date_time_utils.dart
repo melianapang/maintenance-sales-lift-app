@@ -5,6 +5,7 @@ class DateTimeUtils {
   static String DATE_FORMAT_2 = "dd MMMM yyyy";
   static String DATE_FORMAT_3 = "yyyy-MM-dd HH:mm:ss";
   static String DATE_FORMAT_4 = "yyyy-MM-dd";
+  static String DATE_FORMAT_5 = "dd MMMM yyyy, HH:mm:ss";
 
   static String convertHmTimeToString(DateTime pickedTime) {
     return DateFormat.Hm().format(pickedTime);
