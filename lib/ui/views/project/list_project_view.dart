@@ -94,7 +94,13 @@ class _ListProjectViewState extends State<ListProjectView> {
                         return CustomCardWidget(
                           cardType: CardType.list,
                           title: model.listProject[index].projectName,
-                          description: model.listProject[index].customerName,
+                          description: model.listProject[index].companyName !=
+                                      null ||
+                                  model.listProject[index].companyName
+                                          ?.isNotEmpty ==
+                                      true
+                              ? "${model.listProject[index].companyName} | ${model.listProject[index].customerName}"
+                              : model.listProject[index].customerName,
                           titleSize: 20,
                           descSize: 16,
                           onTap: () {

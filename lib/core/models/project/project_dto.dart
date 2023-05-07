@@ -56,6 +56,7 @@ class ProjectData {
     required this.city,
     required this.customerId,
     required this.customerName,
+    required this.companyName,
     required this.pics,
   });
 
@@ -78,6 +79,9 @@ class ProjectData {
 
   @JsonKey(name: "customer_name")
   final String customerName;
+
+  @JsonKey(name: "company_name")
+  final String? companyName;
 
   @JsonKey(name: "address")
   final String address;

@@ -78,6 +78,7 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       city: "",
       customerId: "",
       customerName: "",
+      companyName: "",
       pics: [],
     );
   }
