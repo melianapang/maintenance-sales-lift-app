@@ -51,14 +51,6 @@ class EditCustomerViewModel extends BaseViewModel {
   // End of TextEditingController
 
   // Dropdown related
-  int _selectedSumberDataOption = 0;
-  int get selectedSumberDataOption => _selectedSumberDataOption;
-  final List<FilterOption> _sumberDataOptions = [
-    FilterOption("Leads", true),
-    FilterOption("Non-Leads", false),
-  ];
-  List<FilterOption> get sumberDataOptions => _sumberDataOptions;
-
   int _selectedKebutuhanPelangganOption = 0;
   int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
   final List<FilterOption> _kebutuhanPelangganOptions = [
@@ -101,9 +93,6 @@ class EditCustomerViewModel extends BaseViewModel {
   }
 
   void _handleAvailableData() {
-    _selectedSumberDataOption = int.parse(_customerData?.dataSource ?? "0") > 1
-        ? 1
-        : int.parse(_customerData?.dataSource ?? "0");
     _selectedTipePelangganOption =
         int.parse(_customerData?.customerType ?? "0") > 1
             ? 1
@@ -115,9 +104,6 @@ class EditCustomerViewModel extends BaseViewModel {
 
     setSelectedTipePelanggan(
       selectedMenu: int.parse(_selectedTipePelangganOption.toString()),
-    );
-    setSelectedSumberData(
-      selectedMenu: int.parse(_selectedSumberDataOption.toString()),
     );
     setSelectedKebutuhanPelanggan(
       selectedMenu: int.parse(_selectedKebutuhanPelangganOption.toString()),
@@ -151,21 +137,6 @@ class EditCustomerViewModel extends BaseViewModel {
 
   void onChangedCity(String value) {
     _isCityValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void setSelectedSumberData({
-    required int selectedMenu,
-  }) {
-    _selectedSumberDataOption = selectedMenu;
-    for (int i = 0; i < _sumberDataOptions.length; i++) {
-      if (i == selectedMenu) {
-        _sumberDataOptions[i].isSelected = true;
-        continue;
-      }
-      _sumberDataOptions[i].isSelected = false;
-    }
-
     notifyListeners();
   }
 
@@ -219,7 +190,9 @@ class EditCustomerViewModel extends BaseViewModel {
       city: cityController.text,
       note: noteController.text,
       companyName: namaPerusahaanController.text,
-      dataSource: _selectedSumberDataOption,
+      dataSource: int.parse(_customerData?.dataSource ?? "0") > 1
+          ? 1
+          : int.parse(_customerData?.dataSource ?? "0"),
       customerType: _selectedTipePelangganOption,
     );
 

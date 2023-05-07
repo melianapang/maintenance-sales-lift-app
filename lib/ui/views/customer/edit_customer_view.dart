@@ -182,30 +182,6 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           onTap: () {
                             _showBottomFilterDialog(
                               context,
-                              "Sumber Data",
-                              model,
-                              listMenu: model.sumberDataOptions,
-                              selectedMenu: model.selectedSumberDataOption,
-                              setSelectedMenu: model.setSelectedSumberData,
-                            );
-                          },
-                          child: TextInput.disabled(
-                            label: "Sumber Data",
-                            text: model
-                                .sumberDataOptions[
-                                    model.selectedSumberDataOption]
-                                .title,
-                            suffixIcon: const Icon(
-                              PhosphorIcons.caretDownBold,
-                              color: MyColors.lightBlack02,
-                            ),
-                          ),
-                        ),
-                        Spacings.vert(24),
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomFilterDialog(
-                              context,
                               "Tipe Pelanggan",
                               model,
                               listMenu: model.tipePelangganOptions,
