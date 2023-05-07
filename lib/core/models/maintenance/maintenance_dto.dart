@@ -52,6 +52,8 @@ class MaintenanceData {
     required this.phoneNumber,
     required this.customerName,
     required this.companyName,
+    required this.projectId,
+    required this.projectName,
     required this.unitId,
     required this.unitName,
     required this.unitLocation,
@@ -59,6 +61,7 @@ class MaintenanceData {
     required this.longitude,
     required this.maintenanceResult,
     required this.scheduleDate,
+    required this.updateMaintenanceDateTime,
     required this.note,
     required this.maintenanceFiles,
   });
@@ -74,14 +77,20 @@ class MaintenanceData {
   @JsonKey(name: "user_name")
   final String userName;
 
+  @JsonKey(name: "phone_number")
+  final String phoneNumber;
+
   @JsonKey(name: "customer_name")
   final String customerName;
 
   @JsonKey(name: "company_name")
   final String? companyName;
 
-  @JsonKey(name: "phone_number")
-  final String phoneNumber;
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
 
   @JsonKey(name: "latitude")
   final String? latitude;
@@ -97,6 +106,9 @@ class MaintenanceData {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "update_maintenance_datetime")
+  final String? updateMaintenanceDateTime;
 
   @JsonKey(name: "unit_id")
   final String unitId;
@@ -235,10 +247,13 @@ class DetailMaintenanceData {
     required this.customerName,
     required this.unitName,
     required this.unitLocation,
+    required this.projectId,
+    required this.projectName,
     required this.latitude,
     required this.longitude,
     required this.maintenanceResult,
     required this.scheduleDate,
+    required this.updateMaintenanceDateTime,
     required this.note,
     required this.maintenanceFiles,
   });
@@ -260,6 +275,12 @@ class DetailMaintenanceData {
   @JsonKey(name: "phone_number")
   final String phoneNumber;
 
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
+
   @JsonKey(name: "latitude")
   final String? latitude;
 
@@ -274,6 +295,9 @@ class DetailMaintenanceData {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "update_maintenance_datetime")
+  final String? updateMaintenanceDateTime;
 
   @JsonKey(name: "unit_name")
   final String unitName;
@@ -340,6 +364,7 @@ class HistoryMaintenanceData {
     required this.longitude,
     required this.maintenanceResult,
     required this.scheduleDate,
+    required this.updateMaintenanceDateTime,
     required this.note,
     required this.maintenanceFiles,
   });
@@ -386,6 +411,9 @@ class HistoryMaintenanceData {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "update_maintenance_datetime")
+  final String updateMaintenanceDateTime;
 
   @JsonKey(name: "maintenance_file")
   final List<MaintenanceFile>? maintenanceFiles;
