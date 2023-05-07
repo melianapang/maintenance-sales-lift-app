@@ -123,6 +123,13 @@ class _DetailUserViewState extends State<DetailUserView> {
                               : "User gagal dihapus. \n ${model.errorMsg}.",
                           positiveLabel: "OK",
                           positiveCallback: () {
+                            if (isSucceed) {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop(true);
+                              return;
+                            }
+
                             model.resetErrorMsg();
                             Navigator.maybePop(context);
                           },

@@ -106,10 +106,12 @@ class _ListUserViewState extends State<ListUserView> {
                                 userData: model.listUser[index],
                               ),
                             ).then(
-                              (value) {
+                              (value) async {
                                 if (value == null) return;
                                 if (value == true) {
-                                  model.refreshPage();
+                                  await model.refreshPage();
+
+                                  _handleErrorDialog(context, model);
                                 }
                               },
                             );
