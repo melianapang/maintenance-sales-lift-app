@@ -44,7 +44,6 @@ class EditUserViewModel extends BaseViewModel {
   //End of Dropdown related
 
   final nameController = TextEditingController();
-  final usernameController = TextEditingController();
   final roleController = TextEditingController();
   final addressController = TextEditingController();
   final cityController = TextEditingController();
@@ -53,9 +52,6 @@ class EditUserViewModel extends BaseViewModel {
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
-
-  bool _isUsernameValid = true;
-  bool get isUsernameValid => _isUsernameValid;
 
   bool _isRoleValid = true;
   bool get isRoleValid => _isRoleValid;
@@ -81,7 +77,6 @@ class EditUserViewModel extends BaseViewModel {
     await checkUserEligibility();
 
     nameController.text = _userData?.name ?? "";
-    usernameController.text = _userData?.username ?? "";
     roleController.text = _userData?.roleName ?? "";
     addressController.text = _userData?.address ?? "";
     cityController.text = _userData?.city ?? "";
@@ -140,11 +135,6 @@ class EditUserViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void onChangedUsername(String value) {
-    _isUsernameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
   void onChangedAddress(String value) {
     _isAdressValid = value.isNotEmpty;
     notifyListeners();
@@ -167,7 +157,6 @@ class EditUserViewModel extends BaseViewModel {
 
   bool _isValid() {
     _isNameValid = nameController.text.isNotEmpty;
-    _isUsernameValid = usernameController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
@@ -175,7 +164,6 @@ class EditUserViewModel extends BaseViewModel {
     notifyListeners();
 
     return _isNameValid &&
-        _isUsernameValid &&
         _isAdressValid &&
         _isCityValid &&
         _isPhoneNumberValid &&
@@ -196,7 +184,7 @@ class EditUserViewModel extends BaseViewModel {
         userId: int.parse(_userData?.userId ?? "0"),
         idRole: getSelectedIdRole(),
         name: nameController.text,
-        username: usernameController.text,
+        username: _userData?.username ?? "",
         phoneNumber: phoneNumberController.text,
         address: addressController.text,
         city: cityController.text,

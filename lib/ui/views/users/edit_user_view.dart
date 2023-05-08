@@ -121,15 +121,6 @@ class _EditUserViewState extends State<EditUserView> {
                       !model.isNameValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
-                  label: "Username",
-                  hintText: "Username",
-                  controller: model.usernameController,
-                  onChangedListener: model.onChangedUsername,
-                  errorText:
-                      !model.isUsernameValid ? "Kolom ini wajib diisi." : null,
-                ),
-                Spacings.vert(24),
                 if (model.isUserAllowedToChangeRole) ...[
                   GestureDetector(
                     onTap: () {
