@@ -183,7 +183,7 @@ class EditCustomerViewModel extends BaseViewModel {
     final response = await _apiService.requestUpdateCustomer(
       customerId: int.parse(_customerData?.customerId ?? "0"),
       nama: namaPelangganController.text,
-      customerNumber: _customerData?.customerNumber ?? "",
+      customerNumber: nomorPelangganController.text,
       customerNeed: _selectedKebutuhanPelangganOption.toString(),
       email: emailController.text,
       phoneNumber: phoneNumberController.text,
