@@ -127,6 +127,9 @@ class TextInput extends StatelessWidget {
           keyboardType: keyboardType,
           minLines: minLines,
           maxLines: maxLines,
+          textInputAction: keyboardType == TextInputType.multiline
+              ? TextInputAction.newline
+              : null,
           inputFormatters: [
             LengthLimitingTextInputFormatter(
               maxLength,
