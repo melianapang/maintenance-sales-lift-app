@@ -181,14 +181,15 @@ class EditUserViewModel extends BaseViewModel {
     }
 
     final response = await _apiService.requestUpdateUser(
-        userId: int.parse(_userData?.userId ?? "0"),
-        idRole: getSelectedIdRole(),
-        name: nameController.text,
-        username: _userData?.username ?? "",
-        phoneNumber: phoneNumberController.text,
-        address: addressController.text,
-        city: cityController.text,
-        email: emailController.text);
+      userId: int.parse(_userData?.userId ?? "0"),
+      idRole: getSelectedIdRole(),
+      name: nameController.text,
+      username: _userData?.username ?? "",
+      phoneNumber: phoneNumberController.text,
+      address: addressController.text,
+      city: cityController.text,
+      email: emailController.text,
+    );
 
     if (response.isRight) return true;
 

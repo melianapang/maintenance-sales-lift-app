@@ -86,7 +86,10 @@ class _EditUserViewState extends State<EditUserView> {
                   showDialogWidget(
                     context,
                     title: "Ubah Data User",
-                    description: "Perubahan data user berhasil disimpan",
+                    description: isSucceed
+                        ? "Perubahan data user berhasil disimpan"
+                        : model.errorMsg ??
+                            "Perubahan data user gagal disimpan",
                     isSuccessDialog: isSucceed,
                     positiveLabel: "OK",
                     positiveCallback: () {
