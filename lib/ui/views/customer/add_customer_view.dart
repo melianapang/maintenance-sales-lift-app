@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/add_customer_view_model.dart';
@@ -84,6 +85,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: AddCustomerViewModel(
+        authenticationService: Provider.of<AuthenticationService>(context),
         dioService: Provider.of<DioService>(context),
       ),
       builder: (context, model, _) {
@@ -267,6 +269,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                     hintText: "Tulis catatan disini...",
                     controller: model.noteController,
                     onChangedListener: (text) {},
+                    keyboardType: TextInputType.multiline,
                     maxLines: 5,
                   ),
                 ],

@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:gcloud/http.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddCustomerViewModel extends BaseViewModel {
   AddCustomerViewModel({
+    required AuthenticationService authenticationService,
     required DioService dioService,
-  }) : _apiService = ApiService(
+  })  : _authenticationService = authenticationService,
+        _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         );
 
   final ApiService _apiService;
+  final AuthenticationService _authenticationService;
 
   // Dropdown related
   int _selectedKebutuhanPelangganOption = 0;
@@ -164,11 +170,27 @@ class AddCustomerViewModel extends BaseViewModel {
       return false;
     }
 
+    Role userRole = await _authenticationService.getUserRole();
+    String dataSource = "0";
+    switch (userRole) {
+      case Role.SuperAdmin:
+      case Role.Admin:
+        dataSource = "0";
+        break;
+      case Role.Engineers:
+        break;
+      case Role.Sales:
+      default:
+        dataSource = "1";
+        break;
+    }
+
     final response = await _apiService.requestCreateCustomer(
         nama: customerNameController.text,
         customerNumber: customerNumberController.text,
         customerType: _selectedTipePelangganOption,
         customerNeed: _selectedKebutuhanPelangganOption.toString(),
+        dataSource: dataSource,
         email: emailController.text,
         companyName: companyNameController.text,
         phoneNumber: phoneNumberController.text,
