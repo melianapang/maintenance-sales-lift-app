@@ -297,7 +297,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                         TextInput.editable(
                           controller: model.noteController,
                           label: "Catatan",
-                          hintText: "Tulis catatanmu disini...m",
+                          hintText: "Tulis catatanmu disini...",
                         ),
                       ],
                     ),
