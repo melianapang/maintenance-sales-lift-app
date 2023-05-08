@@ -161,12 +161,13 @@ class EditProjectViewModel extends BaseViewModel {
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        _isShowNoDataFoundPage =
-            _listCustomer?.isEmpty == true || _listCustomer == null;
-
-        notifyListeners();
       }
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty == true ||
+          _listCustomer?.isEmpty == true ||
+          _listCustomer == null;
+      notifyListeners();
+
       return;
     }
 
