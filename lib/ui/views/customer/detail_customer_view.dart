@@ -137,7 +137,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         ),
                         Spacings.vert(35),
                         TextInput.disabled(
-                          label: "Nomor Customer",
+                          label: "Nomor Pelanggan",
                           text: model.customerData?.customerNumber,
                         ),
                         Spacings.vert(24),
