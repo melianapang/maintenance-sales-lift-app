@@ -154,6 +154,7 @@ class _FormDeleteMaintenanceViewState extends State<FormDeleteMaintenanceView> {
                     label: "Alasan Lainnya",
                     hintText: "Tulis alasan anda disini..",
                     maxLines: 5,
+                    keyboardType: TextInputType.multiline,
                   ),
                   Spacings.vert(24),
                 ],

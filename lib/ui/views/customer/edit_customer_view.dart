@@ -298,6 +298,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           controller: model.noteController,
                           label: "Catatan",
                           hintText: "Tulis catatanmu disini...",
+                          keyboardType: TextInputType.multiline,
                         ),
                       ],
                     ),

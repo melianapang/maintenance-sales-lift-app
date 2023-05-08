@@ -223,6 +223,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
                   maxLines: 5,
+                  keyboardType: TextInputType.multiline,
                 ),
               ],
             ),

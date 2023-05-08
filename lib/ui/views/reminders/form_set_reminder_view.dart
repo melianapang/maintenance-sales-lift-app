@@ -199,6 +199,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                   label: "Catatan",
                   hintText: "Tulis catatan disini...",
                   maxLines: 5,
+                  keyboardType: TextInputType.multiline,
                 ),
               ],
             ),

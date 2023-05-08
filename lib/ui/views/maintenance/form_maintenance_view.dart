@@ -276,6 +276,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   controller: model.noteController,
                   hintText: "Tulis catatan disini..",
                   maxLines: 5,
+                  keyboardType: TextInputType.multiline,
                 ),
                 Spacings.vert(24),
                 DatePickerWidget(

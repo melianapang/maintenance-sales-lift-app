@@ -211,6 +211,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
                   label: "Catatan",
                   maxLines: 5,
                   hintText: "Tulis keterangan disini...",
+                  keyboardType: TextInputType.multiline,
                 ),
                 Spacings.vert(24),
               ],
