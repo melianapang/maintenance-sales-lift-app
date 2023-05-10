@@ -120,10 +120,7 @@ class DetailFollowUpViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.isEmpty) {
-        _errorMsg = "Tidak ada data riwayat yang bisa ditampilkan.";
-        return;
-      }
+      if (response.right.isEmpty) return;
 
       _historyData = response.right;
       _mappingToTimelineData();
