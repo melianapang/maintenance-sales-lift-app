@@ -1226,6 +1226,7 @@ class ApiService {
     required int projectId,
     required String unitName,
     required String unitLocation,
+    required String firstMaintenanceDate,
   }) async {
     try {
       final payload = CreateUnitRequest(
@@ -1233,6 +1234,7 @@ class ApiService {
         unitName: unitName,
         customerId: customerId,
         unitLocation: unitLocation,
+        firstMaintenanceDate: firstMaintenanceDate,
       );
       final HttpResponse<dynamic> response =
           await api.requestCreateUnit(payload);

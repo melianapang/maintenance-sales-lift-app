@@ -15,6 +15,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
@@ -142,6 +143,16 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                         color: MyColors.lightBlack02,
                       ),
                     ),
+                  ),
+                  Spacings.vert(24),
+                  DatePickerWidget(
+                    label: "Tanggal Pemeliharaan Pertama",
+                    isRangeCalendar: false,
+                    selectedDates: model.selectedNextMaintenanceDates,
+                    onSelectedDates: (DateTime start, DateTime? end) {
+                      print('$start $end');
+                      model.setSelectedNextMaintenanceDates([start]);
+                    },
                   ),
                   Spacings.vert(24),
                 ],

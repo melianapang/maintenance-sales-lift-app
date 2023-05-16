@@ -4,7 +4,9 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:intl/intl.dart';
 
 class AddUnitCustomerViewModel extends BaseViewModel {
   AddUnitCustomerViewModel({
@@ -43,6 +45,16 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   ProjectData? _selectedProyek;
   ProjectData? get selectedProyek => _selectedProyek;
 
+  List<DateTime> _selectedNextMaintenanceDates = [
+    DateTime.now().add(
+      Duration(
+        days: 7,
+      ),
+    ),
+  ];
+  List<DateTime> get selectedNextMaintenanceDates =>
+      _selectedNextMaintenanceDates;
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
@@ -71,6 +83,11 @@ class AddUnitCustomerViewModel extends BaseViewModel {
 
   void onChangedLocation(String value) {
     _isLocationValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void setSelectedNextMaintenanceDates(List<DateTime> value) {
+    _selectedNextMaintenanceDates = value;
     notifyListeners();
   }
 
@@ -132,6 +149,12 @@ class AddUnitCustomerViewModel extends BaseViewModel {
       projectId: int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: nameController.text,
       unitLocation: locationController.text,
+      firstMaintenanceDate: DateTimeUtils.convertDateToString(
+        date: _selectedNextMaintenanceDates.first,
+        formatter: DateFormat(
+          DateTimeUtils.DATE_FORMAT_3,
+        ),
+      ),
     );
 
     if (response.isRight) return true;

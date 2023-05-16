@@ -87,6 +87,7 @@ class CreateUnitRequest {
     required this.projectId,
     required this.unitName,
     required this.unitLocation,
+    required this.firstMaintenanceDate,
   });
 
   factory CreateUnitRequest.fromJson(Map<String, dynamic> json) =>
@@ -105,6 +106,9 @@ class CreateUnitRequest {
 
   @JsonKey(name: "unit_location")
   final String unitLocation;
+
+  @JsonKey(name: "maintenance_date")
+  final String firstMaintenanceDate;
 }
 
 @JsonSerializable()
