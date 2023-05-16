@@ -14,12 +14,12 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailProjectViewParam {
   DetailProjectViewParam({
@@ -191,7 +191,32 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                     label: "Kota",
                     text: model.projectData?.city,
                   ),
-                  Spacings.vert(32),
+                  Spacings.vert(12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(),
+                      SizedBox(),
+                      ButtonWidget(
+                        buttonType: ButtonType.secondary,
+                        text: "Dokumen Proyek",
+                        buttonSize: ButtonSize.medium,
+                        padding: const EdgeInsets.all(
+                          8,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.documentProject,
+                            arguments: DocumentProjectViewwParam(
+                              projectData: model.projectData,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  Spacings.vert(24),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(

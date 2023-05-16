@@ -48,6 +48,7 @@ class Routes {
   static const String openNotificationReminder = "open-notification-reminder";
   static const String exportCustomer = 'export-customer-data';
   static const String exportMaintenance = 'export-maintenance-data';
+  static const String documentProject = 'document-project';
 
   // Gallery
   static const String imageDetail = 'image-detail';

@@ -33,6 +33,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/list_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/after_set_reminder_view.dart';
@@ -380,6 +381,16 @@ class AppRouter {
                 : DetailProjectViewParam();
         return buildRoute(
           builder: (_) => DetailProjectView(
+            param: param,
+          ),
+        );
+      case Routes.documentProject:
+        final DocumentProjectViewwParam param =
+            settings.arguments is DocumentProjectViewwParam
+                ? settings.arguments as DocumentProjectViewwParam
+                : DocumentProjectViewwParam();
+        return buildRoute(
+          builder: (_) => DocumentProjectView(
             param: param,
           ),
         );

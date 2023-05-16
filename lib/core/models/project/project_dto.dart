@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 
 part 'project_dto.g.dart';
 
@@ -58,6 +59,7 @@ class ProjectData {
     required this.customerName,
     required this.companyName,
     required this.pics,
+    this.documents,
   });
 
   factory ProjectData.fromJson(Map<String, dynamic> json) =>
@@ -91,6 +93,9 @@ class ProjectData {
 
   @JsonKey(name: "pics")
   final List<PICProject> pics;
+
+  @JsonKey(name: "documents")
+  final List<DocumentData>? documents;
 }
 
 @JsonSerializable()

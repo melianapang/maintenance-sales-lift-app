@@ -55,7 +55,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
     return ViewModel(
       model: DetailCustomerViewModel(
         dioService: Provider.of<DioService>(context),
-        downloadService: Provider.of<DownloadService>(context),
         customerData: widget.param.customerData,
       ),
       onModelReady: (DetailCustomerViewModel model) async {
@@ -182,11 +181,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                           hintText: "Catatan mengenai pelanggan...",
                           text: model.customerData?.note,
                         ),
-                        Spacings.vert(24),
-                        if (model.customerData?.documents.isNotEmpty == true)
-                          ..._buildDocumentList(
-                            model: model,
-                          ),
                       ],
                     ),
                   )
@@ -199,135 +193,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
         );
       },
     );
-  }
-
-  List<Widget> _buildDocumentList({
-    required DetailCustomerViewModel model,
-  }) {
-    return [
-      Spacings.vert(24),
-      const Divider(
-        thickness: 0.5,
-        color: MyColors.yellow,
-      ),
-      Spacings.vert(6),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          StringUtils.removeZeroWidthSpaces(
-            "Daftar Dokumen",
-          ),
-          textAlign: TextAlign.start,
-          style: buildTextStyle(
-            fontSize: 18,
-            fontColor: MyColors.yellow01,
-            fontWeight: 500,
-          ),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      Spacings.vert(6),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          StringUtils.removeZeroWidthSpaces(
-            "Klik salah satu daftar untuk mengunduh berkas.",
-          ),
-          textAlign: TextAlign.start,
-          style: buildTextStyle(
-            fontSize: 12,
-            fontColor: MyColors.yellow02,
-            fontWeight: 500,
-          ),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      Spacings.vert(24),
-      ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: model.customerData?.documents.length ?? 0,
-        separatorBuilder: (context, index) => const Divider(
-          color: MyColors.lightBlack01,
-          thickness: 0.4,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: !model.busy
-                    ? () async {
-                        if (model.customerData?.documents[index].filePath
-                                .isEmpty ==
-                            true) return;
-
-                        bool isGranted = await model.checkPermissions();
-                        if (!isGranted) return;
-
-                        buildLoadingDialog(context);
-                        await model.downloadData(
-                          index: index,
-                        );
-                        Navigator.pop(context);
-
-                        showDialogWidget(
-                          context,
-                          title: "Bukti Dokument",
-                          isSuccessDialog: model.errorMsg == null,
-                          description: model.errorMsg == null
-                              ? "Bukti Dokumen berhasil diunduh. Untuk menyimpan ke perangkat anda, Anda bisa menekan tombol unduh saat berkas berhasil dibuka."
-                              : model.errorMsg ??
-                                  "Gagal mengunduh berkas. Coba beberapa saat lagi.",
-                          positiveLabel: "OK",
-                          positiveCallback: () {
-                            Navigator.maybePop(context);
-                          },
-                        );
-                      }
-                    : null,
-                child: Text(
-                  mappingCustomerFileTypeToString(
-                    int.parse(
-                      model.customerData?.documents[index].fileType ?? "3",
-                    ),
-                  ),
-                  textAlign: TextAlign.start,
-                  style: buildTextStyle(
-                    fontSize: 16,
-                    fontWeight: 400,
-                    fontColor: MyColors.blueLihatSelengkapnya,
-                    isUnderlined: true,
-                  ),
-                ),
-              ),
-              Spacings.vert(6),
-              Text(
-                'Dibuat pada tanggal: ${DateTimeUtils.convertStringToOtherStringDateFormat(
-                  date: model.customerData?.documents[index].createdAt ??
-                      DateTimeUtils.convertDateToString(
-                        date: DateTime.now(),
-                        formatter: DateFormat(
-                          DateTimeUtils.DATE_FORMAT_2,
-                        ),
-                      ),
-                  formattedString: DateTimeUtils.DATE_FORMAT_2,
-                )}',
-                textAlign: TextAlign.start,
-                style: buildTextStyle(
-                  fontSize: 12,
-                  fontWeight: 400,
-                  fontColor: MyColors.lightBlack02,
-                ),
-              ),
-              Spacings.vert(8),
-            ],
-          );
-        },
-      ),
-    ];
   }
 
   Widget _buildExtendedFAB(DetailCustomerViewModel model) {
