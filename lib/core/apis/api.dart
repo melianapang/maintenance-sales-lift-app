@@ -1001,7 +1001,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, String>> requestCreateCustomer({
+  Future<Either<Failure, CreateCustomerResponse>> requestCreateCustomer({
     required String nama,
     required String customerNumber,
     required int customerType,
@@ -1038,13 +1038,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, String>(createCustomerResponse.message);
+        return Right<Failure, CreateCustomerResponse>(createCustomerResponse);
       }
 
-      return ErrorUtils<String>().handleDomainError(response);
+      return ErrorUtils<CreateCustomerResponse>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<String>().handleError(e);
+      return ErrorUtils<CreateCustomerResponse>().handleError(e);
     }
   }
 

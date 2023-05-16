@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gcloud/http.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -196,10 +197,11 @@ class AddCustomerViewModel extends BaseViewModel {
     _errorMsg = null;
   }
 
-  Future<bool> requestCreateCustomer() async {
+  // @TODO(meli): change into Future<CustomerData> obj later // wait for BE
+  Future<CustomerData?> requestCreateCustomer() async {
     if (!isValid()) {
       _errorMsg = "Isi semua data dengan benar.";
-      return false;
+      return null;
     }
 
     final response = await _apiService.requestCreateCustomer(
@@ -216,9 +218,13 @@ class AddCustomerViewModel extends BaseViewModel {
       city: cityController.text,
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      return response.right.data.customerData;
+      // @TODO(meli): change into this later // wait for BE
+      // return response.right.customer;
+    }
 
     _errorMsg = response.left.message;
-    return false;
+    return null;
   }
 }

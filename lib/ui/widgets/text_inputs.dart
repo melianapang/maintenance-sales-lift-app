@@ -12,6 +12,7 @@ class TextInput extends StatelessWidget {
     Widget? prefixIcon,
     Widget? suffixIcon,
     Color? backgroundColor = MyColors.darkBlack02,
+    Widget? actionWidget,
   }) {
     final controller = TextEditingController();
     controller.text = text ?? '';
@@ -23,6 +24,7 @@ class TextInput extends StatelessWidget {
       hintText: hintText,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
+      actionWidget: actionWidget,
     );
   }
 
@@ -84,6 +86,7 @@ class TextInput extends StatelessWidget {
     this.fontColor = MyColors.white,
     this.validator,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.actionWidget,
     super.key,
   });
 
@@ -106,19 +109,27 @@ class TextInput extends StatelessWidget {
   final Color fontColor;
   final String? Function(String?)? validator;
   final AutovalidateMode autovalidateMode;
+  final Widget? actionWidget;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) ...[
-          Text(
-            label ?? "",
-            style: buildTextStyle(
-              fontSize: 14,
-              fontColor: MyColors.lightBlack02,
-            ),
+        if (label != null || actionWidget != null) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                label ?? "",
+                style: buildTextStyle(
+                  fontSize: 14,
+                  fontColor: MyColors.lightBlack02,
+                ),
+              ),
+              Spacings.horz(16),
+              actionWidget ?? const SizedBox.shrink(),
+            ],
           ),
           Spacings.vert(8),
         ],

@@ -254,6 +254,7 @@ class CreateCustomerResponse {
   CreateCustomerResponse({
     required this.isSuccess,
     required this.message,
+    required this.data,
   });
 
   factory CreateCustomerResponse.fromJson(Map<String, dynamic> json) =>
@@ -266,6 +267,24 @@ class CreateCustomerResponse {
 
   @JsonKey(name: "Message")
   final String message;
+
+  @JsonKey(name: "Data")
+  final CreateCustomerDataResponse data;
+}
+
+@JsonSerializable()
+class CreateCustomerDataResponse {
+  CreateCustomerDataResponse({
+    required this.customerData,
+  });
+
+  factory CreateCustomerDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateCustomerDataResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateCustomerDataResponseToJson(this);
+
+  @JsonKey(name: "customer")
+  final CustomerData customerData;
 }
 //endregion
 

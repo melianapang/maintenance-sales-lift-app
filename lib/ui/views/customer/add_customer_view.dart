@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -120,17 +121,17 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                   await Navigator.maybePop(context);
 
                   buildLoadingDialog(context);
-                  bool result = await model.requestCreateCustomer();
+                  CustomerData? result = await model.requestCreateCustomer();
                   Navigator.pop(context);
 
                   showDialogWidget(context,
                       title: "Tambah Pelanggan",
-                      description: result
+                      description: result != null
                           ? "Berhasil menambah data pelanggan"
                           : model.errorMsg ?? "Gagal menambah data pelanggan",
-                      isSuccessDialog: result,
+                      isSuccessDialog: result != null,
                       positiveLabel: "OK", positiveCallback: () {
-                    if (result) {
+                    if (result != null) {
                       Navigator.of(context)
                         ..pop()
                         ..pop(result);

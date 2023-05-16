@@ -60,6 +60,11 @@ class AddProjectViewModel extends BaseViewModel {
     FilterOption("Lainnya", false),
   ];
   List<FilterOption> get keperluanProyekOptions => _keperluanProyekOptions;
+
+  _DummyClass? _selectedDummy;
+  _DummyClass? get selectedDummy => _selectedDummy;
+
+  List<FilterOption> dummy = [];
   //endregion
 
   int? _createdProjectId;
@@ -77,6 +82,40 @@ class AddProjectViewModel extends BaseViewModel {
     await requestGetAllCustomer();
 
     setBusy(false);
+  }
+
+  Future<void> fetchDummy() async {
+    Future<void>.delayed(Duration(seconds: 1), () {
+      // mock fetch
+      final List<_DummyClass> result = [
+        _DummyClass(
+          name: 'dummy1',
+          id: '1',
+        ),
+        _DummyClass(
+          name: 'dummy2',
+          id: '2',
+        ),
+        _DummyClass(
+          name: 'dummy3',
+          id: '3',
+        ),
+      ];
+      dummy = result
+          .map(
+            (e) => FilterOption(
+              e.name,
+              e.id == _selectedDummy?.id,
+            ),
+          )
+          .toList();
+      notifyListeners();
+    });
+  }
+
+  void setSelectedDummy(_DummyClass value) {
+    _selectedDummy = value;
+    notifyListeners();
   }
 
   void onChangedName(String value) {
@@ -132,10 +171,15 @@ class AddProjectViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  void setSelectedCustomer({
+  void setSelectedCustomerByIndex({
     required int selectedIndex,
   }) {
     _selectedCustomer = _listCustomer?[selectedIndex];
+    notifyListeners();
+  }
+
+  void setSelectedCustomer(CustomerData data) {
+    _selectedCustomer = data;
     notifyListeners();
   }
 
@@ -215,4 +259,13 @@ class AddProjectViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
     return false;
   }
+}
+
+class _DummyClass {
+  _DummyClass({
+    required this.id,
+    required this.name,
+  });
+  final String id;
+  final String name;
 }
