@@ -120,7 +120,7 @@ class MaintenanceData {
   final String unitLocation;
 
   @JsonKey(name: "maintenance_file")
-  final List<MaintenanceFile> maintenanceFiles;
+  final List<MaintenanceFile>? maintenanceFiles;
 }
 
 @JsonSerializable()
