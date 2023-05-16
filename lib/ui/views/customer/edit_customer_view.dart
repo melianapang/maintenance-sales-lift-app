@@ -3,6 +3,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/edit_customer_view_model.dart';
@@ -101,6 +102,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
       model: EditCustomerViewModel(
         dioService: Provider.of<DioService>(context),
         customerData: widget.param.customerData,
+        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (EditCustomerViewModel model) async {
         await model.initModel();
@@ -178,6 +180,19 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                     ),
                     child: Column(
                       children: [
+                        if (model.isSumberDataFieldVisible) ...[
+                          TextInput.editable(
+                            label: "Sumber Data",
+                            hintText: "Sumber Data",
+                            maxLength: 99,
+                            controller: model.sumberDataController,
+                            onChangedListener: model.onChangedSumberData,
+                            errorText: !model.isSumberDataValid
+                                ? "Kolom ini wajib diisi."
+                                : null,
+                          ),
+                          Spacings.vert(24),
+                        ],
                         GestureDetector(
                           onTap: () {
                             _showBottomFilterDialog(

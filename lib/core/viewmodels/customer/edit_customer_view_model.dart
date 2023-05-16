@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -10,19 +11,26 @@ class EditCustomerViewModel extends BaseViewModel {
   EditCustomerViewModel({
     CustomerData? customerData,
     required DioService dioService,
+    required AuthenticationService authenticationService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
+        _authenticationService = authenticationService,
         _customerData = customerData;
 
   final ApiService _apiService;
+  final AuthenticationService _authenticationService;
 
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
+  bool _isSumberDataFieldVisible = true;
+  bool get isSumberDataFieldVisible => _isSumberDataFieldVisible;
+
   // TextEditingController
+  final sumberDataController = TextEditingController();
   final nomorPelangganController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
@@ -30,6 +38,9 @@ class EditCustomerViewModel extends BaseViewModel {
   final cityController = TextEditingController();
   final emailController = TextEditingController();
   final noteController = TextEditingController();
+
+  bool _isSumberDataValid = true;
+  bool get isSumberDataValid => _isSumberDataValid;
 
   bool _isCustomerNameValid = true;
   bool get isCustomerNameValid => _isCustomerNameValid;
@@ -81,6 +92,7 @@ class EditCustomerViewModel extends BaseViewModel {
 
     if (_customerData != null) {
       _handleAvailableData();
+      sumberDataController.text = _customerData?.dataSource ?? "";
       nomorPelangganController.text = _customerData?.customerNumber ?? "";
       namaPelangganController.text = _customerData?.customerName ?? "";
       namaPerusahaanController.text = _customerData?.companyName ?? "";
@@ -89,7 +101,13 @@ class EditCustomerViewModel extends BaseViewModel {
       emailController.text = _customerData?.email ?? "";
       noteController.text = _customerData?.note ?? "";
     }
+
+    _isSumberDataFieldVisibility();
     setBusy(false);
+  }
+
+  void _isSumberDataFieldVisibility() {
+    _isSumberDataFieldVisible = customerData?.isLead == "1";
   }
 
   void _handleAvailableData() {
@@ -108,6 +126,11 @@ class EditCustomerViewModel extends BaseViewModel {
     setSelectedKebutuhanPelanggan(
       selectedMenu: int.parse(_selectedKebutuhanPelangganOption.toString()),
     );
+  }
+
+  void onChangedSumberData(String value) {
+    _isSumberDataValid = value.isNotEmpty;
+    notifyListeners();
   }
 
   void onChangedCustomerName(String value) {
@@ -190,9 +213,12 @@ class EditCustomerViewModel extends BaseViewModel {
       city: cityController.text,
       note: noteController.text,
       companyName: namaPerusahaanController.text,
-      dataSource: int.parse(_customerData?.dataSource ?? "0") > 1
+      isLead: int.parse(_customerData?.isLead ?? "0") > 1
           ? 1
-          : int.parse(_customerData?.dataSource ?? "0"),
+          : int.parse(_customerData?.isLead ?? "0"),
+      dataSource: (_customerData?.isLead ?? "0") == "1"
+          ? sumberDataController.text
+          : "",
       customerType: _selectedTipePelangganOption,
     );
 

@@ -136,6 +136,11 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         ),
                         Spacings.vert(35),
                         TextInput.disabled(
+                            label: "Sumber Data",
+                            hintText: 'Sumber Data',
+                            text: model.customerData?.dataSource ?? "0"),
+                        Spacings.vert(24),
+                        TextInput.disabled(
                           label: "Nomor Pelanggan",
                           text: model.customerData?.customerNumber,
                         ),
@@ -144,13 +149,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                           label: "Tipe Pelanggan",
                           text: mappingCustomerTypeToString(
                             int.parse(model.customerData?.customerType ?? "0"),
-                          ),
-                        ),
-                        Spacings.vert(24),
-                        TextInput.disabled(
-                          label: "Sumber Data",
-                          text: mappingDataSourceToString(
-                            int.parse(model.customerData?.dataSource ?? "0"),
                           ),
                         ),
                         Spacings.vert(24),

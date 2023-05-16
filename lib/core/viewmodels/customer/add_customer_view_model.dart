@@ -21,6 +21,9 @@ class AddCustomerViewModel extends BaseViewModel {
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
 
+  bool _isSumberDataFieldVisible = true;
+  bool get isSumberDataFieldVisible => _isSumberDataFieldVisible;
+
   // Dropdown related
   int _selectedKebutuhanPelangganOption = 0;
   int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
@@ -41,6 +44,7 @@ class AddCustomerViewModel extends BaseViewModel {
   // End of Dropdown related
 
   //region TextController
+  final sumberDataController = TextEditingController();
   final customerNameController = TextEditingController();
   final customerNumberController = TextEditingController();
   final companyNameController = TextEditingController();
@@ -48,6 +52,9 @@ class AddCustomerViewModel extends BaseViewModel {
   final emailController = TextEditingController();
   final noteController = TextEditingController();
   final cityController = TextEditingController();
+
+  bool _isSumberDataValid = true;
+  bool get isSumberDataValid => _isSumberDataValid;
 
   bool _isCustomerNameValid = true;
   bool get isCustomerNameValid => _isCustomerNameValid;
@@ -72,7 +79,32 @@ class AddCustomerViewModel extends BaseViewModel {
   String? get errorMsg => _errorMsg;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    await _isSumberDataFieldVisibility();
+    setBusy(false);
+  }
+
+  Future<void> _isSumberDataFieldVisibility() async {
+    Role userRole = await _authenticationService.getUserRole();
+    switch (userRole) {
+      case Role.SuperAdmin:
+      case Role.Admin:
+        _isSumberDataFieldVisible = true;
+        break;
+      case Role.Engineers:
+        break;
+      case Role.Sales:
+      default:
+        _isSumberDataFieldVisible = false;
+        break;
+    }
+  }
+
+  void onChangedSumberData(String value) {
+    _isSumberDataValid = value.isNotEmpty;
+    notifyListeners();
+  }
 
   void onChangedCustomerName(String value) {
     _isCustomerNameValid = value.isNotEmpty;
@@ -170,32 +202,19 @@ class AddCustomerViewModel extends BaseViewModel {
       return false;
     }
 
-    Role userRole = await _authenticationService.getUserRole();
-    String dataSource = "0";
-    switch (userRole) {
-      case Role.SuperAdmin:
-      case Role.Admin:
-        dataSource = "0";
-        break;
-      case Role.Engineers:
-        break;
-      case Role.Sales:
-      default:
-        dataSource = "1";
-        break;
-    }
-
     final response = await _apiService.requestCreateCustomer(
-        nama: customerNameController.text,
-        customerNumber: customerNumberController.text,
-        customerType: _selectedTipePelangganOption,
-        customerNeed: _selectedKebutuhanPelangganOption.toString(),
-        dataSource: dataSource,
-        email: emailController.text,
-        companyName: companyNameController.text,
-        phoneNumber: phoneNumberController.text,
-        note: noteController.text,
-        city: cityController.text);
+      nama: customerNameController.text,
+      customerNumber: customerNumberController.text,
+      customerType: _selectedTipePelangganOption,
+      customerNeed: _selectedKebutuhanPelangganOption.toString(),
+      isLead: isSumberDataFieldVisible ? "1" : "0",
+      dataSource: sumberDataController.text,
+      email: emailController.text,
+      companyName: companyNameController.text,
+      phoneNumber: phoneNumberController.text,
+      note: noteController.text,
+      city: cityController.text,
+    );
 
     if (response.isRight) return true;
 

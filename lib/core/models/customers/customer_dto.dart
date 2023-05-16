@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 
 part 'customer_dto.g.dart';
 
@@ -13,6 +11,7 @@ class UpdateCustomerRequest {
     required this.customerNumber,
     required this.customerNeed,
     required this.dataSource,
+    required this.isLead,
     required this.email,
     required this.phoneNumber,
     required this.city,
@@ -47,8 +46,11 @@ class UpdateCustomerRequest {
   @JsonKey(name: "city")
   final String city;
 
+  @JsonKey(name: "is_lead")
+  final int isLead;
+
   @JsonKey(name: "data_source")
-  final int dataSource;
+  final String dataSource;
 
   @JsonKey(name: "note")
   final String note;
@@ -132,13 +134,13 @@ class CustomerData {
     required this.customerName,
     this.companyName,
     required this.customerNeed,
-    required this.dataSource,
     required this.city,
     required this.phoneNumber,
     required this.email,
     required this.status,
+    required this.isLead,
+    required this.dataSource,
     this.note,
-    required this.documents,
   });
 
   factory CustomerData.fromJson(Map<String, dynamic> json) =>
@@ -164,6 +166,9 @@ class CustomerData {
   @JsonKey(name: "customer_need")
   final String customerNeed;
 
+  @JsonKey(name: "is_lead")
+  final String isLead;
+
   @JsonKey(name: "data_source")
   final String dataSource;
 
@@ -181,9 +186,6 @@ class CustomerData {
 
   @JsonKey(name: "status")
   final String status;
-
-  @JsonKey(name: "documents")
-  final List<DocumentData> documents;
 }
 //endregion
 
@@ -195,6 +197,7 @@ class CreateCustomerRequest {
     required this.customerType,
     required this.customerNumber,
     required this.customerNeed,
+    required this.isLead,
     required this.dataSource,
     required this.email,
     required this.phoneNumber,
@@ -220,6 +223,9 @@ class CreateCustomerRequest {
 
   @JsonKey(name: "customer_need")
   final String customerNeed;
+
+  @JsonKey(name: "is_lead")
+  final String isLead;
 
   @JsonKey(name: "data_source")
   final String dataSource;

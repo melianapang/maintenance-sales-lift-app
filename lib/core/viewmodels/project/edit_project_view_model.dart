@@ -98,11 +98,11 @@ class EditProjectViewModel extends BaseViewModel {
       customerName: _projectData?.customerName ?? "",
       customerNeed: "customerNeed",
       dataSource: "dataSource",
+      isLead: "isLead",
       city: "city",
       phoneNumber: "phoneNumber",
       email: "email",
       status: "status",
-      documents: [],
     );
 
     setSelectedKeperluanProyek(

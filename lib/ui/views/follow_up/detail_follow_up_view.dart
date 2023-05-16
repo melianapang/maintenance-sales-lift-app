@@ -82,7 +82,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                   phoneNumber: "",
                   email: "",
                   dataSource: "",
-                  documents: [],
+                  isLead: "",
                   status: "",
                 )),
               ).then((value) {

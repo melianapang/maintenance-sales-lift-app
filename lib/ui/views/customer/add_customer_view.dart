@@ -154,6 +154,19 @@ class _AddCustomerViewState extends State<AddCustomerView> {
               ),
               child: Column(
                 children: [
+                  if (model.isSumberDataFieldVisible) ...[
+                    TextInput.editable(
+                      label: "Sumber Data",
+                      hintText: "Sumber Data",
+                      maxLength: 99,
+                      controller: model.sumberDataController,
+                      onChangedListener: model.onChangedSumberData,
+                      errorText: !model.isSumberDataValid
+                          ? "Kolom ini wajib diisi."
+                          : null,
+                    ),
+                    Spacings.vert(24),
+                  ],
                   GestureDetector(
                     onTap: () {
                       _showBottomDialog(
