@@ -126,7 +126,6 @@ class MaintenanceData {
 @JsonSerializable()
 class UpdateMaintenanceRequest {
   UpdateMaintenanceRequest({
-    required this.userId,
     required this.unitId,
     required this.latitude,
     required this.longitude,
@@ -140,9 +139,6 @@ class UpdateMaintenanceRequest {
       _$UpdateMaintenanceRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateMaintenanceRequestToJson(this);
-
-  @JsonKey(name: "user_id")
-  final int userId;
 
   @JsonKey(name: "unit_id")
   final int unitId;

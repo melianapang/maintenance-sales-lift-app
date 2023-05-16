@@ -142,12 +142,9 @@ class FormMaintenanceViewModel extends BaseViewModel {
       return false;
     }
 
-    String userId = await _sharedPreferenceService.get(SharedPrefKeys.userId);
-
     final response = await _apiService.requestUpdateMaintenace(
       maintenanceId: int.parse(_maintenanceData?.maintenanceId ?? "0"),
       unitId: int.parse(_maintenanceData?.unitId ?? "0"),
-      userId: int.parse(userId),
       latitude: position.latitude,
       longitude: position.longitude,
       maintenanceResult: _selectedHasilMaintenanceOption + 1,
@@ -229,12 +226,9 @@ class FormMaintenanceViewModel extends BaseViewModel {
       return false;
     }
 
-    String userId = await _sharedPreferenceService.get(SharedPrefKeys.userId);
-
     final response = await _apiService.requestUpdateMaintenace(
       maintenanceId: int.parse(_maintenanceData?.maintenanceId ?? "0"),
       unitId: int.parse(_maintenanceData?.unitId ?? "0"),
-      userId: int.parse(userId),
       latitude: position.latitude,
       longitude: position.longitude,
       maintenanceResult: _selectedHasilMaintenanceOption + 1,
