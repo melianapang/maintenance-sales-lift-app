@@ -112,51 +112,6 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
               ),
               child: Column(
                 children: [
-                  // DatePickerWidget(
-                  //   label: "Rentang Tanggal",
-                  //   isRangeCalendar: true,
-                  //   selectedDates: model.selectedDates,
-                  //   onSelectedDates: (DateTime start, DateTime? end) {
-                  //     print('$start $end');
-                  //     model.setSelectedDates([
-                  //       start,
-                  //       if (end != null) end,
-                  //     ]);
-                  //   },
-                  // ),
-                  // Spacings.vert(24),
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: TextInput.disabled(
-                  //     label: "Status Pemeliharaan",
-                  //     text: 'Semua',
-                  //     suffixIcon: const Icon(
-                  //       PhosphorIcons.caretDownBold,
-                  //       color: MyColors.darkBlue01,
-                  //       size: 16,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Spacings.vert(24),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     _showPilihProyekBottomDialog(
-                  //       context,
-                  //       model,
-                  //       setSelectedMenu: model.setSelectedProyek,
-                  //     );
-                  //   },
-                  //   child: TextInput.disabled(
-                  //     label: "Pilih Proyek",
-                  //     hintText: "Pilih proyek yang diinginkan",
-                  //     text: model.selectedProject?.projectName,
-                  //     suffixIcon: const Icon(
-                  //       PhosphorIcons.caretDownBold,
-                  //       color: MyColors.lightBlack02,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Spacings.vert(24),
                   Text(
                     "Tekan tombol 'Unduh Data' dibawah halaman ini untuk mengunduh data pemeliharaan,",
                     textAlign: TextAlign.center,
@@ -178,54 +133,6 @@ class _ExportDataMaintenanceViewState extends State<ExportDataMaintenanceView> {
           ),
         );
       },
-    );
-  }
-
-  void _showPilihProyekBottomDialog(
-    BuildContext context,
-    ExportDataMaintenanceViewModel model, {
-    required void Function({
-      required int selectedIndex,
-    })
-        setSelectedMenu,
-  }) {
-    showGeneralBottomSheet(
-      context: context,
-      title: 'Daftar Pelanggan',
-      isFlexible: false,
-      showCloseButton: false,
-      sizeToScreenRatio: 0.8,
-      child: !model.isShowNoDataFoundPage && !model.busy
-          ? Expanded(
-              child: LazyLoadScrollView(
-                onEndOfPage: () => model.requestGetAllProjects(),
-                scrollDirection: Axis.vertical,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: model.listProject?.length ?? 0,
-                  separatorBuilder: (_, __) => const Divider(
-                    color: MyColors.transparent,
-                    height: 20,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomCardWidget(
-                      cardType: CardType.list,
-                      title: model.listProject?[index].projectName ?? "",
-                      description: model.listProject?[index].customerName,
-                      desc2Size: 16,
-                      titleSize: 20,
-                      onTap: () {
-                        setSelectedMenu(
-                          selectedIndex: index,
-                        );
-                        Navigator.maybePop(context);
-                      },
-                    );
-                  },
-                ),
-              ),
-            )
-          : buildNoDataFoundPage(),
     );
   }
 
