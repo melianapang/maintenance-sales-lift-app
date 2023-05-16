@@ -34,6 +34,7 @@ Role mappingStringToRole(String role) {
     case "Sales":
       return Role.Sales;
     case "Teknisi":
+    case "Engineer":
     default:
       return Role.Engineers;
   }

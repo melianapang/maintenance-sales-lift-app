@@ -58,38 +58,40 @@ class _DetailUserViewState extends State<DetailUserView> {
             title: "Data User",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.editUser,
-                    arguments: EditUserViewParam(
-                      userData: model.userData,
+            actions: model.isAllowedToDeleteEditUser
+                ? <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.editUser,
+                          arguments: EditUserViewParam(
+                            userData: model.userData,
+                          ),
+                        ).then((value) {
+                          if (value == null || value == false) return;
+
+                          model.refreshPage();
+                          model.setPreviousPageNeedRefresh(true);
+
+                          _handleErrorDialog(context, model);
+                        });
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                        ),
+                        child: Icon(
+                          PhosphorIcons.pencilSimpleLineBold,
+                          color: MyColors.lightBlack02,
+                          size: 18,
+                        ),
+                      ),
                     ),
-                  ).then((value) {
-                    if (value == null || value == false) return;
-
-                    model.refreshPage();
-                    model.setPreviousPageNeedRefresh(true);
-
-                    _handleErrorDialog(context, model);
-                  });
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20.0,
-                  ),
-                  child: Icon(
-                    PhosphorIcons.pencilSimpleLineBold,
-                    color: MyColors.lightBlack02,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ],
+                  ]
+                : null,
           ),
-          bottomNavigationBar: model.isAllowedToDeleteUser
+          bottomNavigationBar: model.isAllowedToDeleteEditUser
               ? ButtonWidget.bottomSingleButton(
                   buttonType: ButtonType.primary,
                   padding: EdgeInsets.only(

@@ -27,8 +27,8 @@ class DetailUserViewModel extends BaseViewModel {
   UserData? _userData;
   UserData? get userData => _userData;
 
-  bool _isAllowedToDeleteUser = false;
-  bool get isAllowedToDeleteUser => _isAllowedToDeleteUser;
+  bool _isAllowedToDeleteEditUser = false;
+  bool get isAllowedToDeleteEditUser => _isAllowedToDeleteEditUser;
 
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
@@ -36,7 +36,7 @@ class DetailUserViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
-    await _checkIsAllowedToDeleteUser();
+    await _checkIsAllowedToDeleteAndEditUser();
     setBusy(false);
   }
 
@@ -44,9 +44,12 @@ class DetailUserViewModel extends BaseViewModel {
     _isPreviousPageNeedRefresh = value;
   }
 
-  Future<void> _checkIsAllowedToDeleteUser() async {
+  Future<void> _checkIsAllowedToDeleteAndEditUser() async {
     Role role = await _authenticationService.getUserRole();
-    _isAllowedToDeleteUser = role == Role.Admin || role == Role.SuperAdmin;
+    Role dataRole = mappingStringToRole(_userData?.roleName ?? "Teknisi");
+    _isAllowedToDeleteEditUser =
+        (dataRole != Role.SuperAdmin && role == Role.Admin) ||
+            role == Role.SuperAdmin;
   }
 
   void resetErrorMsg() {
