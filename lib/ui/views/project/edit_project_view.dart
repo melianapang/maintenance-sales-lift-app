@@ -339,32 +339,40 @@ class _EditProjectViewState extends State<EditProjectView> {
       sizeToScreenRatio: 0.8,
       child: !model.isShowNoDataFoundPage && !model.busy
           ? Expanded(
-              child: LazyLoadScrollView(
-                onEndOfPage: () => model.requestGetAllCustomer(),
-                scrollDirection: Axis.vertical,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: model.listCustomer?.length ?? 0,
-                  separatorBuilder: (_, __) => const Divider(
-                    color: MyColors.transparent,
-                    height: 20,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomCardWidget(
-                      cardType: CardType.list,
-                      title: model.listCustomer?[index].customerName ?? "",
-                      description: model.listCustomer?[index].companyName,
-                      desc2Size: 16,
-                      titleSize: 20,
-                      onTap: () {
-                        setSelectedMenu(
-                          selectedIndex: index,
+              child: StatefulBuilder(
+                builder: (context, ss) {
+                  return LazyLoadScrollView(
+                    onEndOfPage: () {
+                      ss(() {
+                        model.requestGetAllCustomer();
+                      });
+                    },
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: model.listCustomer?.length ?? 0,
+                      separatorBuilder: (_, __) => const Divider(
+                        color: MyColors.transparent,
+                        height: 20,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCardWidget(
+                          cardType: CardType.list,
+                          title: model.listCustomer?[index].customerName ?? "",
+                          description: model.listCustomer?[index].companyName,
+                          desc2Size: 16,
+                          titleSize: 20,
+                          onTap: () {
+                            setSelectedMenu(
+                              selectedIndex: index,
+                            );
+                            Navigator.maybePop(context);
+                          },
                         );
-                        Navigator.maybePop(context);
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             )
           : buildNoDataFoundPage(),

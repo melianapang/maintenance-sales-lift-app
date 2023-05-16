@@ -180,37 +180,45 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
       sizeToScreenRatio: 0.8,
       child: !model.isShowNoDataFoundPage && !model.busy
           ? Expanded(
-              child: LazyLoadScrollView(
-                onEndOfPage: () => model.requestGetAllProjectByCustomerId(),
-                scrollDirection: Axis.vertical,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: model.listProject?.length ?? 0,
-                  separatorBuilder: (_, __) => const Divider(
-                    color: MyColors.transparent,
-                    height: 20,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomCardWidget(
-                      cardType: CardType.list,
-                      title: model.listProject?[index].projectName ?? "",
-                      description:
-                          "Kebutuhan Proyek: ${mappingProjectNeedTypeToString(
-                        int.parse(
-                          model.listProject?[index].projectNeed ?? "0",
-                        ),
-                      )}",
-                      desc2Size: 14,
-                      titleSize: 20,
-                      onTap: () {
-                        setSelectedMenu(
-                          selectedIndex: index,
+              child: StatefulBuilder(
+                builder: (context, ss) {
+                  return LazyLoadScrollView(
+                    onEndOfPage: () {
+                      ss(() {
+                        model.requestGetAllProjectByCustomerId();
+                      });
+                    },
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: model.listProject?.length ?? 0,
+                      separatorBuilder: (_, __) => const Divider(
+                        color: MyColors.transparent,
+                        height: 20,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCardWidget(
+                          cardType: CardType.list,
+                          title: model.listProject?[index].projectName ?? "",
+                          description:
+                              "Kebutuhan Proyek: ${mappingProjectNeedTypeToString(
+                            int.parse(
+                              model.listProject?[index].projectNeed ?? "0",
+                            ),
+                          )}",
+                          desc2Size: 14,
+                          titleSize: 20,
+                          onTap: () {
+                            setSelectedMenu(
+                              selectedIndex: index,
+                            );
+                            Navigator.maybePop(context);
+                          },
                         );
-                        Navigator.maybePop(context);
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             )
           : buildNoDataFoundPage(),
