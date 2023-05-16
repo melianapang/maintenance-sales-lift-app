@@ -54,6 +54,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
             appBar: buildDefaultAppBar(
               context,
               title: "Dokumen Proyek",
+              isBackEnabled: true,
             ),
             body: Padding(
               padding: const EdgeInsets.only(
@@ -93,7 +94,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
     required DocumentProjectViewModel model,
   }) {
     return [
-      Spacings.vert(6),
+      Spacings.vert(24),
       Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -102,7 +103,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
           ),
           textAlign: TextAlign.start,
           style: buildTextStyle(
-            fontSize: 12,
+            fontSize: 14,
             fontColor: MyColors.yellow02,
             fontWeight: 500,
           ),

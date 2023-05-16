@@ -216,7 +216,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                       ),
                     ],
                   ),
-                  Spacings.vert(24),
+                  Spacings.vert(12),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
