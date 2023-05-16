@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -19,16 +20,23 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
-enum FormSetReminderSource { ListReminderPage, CustomerPage, ProjectPage }
+enum FormSetReminderSource {
+  ListReminderPage,
+  CustomerPage,
+  ProjectPage,
+  MaintenancePage
+}
 
 class FormSetReminderViewParam {
   FormSetReminderViewParam({
     required this.source,
     this.customerData,
+    this.maintenanceData,
   });
 
   final FormSetReminderSource source;
   CustomerData? customerData;
+  MaintenanceData? maintenanceData;
 }
 
 class FormSetReminderView extends StatefulWidget {
@@ -51,6 +59,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
         dioService: Provider.of<DioService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         customerData: widget.param.customerData,
+        maintenanceData: widget.param.maintenanceData,
       ),
       onModelReady: (FormSetReminderViewModel model) async {
         await model.initModel();
@@ -118,8 +127,8 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.param.source !=
-                    FormSetReminderSource.ListReminderPage) ...[
+                if (widget.param.source ==
+                    FormSetReminderSource.CustomerPage) ...[
                   Text(
                     "Informasi Pelanggan",
                     style: buildTextStyle(
@@ -145,6 +154,50 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                     controller: model.namaPerusahaanController,
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
+                  ),
+                  Spacings.vert(12),
+                  const Divider(
+                    thickness: 1,
+                    color: MyColors.darkGreyBackground,
+                  ),
+                  Spacings.vert(12),
+                  Text(
+                    "Data Pengingat",
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.yellow01,
+                      fontWeight: 600,
+                    ),
+                  ),
+                  Spacings.vert(8),
+                ],
+                if (widget.param.source ==
+                    FormSetReminderSource.MaintenancePage) ...[
+                  Text(
+                    "Informasi Pemeliharaan",
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontColor: MyColors.yellow01,
+                      fontWeight: 600,
+                    ),
+                  ),
+                  Spacings.vert(8),
+                  TextInput.editable(
+                    controller: model.namaUnitController,
+                    label: "Nama Unit",
+                    hintText: "Nama Unit",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    controller: model.lokasiUnitController,
+                    label: "Lokasi Unit",
+                    hintText: "Lokasi Unit",
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    controller: model.namaPelangganUnitController,
+                    label: "Nama Pelanggan",
+                    hintText: "Nama Pelanggan",
                   ),
                   Spacings.vert(12),
                   const Divider(

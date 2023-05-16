@@ -7,6 +7,7 @@ part 'reminder_dto.g.dart';
 class CreateReminderRequest {
   CreateReminderRequest({
     this.customerId,
+    this.maintenanceId,
     required this.reminderDate,
     required this.reminderTime,
     required this.description,
@@ -21,6 +22,9 @@ class CreateReminderRequest {
 
   @JsonKey(name: "customer_id")
   final int? customerId;
+
+  @JsonKey(name: "maintenance_id")
+  final String? maintenanceId;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;
@@ -125,6 +129,7 @@ class ReminderData {
   ReminderData({
     required this.reminderId,
     required this.userName,
+    required this.maintenanceId,
     required this.customerId,
     required this.customerName,
     required this.reminderDate,
@@ -144,6 +149,9 @@ class ReminderData {
 
   @JsonKey(name: "user_name")
   final String userName;
+
+  @JsonKey(name: "maintenance_id")
+  final String? maintenanceId;
 
   @JsonKey(name: "customer_id")
   final String? customerId;

@@ -11,6 +11,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
@@ -84,7 +85,23 @@ class OpenNotificationReminderView extends StatelessWidget {
                       );
                     },
                   )
-                : null,
+                : model.maintenanceData != null
+                    ? ButtonWidget(
+                        buttonType: ButtonType.primary,
+                        text: "Buat Laporan Pemeliharaan",
+                        padding: PaddingUtils.getPadding(context,
+                            defaultPadding: 24),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.formMaintenance,
+                            arguments: FormMaintenanceViewParam(
+                              maintenanceData: model.maintenanceData,
+                            ),
+                          );
+                        },
+                      )
+                    : null,
             body: !model.busy
                 ? SingleChildScrollView(
                     padding: const EdgeInsets.all(

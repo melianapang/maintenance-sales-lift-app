@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -17,13 +18,15 @@ class FormSetReminderViewModel extends BaseViewModel {
     required OneSignalService oneSignalService,
     required DioService dioService,
     CustomerData? customerData,
+    MaintenanceData? maintenanceData,
   })  : _oneSignalService = oneSignalService,
         _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
-        _customerData = customerData;
+        _customerData = customerData,
+        _maintenanceData = maintenanceData;
 
   final OneSignalService _oneSignalService;
   final ApiService _apiService;
@@ -31,12 +34,20 @@ class FormSetReminderViewModel extends BaseViewModel {
   final CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
+  final MaintenanceData? _maintenanceData;
+  MaintenanceData? get maintenanceData => _maintenanceData;
+
   bool _isNotificationPermissionGrantedBefore = true;
 
   // TextEditingController
   final nomorPelangganController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
+
+  final namaUnitController = TextEditingController();
+  final lokasiUnitController = TextEditingController();
+  final namaPelangganUnitController = TextEditingController();
+
   final descriptionController = TextEditingController();
   final noteController = TextEditingController();
   // End of TextEditingController
@@ -73,9 +84,22 @@ class FormSetReminderViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    //if customerData not null
     nomorPelangganController.text = _customerData?.customerNumber ?? "";
     namaPelangganController.text = _customerData?.customerName ?? "";
     namaPerusahaanController.text = _customerData?.companyName ?? "";
+
+    //if maintenanceData not null
+    namaUnitController.text = _maintenanceData?.unitName ?? "";
+    lokasiUnitController.text = _maintenanceData?.unitLocation ?? "";
+    namaPelangganUnitController.text = _maintenanceData?.customerName ?? "";
+    if (_maintenanceData?.scheduleDate != null) {
+      _selectedDates = [
+        DateTimeUtils.convertStringToDate(
+          formattedDateString: _maintenanceData?.scheduleDate ?? '',
+        )
+      ];
+    }
     setBusy(false);
   }
 
@@ -129,9 +153,11 @@ class FormSetReminderViewModel extends BaseViewModel {
     }
 
     int? customerId = int.parse(_customerData?.customerId ?? "-1");
+    String? maintenanceId = _maintenanceData?.maintenanceId ?? "";
 
     final response = await _apiService.requestCreateReminder(
       customerId: customerId > -1 ? customerId : null,
+      maintenanceId: maintenanceId.isEmpty ? null : maintenanceId,
       reminderDate: DateTimeUtils.convertDateToString(
         date: _selectedDates.first,
         formatter: DateFormat(

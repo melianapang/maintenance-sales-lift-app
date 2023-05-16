@@ -21,6 +21,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenanc
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -345,6 +346,36 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                   Navigator.of(context)..pop(true);
                 }
               },
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.bellBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Jadwalkan Pengingat',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.formSetReminder,
+              arguments: FormSetReminderViewParam(
+                source: FormSetReminderSource.MaintenancePage,
+                maintenanceData: widget.param.maintenanceData,
+              ),
             );
 
             setState() {
