@@ -107,7 +107,7 @@ class CreateUnitRequest {
   @JsonKey(name: "unit_location")
   final String unitLocation;
 
-  @JsonKey(name: "maintenance_date")
+  @JsonKey(name: "schedule_date")
   final String firstMaintenanceDate;
 }
 

@@ -826,6 +826,7 @@ class ApiService {
 
   Future<Either<Failure, String>> requestCreateReminder({
     int? customerId,
+    String? maintenanceId,
     required String reminderDate,
     required String reminderTime,
     required String description,
@@ -835,6 +836,7 @@ class ApiService {
     try {
       final payload = CreateReminderRequest(
         customerId: customerId,
+        maintenanceId: maintenanceId,
         reminderDate: reminderDate,
         reminderTime: reminderTime,
         description: description,
@@ -1695,7 +1697,6 @@ class ApiService {
   Future<Either<Failure, bool>> requestUpdateMaintenace(
       {required int maintenanceId,
       required int unitId,
-      required int userId,
       required double longitude,
       required double latitude,
       required String note,
@@ -1704,7 +1705,6 @@ class ApiService {
       required List<MaintenanceFile>? maintenanceFiles}) async {
     try {
       final payload = UpdateMaintenanceRequest(
-        userId: userId,
         unitId: unitId,
         longitude: longitude,
         latitude: latitude,
