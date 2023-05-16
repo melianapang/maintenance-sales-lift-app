@@ -168,7 +168,7 @@ class _AddProjectViewState extends State<AddProjectView> {
                           horizontal: 4,
                         ),
                         child: Text(
-                          'Tambah Pelanggan',
+                          'Tambah Pelanggan Baru',
                           style: buildTextStyle(
                             fontSize: 12,
                             fontWeight: 600,
