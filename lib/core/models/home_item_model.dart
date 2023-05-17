@@ -41,6 +41,15 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     Routes.listLog,
   ),
   HomeItemModel(
+    "Master Pelanggan",
+    PhosphorIcons.folderUserBold,
+    <Role>[
+      Role.Admin,
+      Role.SuperAdmin,
+    ],
+    Routes.masterCustomerMenu,
+  ),
+  HomeItemModel(
     "Proyek",
     PhosphorIcons.monitor,
     <Role>[

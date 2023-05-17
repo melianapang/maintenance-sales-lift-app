@@ -99,7 +99,7 @@ extension ButtonSizeExt on ButtonSize {
 
   static const Map<ButtonSize, double> fontSizes = <ButtonSize, double>{
     ButtonSize.small: 10,
-    ButtonSize.medium: 12,
+    ButtonSize.medium: 14,
     ButtonSize.large: 16,
   };
 
@@ -121,7 +121,7 @@ extension ButtonSizeExt on ButtonSize {
     ),
     ButtonSize.medium: EdgeInsets.symmetric(
       horizontal: 12,
-      vertical: 8,
+      vertical: 14,
     ),
     ButtonSize.large: EdgeInsets.symmetric(
       horizontal: 24,

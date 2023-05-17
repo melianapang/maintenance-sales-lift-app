@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/viewmodels/master_customer/list_customer_need_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/custom_base_url_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
@@ -30,6 +32,9 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_need/list_customer_need_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_type/list_customer_type_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/master_customer_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
@@ -433,6 +438,19 @@ class AppRouter {
           builder: (_) => EditUnitCustomerView(
             param: param,
           ),
+        );
+      //Master Customer
+      case Routes.masterCustomerMenu:
+        return buildRoute(
+          builder: (_) => const MasterCustomerMenuView(),
+        );
+      case Routes.listCustomerNeed:
+        return buildRoute(
+          builder: (_) => const ListCustomerNeedView(),
+        );
+      case Routes.listCustomerType:
+        return buildRoute(
+          builder: (_) => const ListCustomerTypeView(),
         );
 
       // Gallery

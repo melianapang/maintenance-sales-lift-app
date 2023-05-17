@@ -49,6 +49,11 @@ class Routes {
   static const String exportCustomer = 'export-customer-data';
   static const String exportMaintenance = 'export-maintenance-data';
   static const String documentProject = 'document-project';
+  static const String masterCustomerMenu = 'master-customer-menu';
+  static const String listCustomerNeed = 'list-customer-need';
+  static const String addCustomerNeed = 'add-customer-need';
+  static const String listCustomerType = 'list-customer-type';
+  static const String addCustomerType = 'add-customer-type';
 
   // Gallery
   static const String imageDetail = 'image-detail';

@@ -7,6 +7,8 @@ import 'package:rejo_jaya_sakti_apps/core/models/approval/approval_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/login_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/authentication/manage_account_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/failure/failure_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
@@ -192,6 +194,46 @@ abstract class Api {
     @Query("customer_need") int customerNeed,
     @Query("sort_by") int sortBy,
   );
+  //endregion
+
+  //region master customer
+
+  //region customertype
+  @GET('/api/0/CustomerType/get_all_customer_types/')
+  Future<HttpResponse<dynamic>> requestGetAllCustomerTypes(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @POST('/api/0/CustomerType/create_customer_type')
+  Future<HttpResponse<dynamic>> requestCreateCustomerTypes(
+    @Body() CreateCustomerTypeRequest request,
+  );
+
+  @DELETE('/api/0/CustomerType/delete_customer_type/{customer_type_id}')
+  Future<HttpResponse<dynamic>> requestDeleteCustomerTypes(
+    @Path("customer_type_id") int customerTypeId,
+  );
+  //endregion
+
+  //region customer need
+  @GET('/api/0/CustomerNeed/get_all_customer_needs/')
+  Future<HttpResponse<dynamic>> requestGetAllCustomerNeed(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @POST('/api/0/CustomerNeed/create_customer_need')
+  Future<HttpResponse<dynamic>> requestCreateCustomerNeed(
+    @Body() CreateCustomerNeedRequest request,
+  );
+
+  @DELETE('/api/0/CustomerNeed/delete_customer_need/{customer_need_id}')
+  Future<HttpResponse<dynamic>> requestDeleteCustomerNeed(
+    @Path("customer_need_id") int customerNeedId,
+  );
+  //endregion
+
   //endregion
 
   //region unit
@@ -1167,6 +1209,158 @@ class ApiService {
 
   Future<String> requestExportCustomerData() async {
     return 'http://www.africau.edu/images/default/sample.pdf';
+  }
+  //endregion
+
+  //region customer type
+  Future<Either<Failure, ListCustomerTypeData>> getAllCustomerType({
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllCustomerTypes(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerTypeResponse getAllResponse =
+            GetAllCustomerTypeResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerTypeData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerTypeData>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<ListCustomerTypeData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestCreateCustomerTypes({
+    required String name,
+  }) async {
+    try {
+      final payload = CreateCustomerTypeRequest(
+        customerTypeName: name,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateCustomerTypes(payload);
+
+      if (response.isSuccess) {
+        final CreateCustomerTypeResponse createNameResponse =
+            CreateCustomerTypeResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createNameResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteCustomerType({
+    required int customerTypeId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteCustomerTypes(customerTypeId);
+
+      if (response.isSuccess) {
+        final DeleteCustomerTypeResponse deleteCustomerResponse =
+            DeleteCustomerTypeResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteCustomerResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+  //endregion
+
+  //region customer need
+  Future<Either<Failure, ListCustomerNeedData>> getAllCustomerNeed({
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllCustomerNeed(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerNeedResponse getAllResponse =
+            GetAllCustomerNeedResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerNeedData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerNeedData>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<ListCustomerNeedData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestCreateCustomerNeed({
+    required String name,
+  }) async {
+    try {
+      final payload = CreateCustomerNeedRequest(
+        customerNeedName: name,
+      );
+      final HttpResponse<dynamic> response =
+          await api.requestCreateCustomerNeed(payload);
+
+      if (response.isSuccess) {
+        final CreateCustomerNeedResponse createResponse =
+            CreateCustomerNeedResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(createResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, String>> requestDeleteCustomerNeed({
+    required int customerNeedId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestDeleteCustomerNeed(customerNeedId);
+
+      if (response.isSuccess) {
+        final DeleteCustomerNeedResponse deleteCustomerResponse =
+            DeleteCustomerNeedResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, String>(deleteCustomerResponse.message);
+      }
+
+      return ErrorUtils<String>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<String>().handleError(e);
+    }
   }
   //endregion
 
