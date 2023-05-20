@@ -83,6 +83,9 @@ abstract class Api {
   //endregion
 
   //region approval
+  @GET('/api/0/Approval/approval_numbering/')
+  Future<HttpResponse<dynamic>> requestGetApprovalNotificationBatchNumber();
+
   @GET('/api/0/Approval/get_all_approvals/')
   Future<HttpResponse<dynamic>> requestGetAllApproval(
     @Query("current_page") int currentPage,
@@ -705,6 +708,25 @@ class ApiService {
   //endregion
 
   //region approval
+  Future<Either<Failure, NumberingApprovalData>>
+      requestGetApprovaNotificationBatchlNumber() async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetApprovalNotificationBatchNumber();
+
+      if (response.isSuccess) {
+        NumberingApprovalResponse approvalResponse =
+            NumberingApprovalResponse.fromJson(response.data);
+
+        return Right<Failure, NumberingApprovalData>(approvalResponse.data);
+      }
+      return ErrorUtils<NumberingApprovalData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<NumberingApprovalData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestUpdateApproval({
     required int approvalId,
     required int approvalStatus,

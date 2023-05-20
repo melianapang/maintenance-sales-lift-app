@@ -18,6 +18,9 @@ class ListApprovalViewModel extends BaseViewModel {
   List<ApprovalData>? _listApproval = [];
   List<ApprovalData>? get listApproval => _listApproval;
 
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
 
@@ -39,6 +42,10 @@ class ListApprovalViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   Future<void> requestGetAllApproval() async {

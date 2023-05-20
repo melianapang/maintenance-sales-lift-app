@@ -46,6 +46,7 @@ class _ListApprovalViewState extends State<ListApprovalView> {
             context,
             title: "Daftar Permohonan",
             isBackEnabled: true,
+            isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
           body: Column(
             children: [
@@ -93,6 +94,7 @@ class _ListApprovalViewState extends State<ListApprovalView> {
                               if (value == null) return;
                               if (value == true) {
                                 model.refreshPage();
+                                model.setPreviousPageNeedRefresh(true);
                               }
                             });
                           },

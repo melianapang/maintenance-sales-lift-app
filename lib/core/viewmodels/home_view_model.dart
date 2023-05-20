@@ -1,28 +1,43 @@
+import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/home_item_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class HomeViewModel extends BaseViewModel {
   HomeViewModel({
+    required DioService dioService,
     required AuthenticationService authenticationService,
     required SharedPreferencesService sharedPreferencesService,
-  })  : _authenticationService = authenticationService,
+  })  : _apiService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        ),
+        _authenticationService = authenticationService,
         _sharedPreferencesService = sharedPreferencesService;
 
+  final ApiService _apiService;
   final AuthenticationService _authenticationService;
   final SharedPreferencesService _sharedPreferencesService;
 
   ProfileData? _profileData;
   ProfileData? get profileData => _profileData;
 
+  int? _approvalNumbers;
+  int? get approvalNumbers => _approvalNumbers;
+
   @override
   Future<void> initModel() async {
     setBusy(true);
     _profileData = await _sharedPreferencesService.get(
       SharedPrefKeys.profileData,
+    );
+    _approvalNumbers = await _sharedPreferencesService.get(
+      SharedPrefKeys.approvalNotificationBatchNumber,
     );
     setBusy(false);
   }
@@ -39,5 +54,19 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> logout() async {
     await _authenticationService.logout();
+  }
+
+  Future<void> getApprovalNotificationBatchNumber() async {
+    final response =
+        await _apiService.requestGetApprovaNotificationBatchlNumber();
+
+    if (response.isRight) {
+      _approvalNumbers = response.right.totalData;
+      await _sharedPreferencesService.set(
+        SharedPrefKeys.approvalNotificationBatchNumber,
+        response.right.totalData,
+      );
+      notifyListeners();
+    }
   }
 }

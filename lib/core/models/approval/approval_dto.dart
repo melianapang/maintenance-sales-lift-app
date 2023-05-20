@@ -186,3 +186,43 @@ class DetailApprovalData {
   final String approvalDate;
 }
 //endregion
+
+//region get numbering approval
+@JsonSerializable()
+class NumberingApprovalResponse {
+  NumberingApprovalResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory NumberingApprovalResponse.fromJson(Map<String, dynamic> json) =>
+      _$NumberingApprovalResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NumberingApprovalResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final NumberingApprovalData data;
+}
+
+@JsonSerializable()
+class NumberingApprovalData {
+  NumberingApprovalData({
+    required this.totalData,
+  });
+
+  factory NumberingApprovalData.fromJson(Map<String, dynamic> json) =>
+      _$NumberingApprovalDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NumberingApprovalDataToJson(this);
+
+  @JsonKey(name: "total")
+  final int totalData;
+}
+//endregion

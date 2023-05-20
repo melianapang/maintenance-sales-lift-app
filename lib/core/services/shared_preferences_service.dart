@@ -7,6 +7,7 @@ enum SharedPrefKeys {
   profileData,
   authenticationToken,
   userId,
+  approvalNotificationBatchNumber,
 }
 
 extension SharedPrefKeysExt on SharedPrefKeys {
@@ -14,6 +15,8 @@ extension SharedPrefKeysExt on SharedPrefKeys {
     SharedPrefKeys.profileData: 'profile_data',
     SharedPrefKeys.authenticationToken: 'authentication_token',
     SharedPrefKeys.userId: "user_id",
+    SharedPrefKeys.approvalNotificationBatchNumber:
+        "approval_notif_batch_number",
   };
 
   String get label => _labels[this] ?? '';
@@ -47,16 +50,10 @@ class SharedPreferencesService {
           return null;
         }
       case SharedPrefKeys.authenticationToken:
-        final String? raw = _sharedPreferences.getString(
-          SharedPrefKeys.authenticationToken.label,
-        );
-        if (raw == null) {
-          return null;
-        }
-        return json.decode(raw);
       case SharedPrefKeys.userId:
+      case SharedPrefKeys.approvalNotificationBatchNumber:
         final String? raw = _sharedPreferences.getString(
-          SharedPrefKeys.userId.label,
+          key.label,
         );
         if (raw == null) {
           return null;

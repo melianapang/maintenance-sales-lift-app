@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/splash_screen_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -39,7 +41,10 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: SplashScreenViewModel(
-        apisService: Provider.of<AuthenticationService>(context),
+        dioService: Provider.of<DioService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
+        sharedPreferencesService:
+            Provider.of<SharedPreferencesService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         gCloudService: Provider.of<GCloudService>(context),
         remoteConfigService: Provider.of<RemoteConfigService>(context),
