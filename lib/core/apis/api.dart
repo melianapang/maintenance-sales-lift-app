@@ -53,6 +53,13 @@ abstract class Api {
     @Query("input_search") String inputSearch,
   );
 
+  @GET('/api/0/User/filter_user/')
+  Future<HttpResponse<dynamic>> filterUser(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+    @Query("role_id") int roleId,
+  );
+
   @POST('/api/0/User/create_user')
   Future<HttpResponse<dynamic>> requestCreateUser(
     @Body() CreateUserRequest request,
@@ -655,6 +662,31 @@ class ApiService {
         currentPage,
         pageSize,
         inputUser,
+      );
+
+      if (response.isSuccess) {
+        GetAllUserResponse getAllUserResponse =
+            GetAllUserResponse.fromJson(response.data);
+
+        return Right<Failure, ListUserData>(getAllUserResponse.data);
+      }
+      return ErrorUtils<ListUserData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<ListUserData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListUserData>> filterUser({
+    required int pageSize,
+    required int currentPage,
+    required int roleId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.filterUser(
+        currentPage,
+        pageSize,
+        roleId,
       );
 
       if (response.isSuccess) {
