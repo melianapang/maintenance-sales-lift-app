@@ -104,135 +104,143 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               bottom: 24.0,
               left: 24.0,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Spacings.vert(20),
-                  Text(
-                    model.projectData?.projectName ?? "",
-                    style: buildTextStyle(
-                      fontSize: 30,
-                      fontWeight: 800,
-                      fontColor: MyColors.yellow01,
-                    ),
-                  ),
-                  Text(
-                    model.projectData?.customerName ?? "",
-                    style: buildTextStyle(
-                      fontSize: 20,
-                      fontWeight: 400,
-                      fontColor: MyColors.lightBlack02,
-                    ),
-                  ),
-                  Spacings.vert(35),
-                  TextInput.disabled(
-                    label: "Keperluan Proyek",
-                    text: mappingProjectNeedTypeToString(
-                      int.parse(model.projectData?.projectNeed ?? "0"),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Alamat",
-                    text: model.projectData?.address,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.disabled(
-                    label: "Kota",
-                    text: model.projectData?.city,
-                  ),
-                  Spacings.vert(12),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "PIC Proyek",
-                      style: buildTextStyle(
-                        fontSize: 18,
-                        fontColor: MyColors.yellow01,
-                        fontWeight: 700,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(12),
-                  if (model.listPic.isEmpty)
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Belum ada data PIC untuk proyek ini.",
-                        style: buildTextStyle(
-                          fontSize: 16,
-                          fontColor: MyColors.lightBlack02.withOpacity(
-                            0.5,
+            child: !model.busy
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Spacings.vert(20),
+                        Text(
+                          model.projectData?.projectName ?? "",
+                          style: buildTextStyle(
+                            fontSize: 30,
+                            fontWeight: 800,
+                            fontColor: MyColors.yellow01,
                           ),
-                          fontWeight: 300,
                         ),
-                      ),
-                    ),
-                  if (model.listPic.isNotEmpty)
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: model.projectData?.pics.length ?? 0,
-                      separatorBuilder: (context, index) => const Divider(
-                        color: MyColors.transparent,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          elevation: 2,
-                          color: MyColors.darkBlack02,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              19.0,
+                        Text(
+                          model.projectData?.customerName ?? "",
+                          style: buildTextStyle(
+                            fontSize: 20,
+                            fontWeight: 400,
+                            fontColor: MyColors.lightBlack02,
+                          ),
+                        ),
+                        Spacings.vert(35),
+                        TextInput.disabled(
+                          label: "Keperluan Proyek",
+                          text: mappingProjectNeedTypeToString(
+                            int.parse(model.projectData?.projectNeed ?? "0"),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Alamat",
+                          text: model.projectData?.address,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.disabled(
+                          label: "Kota",
+                          text: model.projectData?.city,
+                        ),
+                        Spacings.vert(12),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "PIC Proyek",
+                            style: buildTextStyle(
+                              fontSize: 18,
+                              fontColor: MyColors.yellow01,
+                              fontWeight: 700,
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 24.0,
-                              top: 14,
-                              bottom: 14,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  StringUtils.removeZeroWidthSpaces(
-                                    model.projectData?.pics[index].picName ??
-                                        "",
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: buildTextStyle(
-                                    fontColor: MyColors.lightBlack02,
-                                    fontSize: 14,
-                                    fontWeight: 800,
-                                  ),
+                        ),
+                        Spacings.vert(12),
+                        if (model.listPic.isEmpty)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Belum ada data PIC untuk proyek ini.",
+                              style: buildTextStyle(
+                                fontSize: 16,
+                                fontColor: MyColors.lightBlack02.withOpacity(
+                                  0.5,
                                 ),
-                                Spacings.vert(2),
-                                Text(
-                                  StringUtils.removeZeroWidthSpaces(
-                                    model.projectData?.pics[index]
-                                            .phoneNumber ??
-                                        "",
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: buildTextStyle(
-                                    fontColor: MyColors.lightBlack02,
-                                    fontSize: 14,
-                                    fontWeight: 400,
-                                  ),
-                                ),
-                              ],
+                                fontWeight: 300,
+                              ),
                             ),
                           ),
-                        );
-                      },
+                        if (model.listPic.isNotEmpty)
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: model.projectData?.pics.length ?? 0,
+                            separatorBuilder: (context, index) => const Divider(
+                              color: MyColors.transparent,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Card(
+                                elevation: 2,
+                                color: MyColors.darkBlack02,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    19.0,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 24.0,
+                                    top: 14,
+                                    bottom: 14,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        StringUtils.removeZeroWidthSpaces(
+                                          model.projectData?.pics[index]
+                                                  .picName ??
+                                              "",
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: buildTextStyle(
+                                          fontColor: MyColors.lightBlack02,
+                                          fontSize: 14,
+                                          fontWeight: 800,
+                                        ),
+                                      ),
+                                      Spacings.vert(2),
+                                      Text(
+                                        StringUtils.removeZeroWidthSpaces(
+                                          model.projectData?.pics[index]
+                                                  .phoneNumber ??
+                                              "",
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: buildTextStyle(
+                                          fontColor: MyColors.lightBlack02,
+                                          fontSize: 14,
+                                          fontWeight: 400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        Spacings.vert(24),
+                      ],
                     ),
-                  Spacings.vert(24),
-                ],
-              ),
-            ),
+                  )
+                : Column(
+                    children: [
+                      buildLoadingPage(),
+                    ],
+                  ),
           ),
         );
       },

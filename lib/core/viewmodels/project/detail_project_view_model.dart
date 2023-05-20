@@ -77,6 +77,7 @@ class DetailProjectViewModel extends BaseViewModel {
 
     if (response.isRight) {
       _projectData = response.right;
+      _listPic = response.right.pics;
       notifyListeners();
     }
   }
