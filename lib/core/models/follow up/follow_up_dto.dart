@@ -47,6 +47,8 @@ class ListFollowUpData {
 @JsonSerializable()
 class FollowUpFrontData {
   FollowUpFrontData({
+    required this.projectId,
+    required this.projectName,
     required this.customerId,
     required this.customerName,
     required this.companyName,
@@ -56,6 +58,12 @@ class FollowUpFrontData {
       _$FollowUpFrontDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$FollowUpFrontDataToJson(this);
+
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
 
   @JsonKey(name: "customer_id")
   final String customerId;
@@ -93,7 +101,7 @@ class FollowUpFileData {
 @JsonSerializable()
 class UpdateFollowUpRequest {
   UpdateFollowUpRequest({
-    required this.customerId,
+    required this.projectId,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
@@ -104,8 +112,8 @@ class UpdateFollowUpRequest {
 
   Map<String, dynamic> toJson() => _$UpdateFollowUpRequestToJson(this);
 
-  @JsonKey(name: "customer_id")
-  final int customerId;
+  @JsonKey(name: "project_id")
+  final int projectId;
 
   @JsonKey(name: "follow_up_result")
   final int followUpResult;
@@ -161,14 +169,17 @@ class FollowUpDetailResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final FollowUpFrontData data;
+  final DetailFollowUpData data;
 }
 
 @JsonSerializable()
 class DetailFollowUpData {
   DetailFollowUpData({
     required this.followUpId,
+    required this.projectId,
+    required this.projectName,
     required this.customerName,
+    required this.companyName,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
@@ -183,8 +194,17 @@ class DetailFollowUpData {
   @JsonKey(name: "follow_up_id")
   final String followUpId;
 
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
+
   @JsonKey(name: "customer_name")
   final String customerName;
+
+  @JsonKey(name: "company_name")
+  final String? companyName;
 
   @JsonKey(name: "follow_up_result")
   final String followUpResult;
@@ -243,7 +263,8 @@ class ListHistoryMaintenane {
 class HistoryFollowUpData {
   HistoryFollowUpData({
     required this.followUpId,
-    required this.customerId,
+    required this.projectId,
+    required this.projectName,
     required this.customerName,
     required this.companyName,
     required this.followUpResult,
@@ -260,11 +281,14 @@ class HistoryFollowUpData {
   @JsonKey(name: "follow_up_id")
   final String followUpId;
 
-  @JsonKey(name: "customer_id")
-  final String customerId;
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
 
   @JsonKey(name: "customer_name")
-  final String customerName;
+  final String? customerName;
 
   @JsonKey(name: "company_name")
   final String? companyName;
@@ -287,7 +311,7 @@ class HistoryFollowUpData {
 @JsonSerializable()
 class CreateFollowUpRequest {
   CreateFollowUpRequest({
-    required this.customerId,
+    required this.projectId,
     required this.followUpResult,
     required this.scheduleDate,
     required this.note,
@@ -299,8 +323,8 @@ class CreateFollowUpRequest {
 
   Map<String, dynamic> toJson() => _$CreateFollowUpRequestToJson(this);
 
-  @JsonKey(name: "customer_id")
-  final int customerId;
+  @JsonKey(name: "project_id")
+  final int projectId;
 
   @JsonKey(name: "follow_up_result")
   final int followUpResult;

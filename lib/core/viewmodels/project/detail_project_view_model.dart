@@ -1,3 +1,4 @@
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
@@ -33,6 +34,14 @@ class DetailProjectViewModel extends BaseViewModel {
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
 
+  //region extended fab
+  SpeedDialDirection _speedDialDirection = SpeedDialDirection.up;
+  SpeedDialDirection get selectedTahapKonfirmasiOption => _speedDialDirection;
+
+  bool _isDialChildrenVisible = false;
+  bool get isDialChildrenVisible => _isDialChildrenVisible;
+  //endregion
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
@@ -51,6 +60,10 @@ class DetailProjectViewModel extends BaseViewModel {
   Future<void> _checkIsAllowedToDeleteData() async {
     _isAllowedToDeleteData =
         await _authenticationService.getUserRole() == Role.SuperAdmin;
+  }
+
+  void setDialChildrenVisible() {
+    _isDialChildrenVisible = !isDialChildrenVisible;
   }
 
   void resetErrorMsg() {

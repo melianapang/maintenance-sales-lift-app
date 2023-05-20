@@ -12,14 +12,18 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewModel extends BaseViewModel {
   DetailFollowUpViewModel({
+    String? projectId,
+    String? projectName,
     String? customerId,
     String? customerName,
     String? companyName,
     required DioService dioService,
     required NavigationService navigationService,
-  })  : _customerId = customerId,
+  })  : _projectId = projectId,
+        _projectName = projectName,
         _companyName = companyName,
         _customerName = customerName,
+        _customerId = customerId,
         _navigationService = navigationService,
         _apiService = ApiService(
           api: Api(
@@ -32,6 +36,12 @@ class DetailFollowUpViewModel extends BaseViewModel {
 
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
+  String? _projectId;
+  String? get projectId => _projectId;
+
+  String? _projectName;
+  String? get projectName => _projectName;
 
   String? _customerId;
   String? get customerId => _customerId;
@@ -116,7 +126,7 @@ class DetailFollowUpViewModel extends BaseViewModel {
 
   Future<void> requestGetHistoryFollowUp() async {
     final response = await _apiService.requestGetHistoryFollowUp(
-      customerId: _customerId ?? "0",
+      projectId: _projectId ?? "0",
     );
 
     if (response.isRight) {

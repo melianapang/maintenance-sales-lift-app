@@ -902,7 +902,7 @@ class ApiService {
   }
 
   Future<Either<Failure, String>> requestCreateReminder({
-    int? customerId,
+    int? projectId,
     String? maintenanceId,
     required String reminderDate,
     required String reminderTime,
@@ -912,7 +912,7 @@ class ApiService {
   }) async {
     try {
       final payload = CreateReminderRequest(
-        customerId: customerId,
+        projectId: projectId,
         maintenanceId: maintenanceId,
         reminderDate: reminderDate,
         reminderTime: reminderTime,
@@ -1582,7 +1582,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, FollowUpFrontData>> requestFollowUpDetail({
+  Future<Either<Failure, DetailFollowUpData>> requestFollowUpDetail({
     required int followUpId,
   }) async {
     try {
@@ -1595,13 +1595,13 @@ class ApiService {
           response.data,
         );
 
-        return Right<Failure, FollowUpFrontData>(followUpDetailResponse.data);
+        return Right<Failure, DetailFollowUpData>(followUpDetailResponse.data);
       }
 
-      return ErrorUtils<FollowUpFrontData>().handleDomainError(response);
+      return ErrorUtils<DetailFollowUpData>().handleDomainError(response);
     } catch (e) {
       log("Error: ${e.toString()}");
-      return ErrorUtils<FollowUpFrontData>().handleError(e);
+      return ErrorUtils<DetailFollowUpData>().handleError(e);
     }
   }
 
@@ -1630,13 +1630,12 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp({
-    required String customerId,
-  }) async {
+  Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp(
+      {required String projectId}) async {
     try {
       final HttpResponse<dynamic> response =
           await api.requestGetAllHistoryFollowUp(
-        customerId,
+        projectId,
       );
 
       if (response.isSuccess) {
@@ -1655,7 +1654,7 @@ class ApiService {
   }
 
   Future<Either<Failure, String>> requestCreateFollowUp({
-    required int customerId,
+    required int projectId,
     required String scheduleDate,
     required int followUpResult,
     required String note,
@@ -1663,7 +1662,7 @@ class ApiService {
   }) async {
     try {
       final payload = CreateFollowUpRequest(
-        customerId: customerId,
+        projectId: projectId,
         followUpResult: followUpResult,
         scheduleDate: scheduleDate,
         note: note,
@@ -1691,14 +1690,14 @@ class ApiService {
 
   Future<Either<Failure, bool>> requestUpdateFollowUp({
     required int followUpId,
-    required int customerId,
+    required int projectId,
     required String note,
     required int followUpResult,
     required String scheduleDate,
   }) async {
     try {
       final payload = UpdateFollowUpRequest(
-        customerId: customerId,
+        projectId: projectId,
         followUpResult: followUpResult,
         note: note,
         scheduleDate: scheduleDate,

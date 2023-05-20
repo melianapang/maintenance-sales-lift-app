@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -17,7 +18,7 @@ class FormSetReminderViewModel extends BaseViewModel {
   FormSetReminderViewModel({
     required OneSignalService oneSignalService,
     required DioService dioService,
-    CustomerData? customerData,
+    ProjectData? projectData,
     MaintenanceData? maintenanceData,
   })  : _oneSignalService = oneSignalService,
         _apiService = ApiService(
@@ -25,14 +26,14 @@ class FormSetReminderViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
-        _customerData = customerData,
+        _projectData = projectData,
         _maintenanceData = maintenanceData;
 
   final OneSignalService _oneSignalService;
   final ApiService _apiService;
 
-  final CustomerData? _customerData;
-  CustomerData? get customerData => _customerData;
+  final ProjectData? _projectData;
+  ProjectData? get projectData => _projectData;
 
   final MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
@@ -40,7 +41,7 @@ class FormSetReminderViewModel extends BaseViewModel {
   bool _isNotificationPermissionGrantedBefore = true;
 
   // TextEditingController
-  final nomorPelangganController = TextEditingController();
+  final namaProyekController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
 
@@ -85,9 +86,9 @@ class FormSetReminderViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     //if customerData not null
-    nomorPelangganController.text = _customerData?.customerNumber ?? "";
-    namaPelangganController.text = _customerData?.customerName ?? "";
-    namaPerusahaanController.text = _customerData?.companyName ?? "";
+    namaProyekController.text = _projectData?.projectName ?? "";
+    namaPelangganController.text = _projectData?.customerName ?? "";
+    namaPerusahaanController.text = _projectData?.companyName ?? "";
 
     //if maintenanceData not null
     namaUnitController.text = _maintenanceData?.unitName ?? "";
@@ -152,11 +153,11 @@ class FormSetReminderViewModel extends BaseViewModel {
       _errorMsg = null;
     }
 
-    int? customerId = int.parse(_customerData?.customerId ?? "-1");
+    int? projectId = int.parse(_projectData?.projectId ?? "-1");
     String? maintenanceId = _maintenanceData?.maintenanceId ?? "";
 
     final response = await _apiService.requestCreateReminder(
-      customerId: customerId > -1 ? customerId : null,
+      projectId: projectId > 0 ? projectId : null,
       maintenanceId: maintenanceId.isEmpty ? null : maintenanceId,
       reminderDate: DateTimeUtils.convertDateToString(
         date: _selectedDates.first,

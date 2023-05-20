@@ -100,8 +100,8 @@ class _ListRemindersViewState extends State<ListRemindersView> {
                       itemBuilder: (BuildContext context, int index) {
                         return CustomCardWidget(
                           cardType: CardType.list,
-                          title: model.listReminder[index].customerName ??
-                              "(Tanpa Pelanggan)",
+                          title: model.listReminder[index].projectName ??
+                              "(Tanpa Proyek)",
                           description: model.listReminder[index].description,
                           description2: DateTimeUtils
                               .convertStringToOtherStringDateFormat(

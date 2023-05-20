@@ -69,7 +69,7 @@ class OpenNotificationReminderView extends StatelessWidget {
               title: "Pengingat",
               isBackEnabled: true,
             ),
-            bottomNavigationBar: model.customerData != null
+            bottomNavigationBar: model.projectData != null
                 ? ButtonWidget(
                     buttonType: ButtonType.primary,
                     text: "Buat Laporan Hasil Konfirmasi",
@@ -80,7 +80,7 @@ class OpenNotificationReminderView extends StatelessWidget {
                         context,
                         Routes.formFollowUp,
                         arguments: FormFollowUpViewParam(
-                          customerData: model.customerData,
+                          projectData: model.projectData,
                         ),
                       );
                     },

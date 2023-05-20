@@ -6,7 +6,7 @@ part 'reminder_dto.g.dart';
 @JsonSerializable()
 class CreateReminderRequest {
   CreateReminderRequest({
-    this.customerId,
+    this.projectId,
     this.maintenanceId,
     required this.reminderDate,
     required this.reminderTime,
@@ -20,8 +20,8 @@ class CreateReminderRequest {
 
   Map<String, dynamic> toJson() => _$CreateReminderRequestToJson(this);
 
-  @JsonKey(name: "customer_id")
-  final int? customerId;
+  @JsonKey(name: "project_id")
+  final int? projectId;
 
   @JsonKey(name: "maintenance_id")
   final String? maintenanceId;
@@ -130,8 +130,8 @@ class ReminderData {
     required this.reminderId,
     required this.userName,
     required this.maintenanceId,
-    required this.customerId,
-    required this.customerName,
+    required this.projectId,
+    required this.projectName,
     required this.reminderDate,
     required this.reminderTime,
     required this.description,
@@ -153,11 +153,11 @@ class ReminderData {
   @JsonKey(name: "maintenance_id")
   final String? maintenanceId;
 
-  @JsonKey(name: "customer_id")
-  final String? customerId;
+  @JsonKey(name: "project_id")
+  final String? projectId;
 
-  @JsonKey(name: "customer_name")
-  final String? customerName;
+  @JsonKey(name: "project_name")
+  final String? projectName;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;

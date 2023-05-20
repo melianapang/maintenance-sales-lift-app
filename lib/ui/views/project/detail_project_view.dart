@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -12,11 +13,12 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -42,6 +44,8 @@ class DetailProjectView extends StatefulWidget {
 }
 
 class _DetailProjectViewState extends State<DetailProjectView> {
+  var isDialOpen = ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     return ViewModel(
@@ -93,61 +97,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               ),
             ],
           ),
-          bottomNavigationBar: model.isAllowedToDeleteData
-              ? ButtonWidget.bottomSingleButton(
-                  buttonType: ButtonType.primary,
-                  padding: EdgeInsets.only(
-                    bottom: PaddingUtils.getBottomPadding(
-                      context,
-                      defaultPadding: 12,
-                    ),
-                    left: 24.0,
-                    right: 24.0,
-                  ),
-                  onTap: () {
-                    showDialogWidget(
-                      context,
-                      title: "Menghapus Data Proyek",
-                      description: "Anda yakin ingin menghapus Proyek ini?",
-                      positiveLabel: "Iya",
-                      negativeLabel: "Tidak",
-                      positiveCallback: () async {
-                        await Navigator.maybePop(context);
-
-                        buildLoadingDialog(context);
-                        bool result = await model.requestDeleteProject();
-                        Navigator.pop(context);
-
-                        showDialogWidget(
-                          context,
-                          title: "Menghapus Data Proyek",
-                          isSuccessDialog: result,
-                          description: result
-                              ? "Proyek telah dihapus."
-                              : model.errorMsg ??
-                                  "Proyek gagal dihapus. Coba beberapa saat lagi.",
-                          positiveLabel: "OK",
-                          positiveCallback: () {
-                            if (result) {
-                              Navigator.of(context)
-                                ..pop()
-                                ..pop(true);
-                              return;
-                            }
-
-                            model.resetErrorMsg();
-                            Navigator.maybePop(context);
-                          },
-                        );
-                      },
-                      negativeCallback: () {
-                        Navigator.maybePop(context);
-                      },
-                    );
-                  },
-                  text: 'Hapus Proyek',
-                )
-              : null,
+          floatingActionButton: _buildExtendedFAB(model),
           body: Padding(
             padding: const EdgeInsets.only(
               right: 24.0,
@@ -190,31 +140,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                   TextInput.disabled(
                     label: "Kota",
                     text: model.projectData?.city,
-                  ),
-                  Spacings.vert(12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(),
-                      SizedBox(),
-                      ButtonWidget(
-                        buttonType: ButtonType.secondary,
-                        text: "Dokumen Proyek",
-                        buttonSize: ButtonSize.medium,
-                        padding: const EdgeInsets.all(
-                          8,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.documentProject,
-                            arguments: DocumentProjectViewwParam(
-                              projectData: model.projectData,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
                   ),
                   Spacings.vert(12),
                   Align(
@@ -311,6 +236,160 @@ class _DetailProjectViewState extends State<DetailProjectView> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildExtendedFAB(DetailProjectViewModel model) {
+    return SpeedDial(
+      icon: PhosphorIcons.plusBold,
+      activeIcon: PhosphorIcons.xBold,
+      spacing: 3,
+      mini: false,
+      openCloseDial: isDialOpen,
+      childPadding: const EdgeInsets.all(5),
+      spaceBetweenChildren: 4,
+      dialRoot: (ctx, open, toggleChildren) {
+        return FloatingButtonWidget(
+          onTap: toggleChildren,
+          icon: PhosphorIcons.squaresFourBold,
+        );
+      },
+      buttonSize: const Size(56.0, 56.0),
+      childrenButtonSize: const Size(52.0, 52.0),
+      visible: true,
+      direction: SpeedDialDirection.up,
+      switchLabelPosition: false,
+      renderOverlay: false,
+      useRotationAnimation: true,
+      elevation: 8.0,
+      animationCurve: Curves.elasticInOut,
+      isOpenOnStart: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
+      ),
+      children: [
+        if (model.isAllowedToDeleteData)
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.trashBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Hapus Data Proyek',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              showDialogWidget(
+                context,
+                title: "Menghapus Data Proyek",
+                description: "Anda yakin ingin menghapus Proyek ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
+
+                  buildLoadingDialog(context);
+                  bool result = await model.requestDeleteProject();
+                  Navigator.pop(context);
+
+                  showDialogWidget(
+                    context,
+                    title: "Menghapus Data Proyek",
+                    isSuccessDialog: result,
+                    description: result
+                        ? "Proyek telah dihapus."
+                        : model.errorMsg ??
+                            "Proyek gagal dihapus. Coba beberapa saat lagi.",
+                    positiveLabel: "OK",
+                    positiveCallback: () {
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
+
+                      model.resetErrorMsg();
+                      Navigator.maybePop(context);
+                    },
+                  );
+                },
+                negativeCallback: () {
+                  Navigator.maybePop(context);
+                },
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.bellBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Jadwalkan Pengingat',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.formSetReminder,
+              arguments: FormSetReminderViewParam(
+                source: FormSetReminderSource.ProjectPage,
+                projectData: widget.param.projectData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.listBulletsBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Dokumen Proyek',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.documentProject,
+              arguments: DocumentProjectViewwParam(
+                projectData: model.projectData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+      ],
     );
   }
 

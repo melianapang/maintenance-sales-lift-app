@@ -81,8 +81,9 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                       itemBuilder: (BuildContext context, int index) {
                         return CustomCardWidget(
                           cardType: CardType.list,
-                          title: model.listFollowUp[index].customerName,
-                          description: model.listFollowUp[index].companyName,
+                          title: model.listFollowUp[index].projectName,
+                          description:
+                              "${model.listFollowUp[index].customerName} ${(model.listFollowUp[index].companyName != "" ? " | ${model.listFollowUp[index].companyName}" : "")}",
                           titleSize: 20,
                           descSize: 16,
                           onTap: () {
@@ -90,6 +91,9 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                               context,
                               Routes.detailFollowUp,
                               arguments: DetailFollowUpViewParam(
+                                projectId: model.listFollowUp[index].projectId,
+                                projectName:
+                                    model.listFollowUp[index].projectName,
                                 customerId:
                                     model.listFollowUp[index].customerId,
                                 companyName:

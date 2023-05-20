@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
@@ -16,7 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class FormFollowUpViewModel extends BaseViewModel {
   FormFollowUpViewModel({
-    CustomerData? customerData,
+    ProjectData? projectData,
     required DioService dioService,
     required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
@@ -27,7 +27,7 @@ class FormFollowUpViewModel extends BaseViewModel {
           ),
         ),
         _sharedPreferenceService = sharedPreferencesService,
-        _customerData = customerData,
+        _projectData = projectData,
         _gCloudService = gCloudService,
         _remoteConfigService = remoteConfigService;
 
@@ -36,8 +36,8 @@ class FormFollowUpViewModel extends BaseViewModel {
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 
-  CustomerData? _customerData;
-  CustomerData? get customerData => _customerData;
+  ProjectData? _projectData;
+  ProjectData? get projectData => _projectData;
 
   //region Feature flag values
   bool _isGCloudStorageEnabled = false;
@@ -104,7 +104,7 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   Future<bool> _requestUpdateFollowUp() async {
     final response = await _apiService.requestCreateFollowUp(
-      customerId: int.parse(_customerData?.customerId ?? "0"),
+      projectId: int.parse(projectData?.projectId ?? "0"),
       followUpResult: _selectedHasilKonfirmasiOption,
       scheduleDate: DateTimeUtils.convertDateToString(
         date: _selectedDates.first,
@@ -134,7 +134,7 @@ class FormFollowUpViewModel extends BaseViewModel {
         String ext = gallery.filepath.split('.').last;
 
         final response = await _gCloudService.save(
-          '${customerData?.customerId}_follow_up_data_$currDateString.$ext',
+          '${_projectData?.projectId}_follow_up_data_$currDateString.$ext',
           file.readAsBytesSync(),
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
@@ -144,7 +144,7 @@ class FormFollowUpViewModel extends BaseViewModel {
         _uploadedFiles.add(
           FollowUpFile(
             filePath:
-                "${EnvConstants.baseGCloudPublicUrl}${_customerData?.customerId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
+                "${EnvConstants.baseGCloudPublicUrl}${_projectData?.projectId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
           ),
         );
         print("LINK UPLOADED SERVER: ${gallery.filepath}");
@@ -156,7 +156,7 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   Future<bool> _requestUpdateFollowUpDummy() async {
     final response = await _apiService.requestCreateFollowUp(
-      customerId: int.parse(_customerData?.customerId ?? "0"),
+      projectId: int.parse(_projectData?.projectId ?? "0"),
       followUpResult: _selectedHasilKonfirmasiOption,
       scheduleDate: DateTimeUtils.convertDateToString(
         date: _selectedDates.first,

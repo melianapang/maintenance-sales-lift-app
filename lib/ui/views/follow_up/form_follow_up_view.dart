@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
@@ -23,10 +24,10 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class FormFollowUpViewParam {
   FormFollowUpViewParam({
-    this.customerData,
+    this.projectData,
   });
 
-  final CustomerData? customerData;
+  final ProjectData? projectData;
 }
 
 class FormFollowUpView extends StatefulWidget {
@@ -48,7 +49,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
   Widget build(BuildContext context) {
     return ViewModel<FormFollowUpViewModel>(
       model: FormFollowUpViewModel(
-        customerData: widget.param.customerData,
+        projectData: widget.param.projectData,
         dioService: Provider.of<DioService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
@@ -133,26 +134,26 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     model.setSelectedDates([start]);
                   },
                 ),
-                if (model.customerData?.customerNumber.isNotEmpty == true) ...[
+                if (model.projectData?.projectName.isNotEmpty == true) ...[
                   Spacings.vert(24),
                   TextInput.disabled(
-                    label: "Nomor Pelanggan",
-                    hintText: "Nomor Pelanggan",
-                    text: model.customerData?.customerNumber,
+                    label: "Nama Proyek",
+                    hintText: "Nomor Proyek",
+                    text: model.projectData?.projectName,
                   ),
                 ],
                 Spacings.vert(24),
                 TextInput.disabled(
                   label: "Nama Pelanggan",
                   hintText: "Nama Pelanggan",
-                  text: model.customerData?.customerName,
+                  text: model.projectData?.customerName,
                 ),
-                if (model.customerData?.companyName?.isNotEmpty == true) ...[
+                if (model.projectData?.companyName?.isNotEmpty == true) ...[
                   Spacings.vert(24),
                   TextInput.disabled(
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
-                    text: model.customerData?.companyName,
+                    text: model.projectData?.companyName,
                   ),
                 ],
                 Spacings.vert(24),

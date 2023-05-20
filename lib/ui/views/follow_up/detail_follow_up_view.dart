@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -19,11 +20,15 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 
 class DetailFollowUpViewParam {
   DetailFollowUpViewParam({
+    this.projectId,
+    this.projectName,
     this.customerId,
     this.customerName,
     this.companyName,
   });
 
+  final String? projectId;
+  final String? projectName;
   final String? customerId;
   final String? customerName;
   final String? companyName;
@@ -46,6 +51,8 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: DetailFollowUpViewModel(
+        projectId: widget.param.projectId,
+        projectName: widget.param.projectName,
         customerId: widget.param.customerId,
         customerName: widget.param.customerName,
         companyName: widget.param.companyName,
@@ -71,19 +78,16 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                 context,
                 Routes.formFollowUp,
                 arguments: FormFollowUpViewParam(
-                    customerData: CustomerData(
-                  customerId: model.customerId ?? "",
+                    projectData: ProjectData(
+                  projectId: model.projectId ?? "",
+                  projectName: model.projectName ?? "",
+                  projectNeed: "",
                   customerName: model.customerName ?? "",
                   companyName: model.companyName,
                   city: "",
-                  customerNeed: "",
-                  customerNumber: "",
-                  customerType: "",
-                  phoneNumber: "",
-                  email: "",
-                  dataSource: "",
-                  isLead: "",
-                  status: "",
+                  address: "",
+                  pics: [],
+                  customerId: "",
                 )),
               ).then((value) {
                 if (value == null) return;
@@ -100,7 +104,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                   child: Column(
                     children: [
                       Text(
-                        model.customerName ?? "",
+                        model.projectName ?? "",
                         style: buildTextStyle(
                           fontSize: 26,
                           fontWeight: 800,
@@ -109,7 +113,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                       ),
                       Spacings.vert(8),
                       Text(
-                        model.companyName ?? "",
+                        "${model.customerName} ${(model.companyName != "" ? " | ${model.companyName}" : "")}",
                         style: buildTextStyle(
                           fontSize: 20,
                           fontWeight: 400,

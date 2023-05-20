@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -22,20 +23,19 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/time_picker.dart';
 
 enum FormSetReminderSource {
   ListReminderPage,
-  CustomerPage,
   ProjectPage,
-  MaintenancePage
+  MaintenancePage,
 }
 
 class FormSetReminderViewParam {
   FormSetReminderViewParam({
     required this.source,
-    this.customerData,
+    this.projectData,
     this.maintenanceData,
   });
 
   final FormSetReminderSource source;
-  CustomerData? customerData;
+  ProjectData? projectData;
   MaintenanceData? maintenanceData;
 }
 
@@ -58,7 +58,7 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
       model: FormSetReminderViewModel(
         dioService: Provider.of<DioService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
-        customerData: widget.param.customerData,
+        projectData: widget.param.projectData,
         maintenanceData: widget.param.maintenanceData,
       ),
       onModelReady: (FormSetReminderViewModel model) async {
@@ -128,9 +128,9 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.param.source ==
-                    FormSetReminderSource.CustomerPage) ...[
+                    FormSetReminderSource.ProjectPage) ...[
                   Text(
-                    "Informasi Pelanggan",
+                    "Informasi Proyek",
                     style: buildTextStyle(
                       fontSize: 18,
                       fontColor: MyColors.yellow01,
@@ -139,9 +139,9 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
                   ),
                   Spacings.vert(8),
                   TextInput.editable(
-                    controller: model.nomorPelangganController,
-                    label: "Nomor Pelanggan",
-                    hintText: "Nomor Pelanggan",
+                    controller: model.namaProyekController,
+                    label: "Nama Proyek",
+                    hintText: "Nama Proyek",
                   ),
                   Spacings.vert(24),
                   TextInput.editable(

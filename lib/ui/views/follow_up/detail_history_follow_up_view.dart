@@ -63,21 +63,23 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                   children: [
                     Spacings.vert(20),
                     Text(
-                      model.historyData?.customerName ?? "",
+                      model.historyData?.projectName ?? "",
                       style: buildTextStyle(
                         fontSize: 32,
                         fontWeight: 800,
                         fontColor: MyColors.yellow01,
                       ),
                     ),
-                    Text(
-                      model.historyData?.companyName ?? "",
-                      style: buildTextStyle(
-                        fontSize: 20,
-                        fontWeight: 400,
-                        fontColor: MyColors.lightBlack02,
+                    if (model.historyData?.customerName != null ||
+                        model.historyData?.companyName != null)
+                      Text(
+                        "${model.historyData?.customerName} ${(model.historyData?.companyName != "" ? " | ${model.historyData?.companyName}" : "")}",
+                        style: buildTextStyle(
+                          fontSize: 20,
+                          fontWeight: 400,
+                          fontColor: MyColors.lightBlack02,
+                        ),
                       ),
-                    ),
                     Spacings.vert(35),
                     StatusCardWidget(
                       cardType: model.statusCardType,

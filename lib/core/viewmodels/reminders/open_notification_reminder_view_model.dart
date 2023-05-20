@@ -1,6 +1,7 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/reminder/reminder_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -25,8 +26,8 @@ class OpenNotificationReminderViewModel extends BaseViewModel {
   ReminderData? _reminderData;
   ReminderData? get reminderData => _reminderData;
 
-  CustomerData? _customerData;
-  CustomerData? get customerData => _customerData;
+  ProjectData? _projectData;
+  ProjectData? get projectData => _projectData;
 
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
@@ -53,8 +54,8 @@ class OpenNotificationReminderViewModel extends BaseViewModel {
       _reminderData = response.right;
       if (_reminderData?.maintenanceId != null) {
         await requestDetailMaintenance();
-      } else if (_reminderData?.customerId != null) {
-        await requestDetailCustomer();
+      } else if (_reminderData?.projectId != null) {
+        await requestDetailProject();
       }
 
       return;
@@ -63,17 +64,17 @@ class OpenNotificationReminderViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  Future<void> requestDetailCustomer() async {
+  Future<void> requestDetailProject() async {
     if (param?.reminderId == null || param?.reminderId.isEmpty == true) return;
-    if (_reminderData?.customerId == null) return;
+    if (_reminderData?.projectId == null) return;
     resetErrorMsg();
 
-    final response = await _apiService.getDetailCustomer(
-      customerId: int.parse(_reminderData?.customerId ?? "0"),
+    final response = await _apiService.requestDetailProject(
+      projectId: int.parse(_reminderData?.projectId ?? "0"),
     );
 
     if (response.isRight) {
-      _customerData = response.right;
+      _projectData = response.right;
       return;
     }
 

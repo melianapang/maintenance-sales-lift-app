@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/document_project_view_model.dart';
@@ -57,10 +58,9 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
               isBackEnabled: true,
             ),
             body: Padding(
-              padding: const EdgeInsets.only(
-                right: 24.0,
-                bottom: 24.0,
-                left: 24.0,
+              padding: PaddingUtils.getPadding(
+                context,
+                defaultPadding: 20,
               ),
               child: !model.busy
                   ? SingleChildScrollView(
@@ -74,7 +74,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
                           : Text(
                               "Tidak ada dokumen untuk proyek ini.",
                               style: buildTextStyle(
-                                fontSize: 24,
+                                fontSize: 20,
                                 fontWeight: 600,
                                 fontColor: MyColors.lightBlack02,
                               ),

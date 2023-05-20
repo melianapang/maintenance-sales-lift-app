@@ -318,36 +318,6 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
             }
           },
         ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.bellBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Jadwalkan Pengingat',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.formSetReminder,
-              arguments: FormSetReminderViewParam(
-                source: FormSetReminderSource.CustomerPage,
-                customerData: widget.param.customerData,
-              ),
-            );
-
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
       ],
     );
   }

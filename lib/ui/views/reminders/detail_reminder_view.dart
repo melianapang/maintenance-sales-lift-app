@@ -54,7 +54,7 @@ class _DetailReminderViewState extends State<DetailReminderView> {
                 children: [
                   Spacings.vert(32),
                   Text(
-                    model.reminderData?.customerName ?? "(Tanpa Pelanggan)",
+                    model.reminderData?.projectName ?? "(Tanpa Proyek)",
                     style: buildTextStyle(
                       fontSize: 32,
                       fontWeight: 800,
