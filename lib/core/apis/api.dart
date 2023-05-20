@@ -113,6 +113,7 @@ abstract class Api {
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
     @Query("input_search") String inputSearch,
+    @Query("sort_by") String sortBy,
   );
 
   @GET('/api/0/Log/get_log_detail/{log_id}')
@@ -828,12 +829,14 @@ class ApiService {
     required int pageSize,
     required int currentPage,
     required String inputUser,
+    required String sortBy,
   }) async {
     try {
       final HttpResponse<dynamic> response = await api.searchLog(
         currentPage,
         pageSize,
         inputUser,
+        sortBy,
       );
 
       if (response.isSuccess) {

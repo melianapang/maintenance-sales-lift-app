@@ -50,3 +50,51 @@ Widget buildSearchBar(
     ),
   );
 }
+
+Widget buildSearchBarWithSortMenu(
+  BuildContext context, {
+  bool? isEnabled,
+  bool isNowSortAscending = true,
+  required TextEditingController searchController,
+  required void Function(String) textSearchOnChanged,
+  VoidCallback? onTapFilter,
+}) {
+  return Container(
+    margin: const EdgeInsets.all(20),
+    child: Row(
+      children: [
+        Expanded(
+          child: TextInput.editable(
+            onChangedListener: textSearchOnChanged,
+            controller: searchController,
+            hintText: "Search",
+            isEnabled: isEnabled,
+            prefixIcon: const Icon(
+              PhosphorIcons.magnifyingGlassBold,
+              color: MyColors.lightBlack02,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: onTapFilter,
+          child: Container(
+            margin: const EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.symmetric(
+              vertical: 15,
+            ),
+            decoration: BoxDecoration(
+                color: MyColors.darkBlack02,
+                borderRadius: BorderRadius.circular(10)),
+            width: 50,
+            child: Icon(
+              isNowSortAscending
+                  ? PhosphorIcons.sortDescendingBold
+                  : PhosphorIcons.sortAscendingBold,
+              color: MyColors.lightBlack02,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}

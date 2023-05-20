@@ -29,6 +29,9 @@ class ListLogViewModel extends BaseViewModel {
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
 
+  bool _isSortAscending = true;
+  bool get isNowSortAscending => _isSortAscending;
+
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
 
@@ -129,6 +132,13 @@ class ListLogViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  Future<void> requestSortAscDesc() async {
+    resetPage();
+    _isSortAscending = !isNowSortAscending;
+    searchLog();
+    // notifyListeners();
+  }
+
   Future<void> searchLog() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
@@ -141,6 +151,7 @@ class ListLogViewModel extends BaseViewModel {
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
       inputUser: searchController.text,
+      sortBy: _isSortAscending ? "ASC" : "DESC",
     );
 
     if (response.isRight) {

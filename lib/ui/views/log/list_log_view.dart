@@ -50,7 +50,7 @@ class _ListLogViewState extends State<ListLogView> {
           ),
           body: Column(
             children: [
-              buildSearchBar(
+              buildSearchBarWithSortMenu(
                 context,
                 isEnabled: !(model.isShowNoDataFoundPage &&
                     model.searchController.text.isEmpty),
@@ -63,8 +63,8 @@ class _ListLogViewState extends State<ListLogView> {
                   );
                 },
                 searchController: model.searchController,
-                isFilterShown: false,
-                onTapFilter: () {},
+                isNowSortAscending: model.isNowSortAscending,
+                onTapFilter: () => model.requestSortAscDesc(),
               ),
               if (!model.isShowNoDataFoundPage && !model.busy) ...[
                 Spacings.vert(12),
