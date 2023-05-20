@@ -127,7 +127,7 @@ class ListCustomerNeedViewModel extends BaseViewModel {
     if (response.isRight) {
       namaKeperluanController.text = "";
       setIsAddingNewData();
-      await requestGetAllCustomerNeed();
+      await refreshPage();
       return true;
     }
 
@@ -144,7 +144,7 @@ class ListCustomerNeedViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      await requestGetAllCustomerNeed();
+      await refreshPage();
       return true;
     }
 
