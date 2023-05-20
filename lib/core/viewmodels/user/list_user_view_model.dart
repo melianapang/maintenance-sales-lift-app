@@ -25,6 +25,8 @@ class ListUserViewModel extends BaseViewModel {
   List<UserData> get listUser => _listUser;
 
   //Filter Related
+  bool _isFilterActivated = false;
+
   int _selectedRoleOption = 0;
   int get selectedRoleOption => _selectedRoleOption;
   final List<FilterOption> _roleOptions = [
@@ -79,9 +81,14 @@ class ListUserViewModel extends BaseViewModel {
     }
 
     if (needSync) {
+      isLoading = true;
+
+      _isFilterActivated = true;
       resetPage();
       resetSearchBar();
       syncFilterUser();
+
+      isLoading = false;
     }
     notifyListeners();
   }
@@ -91,6 +98,7 @@ class ListUserViewModel extends BaseViewModel {
   }
 
   void resetFilter() {
+    _isFilterActivated = false;
     terapkanFilter(
       selectedRole: 0,
       needSync: false,
@@ -98,13 +106,10 @@ class ListUserViewModel extends BaseViewModel {
   }
 
   Future<void> syncFilterUser() async {
-    setBusy(true);
-
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
-      setBusy(false);
       return;
     }
 
@@ -128,14 +133,12 @@ class ListUserViewModel extends BaseViewModel {
         );
       }
       _isShowNoDataFoundPage = response.right.result.isEmpty;
-      setBusy(false);
       notifyListeners();
 
       return;
     }
 
     _errorMsg = response.left.message;
-    setBusy(false);
   }
 
   Future<void> searchOnChanged() async {
@@ -157,6 +160,14 @@ class ListUserViewModel extends BaseViewModel {
   }
 
   Future<void> onLazyLoad() async {
+    isLoading = false;
+    if (_isFilterActivated) {
+      await syncFilterUser();
+
+      isLoading = false;
+      return;
+    }
+
     if (searchController.text.isNotEmpty) {
       invokeDebouncer(searchUser);
       return;
@@ -203,8 +214,9 @@ class ListUserViewModel extends BaseViewModel {
     setBusy(true);
 
     resetPage();
-    await requestGetAllUserData();
+    resetFilter();
 
+    await requestGetAllUserData();
     _isShowNoDataFoundPage = _listUser.isEmpty;
     notifyListeners();
 

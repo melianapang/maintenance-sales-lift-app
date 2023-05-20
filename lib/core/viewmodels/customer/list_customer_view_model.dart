@@ -42,6 +42,8 @@ class ListCustomerViewModel extends BaseViewModel {
   Timer? _debounce;
 
   // Filter related
+  bool _isFilterActivated = false;
+
   int _selectedTipePelangganOption = 0;
   int get selectedTipePelangganOption => _selectedTipePelangganOption;
   final List<FilterOption> _tipePelangganOptions = [
@@ -150,9 +152,14 @@ class ListCustomerViewModel extends BaseViewModel {
     }
 
     if (needSync) {
+      isLoading = true;
+
+      _isFilterActivated = true;
       resetPage();
       resetSearchBar();
       syncFilterCustomer();
+
+      isLoading = false;
     }
     notifyListeners();
   }
@@ -162,6 +169,7 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   void resetFilter() {
+    _isFilterActivated = false;
     terapkanFilter(
       selectedKebutuhanPelanggan: 0,
       selectedPelanggan: 0,
@@ -191,6 +199,14 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> onLazyLoad() async {
+    isLoading = false;
+    if (_isFilterActivated) {
+      await syncFilterCustomer();
+
+      isLoading = false;
+      return;
+    }
+
     if (searchController.text.isNotEmpty) {
       invokeDebouncer(searchCustomer);
       return;
@@ -208,13 +224,10 @@ class ListCustomerViewModel extends BaseViewModel {
   }
 
   Future<void> syncFilterCustomer() async {
-    setBusy(true);
-
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
-      setBusy(false);
       return;
     }
 
@@ -241,14 +254,12 @@ class ListCustomerViewModel extends BaseViewModel {
         );
       }
       _isShowNoDataFoundPage = response.right.result.isEmpty;
-      setBusy(false);
       notifyListeners();
 
       return;
     }
 
     _errorMsg = response.left.message;
-    setBusy(false);
   }
 
   Future<void> requestGetAllCustomer() async {

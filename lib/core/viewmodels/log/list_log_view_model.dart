@@ -76,7 +76,7 @@ class ListLogViewModel extends BaseViewModel {
   }
 
   Future<void> onLazyLoad() async {
-    if (searchController.text.isNotEmpty) {
+    if (searchController.text.isNotEmpty || !isNowSortAscending) {
       invokeDebouncer(searchLog);
       return;
     }

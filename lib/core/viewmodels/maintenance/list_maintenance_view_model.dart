@@ -44,6 +44,8 @@ class ListMaintenanceViewModel extends BaseViewModel {
   //endregion
 
   // Filter related
+  bool _isFilterActivated = false;
+
   int _selectedMaintenanceStatusOption = 0;
   int get selectedMaintenanceStatusOption => _selectedMaintenanceStatusOption;
   final List<FilterOption> _maintenanceStatusOptions = [
@@ -112,6 +114,14 @@ class ListMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> onLazyLoad() async {
+    isLoading = true;
+    if (_isFilterActivated) {
+      await syncFilterMaintenance();
+
+      isLoading = false;
+      return;
+    }
+
     if (searchController.text.isNotEmpty) {
       invokeDebouncer(searchMaintenance);
       return;
@@ -144,9 +154,14 @@ class ListMaintenanceViewModel extends BaseViewModel {
     }
 
     if (needSync) {
+      isLoading = true;
+
+      _isFilterActivated = true;
       resetPage();
       resetSearchBar();
       syncFilterMaintenance();
+
+      isLoading = false;
     }
     notifyListeners();
   }
@@ -156,6 +171,7 @@ class ListMaintenanceViewModel extends BaseViewModel {
   }
 
   void resetFilter() {
+    _isFilterActivated = false;
     terapkanFilter(
       selectedMaintenanceStatus: 0,
       selectedSort: 0,
@@ -172,13 +188,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<void> syncFilterMaintenance() async {
-    setBusy(true);
-
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
                 _paginationControl.pageSize) {
-      setBusy(false);
       return;
     }
 
@@ -203,14 +216,12 @@ class ListMaintenanceViewModel extends BaseViewModel {
         );
       }
       _isShowNoDataFoundPage = response.right.result.isEmpty;
-      setBusy(false);
       notifyListeners();
 
       return;
     }
 
     _errorMsg = response.left.message;
-    setBusy(false);
   }
 
   Future<void> requestGetAllMaintenance() async {
@@ -251,8 +262,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
     setBusy(true);
 
     resetPage();
-    await requestGetAllMaintenance();
+    resetFilter();
 
+    await requestGetAllMaintenance();
     _isShowNoDataFoundPage =
         _listMaintenance?.isEmpty == true || _listMaintenance == null;
     notifyListeners();
