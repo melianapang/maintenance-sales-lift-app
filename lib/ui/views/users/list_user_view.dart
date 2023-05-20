@@ -16,6 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class ListUserView extends StatefulWidget {
   const ListUserView({super.key});
@@ -75,7 +76,13 @@ class _ListUserViewState extends State<ListUserView> {
                   );
                 },
                 searchController: model.searchController,
-                isFilterShown: false,
+                isFilterShown: true,
+                onTapFilter: () => showUserFilterMenu(
+                  context,
+                  listRole: model.roleOptions,
+                  selectedRole: model.selectedRoleOption,
+                  terapkanCallback: model.terapkanFilter,
+                ),
               ),
               Spacings.vert(12),
               if (!model.isShowNoDataFoundPage &&

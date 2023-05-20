@@ -325,6 +325,72 @@ void showMaintenanceFilterMenu(
   );
 }
 
+//build filter menu for user
+void showUserFilterMenu(
+  BuildContext context, {
+  required List<FilterOption> listRole,
+  required int selectedRole,
+  required void Function({
+    required int selectedRole,
+  })
+      terapkanCallback,
+}) {
+  final List<FilterOption> roleLocal = convertToNewList(listRole);
+  int role = selectedRole;
+
+  showGeneralBottomSheet(
+    context: context,
+    title: 'Filters',
+    isFlexible: true,
+    showCloseButton: false,
+    child: StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Peran",
+              style: buildTextStyle(
+                fontSize: 14,
+                fontWeight: 400,
+                fontColor: MyColors.lightBlack02,
+              ),
+            ),
+            Spacings.vert(8),
+            _buildFilterOptionsWidget(
+              roleLocal,
+              (int selectedIndex) {
+                role = selectedIndex;
+                for (int i = 0; i < roleLocal.length; i++) {
+                  if (i == selectedIndex) {
+                    roleLocal[i].isSelected = true;
+                    continue;
+                  }
+
+                  roleLocal[i].isSelected = false;
+                }
+                setState(() {});
+              },
+            ),
+            Spacings.vert(24),
+            ButtonWidget(
+              buttonType: ButtonType.primary,
+              buttonSize: ButtonSize.large,
+              text: "Terapkan",
+              onTap: () {
+                terapkanCallback(
+                  selectedRole: role,
+                );
+                Navigator.maybePop(context);
+              },
+            )
+          ],
+        );
+      },
+    ),
+  );
+}
+
 //build choices for form.
 Widget buildMenuChoices(
     List<FilterOption> listMenu, void Function(int) callback) {
