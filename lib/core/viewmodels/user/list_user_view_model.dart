@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gcloud/datastore.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
@@ -30,10 +31,11 @@ class ListUserViewModel extends BaseViewModel {
   int _selectedRoleOption = 0;
   int get selectedRoleOption => _selectedRoleOption;
   final List<FilterOption> _roleOptions = [
-    FilterOption("Super Admin", true),
+    FilterOption("Super Admin", false),
     FilterOption("Admin", false),
     FilterOption("Sales", false),
     FilterOption("Teknisi", false),
+    FilterOption("All", true),
   ];
   List<FilterOption> get roleOptions => _roleOptions;
 
@@ -67,10 +69,10 @@ class ListUserViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  void terapkanFilter({
+  Future<void> terapkanFilter({
     required int selectedRole,
     bool needSync = true,
-  }) {
+  }) async {
     _selectedRoleOption = selectedRole;
     for (int i = 0; i < _roleOptions.length; i++) {
       if (i == selectedRole) {
@@ -78,6 +80,22 @@ class ListUserViewModel extends BaseViewModel {
         continue;
       }
       _roleOptions[i].isSelected = false;
+    }
+
+    //all filter is the same with get data in the first time open the page
+    if (_selectedRoleOption > 3) {
+      isLoading = true;
+
+      _isFilterActivated = false;
+      resetPage();
+      resetSearchBar();
+      _paginationControl.currentPage = 1;
+      await requestGetAllUserData();
+
+      isLoading = false;
+      notifyListeners();
+
+      return;
     }
 
     if (needSync) {
@@ -97,9 +115,9 @@ class ListUserViewModel extends BaseViewModel {
     searchController.text = "";
   }
 
-  void resetFilter() {
+  Future<void> resetFilter() async {
     _isFilterActivated = false;
-    terapkanFilter(
+    await terapkanFilter(
       selectedRole: 0,
       needSync: false,
     );
@@ -214,7 +232,7 @@ class ListUserViewModel extends BaseViewModel {
     setBusy(true);
 
     resetPage();
-    resetFilter();
+    await resetFilter();
 
     await requestGetAllUserData();
     _isShowNoDataFoundPage = _listUser.isEmpty;
