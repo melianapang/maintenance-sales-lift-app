@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gcloud/datastore.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/user/user_dto.dart';
@@ -82,7 +81,7 @@ class ListUserViewModel extends BaseViewModel {
       _roleOptions[i].isSelected = false;
     }
 
-    //all filter is the same with get data in the first time open the page
+    //"all" filter is equal with get data in the first time open the page
     if (_selectedRoleOption > 3) {
       isLoading = true;
 
