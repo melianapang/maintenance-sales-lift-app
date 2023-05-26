@@ -16,6 +16,9 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
@@ -388,6 +391,35 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               context,
               Routes.documentProject,
               arguments: DocumentProjectViewwParam(
+                projectData: model.projectData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.newspaperClippingBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Buat Laporan Konfirmasi',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () async {
+            Navigator.pushNamed(
+              context,
+              Routes.formFollowUp,
+              arguments: FormFollowUpViewParam(
                 projectData: model.projectData,
               ),
             );
