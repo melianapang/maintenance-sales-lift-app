@@ -1690,8 +1690,9 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp(
-      {required String projectId}) async {
+  Future<Either<Failure, List<HistoryFollowUpData>>> requestGetHistoryFollowUp({
+    required String projectId,
+  }) async {
     try {
       final HttpResponse<dynamic> response =
           await api.requestGetAllHistoryFollowUp(
