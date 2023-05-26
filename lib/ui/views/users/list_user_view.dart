@@ -103,7 +103,13 @@ class _ListUserViewState extends State<ListUserView> {
                         return CustomCardWidget(
                           cardType: CardType.list,
                           title: StringUtils.removeZeroWidthSpaces(
-                              model.listUser[index].name),
+                            model.listUser[index].name,
+                          ),
+                          description:
+                              StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                            model.listUser[index].roleName,
+                          ),
+                          descSize: 16,
                           titleSize: 20,
                           onTap: () {
                             Navigator.pushNamed(
