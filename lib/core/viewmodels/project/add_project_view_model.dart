@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
@@ -20,6 +22,9 @@ class AddProjectViewModel extends BaseViewModel {
 
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
+
+  bool isLoading = false;
+  bool isSearch = false;
 
   //region pilih customer proyek
   List<CustomerData>? _listCustomer;
@@ -70,6 +75,9 @@ class AddProjectViewModel extends BaseViewModel {
   int? _createdProjectId;
   int? get createdProjectId => _createdProjectId;
 
+  TextEditingController searchController = TextEditingController();
+  Timer? _debounce;
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
@@ -78,7 +86,6 @@ class AddProjectViewModel extends BaseViewModel {
     setBusy(true);
 
     paginationControl.currentPage = 1;
-
     await requestGetAllCustomer();
 
     setBusy(false);
@@ -131,6 +138,43 @@ class AddProjectViewModel extends BaseViewModel {
   void onChangedCity(String value) {
     _isCityValid = value.isNotEmpty;
     notifyListeners();
+  }
+
+  void resetSearchBar() {
+    searchController.text = "";
+  }
+
+  void resetPage() {
+    _listCustomer = [];
+    _errorMsg = null;
+
+    _paginationControl.currentPage = 1;
+    _paginationControl.totalData = -1;
+  }
+
+  Future<List<CustomerData>> searchOnChanged() async {
+    final Completer<bool> completer = Completer<bool>();
+
+    isLoading = true;
+    if (isSearch) resetPage();
+
+    if (searchController.text.isEmpty) {
+      await requestGetAllCustomer();
+
+      isLoading = false;
+      completer.complete(true);
+      return _listCustomer ?? [];
+    }
+
+    invokeDebouncer(
+      () async {
+        await searchCustomer();
+        isLoading = false;
+        completer.complete(true);
+      },
+    );
+    await completer.future;
+    return _listCustomer ?? [];
   }
 
   Future<void> requestGetAllCustomer() async {
@@ -258,6 +302,55 @@ class AddProjectViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<List<CustomerData>> searchCustomer() async {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return [];
+    }
+
+    final response = await _apiService.searchCustomer(
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+      inputUser: searchController.text,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listCustomer = response.right.result;
+        } else {
+          _listCustomer?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+      }
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
+
+      return _listCustomer ?? [];
+    }
+
+    _errorMsg = response.left.message;
+    _isShowNoDataFoundPage = true;
+    notifyListeners();
+    return [];
+  }
+
+  void invokeDebouncer(Function() function) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(
+      const Duration(
+        milliseconds: 300,
+      ),
+      function,
+    );
   }
 }
 

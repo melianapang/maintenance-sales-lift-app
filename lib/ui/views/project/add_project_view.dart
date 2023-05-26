@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -362,7 +364,6 @@ class _AddProjectViewState extends State<AddProjectView> {
     })
         setSelectedMenu,
   }) {
-    final searchController = TextEditingController();
     showGeneralBottomSheet(
       context: context,
       title: 'Daftar Pelanggan',
@@ -373,48 +374,55 @@ class _AddProjectViewState extends State<AddProjectView> {
           ? Expanded(
               child: StatefulBuilder(
                 builder: (context, ss) {
-                  return Column(
-                    children: [
-                      buildSearchBar(
-                        context,
-                        isFilterShown: false,
-                        searchController: searchController,
-                        textSearchOnChanged: (String value) {},
-                      ),
-                      LazyLoadScrollView(
-                        onEndOfPage: () {
-                          ss(() {
-                            model.requestGetAllCustomer();
-                          });
-                        },
-                        scrollDirection: Axis.vertical,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: model.listCustomer?.length ?? 0,
-                          separatorBuilder: (_, __) => const Divider(
-                            color: MyColors.transparent,
-                            height: 20,
+                  return FutureBuilder<List<CustomerData>>(
+                    future: model.searchOnChanged(),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          buildSearchBar(
+                            context,
+                            isFilterShown: false,
+                            searchController: model.searchController,
+                            textSearchOnChanged: (_) {
+                              model.isSearch = true;
+                              ss(() {});
+                            },
                           ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return CustomCardWidget(
-                              cardType: CardType.list,
-                              title:
-                                  model.listCustomer?[index].customerName ?? "",
-                              description:
-                                  model.listCustomer?[index].companyName,
-                              desc2Size: 16,
-                              titleSize: 20,
-                              onTap: () {
-                                setSelectedMenu(
-                                  selectedIndex: index,
-                                );
-                                Navigator.maybePop(context);
+                          Expanded(
+                            child: LazyLoadScrollView(
+                              onEndOfPage: () {
+                                model.isSearch = false;
+                                ss(() {});
                               },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                              child: ListView.separated(
+                                itemCount: snapshot.data?.length ?? 0,
+                                separatorBuilder: (_, __) => const Divider(
+                                  color: MyColors.transparent,
+                                  height: 20,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return CustomCardWidget(
+                                    cardType: CardType.list,
+                                    title: snapshot.data?[index].customerName ??
+                                        "",
+                                    description:
+                                        snapshot.data?[index].companyName,
+                                    desc2Size: 16,
+                                    titleSize: 20,
+                                    onTap: () {
+                                      setSelectedMenu(
+                                        selectedIndex: index,
+                                      );
+                                      Navigator.maybePop(context);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               ),
