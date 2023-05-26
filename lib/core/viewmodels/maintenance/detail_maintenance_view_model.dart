@@ -107,6 +107,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   Future<void> isUserAllowedToEditMaintenance() async {
     Role role = await _authenticationService.getUserRole();
+    if (_maintenanceData?.scheduleDate == null) return;
     bool isAfterToday = DateTimeUtils.isDateStringAfterToday(
         _maintenanceData?.scheduleDate ?? "");
     bool isNotMaintenanced = mappingStringtoMaintenanceStatus(

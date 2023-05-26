@@ -8,6 +8,7 @@ class CreateReminderRequest {
   CreateReminderRequest({
     this.projectId,
     this.maintenanceId,
+    this.followUpId,
     required this.reminderDate,
     required this.reminderTime,
     required this.description,
@@ -25,6 +26,9 @@ class CreateReminderRequest {
 
   @JsonKey(name: "maintenance_id")
   final String? maintenanceId;
+
+  @JsonKey(name: "follow_up_id")
+  final String? followUpId;
 
   @JsonKey(name: "reminder_date")
   final String reminderDate;
@@ -130,6 +134,7 @@ class ReminderData {
     required this.reminderId,
     required this.userName,
     required this.maintenanceId,
+    required this.followUpId,
     required this.projectId,
     required this.projectName,
     required this.reminderDate,
@@ -152,6 +157,9 @@ class ReminderData {
 
   @JsonKey(name: "maintenance_id")
   final String? maintenanceId;
+
+  @JsonKey(name: "follow_up_id")
+  final String? followUpId;
 
   @JsonKey(name: "project_id")
   final String? projectId;
@@ -203,6 +211,8 @@ class UpdateReminderRequest {
   UpdateReminderRequest({
     required this.reminderDate,
     required this.reminderTime,
+    this.followUpId,
+    this.maintenanceId,
     required this.description,
     required this.remindedNote,
     required this.afterRemindedNote,
@@ -218,6 +228,12 @@ class UpdateReminderRequest {
 
   @JsonKey(name: "reminder_time")
   final String reminderTime;
+
+  @JsonKey(name: "follow_up_id")
+  final String? followUpId;
+
+  @JsonKey(name: "maintenance_id")
+  final String? maintenanceId;
 
   @JsonKey(name: "description")
   final String description;

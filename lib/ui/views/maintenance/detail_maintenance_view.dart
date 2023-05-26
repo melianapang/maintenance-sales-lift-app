@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
@@ -168,7 +167,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                                 DateTimeUtils.convertDateToString(
                                   date: DateTime.now(),
                                   formatter: DateFormat(
-                                    DateTimeUtils.DATE_FORMAT_2,
+                                    DateTimeUtils.DATE_FORMAT_3,
                                   ),
                                 ),
                             formattedString: DateTimeUtils.DATE_FORMAT_2,

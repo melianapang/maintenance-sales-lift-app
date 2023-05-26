@@ -139,6 +139,13 @@ abstract class Api {
     @Query("input_search") String inputSearch,
   );
 
+  @GET('/api/0/Reminder/get_all_reminders_by_project_id/{project_id}')
+  Future<HttpResponse<dynamic>> requestGetAllReminderByProjectId(
+    @Path("project_id") int logId,
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
   @POST('/api/0/Reminder/create_reminder')
   Future<HttpResponse<dynamic>> requestCreateReminder(
     @Body() CreateReminderRequest request,
@@ -923,9 +930,35 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, ListReminderData>> requestGetAllReminderByProjectId({
+    required int projectId,
+    required int pageSize,
+    required int currentPage,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllReminderByProjectId(
+        projectId,
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllReminderResponse getAllReminderResponse =
+            GetAllReminderResponse.fromJson(response.data);
+
+        return Right<Failure, ListReminderData>(getAllReminderResponse.data);
+      }
+      return ErrorUtils<ListReminderData>().handleDomainError(response);
+    } catch (e) {
+      return ErrorUtils<ListReminderData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateReminder({
     int? projectId,
     String? maintenanceId,
+    String? followUpId,
     required String reminderDate,
     required String reminderTime,
     required String description,
@@ -936,6 +969,7 @@ class ApiService {
       final payload = CreateReminderRequest(
         projectId: projectId,
         maintenanceId: maintenanceId,
+        followUpId: followUpId,
         reminderDate: reminderDate,
         reminderTime: reminderTime,
         description: description,
@@ -967,6 +1001,8 @@ class ApiService {
     required int reminderId,
     required String reminderDate,
     required String reminderTime,
+    String? maintenanceId,
+    String? followUpId,
     required String description,
     required String remindedNote,
     required String afterRemindedNote,
@@ -976,6 +1012,8 @@ class ApiService {
       final payload = UpdateReminderRequest(
         reminderDate: reminderDate,
         reminderTime: reminderTime,
+        maintenanceId: maintenanceId,
+        followUpId: followUpId,
         description: description,
         remindedNote: remindedNote,
         afterRemindedNote: afterRemindedNote,
