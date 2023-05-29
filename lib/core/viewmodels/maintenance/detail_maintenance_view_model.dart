@@ -130,6 +130,7 @@ class DetailMaintenanceViewModel extends BaseViewModel {
   Future<void> requestGetHistoryMaintenance() async {
     final response = await _apiService.requestGetHistoryMaintenance(
       _maintenanceData?.unitId ?? "",
+      _maintenanceData?.maintenanceId ?? "",
     );
 
     if (response.isRight) {

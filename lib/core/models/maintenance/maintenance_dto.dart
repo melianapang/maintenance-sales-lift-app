@@ -28,7 +28,6 @@ class GetAllMaintenanceResponse {
 @JsonSerializable()
 class ListMaintenanceData {
   ListMaintenanceData({
-    required this.totalSize,
     required this.result,
   });
 
@@ -36,9 +35,6 @@ class ListMaintenanceData {
       _$ListMaintenanceDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ListMaintenanceDataToJson(this);
-
-  @JsonKey(name: "total_size")
-  final String totalSize;
 
   @JsonKey(name: "result")
   final List<MaintenanceData> result;
@@ -64,6 +60,7 @@ class MaintenanceData {
     required this.updateMaintenanceDateTime,
     required this.note,
     required this.maintenanceFiles,
+    required this.lastMaintenanceResult,
   });
 
   factory MaintenanceData.fromJson(Map<String, dynamic> json) =>
@@ -119,6 +116,9 @@ class MaintenanceData {
   @JsonKey(name: "unit_location")
   final String unitLocation;
 
+  @JsonKey(name: "last_maintenance_result")
+  final String? lastMaintenanceResult;
+
   @JsonKey(name: "maintenance_file")
   final List<MaintenanceFile>? maintenanceFiles;
 }
@@ -133,6 +133,7 @@ class UpdateMaintenanceRequest {
     required this.scheduleDate,
     required this.note,
     required this.maintenanceFiles,
+    required this.lastMaintenanceResult,
   });
 
   factory UpdateMaintenanceRequest.fromJson(Map<String, dynamic> json) =>
@@ -157,6 +158,9 @@ class UpdateMaintenanceRequest {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "last_maintenance_result")
+  final String? lastMaintenanceResult;
 
   @JsonKey(name: "maintenance_file")
   final List<MaintenanceFile>? maintenanceFiles;

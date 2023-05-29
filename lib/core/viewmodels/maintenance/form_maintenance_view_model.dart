@@ -156,6 +156,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
       ),
       note: noteController.text,
       maintenanceFiles: _uploadedFiles,
+      lastMaintenanceResult: (_selectedHasilMaintenanceOption + 1).toString(),
     );
 
     if (response.isRight) return true;
@@ -232,6 +233,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
       latitude: position.latitude,
       longitude: position.longitude,
       maintenanceResult: _selectedHasilMaintenanceOption + 1,
+      lastMaintenanceResult: (_selectedHasilMaintenanceOption + 1).toString(),
       scheduleDate: DateTimeUtils.convertDateToString(
         date: _selectedNextMaintenanceDates.first,
         formatter: DateFormat(

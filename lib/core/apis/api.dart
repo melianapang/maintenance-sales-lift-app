@@ -335,10 +335,11 @@ abstract class Api {
   //enregion
 
   //region maintenance
-  @GET('/api/0/Maintenance/get_all_maintenances/')
+  @GET('/api/0/Maintenance/get_list_maintenance/')
   Future<HttpResponse<dynamic>> requestGetAllMaintenance(
-    @Query("current_page") int currentPage,
-    @Query("page_size") int pageSize,
+    @Query("sort_by") int sortBy,
+    @Query("status") int status,
+    @Query("input_search") String inputSearch,
   );
 
   @GET('/api/0/Maintenance/get_detail_maintenance/{maintenance_id}')
@@ -346,9 +347,10 @@ abstract class Api {
     @Path("maintenance_id") int maintenanceId,
   );
 
-  @GET('/api/0/Maintenance/get_history_maintenances/{unit_id}')
+  @GET('/api/0/Maintenance/get_history_maintenances/{unit_id}/{maintenance_id}')
   Future<HttpResponse<dynamic>> requestGetAllHistoryMaintenance(
     @Path("unit_id") String customerId,
+    @Path("maintenance_id") String maintenanceId,
   );
 
   @GET('/api/0/Maintenance/search_maintenance/')
@@ -1816,71 +1818,16 @@ class ApiService {
   //endregion
 
   //region maintenance
-  Future<Either<Failure, ListMaintenanceData>> requestFilterMaintenance(
-    int currentPage,
-    int pageSize,
-    int status,
-    int sortBy,
-  ) async {
-    try {
-      final HttpResponse<dynamic> response = await api.requestFilterMaintenance(
-        currentPage,
-        pageSize,
-        status,
-        sortBy,
-      );
-
-      if (response.isSuccess) {
-        GetAllMaintenanceResponse getAllMaintenanceResponse =
-            GetAllMaintenanceResponse.fromJson(response.data);
-
-        return Right<Failure, ListMaintenanceData>(
-          getAllMaintenanceResponse.data,
-        );
-      }
-
-      return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
-    } catch (e) {
-      log("Error: $e");
-      return ErrorUtils<ListMaintenanceData>().handleError(e);
-    }
-  }
-
-  Future<Either<Failure, ListMaintenanceData>> searchMaintenance({
-    required int pageSize,
-    required int currentPage,
-    required String inputUser,
+  Future<Either<Failure, ListMaintenanceData>> requestGetAllMaintenance({
+    required int sortBy,
+    required int status,
+    required String inputSearch,
   }) async {
     try {
-      final HttpResponse<dynamic> response = await api.searchMaintenance(
-        currentPage,
-        pageSize,
-        inputUser,
-      );
-
-      if (response.isSuccess) {
-        GetAllMaintenanceResponse getAllMaintenanceResponse =
-            GetAllMaintenanceResponse.fromJson(response.data);
-
-        return Right<Failure, ListMaintenanceData>(
-          getAllMaintenanceResponse.data,
-        );
-      }
-      return ErrorUtils<ListMaintenanceData>().handleDomainError(response);
-    } catch (e) {
-      log("Error: ${e.toString()}");
-      return ErrorUtils<ListMaintenanceData>().handleError(e);
-    }
-  }
-
-  Future<Either<Failure, ListMaintenanceData>> requestGetAllMaintenance(
-    int currentPage,
-    int pageSize,
-  ) async {
-    try {
       final HttpResponse<dynamic> response = await api.requestGetAllMaintenance(
-        currentPage,
-        pageSize,
+        sortBy,
+        status,
+        inputSearch,
       );
 
       if (response.isSuccess) {
@@ -1961,11 +1908,13 @@ class ApiService {
   Future<Either<Failure, List<HistoryMaintenanceData>>>
       requestGetHistoryMaintenance(
     String unitId,
+    String maintenanceId,
   ) async {
     try {
       final HttpResponse<dynamic> response =
           await api.requestGetAllHistoryMaintenance(
         unitId,
+        maintenanceId,
       );
 
       if (response.isSuccess) {
@@ -1983,15 +1932,17 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, bool>> requestUpdateMaintenace(
-      {required int maintenanceId,
-      required int unitId,
-      required double longitude,
-      required double latitude,
-      required String note,
-      required int maintenanceResult,
-      required String scheduleDate,
-      required List<MaintenanceFile>? maintenanceFiles}) async {
+  Future<Either<Failure, bool>> requestUpdateMaintenace({
+    required int maintenanceId,
+    required int unitId,
+    required double longitude,
+    required double latitude,
+    required String note,
+    required int maintenanceResult,
+    required String scheduleDate,
+    required List<MaintenanceFile>? maintenanceFiles,
+    required String? lastMaintenanceResult,
+  }) async {
     try {
       final payload = UpdateMaintenanceRequest(
         unitId: unitId,
@@ -2001,6 +1952,7 @@ class ApiService {
         note: note,
         scheduleDate: scheduleDate,
         maintenanceFiles: maintenanceFiles,
+        lastMaintenanceResult: lastMaintenanceResult,
       );
 
       final HttpResponse<dynamic> response = await api.requestUpdateMaintenance(
