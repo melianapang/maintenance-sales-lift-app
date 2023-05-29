@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -13,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
@@ -337,45 +339,64 @@ class _EditProjectViewState extends State<EditProjectView> {
       isFlexible: false,
       showCloseButton: false,
       sizeToScreenRatio: 0.8,
-      child: !model.isShowNoDataFoundPage && !model.busy
-          ? Expanded(
-              child: StatefulBuilder(
-                builder: (context, ss) {
-                  return LazyLoadScrollView(
-                    onEndOfPage: () {
-                      ss(() {
-                        model.requestGetAllCustomer();
-                      });
-                    },
-                    scrollDirection: Axis.vertical,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: model.listCustomer?.length ?? 0,
-                      separatorBuilder: (_, __) => const Divider(
-                        color: MyColors.transparent,
-                        height: 20,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCardWidget(
-                          cardType: CardType.list,
-                          title: model.listCustomer?[index].customerName ?? "",
-                          description: model.listCustomer?[index].companyName,
-                          desc2Size: 16,
-                          titleSize: 20,
-                          onTap: () {
-                            setSelectedMenu(
-                              selectedIndex: index,
-                            );
-                            Navigator.maybePop(context);
-                          },
-                        );
+      child: Expanded(
+        child: StatefulBuilder(
+          builder: (context, ss) {
+            return FutureBuilder<List<CustomerData>>(
+              future: model.searchOnChanged(),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    buildSearchBar(
+                      context,
+                      isFilterShown: false,
+                      searchController: model.searchController,
+                      textSearchOnChanged: (_) {
+                        model.isSearch = true;
+                        ss(() {});
                       },
                     ),
-                  );
-                },
-              ),
-            )
-          : buildNoDataFoundPage(),
+                    if (!model.isShowNoDataFoundPage && !model.isLoading)
+                      Expanded(
+                        child: LazyLoadScrollView(
+                          onEndOfPage: () {
+                            model.isSearch = false;
+                            ss(() {});
+                          },
+                          child: ListView.separated(
+                            itemCount: snapshot.data?.length ?? 0,
+                            separatorBuilder: (_, __) => const Divider(
+                              color: MyColors.transparent,
+                              height: 20,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return CustomCardWidget(
+                                cardType: CardType.list,
+                                title: snapshot.data?[index].customerName ?? "",
+                                description: snapshot.data?[index].companyName,
+                                desc2Size: 16,
+                                titleSize: 20,
+                                onTap: () {
+                                  setSelectedMenu(
+                                    selectedIndex: index,
+                                  );
+                                  Navigator.maybePop(context);
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    if (model.isShowNoDataFoundPage && !model.isLoading)
+                      buildNoDataFoundPage(),
+                    if (model.isLoading) buildLoadingPage(),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -370,64 +370,64 @@ class _AddProjectViewState extends State<AddProjectView> {
       isFlexible: false,
       showCloseButton: false,
       sizeToScreenRatio: 0.8,
-      child: !model.isShowNoDataFoundPage && !model.busy
-          ? Expanded(
-              child: StatefulBuilder(
-                builder: (context, ss) {
-                  return FutureBuilder<List<CustomerData>>(
-                    future: model.searchOnChanged(),
-                    builder: (context, snapshot) {
-                      return Column(
-                        children: [
-                          buildSearchBar(
-                            context,
-                            isFilterShown: false,
-                            searchController: model.searchController,
-                            textSearchOnChanged: (_) {
-                              model.isSearch = true;
-                              ss(() {});
+      child: Expanded(
+        child: StatefulBuilder(
+          builder: (context, ss) {
+            return FutureBuilder<List<CustomerData>>(
+              future: model.searchOnChanged(),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    buildSearchBar(
+                      context,
+                      isFilterShown: false,
+                      searchController: model.searchController,
+                      textSearchOnChanged: (_) {
+                        model.isSearch = true;
+                        ss(() {});
+                      },
+                    ),
+                    if (!model.isShowNoDataFoundPage && !model.isLoading)
+                      Expanded(
+                        child: LazyLoadScrollView(
+                          onEndOfPage: () {
+                            model.isSearch = false;
+                            ss(() {});
+                          },
+                          child: ListView.separated(
+                            itemCount: snapshot.data?.length ?? 0,
+                            separatorBuilder: (_, __) => const Divider(
+                              color: MyColors.transparent,
+                              height: 20,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return CustomCardWidget(
+                                cardType: CardType.list,
+                                title: snapshot.data?[index].customerName ?? "",
+                                description: snapshot.data?[index].companyName,
+                                desc2Size: 16,
+                                titleSize: 20,
+                                onTap: () {
+                                  setSelectedMenu(
+                                    selectedIndex: index,
+                                  );
+                                  Navigator.maybePop(context);
+                                },
+                              );
                             },
                           ),
-                          Expanded(
-                            child: LazyLoadScrollView(
-                              onEndOfPage: () {
-                                model.isSearch = false;
-                                ss(() {});
-                              },
-                              child: ListView.separated(
-                                itemCount: snapshot.data?.length ?? 0,
-                                separatorBuilder: (_, __) => const Divider(
-                                  color: MyColors.transparent,
-                                  height: 20,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return CustomCardWidget(
-                                    cardType: CardType.list,
-                                    title: snapshot.data?[index].customerName ??
-                                        "",
-                                    description:
-                                        snapshot.data?[index].companyName,
-                                    desc2Size: 16,
-                                    titleSize: 20,
-                                    onTap: () {
-                                      setSelectedMenu(
-                                        selectedIndex: index,
-                                      );
-                                      Navigator.maybePop(context);
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            )
-          : buildNoDataFoundPage(),
+                        ),
+                      ),
+                    if (model.isShowNoDataFoundPage && !model.isLoading)
+                      buildNoDataFoundPage(),
+                    if (model.isLoading) buildLoadingPage(),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }
