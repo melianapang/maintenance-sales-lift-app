@@ -37,7 +37,34 @@ class ListMaintenanceData {
   Map<String, dynamic> toJson() => _$ListMaintenanceDataToJson(this);
 
   @JsonKey(name: "result")
-  final List<MaintenanceData> result;
+  final List<GroupingMaintenanceData> result;
+}
+
+@JsonSerializable()
+class GroupingMaintenanceData {
+  GroupingMaintenanceData({
+    required this.projectId,
+    required this.projectName,
+    required this.isBgRed,
+    required this.unitMaintenaces,
+  });
+
+  factory GroupingMaintenanceData.fromJson(Map<String, dynamic> json) =>
+      _$GroupingMaintenanceDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GroupingMaintenanceDataToJson(this);
+
+  @JsonKey(name: "project_id")
+  final String projectId;
+
+  @JsonKey(name: "project_name")
+  final String projectName;
+
+  @JsonKey(name: "is_bg_red")
+  final bool? isBgRed;
+
+  @JsonKey(name: "units")
+  final List<MaintenanceData> unitMaintenaces;
 }
 
 @JsonSerializable()
@@ -61,6 +88,7 @@ class MaintenanceData {
     required this.note,
     required this.maintenanceFiles,
     required this.lastMaintenanceResult,
+    this.isBgRed,
   });
 
   factory MaintenanceData.fromJson(Map<String, dynamic> json) =>
@@ -121,6 +149,9 @@ class MaintenanceData {
 
   @JsonKey(name: "maintenance_file")
   final List<MaintenanceFile>? maintenanceFiles;
+
+  @JsonKey(name: "is_bg_red")
+  final bool? isBgRed;
 }
 
 @JsonSerializable()

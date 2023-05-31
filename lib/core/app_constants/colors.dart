@@ -28,6 +28,8 @@ class MyColors {
   static const Color greyBackgroundStatusCard = Color(0xFFEBEBEB);
   static const Color redBackgroundStatusCard = Color(0xFFE7BCBC);
 
+  static const Color redBackgroundMaintenanceCard = Color(0xFFf54949);
+
   static const Color blue001 = Color(0xff189AB4);
   static const Color blue002 = Color(0xff74E7DA);
   static const Color blue003 = Color(0xff8BA7B8);

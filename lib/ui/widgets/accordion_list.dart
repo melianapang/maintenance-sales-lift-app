@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -11,13 +13,13 @@ class AccordionListWidget extends StatefulWidget {
   const AccordionListWidget({
     super.key,
     required this.title,
-    required this.description,
-    required this.listChildren,
+    required this.isRedStatus,
+    required this.listUnitsMaintenances,
   });
 
   final String title;
-  final String description;
-  final List<String> listChildren;
+  final bool isRedStatus;
+  final List<MaintenanceData> listUnitsMaintenances;
 
   @override
   State<AccordionListWidget> createState() => _AccordionListWidgetState();
@@ -53,7 +55,9 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       elevation: 2,
-      color: MyColors.darkBlack02,
+      color: widget.isRedStatus
+          ? MyColors.redBackgroundMaintenanceCard
+          : MyColors.greenBackgroundStatusCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           19.0,
@@ -63,6 +67,7 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
         child: Padding(
           padding: const EdgeInsets.only(
             left: 24.0,
+            right: 24.0,
             top: 14,
             bottom: 14,
           ),
@@ -71,6 +76,7 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
             builder: (context, child) {
               return Column(
                 children: [
+                  Spacings.vert(6),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
@@ -92,36 +98,19 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
                     child: Row(
                       children: [
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                StringUtils.removeZeroWidthSpaces(
-                                  widget.title,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: buildTextStyle(
-                                  fontColor: MyColors.white,
-                                  fontSize: 18,
-                                  fontWeight: 600,
-                                ),
-                              ),
-                              Spacings.vert(2),
-                              Text(
-                                StringUtils.removeZeroWidthSpaces(
-                                  widget.description,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: buildTextStyle(
-                                  fontColor: MyColors.white,
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            StringUtils.removeZeroWidthSpaces(
+                              widget.title,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: buildTextStyle(
+                              fontColor: widget.isRedStatus
+                                  ? MyColors.white
+                                  : MyColors.greenFontStatusCard,
+                              fontSize: 20,
+                              fontWeight: 600,
+                            ),
                           ),
                         ),
                         Align(
@@ -131,18 +120,19 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
                               vertical: 6,
                               horizontal: 6,
                             ),
-                            margin: const EdgeInsets.only(
-                              right: 18,
-                            ),
                             decoration: BoxDecoration(
-                              color: MyColors.yellow01,
+                              color: widget.isRedStatus
+                                  ? MyColors.white
+                                  : MyColors.greenFontStatusCard,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Icon(
                               !isExpanded
                                   ? PhosphorIcons.caretDownBold
                                   : PhosphorIcons.caretUpBold,
-                              color: MyColors.darkBlack02,
+                              color: widget.isRedStatus
+                                  ? MyColors.redBackgroundMaintenanceCard
+                                  : MyColors.greenBackgroundStatusCard,
                               size: 12,
                             ),
                           ),
@@ -150,13 +140,14 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
                       ],
                     ),
                   ),
-                  Spacings.vert(16),
+                  Spacings.vert(12),
                   ClipRect(
                     child: Align(
                       heightFactor: heightFactor.value,
                       child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: widget.listChildren.length,
+                        itemCount: widget.listUnitsMaintenances.length,
                         separatorBuilder: (context, index) => const Divider(
                           color: MyColors.transparent,
                           height: 10,
@@ -168,21 +159,57 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
                                 context,
                                 Routes.detailMaintenance,
                                 arguments: DetailMaintenanceViewParam(
-                                    // maintenanceData: widget.listChildren[index],
-                                    ),
+                                  maintenanceData:
+                                      widget.listUnitsMaintenances[index],
+                                ),
                               );
                             },
-                            child: Text(
-                              StringUtils.removeZeroWidthSpaces(
-                                widget.listChildren[index],
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 24,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: buildTextStyle(
-                                fontColor: MyColors.blueLihatSelengkapnya,
-                                fontSize: 18,
-                                fontWeight: 400,
-                                isUnderlined: true,
+                              decoration: BoxDecoration(
+                                color: widget.listUnitsMaintenances[index]
+                                            .isBgRed ==
+                                        true
+                                    ? MyColors.redFontStatusCard
+                                    : MyColors.greenFontStatusCard,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    StringUtils.removeZeroWidthSpaces(
+                                      widget.listUnitsMaintenances[index]
+                                          .unitName,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: buildTextStyle(
+                                      fontColor: MyColors.white,
+                                      fontSize: 18,
+                                      fontWeight: 400,
+                                      isUnderlined: true,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Status: ${mappingStringNumerictoString(
+                                      widget.listUnitsMaintenances[index]
+                                          .maintenanceResult,
+                                    )}",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: buildTextStyle(
+                                      fontColor: MyColors.white,
+                                      fontSize: 16,
+                                      fontWeight: 400,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
