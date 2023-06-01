@@ -9,7 +9,22 @@ class FilterOption {
   final String title;
   bool isSelected = false;
 
-  FilterOption(this.title, this.isSelected);
+  FilterOption(
+    this.title,
+    this.isSelected,
+  );
+}
+
+class FilterOptionDynamic {
+  final String idFilter;
+  final String title;
+  bool isSelected = false;
+
+  FilterOptionDynamic(
+    this.idFilter,
+    this.title,
+    this.isSelected,
+  );
 }
 
 Widget _buildFilterOptionsWidget(
@@ -61,12 +76,66 @@ Widget buildFilterOption(FilterOption menu, void Function() callback) {
   );
 }
 
+Widget _buildFilterDynamicOptionsWidget(
+    List<FilterOptionDynamic> listMenu, void Function(int) callback) {
+  return Wrap(
+    spacing: 8.0,
+    runSpacing: 12.0,
+    children: [
+      for (FilterOptionDynamic menu in listMenu)
+        buildFilterDynamicOption(
+          menu,
+          () {
+            callback(
+              int.parse(
+                menu.idFilter,
+              ),
+            );
+          },
+        ),
+    ],
+  );
+}
+
+Widget buildFilterDynamicOption(
+    FilterOptionDynamic menu, void Function() callback) {
+  return GestureDetector(
+    onTap: callback,
+    child: Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 0.6,
+          color: !menu.isSelected ? MyColors.transparent : MyColors.yellow01,
+        ),
+        borderRadius: BorderRadius.circular(
+          10,
+        ),
+        color: !menu.isSelected
+            ? MyColors.lightBlack01
+            : MyColors.darkGreyBackground,
+      ),
+      child: Text(
+        menu.title,
+        style: buildTextStyle(
+          fontSize: 13,
+          fontWeight: 600,
+          fontColor: !menu.isSelected ? MyColors.white : MyColors.yellow01,
+        ),
+      ),
+    ),
+  );
+}
+
 //build filter menu for customer
 void showCustomerFilterMenu(
   BuildContext context, {
-  required List<FilterOption> listPelangganMenu,
+  required List<FilterOptionDynamic> listPelangganMenu,
   required List<FilterOption> listSumberDataMenu,
-  required List<FilterOption> listKebutuhanPelanggan,
+  required List<FilterOptionDynamic> listKebutuhanPelanggan,
   required List<FilterOption> listSortMenu,
   required int selectedPelanggan,
   required int selectedSumberData,
@@ -80,16 +149,16 @@ void showCustomerFilterMenu(
   })
       terapkanCallback,
 }) {
-  final List<FilterOption> tipePelangganLocal =
-      convertToNewList(listPelangganMenu);
+  final List<FilterOptionDynamic> tipePelangganLocal =
+      convertToNewListForFilterDynamic(listPelangganMenu);
   int tipePelanggan = selectedPelanggan;
 
   final List<FilterOption> sumberDataLocal =
       convertToNewList(listSumberDataMenu);
   int sumberData = selectedSumberData;
 
-  final List<FilterOption> kebutuhanPelangganLocal =
-      convertToNewList(listKebutuhanPelanggan);
+  final List<FilterOptionDynamic> kebutuhanPelangganLocal =
+      convertToNewListForFilterDynamic(listKebutuhanPelanggan);
   int kebutuhanPelanggan = selectedKebutuhanPelanggan;
 
   final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
@@ -114,17 +183,17 @@ void showCustomerFilterMenu(
               ),
             ),
             Spacings.vert(8),
-            _buildFilterOptionsWidget(
+            _buildFilterDynamicOptionsWidget(
               tipePelangganLocal,
-              (int selectedIndex) {
-                tipePelanggan = selectedIndex;
-                for (int i = 0; i < tipePelangganLocal.length; i++) {
-                  if (i == selectedIndex) {
-                    tipePelangganLocal[i].isSelected = true;
+              (int selectedIdFilter) {
+                tipePelanggan = selectedIdFilter;
+                for (FilterOptionDynamic menu in tipePelangganLocal) {
+                  if (int.parse(menu.idFilter) == selectedIdFilter) {
+                    menu.isSelected = true;
                     continue;
                   }
 
-                  tipePelangganLocal[i].isSelected = false;
+                  menu.isSelected = false;
                 }
                 setState(() {});
               },
@@ -164,17 +233,17 @@ void showCustomerFilterMenu(
               ),
             ),
             Spacings.vert(8),
-            _buildFilterOptionsWidget(
+            _buildFilterDynamicOptionsWidget(
               kebutuhanPelangganLocal,
-              (int selectedIndex) {
-                kebutuhanPelanggan = selectedIndex;
-                for (int i = 0; i < kebutuhanPelangganLocal.length; i++) {
-                  if (i == selectedIndex) {
-                    kebutuhanPelangganLocal[i].isSelected = true;
+              (int selectedIdFilter) {
+                kebutuhanPelanggan = selectedIdFilter;
+                for (FilterOptionDynamic menu in kebutuhanPelangganLocal) {
+                  if (int.parse(menu.idFilter) == selectedIdFilter) {
+                    menu.isSelected = true;
                     continue;
                   }
 
-                  kebutuhanPelangganLocal[i].isSelected = false;
+                  menu.isSelected = false;
                 }
                 setState(() {});
               },
@@ -257,7 +326,7 @@ void showMaintenanceFilterMenu(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Ditangani oleh",
+              "Status Pemeliharaan",
               style: buildTextStyle(
                 fontSize: 14,
                 fontWeight: 400,
@@ -377,7 +446,7 @@ void showUserFilterMenu(
               buttonType: ButtonType.primary,
               buttonSize: ButtonSize.large,
               text: "Terapkan",
-              onTap: () {
+              onTap: () async {
                 terapkanCallback(
                   selectedRole: role,
                 );
@@ -407,12 +476,47 @@ Widget buildMenuChoices(
   );
 }
 
+Widget buildMenuDynamicChoices(
+    List<FilterOptionDynamic> listMenu, void Function(int) callback) {
+  return Align(
+    alignment: Alignment.centerLeft,
+    child: Wrap(
+      spacing: 8.0,
+      runSpacing: 12.0,
+      children: [
+        for (FilterOptionDynamic menu in listMenu)
+          buildFilterDynamicOption(
+            menu,
+            () => callback(
+              int.parse(
+                menu.idFilter,
+              ),
+            ),
+          ),
+      ],
+    ),
+  );
+}
+
 //just to convert the list to map to list again
 //basically just make the copy.
 List<FilterOption> convertToNewList(List<FilterOption> data) {
   return data
       .map(
         (e) => FilterOption(
+          e.title,
+          e.isSelected,
+        ),
+      )
+      .toList();
+}
+
+List<FilterOptionDynamic> convertToNewListForFilterDynamic(
+    List<FilterOptionDynamic> data) {
+  return data
+      .map(
+        (e) => FilterOptionDynamic(
+          e.idFilter,
           e.title,
           e.isSelected,
         ),
