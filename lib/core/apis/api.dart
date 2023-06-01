@@ -219,8 +219,8 @@ abstract class Api {
   //region customertype
   @GET('/api/0/CustomerType/get_all_customer_types/')
   Future<HttpResponse<dynamic>> requestGetAllCustomerTypes(
-    @Query("current_page") int currentPage,
-    @Query("page_size") int pageSize,
+    @Query("current_page") int? currentPage,
+    @Query("page_size") int? pageSize,
   );
 
   @POST('/api/0/CustomerType/create_customer_type')
@@ -237,8 +237,8 @@ abstract class Api {
   //region customer need
   @GET('/api/0/CustomerNeed/get_all_customer_needs/')
   Future<HttpResponse<dynamic>> requestGetAllCustomerNeed(
-    @Query("current_page") int currentPage,
-    @Query("page_size") int pageSize,
+    @Query("current_page") int? currentPage,
+    @Query("page_size") int? pageSize,
   );
 
   @POST('/api/0/CustomerNeed/create_customer_need')
@@ -1335,6 +1335,29 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, ListCustomerTypeData>>
+      getAllCustomerTypeWithoutPagination() async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllCustomerTypes(
+        null,
+        null,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerTypeResponse getAllResponse =
+            GetAllCustomerTypeResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerTypeData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerTypeData>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<ListCustomerTypeData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateCustomerTypes({
     required String name,
   }) async {
@@ -1395,6 +1418,29 @@ class ApiService {
           await api.requestGetAllCustomerNeed(
         currentPage,
         pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerNeedResponse getAllResponse =
+            GetAllCustomerNeedResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerNeedData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerNeedData>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<ListCustomerNeedData>().handleError(e);
+    }
+  }
+
+  Future<Either<Failure, ListCustomerNeedData>>
+      getAllCustomerNeedWithoutPagination() async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllCustomerNeed(
+        null,
+        null,
       );
 
       if (response.isSuccess) {
