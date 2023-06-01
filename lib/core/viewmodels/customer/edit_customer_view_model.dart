@@ -76,6 +76,29 @@ class EditCustomerViewModel extends BaseViewModel {
   List<CustomerTypeData>? _listCustomerType;
   List<CustomerTypeData>? get listCustomerType => _listCustomerType;
   List<FilterOptionDynamic> customerTypeFilterOptions = [];
+
+  String get customerType {
+    if (customerTypeFilterOptions.isEmpty) return "";
+
+    final int index = customerTypeFilterOptions.indexWhere(
+        (element) => int.parse(element.idFilter) == selectedCustomerTypeFilter);
+    if (index > -1) {
+      return customerTypeFilterOptions[index].title;
+    }
+    return "";
+  }
+
+  String get customerNeed {
+    if (customerNeedFilterOptions.isEmpty) return "";
+
+    final int index = customerNeedFilterOptions.indexWhere(
+        (element) => int.parse(element.idFilter) == selectedCustomerNeedFilter);
+    if (index > -1) {
+      return customerNeedFilterOptions[index].title;
+    }
+    return "";
+  }
+
   // End of Dropdown related
 
   String? _errorMsg;

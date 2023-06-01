@@ -206,13 +206,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           },
                           child: TextInput.disabled(
                             label: "Tipe Pelangggan",
-                            text: model.customerTypeFilterOptions
-                                .firstWhere(
-                                  (e) =>
-                                      int.parse(e.idFilter) ==
-                                      model.selectedCustomerTypeFilter,
-                                )
-                                .title,
+                            text: model.customerType,
                             suffixIcon: const Icon(
                               PhosphorIcons.caretDownBold,
                               color: MyColors.lightBlack02,
@@ -269,13 +263,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           },
                           child: TextInput.disabled(
                             label: "Kebutuhan Pelangggan",
-                            text: model.customerNeedFilterOptions
-                                .firstWhere(
-                                  (e) =>
-                                      int.parse(e.idFilter) ==
-                                      model.selectedCustomerNeedFilter,
-                                )
-                                .title,
+                            text: model.customerNeed,
                             suffixIcon: const Icon(
                               PhosphorIcons.caretDownBold,
                               color: MyColors.lightBlack02,
