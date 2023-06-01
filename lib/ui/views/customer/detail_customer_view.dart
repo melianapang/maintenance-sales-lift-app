@@ -5,11 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/customer/detail_customer_view_model.dart';
@@ -21,7 +17,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -78,10 +73,10 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                       customerData: model.customerData,
                     ),
                   ).then(
-                    (value) {
+                    (value) async {
                       if (value == null) return;
                       if (value == true) {
-                        model.requestGetDetailCustomer();
+                        await model.refreshPage();
                         model.setPreviousPageNeedRefresh(true);
                         _handleErrorDialog(context, model);
                       }
@@ -138,29 +133,29 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         TextInput.disabled(
                             label: "Sumber Data",
                             hintText: 'Sumber Data',
-                            text: model.customerData?.dataSource ?? "0"),
+                            text: model.customerData?.dataSource ?? ""),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Nomor Pelanggan",
+                          hintText: "Nomor Pelanggan",
                           text: model.customerData?.customerNumber,
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Tipe Pelanggan",
-                          text: mappingCustomerTypeToString(
-                            int.parse(model.customerData?.customerType ?? "0"),
-                          ),
+                          hintText: "Tipe Pelanggan",
+                          text: model.selectedCustomerTypeFilterName,
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Kebutuhan Pelanggan",
-                          text: mappingCustomerNeedToString(
-                            int.parse(model.customerData?.customerNeed ?? "0"),
-                          ),
+                          hintText: "Kebutuhan Pelanggan",
+                          text: model.selectedCustomerNeedFilterName,
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Kota",
+                          hintText: "Kota",
                           text: model.customerData?.city,
                         ),
                         Spacings.vert(24),
