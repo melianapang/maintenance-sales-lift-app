@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
@@ -44,14 +46,6 @@ class ListCustomerViewModel extends BaseViewModel {
   // Filter related
   bool _isFilterActivated = false;
 
-  int _selectedTipePelangganOption = 0;
-  int get selectedTipePelangganOption => _selectedTipePelangganOption;
-  final List<FilterOption> _tipePelangganOptions = [
-    FilterOption("Perorangan", true),
-    FilterOption("Perusahaan", false),
-  ];
-  List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
-
   int _selectedSumberDataOption = 0;
   int get selectedSumberDataOption => _selectedSumberDataOption;
   final List<FilterOption> _sumberDataOptions = [
@@ -59,15 +53,6 @@ class ListCustomerViewModel extends BaseViewModel {
     FilterOption("Non-Leads", false),
   ];
   List<FilterOption> get sumberDataOptions => _sumberDataOptions;
-
-  int _selectedKebutuhanPelangganOption = 0;
-  int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
-  final List<FilterOption> _kenbutuhanPelangganOptions = [
-    FilterOption("Pembelian Unit", true),
-    FilterOption("Perawatan/Troubleshooting", false),
-  ];
-  List<FilterOption> get kenbutuhanPelangganOptions =>
-      _kenbutuhanPelangganOptions;
 
   int _selectedSortOption = 0;
   int get selectedSortOption => _selectedSortOption;
@@ -78,6 +63,23 @@ class ListCustomerViewModel extends BaseViewModel {
   List<FilterOption> get sortOptions => _sortOptions;
   // End of filter related
 
+  //Filter Dynamic (values from API) related
+  int _selectedCustomerNeedFilter = 0;
+  int get selectedCustomerNeedFilter => _selectedCustomerNeedFilter;
+
+  List<CustomerNeedData>? _listCustomerNeed;
+  List<CustomerNeedData>? get listCustomerNeed => _listCustomerNeed;
+  List<FilterOptionDynamic> customerNeedFilterOptions = [];
+
+  int _selectedCustomerTypeFilter = 0;
+  int get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
+
+  List<CustomerTypeData>? _listCustomerType;
+  List<CustomerTypeData>? get listCustomerType => _listCustomerType;
+  List<FilterOptionDynamic> customerTypeFilterOptions = [];
+
+  //End of filter dynamic related
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
@@ -87,6 +89,8 @@ class ListCustomerViewModel extends BaseViewModel {
 
     _paginationControl.currentPage = 1;
 
+    await requestGetAllCustomerNeed();
+    await requestGetAllCustomerType();
     await requestGetAllCustomer();
     _isShowNoDataFoundPage =
         _listCustomer?.isEmpty == true || _listCustomer == null;
@@ -108,6 +112,38 @@ class ListCustomerViewModel extends BaseViewModel {
     return role == Role.Admin || role == Role.SuperAdmin;
   }
 
+  void convertCustomerTypeDataToFilterData(List<CustomerTypeData> values) {
+    if (values.isEmpty) return;
+
+    customerTypeFilterOptions = values
+        .map(
+          (e) => FilterOptionDynamic(
+            e.customerTypeId,
+            e.customerTypeName,
+            values.first == e,
+          ),
+        )
+        .toList();
+
+    _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
+  }
+
+  void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {
+    if (values.isEmpty) return;
+
+    customerNeedFilterOptions = values
+        .map(
+          (e) => FilterOptionDynamic(
+            e.customerNeedId,
+            e.customerNeedName,
+            values.first == e,
+          ),
+        )
+        .toList();
+
+    _selectedCustomerNeedFilter = int.parse(values.first.customerNeedId);
+  }
+
   void terapkanFilter({
     required int selectedPelanggan,
     required int selectedSumberData,
@@ -115,16 +151,17 @@ class ListCustomerViewModel extends BaseViewModel {
     required int selectedSort,
     bool needSync = true,
   }) {
-    _selectedTipePelangganOption = selectedPelanggan;
+    _selectedCustomerTypeFilter = selectedPelanggan;
     _selectedSumberDataOption = selectedSumberData;
-    _selectedKebutuhanPelangganOption = selectedKebutuhanPelanggan;
+    _selectedCustomerNeedFilter = selectedKebutuhanPelanggan;
     _selectedSortOption = selectedSort;
-    for (int i = 0; i < _tipePelangganOptions.length; i++) {
-      if (i == selectedPelanggan) {
-        _tipePelangganOptions[i].isSelected = true;
+
+    for (FilterOptionDynamic menu in customerTypeFilterOptions) {
+      if (selectedPelanggan == int.parse(menu.idFilter)) {
+        menu.isSelected = true;
         continue;
       }
-      _tipePelangganOptions[i].isSelected = false;
+      menu.isSelected = false;
     }
 
     for (int i = 0; i < _sumberDataOptions.length; i++) {
@@ -135,12 +172,12 @@ class ListCustomerViewModel extends BaseViewModel {
       _sumberDataOptions[i].isSelected = false;
     }
 
-    for (int i = 0; i < _kenbutuhanPelangganOptions.length; i++) {
-      if (i == selectedKebutuhanPelanggan) {
-        _kenbutuhanPelangganOptions[i].isSelected = true;
+    for (FilterOptionDynamic menu in customerNeedFilterOptions) {
+      if (selectedKebutuhanPelanggan == int.parse(menu.idFilter)) {
+        menu.isSelected = true;
         continue;
       }
-      _kenbutuhanPelangganOptions[i].isSelected = false;
+      menu.isSelected = false;
     }
 
     for (int i = 0; i < _sortOptions.length; i++) {
@@ -223,6 +260,46 @@ class ListCustomerViewModel extends BaseViewModel {
     _paginationControl.totalData = -1;
   }
 
+  Future<bool> requestGetAllCustomerNeed() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerNeedWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty == true) {
+        _listCustomerNeed = response.right.result;
+        convertCustomerNeedDataToFilterData(response.right.result);
+      }
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestGetAllCustomerType() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerTypeWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty == true) {
+        _listCustomerType = response.right.result;
+        convertCustomerTypeDataToFilterData(response.right.result);
+      }
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
   Future<void> syncFilterCustomer() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
@@ -234,9 +311,9 @@ class ListCustomerViewModel extends BaseViewModel {
     final response = await _apiService.requestFilterCustomer(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
-      _selectedTipePelangganOption,
+      _selectedCustomerTypeFilter,
       _selectedSumberDataOption,
-      _selectedKebutuhanPelangganOption,
+      _selectedCustomerNeedFilter,
       _selectedSortOption,
     );
 

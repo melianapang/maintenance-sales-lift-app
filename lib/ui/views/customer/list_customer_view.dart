@@ -99,14 +99,14 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                 onTapFilter: () {
                   showCustomerFilterMenu(
                     context,
-                    listPelangganMenu: model.tipePelangganOptions,
+                    listPelangganMenu: model.customerTypeFilterOptions,
                     listSumberDataMenu: model.sumberDataOptions,
-                    listKebutuhanPelanggan: model.kenbutuhanPelangganOptions,
+                    listKebutuhanPelanggan: model.customerNeedFilterOptions,
                     listSortMenu: model.sortOptions,
-                    selectedPelanggan: model.selectedTipePelangganOption,
+                    selectedPelanggan: model.selectedCustomerTypeFilter,
                     selectedSumberData: model.selectedSumberDataOption,
                     selectedKebutuhanPelanggan:
-                        model.selectedKebutuhanPelangganOption,
+                        model.selectedCustomerNeedFilter,
                     selectedSort: model.selectedSortOption,
                     terapkanCallback: model.terapkanFilter,
                   );
