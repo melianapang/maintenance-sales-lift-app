@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gcloud/http.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -25,23 +27,20 @@ class AddCustomerViewModel extends BaseViewModel {
   bool _isSumberDataFieldVisible = true;
   bool get isSumberDataFieldVisible => _isSumberDataFieldVisible;
 
-  // Dropdown related
-  int _selectedKebutuhanPelangganOption = 0;
-  int get selectedKebutuhanPelangganOption => _selectedKebutuhanPelangganOption;
-  final List<FilterOption> _kebutuhanPelangganOptions = [
-    FilterOption("Pembelian Unit", true),
-    FilterOption("Perawatan/Troubleshooting", false),
-  ];
-  List<FilterOption> get kebutuhanPelangganOptions =>
-      _kebutuhanPelangganOptions;
+  // Dropdown related (dynamic values from API)
+  int _selectedCustomerNeedFilter = 0;
+  int get selectedCustomerNeedFilter => _selectedCustomerNeedFilter;
 
-  int _selectedTipePelangganOption = 0;
-  int get selectedTipePelangganOption => _selectedTipePelangganOption;
-  final List<FilterOption> _tipePelangganOptions = [
-    FilterOption("Perorangan", true),
-    FilterOption("Perusahaan", false),
-  ];
-  List<FilterOption> get tipePelangganOptions => _tipePelangganOptions;
+  List<CustomerNeedData>? _listCustomerNeed;
+  List<CustomerNeedData>? get listCustomerNeed => _listCustomerNeed;
+  List<FilterOptionDynamic> customerNeedFilterOptions = [];
+
+  int _selectedCustomerTypeFilter = 0;
+  int get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
+
+  List<CustomerTypeData>? _listCustomerType;
+  List<CustomerTypeData>? get listCustomerType => _listCustomerType;
+  List<FilterOptionDynamic> customerTypeFilterOptions = [];
   // End of Dropdown related
 
   //region TextController
@@ -76,12 +75,36 @@ class AddCustomerViewModel extends BaseViewModel {
   bool get isCityValid => _isCityValid;
   //endregion
 
+  String get customerType {
+    if (customerTypeFilterOptions.isEmpty) return "";
+
+    final int index = customerTypeFilterOptions.indexWhere(
+        (element) => int.parse(element.idFilter) == selectedCustomerTypeFilter);
+    if (index > -1) {
+      return customerTypeFilterOptions[index].title;
+    }
+    return "";
+  }
+
+  String get customerNeed {
+    if (customerNeedFilterOptions.isEmpty) return "";
+
+    final int index = customerNeedFilterOptions.indexWhere(
+        (element) => int.parse(element.idFilter) == selectedCustomerNeedFilter);
+    if (index > -1) {
+      return customerNeedFilterOptions[index].title;
+    }
+    return "";
+  }
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {
     setBusy(true);
+    await requestGetAllCustomerNeed();
+    await requestGetAllCustomerType();
     await _isSumberDataFieldVisibility();
     setBusy(false);
   }
@@ -140,13 +163,13 @@ class AddCustomerViewModel extends BaseViewModel {
   void setSelectedTipePelanggan({
     required int selectedMenu,
   }) {
-    _selectedTipePelangganOption = selectedMenu;
-    for (int i = 0; i < _tipePelangganOptions.length; i++) {
-      if (i == selectedMenu) {
-        _tipePelangganOptions[i].isSelected = true;
+    _selectedCustomerTypeFilter = selectedMenu;
+    for (FilterOptionDynamic menu in customerTypeFilterOptions) {
+      if (int.parse(menu.idFilter) == selectedMenu) {
+        menu.isSelected = true;
         continue;
       }
-      _tipePelangganOptions[i].isSelected = false;
+      menu.isSelected = false;
     }
 
     notifyListeners();
@@ -155,16 +178,48 @@ class AddCustomerViewModel extends BaseViewModel {
   void setSelectedKebutuhanPelanggan({
     required int selectedMenu,
   }) {
-    _selectedKebutuhanPelangganOption = selectedMenu;
-    for (int i = 0; i < _kebutuhanPelangganOptions.length; i++) {
-      if (i == selectedMenu) {
-        _kebutuhanPelangganOptions[i].isSelected = true;
+    _selectedCustomerNeedFilter = selectedMenu;
+    for (FilterOptionDynamic menu in customerNeedFilterOptions) {
+      if (int.parse(menu.idFilter) == selectedMenu) {
+        menu.isSelected = true;
         continue;
       }
-      _kebutuhanPelangganOptions[i].isSelected = false;
+      menu.isSelected = false;
     }
 
     notifyListeners();
+  }
+
+  void convertCustomerTypeDataToFilterData(List<CustomerTypeData> values) {
+    if (values.isEmpty) return;
+
+    customerTypeFilterOptions = values
+        .map(
+          (e) => FilterOptionDynamic(
+            e.customerTypeId,
+            e.customerTypeName,
+            values.first == e,
+          ),
+        )
+        .toList();
+
+    _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
+  }
+
+  void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {
+    if (values.isEmpty) return;
+
+    customerNeedFilterOptions = values
+        .map(
+          (e) => FilterOptionDynamic(
+            e.customerNeedId,
+            e.customerNeedName,
+            values.first == e,
+          ),
+        )
+        .toList();
+
+    _selectedCustomerNeedFilter = int.parse(values.first.customerNeedId);
   }
 
   bool isValid() {
@@ -173,12 +228,12 @@ class AddCustomerViewModel extends BaseViewModel {
     _isEmailValid = emailController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
-    if (selectedTipePelangganOption == 1) {
+    if (selectedCustomerTypeFilter == 1) {
       _isCompanyNameValid = companyNameController.text.isNotEmpty;
     }
     notifyListeners();
 
-    if (selectedTipePelangganOption == 1) {
+    if (selectedCustomerTypeFilter == 1) {
       return _isCustomerNameValid &&
           _isCustomerNumberValid &&
           _isEmailValid &&
@@ -197,7 +252,6 @@ class AddCustomerViewModel extends BaseViewModel {
     _errorMsg = null;
   }
 
-  // @TODO(meli): change into Future<CustomerData> obj later // wait for BE
   Future<CustomerData?> requestCreateCustomer() async {
     if (!isValid()) {
       _errorMsg = "Isi semua data dengan benar.";
@@ -207,8 +261,8 @@ class AddCustomerViewModel extends BaseViewModel {
     final response = await _apiService.requestCreateCustomer(
       nama: customerNameController.text,
       customerNumber: customerNumberController.text,
-      customerType: _selectedTipePelangganOption,
-      customerNeed: _selectedKebutuhanPelangganOption.toString(),
+      customerType: _selectedCustomerTypeFilter,
+      customerNeed: _selectedCustomerNeedFilter.toString(),
       isLead: isSumberDataFieldVisible ? "1" : "0",
       dataSource: sumberDataController.text,
       email: emailController.text,
@@ -220,11 +274,45 @@ class AddCustomerViewModel extends BaseViewModel {
 
     if (response.isRight) {
       return response.right.data.customerData;
-      // @TODO(meli): change into this later // wait for BE
-      // return response.right.customer;
     }
 
     _errorMsg = response.left.message;
     return null;
+  }
+
+  Future<bool> requestGetAllCustomerNeed() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerNeedWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty == true) {
+        _listCustomerNeed = response.right.result;
+        convertCustomerNeedDataToFilterData(response.right.result);
+      }
+      notifyListeners();
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestGetAllCustomerType() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerTypeWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty == true) {
+        _listCustomerType = response.right.result;
+        convertCustomerTypeDataToFilterData(response.right.result);
+      }
+      notifyListeners();
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
   }
 }

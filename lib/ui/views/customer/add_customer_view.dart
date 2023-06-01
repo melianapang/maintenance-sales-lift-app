@@ -28,14 +28,15 @@ class _AddCustomerViewState extends State<AddCustomerView> {
     BuildContext context,
     AddCustomerViewModel model, {
     required String title,
-    required List<FilterOption> listMenu,
+    required List<FilterOptionDynamic> listMenu,
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
     })
         setSelectedMenu,
   }) {
-    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    final List<FilterOptionDynamic> menuLocal =
+        convertToNewListForFilterDynamic(listMenu);
     int menu = selectedMenu;
 
     showGeneralBottomSheet(
@@ -48,17 +49,16 @@ class _AddCustomerViewState extends State<AddCustomerView> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildMenuChoices(
+              buildMenuDynamicChoices(
                 menuLocal,
-                (int selectedIndex) {
-                  menu = selectedIndex;
-                  for (int i = 0; i < menuLocal.length; i++) {
-                    if (i == selectedIndex) {
-                      menuLocal[i].isSelected = true;
+                (int selectedIdFilter) {
+                  menu = selectedIdFilter;
+                  for (FilterOptionDynamic menu in menuLocal) {
+                    if (int.parse(menu.idFilter) == selectedIdFilter) {
+                      menu.isSelected = true;
                       continue;
                     }
-
-                    menuLocal[i].isSelected = false;
+                    menu.isSelected = false;
                   }
                   setState(() {});
                 },
@@ -89,6 +89,9 @@ class _AddCustomerViewState extends State<AddCustomerView> {
         authenticationService: Provider.of<AuthenticationService>(context),
         dioService: Provider.of<DioService>(context),
       ),
+      onModelReady: (AddCustomerViewModel model) async {
+        await model.initModel();
+      },
       builder: (context, model, _) {
         return Scaffold(
           appBar: buildDefaultAppBar(
@@ -148,148 +151,153 @@ class _AddCustomerViewState extends State<AddCustomerView> {
             },
             text: 'Simpan',
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(
-                24.0,
-              ),
-              child: Column(
-                children: [
-                  if (model.isSumberDataFieldVisible) ...[
-                    TextInput.editable(
-                      label: "Sumber Data",
-                      hintText: "Sumber Data",
-                      maxLength: 99,
-                      controller: model.sumberDataController,
-                      onChangedListener: model.onChangedSumberData,
-                      errorText: !model.isSumberDataValid
-                          ? "Kolom ini wajib diisi."
-                          : null,
+          body: !model.busy
+              ? SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(
+                      24.0,
                     ),
-                    Spacings.vert(24),
+                    child: Column(
+                      children: [
+                        if (model.isSumberDataFieldVisible) ...[
+                          TextInput.editable(
+                            label: "Sumber Data",
+                            hintText: "Sumber Data",
+                            maxLength: 99,
+                            controller: model.sumberDataController,
+                            onChangedListener: model.onChangedSumberData,
+                            errorText: !model.isSumberDataValid
+                                ? "Kolom ini wajib diisi."
+                                : null,
+                          ),
+                          Spacings.vert(24),
+                        ],
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomDialog(
+                              context,
+                              model,
+                              title: "Tipe Pelanggan",
+                              listMenu: model.customerTypeFilterOptions,
+                              selectedMenu: model.selectedCustomerTypeFilter,
+                              setSelectedMenu: model.setSelectedTipePelanggan,
+                            );
+                          },
+                          child: TextInput.disabled(
+                            label: "Tipe Pelangggan",
+                            hintText: "Tipe Pelanggan",
+                            text: model.customerType,
+                            suffixIcon: const Icon(
+                              PhosphorIcons.caretDownBold,
+                              color: MyColors.lightBlack02,
+                            ),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Nomor Pelanggan",
+                          hintText: "Nomor Pelanggan",
+                          controller: model.customerNumberController,
+                          onChangedListener: model.onChangedCustomerNumber,
+                          errorText: !model.isCustomerNumberValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Nama Pelanggan",
+                          hintText: "Nama Pelanggan",
+                          controller: model.customerNameController,
+                          onChangedListener: model.onChangedCustomerName,
+                          errorText: !model.isCustomerNameValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
+                        ),
+                        Spacings.vert(24),
+                        if (model.selectedCustomerTypeFilter == 1) ...[
+                          TextInput.editable(
+                            label: "Nama Perusahaan",
+                            hintText: "Nama Perusahaan",
+                            controller: model.companyNameController,
+                            onChangedListener: model.onChangedCompanyName,
+                            errorText: !model.isCompanyNameValid
+                                ? "Kolom ini wajib diisi."
+                                : null,
+                          ),
+                          Spacings.vert(24),
+                        ],
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomDialog(
+                              context,
+                              model,
+                              title: "Kebutuhan Pelanggan",
+                              listMenu: model.customerNeedFilterOptions,
+                              selectedMenu: model.selectedCustomerNeedFilter,
+                              setSelectedMenu:
+                                  model.setSelectedKebutuhanPelanggan,
+                            );
+                          },
+                          child: TextInput.disabled(
+                            label: "Kebutuhan Pelangggan",
+                            hintText: "Kebutuhan Pelanggan",
+                            text: model.customerNeed,
+                            suffixIcon: const Icon(
+                              PhosphorIcons.caretDownBold,
+                              color: MyColors.lightBlack02,
+                            ),
+                          ),
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Kota",
+                          hintText: "Kota",
+                          controller: model.cityController,
+                          onChangedListener: model.onChangedCity,
+                          errorText: !model.isCityValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "No Telepon",
+                          hintText: "081xxxxxxxxxxx",
+                          keyboardType: TextInputType.number,
+                          controller: model.phoneNumberController,
+                          onChangedListener: model.onChangedPhoneNumber,
+                          errorText: !model.isPhoneNumberValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Email",
+                          hintText: "pelanggan@gmail.com",
+                          keyboardType: TextInputType.emailAddress,
+                          controller: model.emailController,
+                          onChangedListener: model.onChangedEmail,
+                          errorText: !model.isEmailValid
+                              ? "Kolom ini wajib diisi."
+                              : null,
+                        ),
+                        Spacings.vert(24),
+                        TextInput.editable(
+                          label: "Catatan",
+                          hintText: "Tulis catatan disini...",
+                          controller: model.noteController,
+                          onChangedListener: (text) {},
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    buildLoadingPage(),
                   ],
-                  GestureDetector(
-                    onTap: () {
-                      _showBottomDialog(
-                        context,
-                        model,
-                        title: "Tipe Pelanggan",
-                        listMenu: model.tipePelangganOptions,
-                        selectedMenu: model.selectedTipePelangganOption,
-                        setSelectedMenu: model.setSelectedTipePelanggan,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Tipe Pelangggan",
-                      text: model.tipePelangganOptions
-                          .where((element) => element.isSelected)
-                          .first
-                          .title,
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "Nomor Pelanggan",
-                    hintText: "Nomor Pelanggan",
-                    controller: model.customerNumberController,
-                    onChangedListener: model.onChangedCustomerNumber,
-                    errorText: !model.isCustomerNumberValid
-                        ? "Kolom ini wajib diisi."
-                        : null,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "Nama Pelanggan",
-                    hintText: "Nama Pelanggan",
-                    controller: model.customerNameController,
-                    onChangedListener: model.onChangedCustomerName,
-                    errorText: !model.isCustomerNameValid
-                        ? "Kolom ini wajib diisi."
-                        : null,
-                  ),
-                  Spacings.vert(24),
-                  if (model.selectedTipePelangganOption == 1) ...[
-                    TextInput.editable(
-                      label: "Nama Perusahaan",
-                      hintText: "Nama Perusahaan",
-                      controller: model.companyNameController,
-                      onChangedListener: model.onChangedCompanyName,
-                      errorText: !model.isCompanyNameValid
-                          ? "Kolom ini wajib diisi."
-                          : null,
-                    ),
-                    Spacings.vert(24),
-                  ],
-                  GestureDetector(
-                    onTap: () {
-                      _showBottomDialog(
-                        context,
-                        model,
-                        title: "Kebutuhan Pelanggan",
-                        listMenu: model.kebutuhanPelangganOptions,
-                        selectedMenu: model.selectedKebutuhanPelangganOption,
-                        setSelectedMenu: model.setSelectedKebutuhanPelanggan,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Kebutuhan Pelangggan",
-                      text: model.kebutuhanPelangganOptions
-                          .where((element) => element.isSelected)
-                          .first
-                          .title,
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
-                      ),
-                    ),
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "Kota",
-                    hintText: "Kota",
-                    controller: model.cityController,
-                    onChangedListener: model.onChangedCity,
-                    errorText:
-                        !model.isCityValid ? "Kolom ini wajib diisi." : null,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "No Telepon",
-                    hintText: "081xxxxxxxxxxx",
-                    keyboardType: TextInputType.number,
-                    controller: model.phoneNumberController,
-                    onChangedListener: model.onChangedPhoneNumber,
-                    errorText: !model.isPhoneNumberValid
-                        ? "Kolom ini wajib diisi."
-                        : null,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "Email",
-                    hintText: "pelanggan@gmail.com",
-                    keyboardType: TextInputType.emailAddress,
-                    controller: model.emailController,
-                    onChangedListener: model.onChangedEmail,
-                    errorText:
-                        !model.isEmailValid ? "Kolom ini wajib diisi." : null,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    label: "Catatan",
-                    hintText: "Tulis catatan disini...",
-                    controller: model.noteController,
-                    onChangedListener: (text) {},
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 5,
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
         );
       },
     );
