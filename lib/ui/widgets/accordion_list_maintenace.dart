@@ -9,23 +9,27 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/detail_maintenance_view.dart';
 
-class AccordionListWidget extends StatefulWidget {
-  const AccordionListWidget({
+class AccordionListMaintenanceWidget extends StatefulWidget {
+  const AccordionListMaintenanceWidget({
     super.key,
     required this.title,
     required this.isRedStatus,
+    required this.isFilterOffOrFilterNotMaintenance,
     required this.listUnitsMaintenances,
   });
 
   final String title;
   final bool isRedStatus;
+  final bool isFilterOffOrFilterNotMaintenance;
   final List<MaintenanceData> listUnitsMaintenances;
 
   @override
-  State<AccordionListWidget> createState() => _AccordionListWidgetState();
+  State<AccordionListMaintenanceWidget> createState() =>
+      _AccordionListMaintenanceWidgetState();
 }
 
-class _AccordionListWidgetState extends State<AccordionListWidget>
+class _AccordionListMaintenanceWidgetState
+    extends State<AccordionListMaintenanceWidget>
     with SingleTickerProviderStateMixin {
   bool isExpanded = false;
   late AnimationController animController;
@@ -197,9 +201,13 @@ class _AccordionListWidgetState extends State<AccordionListWidget>
                                     ),
                                   ),
                                   Text(
-                                    "Status: ${mappingStringNumerictoString(
-                                      widget.listUnitsMaintenances[index]
-                                          .maintenanceResult,
+                                    "${widget.isFilterOffOrFilterNotMaintenance ? "Status Terakhir" : "Status"}: ${mappingStringNumerictoString(
+                                      widget.isFilterOffOrFilterNotMaintenance
+                                          ? widget.listUnitsMaintenances[index]
+                                                  .lastMaintenanceResult ??
+                                              "0"
+                                          : widget.listUnitsMaintenances[index]
+                                              .maintenanceResult,
                                     )}",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,

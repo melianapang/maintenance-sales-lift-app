@@ -12,7 +12,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/accordion_list.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/accordion_list_maintenace.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -111,7 +111,9 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                       height: 20,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return AccordionListWidget(
+                      return AccordionListMaintenanceWidget(
+                        isFilterOffOrFilterNotMaintenance:
+                            model.selectedMaintenanceStatusOption == 0,
                         title: model.listMaintenance?[index].projectName ?? "",
                         isRedStatus:
                             model.listMaintenance?[index].isBgRed ?? false,
