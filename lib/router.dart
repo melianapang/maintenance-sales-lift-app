@@ -34,7 +34,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.d
 import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_need/list_customer_need_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_type/list_customer_type_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/master_customer_menu.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/master_customer_menu_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/add_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
