@@ -42,14 +42,15 @@ class _EditCustomerViewState extends State<EditCustomerView> {
     BuildContext context,
     String title,
     EditCustomerViewModel model, {
-    required List<FilterOption> listMenu,
+    required List<FilterOptionDynamic> listMenu,
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
     })
         setSelectedMenu,
   }) {
-    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    final List<FilterOptionDynamic> menuLocal =
+        convertToNewListForFilterDynamic(listMenu);
     int menu = selectedMenu;
 
     showGeneralBottomSheet(
@@ -62,17 +63,16 @@ class _EditCustomerViewState extends State<EditCustomerView> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildMenuChoices(
+              buildMenuDynamicChoices(
                 menuLocal,
-                (int selectedIndex) {
-                  menu = selectedIndex;
-                  for (int i = 0; i < menuLocal.length; i++) {
-                    if (i == selectedIndex) {
-                      menuLocal[i].isSelected = true;
+                (int selectedIdFilter) {
+                  menu = selectedIdFilter;
+                  for (FilterOptionDynamic menu in menuLocal) {
+                    if (int.parse(menu.idFilter) == selectedIdFilter) {
+                      menu.isSelected = true;
                       continue;
                     }
-
-                    menuLocal[i].isSelected = false;
+                    menu.isSelected = false;
                   }
                   setState(() {});
                 },
@@ -199,16 +199,19 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                               context,
                               "Tipe Pelanggan",
                               model,
-                              listMenu: model.tipePelangganOptions,
-                              selectedMenu: model.selectedTipePelangganOption,
+                              listMenu: model.customerTypeFilterOptions,
+                              selectedMenu: model.selectedCustomerTypeFilter,
                               setSelectedMenu: model.setSelectedTipePelanggan,
                             );
                           },
                           child: TextInput.disabled(
                             label: "Tipe Pelangggan",
-                            text: model
-                                .tipePelangganOptions[
-                                    model.selectedTipePelangganOption]
+                            text: model.customerTypeFilterOptions
+                                .firstWhere(
+                                  (e) =>
+                                      int.parse(e.idFilter) ==
+                                      model.selectedCustomerTypeFilter,
+                                )
                                 .title,
                             suffixIcon: const Icon(
                               PhosphorIcons.caretDownBold,
@@ -237,7 +240,8 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                               : null,
                         ),
                         Spacings.vert(24),
-                        if (model.selectedTipePelangganOption == 1) ...[
+                        if (model.customerData?.companyName?.isNotEmpty ==
+                            true) ...[
                           TextInput.editable(
                             controller: model.namaPerusahaanController,
                             label: "Nama Perusahaan",
@@ -255,9 +259,8 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                               context,
                               "Kebutuhan Pelanggan",
                               model,
-                              listMenu: model.kebutuhanPelangganOptions,
-                              selectedMenu:
-                                  model.selectedKebutuhanPelangganOption,
+                              listMenu: model.customerNeedFilterOptions,
+                              selectedMenu: model.selectedCustomerNeedFilter,
                               setSelectedMenu:
                                   model.setSelectedKebutuhanPelanggan,
                             );
@@ -266,9 +269,12 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           },
                           child: TextInput.disabled(
                             label: "Kebutuhan Pelangggan",
-                            text: model
-                                .kebutuhanPelangganOptions[
-                                    model.selectedKebutuhanPelangganOption]
+                            text: model.customerNeedFilterOptions
+                                .firstWhere(
+                                  (e) =>
+                                      int.parse(e.idFilter) ==
+                                      model.selectedCustomerNeedFilter,
+                                )
                                 .title,
                             suffixIcon: const Icon(
                               PhosphorIcons.caretDownBold,
