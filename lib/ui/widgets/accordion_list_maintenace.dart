@@ -4,6 +4,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
@@ -59,9 +60,7 @@ class _AccordionListMaintenanceWidgetState
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       elevation: 2,
-      color: widget.isRedStatus
-          ? MyColors.redBackgroundMaintenanceCard
-          : MyColors.greenBackgroundStatusCard,
+      color: getBackgroundProjectColor(),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           19.0,
@@ -109,9 +108,7 @@ class _AccordionListMaintenanceWidgetState
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: buildTextStyle(
-                              fontColor: widget.isRedStatus
-                                  ? MyColors.white
-                                  : MyColors.greenFontStatusCard,
+                              fontColor: MyColors.white,
                               fontSize: 20,
                               fontWeight: 600,
                             ),
@@ -125,18 +122,14 @@ class _AccordionListMaintenanceWidgetState
                               horizontal: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: widget.isRedStatus
-                                  ? MyColors.white
-                                  : MyColors.greenFontStatusCard,
+                              color: MyColors.white,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Icon(
                               !isExpanded
                                   ? PhosphorIcons.caretDownBold
                                   : PhosphorIcons.caretUpBold,
-                              color: widget.isRedStatus
-                                  ? MyColors.redBackgroundMaintenanceCard
-                                  : MyColors.greenBackgroundStatusCard,
+                              color: getBackgroundProjectColor(),
                               size: 12,
                             ),
                           ),
@@ -174,11 +167,8 @@ class _AccordionListMaintenanceWidgetState
                                 horizontal: 24,
                               ),
                               decoration: BoxDecoration(
-                                color: widget.listUnitsMaintenances[index]
-                                            .isBgRed ==
-                                        true
-                                    ? MyColors.redFontStatusCard
-                                    : MyColors.greenFontStatusCard,
+                                color: getBackgroundUnitColor(
+                                    widget.listUnitsMaintenances[index]),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
@@ -217,6 +207,32 @@ class _AccordionListMaintenanceWidgetState
                                       fontWeight: 400,
                                     ),
                                   ),
+                                  Text(
+                                    StringUtils.removeZeroWidthSpaces(
+                                      DateTimeUtils
+                                          .convertStringToOtherStringDateFormat(
+                                        date: widget
+                                            .listUnitsMaintenances[index]
+                                            .scheduleDate,
+                                        formattedString:
+                                            DateTimeUtils.DATE_FORMAT_2,
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: buildTextStyle(
+                                      fontColor: widget.isRedStatus ||
+                                              widget
+                                                      .listUnitsMaintenances[
+                                                          index]
+                                                      .maintenanceResult ==
+                                                  "0"
+                                          ? MyColors.white
+                                          : MyColors.greenFontStatusCard,
+                                      fontSize: 16,
+                                      fontWeight: 400,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -232,5 +248,55 @@ class _AccordionListMaintenanceWidgetState
         ),
       ),
     );
+  }
+
+  Color getBackgroundUnitColor(MaintenanceData item) {
+    if (item.isBgRed == true) return MyColors.redBackgroundMaintenanceCard;
+    if (widget.isFilterOffOrFilterNotMaintenance) {
+      switch (item.lastMaintenanceResult) {
+        case "1":
+          return MyColors.redBackgroundMaintenanceCard;
+        case "2":
+          return MyColors.greenBackgroundStatusCard;
+        case "0":
+        default:
+          return MyColors.lightBlack01;
+      }
+    }
+
+    switch (item.maintenanceResult) {
+      case "1":
+        return MyColors.redBackgroundMaintenanceCard;
+      case "2":
+        return MyColors.greenBackgroundStatusCard;
+      case "0":
+      default:
+        return MyColors.lightBlack01;
+    }
+  }
+
+  Color getBackgroundProjectColor() {
+    if (widget.isRedStatus) return MyColors.redBackgroundMaintenanceCard;
+    if (widget.isFilterOffOrFilterNotMaintenance) {
+      switch (widget.listUnitsMaintenances.first.lastMaintenanceResult) {
+        case "1":
+          return MyColors.redBackgroundMaintenanceCard;
+        case "2":
+          return MyColors.green002;
+        case "0":
+        default:
+          return MyColors.darkBlack02;
+      }
+    }
+
+    switch (widget.listUnitsMaintenances.first.maintenanceResult) {
+      case "1":
+        return MyColors.redBackgroundMaintenanceCard;
+      case "2":
+        return MyColors.greenFontStatusCard;
+      case "0":
+      default:
+        return MyColors.lightBlack01;
+    }
   }
 }

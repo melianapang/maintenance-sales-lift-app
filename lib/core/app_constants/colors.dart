@@ -61,7 +61,7 @@ class MyColors {
   static const Color red003 = Color(0xffFC5F5F);
   static const Color negativeColor = Color(0xffF14747);
 
-  static const Color green = Color(0xff0D9F0A);
+  static const Color green = Color(0xff3d804f);
   static const Color green002 = Color(0xff3EC664);
 
   static const Color white = Color(0xffFFFFFF);
