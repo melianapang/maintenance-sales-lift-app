@@ -251,13 +251,13 @@ class _AccordionListMaintenanceWidgetState
   }
 
   Color getBackgroundUnitColor(MaintenanceData item) {
-    if (item.isBgRed == true) return MyColors.redBackgroundMaintenanceCard;
+    if (item.isBgRed == true) return MyColors.redFontStatusCard;
     if (widget.isFilterOffOrFilterNotMaintenance) {
       switch (item.lastMaintenanceResult) {
         case "1":
-          return MyColors.redBackgroundMaintenanceCard;
+          return MyColors.redFontStatusCard;
         case "2":
-          return MyColors.greenBackgroundStatusCard;
+          return MyColors.greenFontStatusCard;
         case "0":
         default:
           return MyColors.lightBlack01;
@@ -266,9 +266,9 @@ class _AccordionListMaintenanceWidgetState
 
     switch (item.maintenanceResult) {
       case "1":
-        return MyColors.redBackgroundMaintenanceCard;
+        return MyColors.redFontStatusCard;
       case "2":
-        return MyColors.greenBackgroundStatusCard;
+        return MyColors.greenBackgroundMaintenanceUnitCard;
       case "0":
       default:
         return MyColors.lightBlack01;
@@ -293,10 +293,10 @@ class _AccordionListMaintenanceWidgetState
       case "1":
         return MyColors.redBackgroundMaintenanceCard;
       case "2":
-        return MyColors.greenFontStatusCard;
+        return MyColors.green002;
       case "0":
       default:
-        return MyColors.lightBlack01;
+        return MyColors.darkBlack02;
     }
   }
 }
