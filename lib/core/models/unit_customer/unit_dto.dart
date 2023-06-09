@@ -84,7 +84,7 @@ class UnitData {
 class CreateUnitRequest {
   CreateUnitRequest({
     required this.customerId,
-    required this.projectId,
+    this.projectId,
     required this.unitName,
     required this.unitLocation,
     required this.firstMaintenanceDate,
@@ -99,7 +99,7 @@ class CreateUnitRequest {
   final int customerId;
 
   @JsonKey(name: "project_id")
-  final int projectId;
+  final int? projectId;
 
   @JsonKey(name: "unit_name")
   final String unitName;

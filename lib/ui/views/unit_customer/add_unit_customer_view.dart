@@ -19,11 +19,18 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+enum CustomerType {
+  ProjectCustomer,
+  NonProjectCustomer,
+}
+
 class AddUnitCustomerViewParam {
   AddUnitCustomerViewParam({
+    this.customerType,
     this.customerData,
   });
 
+  CustomerType? customerType;
   CustomerData? customerData;
 }
 
@@ -44,6 +51,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: AddUnitCustomerViewModel(
+        customerType: widget.param.customerType,
         customerData: widget.param.customerData,
         dioService: Provider.of<DioService>(context),
       ),
@@ -125,25 +133,27 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                         ? "Kolom ini wajib diisi."
                         : null,
                   ),
-                  Spacings.vert(24),
-                  GestureDetector(
-                    onTap: () {
-                      _showPilihProyekBottomDialog(
-                        context,
-                        model,
-                        setSelectedMenu: model.setSelectedProyek,
-                      );
-                    },
-                    child: TextInput.disabled(
-                      label: "Pilih Proyek",
-                      text: model.selectedProyek?.projectName,
-                      hintText: "Pilih Proyek untuk Unit ini",
-                      suffixIcon: const Icon(
-                        PhosphorIcons.caretDownBold,
-                        color: MyColors.lightBlack02,
+                  if (!model.isNonProjectCustomer) ...[
+                    Spacings.vert(24),
+                    GestureDetector(
+                      onTap: () {
+                        _showPilihProyekBottomDialog(
+                          context,
+                          model,
+                          setSelectedMenu: model.setSelectedProyek,
+                        );
+                      },
+                      child: TextInput.disabled(
+                        label: "Pilih Proyek",
+                        text: model.selectedProyek?.projectName,
+                        hintText: "Pilih Proyek untuk Unit ini",
+                        suffixIcon: const Icon(
+                          PhosphorIcons.caretDownBold,
+                          color: MyColors.lightBlack02,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                   Spacings.vert(24),
                   DatePickerWidget(
                     label: "Tanggal Pemeliharaan Pertama",

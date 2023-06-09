@@ -19,9 +19,11 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListUnitCustomerViewParam {
   ListUnitCustomerViewParam({
+    this.customerType,
     this.customerData,
   });
 
+  final CustomerType? customerType;
   final CustomerData? customerData;
 }
 
@@ -62,6 +64,7 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                 context,
                 Routes.addUnit,
                 arguments: AddUnitCustomerViewParam(
+                  customerType: widget.param.customerType,
                   customerData: model.customerData,
                 ),
               ).then(

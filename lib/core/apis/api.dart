@@ -1562,7 +1562,7 @@ class ApiService {
 
   Future<Either<Failure, String>> requestCreateUnit({
     required int customerId,
-    required int projectId,
+    int? projectId,
     required String unitName,
     required String unitLocation,
     required String firstMaintenanceDate,

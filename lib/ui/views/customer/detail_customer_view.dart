@@ -17,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -237,6 +238,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
               context,
               Routes.listUnit,
               arguments: ListUnitCustomerViewParam(
+                customerType: CustomerType.ProjectCustomer,
                 customerData: model.customerData,
               ),
             );

@@ -129,9 +129,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                   onTap: () async {
                     showDialogWidget(
                       context,
-                      title: "Mengubahh Data User",
+                      title: "Mengubahh Data Pelanggan",
                       description:
-                          "Apakah anda yakin ingin mengubah data user ini?",
+                          "Apakah anda yakin ingin mengubah data pelanggan ini?",
                       positiveLabel: "Iya",
                       negativeLabel: "Tidak",
                       negativeCallback: () {
@@ -146,9 +146,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
 
                         if (!result) {
                           showDialogWidget(context,
-                              title: "Ubah Data User",
+                              title: "Ubah Data Pelanggan",
                               description: model.errorMsg ??
-                                  "Perubahan data user gagal.",
+                                  "Perubahan data pelanggan gagal.",
                               isSuccessDialog: false,
                               positiveLabel: "OK", positiveCallback: () {
                             model.resetErrorMsg();
@@ -159,9 +159,9 @@ class _EditCustomerViewState extends State<EditCustomerView> {
 
                         showDialogWidget(
                           context,
-                          title: "Ubah Data User",
+                          title: "Ubah Data Pelanggan",
                           description: model.msg ??
-                              "Perubahan data user berhasil disimpan",
+                              "Perubahan data pelanggan berhasil disimpan",
                           isSuccessDialog: true,
                           positiveLabel: "OK",
                           positiveCallback: () => Navigator.of(context)

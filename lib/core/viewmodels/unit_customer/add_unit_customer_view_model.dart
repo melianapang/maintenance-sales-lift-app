@@ -7,9 +7,11 @@ import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:intl/intl.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
 
 class AddUnitCustomerViewModel extends BaseViewModel {
   AddUnitCustomerViewModel({
+    CustomerType? customerType,
     CustomerData? customerData,
     required DioService dioService,
   })  : _apiService = ApiService(
@@ -17,6 +19,7 @@ class AddUnitCustomerViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
+        _isNonProjectCustomer = customerType == CustomerType.NonProjectCustomer,
         _customerData = customerData;
 
   final ApiService _apiService;
@@ -26,6 +29,9 @@ class AddUnitCustomerViewModel extends BaseViewModel {
 
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
+
+  bool _isNonProjectCustomer = false;
+  bool get isNonProjectCustomer => _isNonProjectCustomer;
 
   final nameController = TextEditingController();
   final locationController = TextEditingController();
@@ -146,7 +152,9 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   Future<bool> requestCreateUnit() async {
     final response = await _apiService.requestCreateUnit(
       customerId: int.parse(_customerData?.customerId ?? "0"),
-      projectId: int.parse(_selectedProyek?.projectId ?? "0"),
+      projectId: _isNonProjectCustomer
+          ? null
+          : int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: nameController.text,
       unitLocation: locationController.text,
       firstMaintenanceDate: DateTimeUtils.convertDateToString(
