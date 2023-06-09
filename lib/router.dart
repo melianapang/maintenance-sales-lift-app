@@ -13,6 +13,10 @@ import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/export_data_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/list_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/add_non_project_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/detail_non_project_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/edit_non_project_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/list_non_project_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
@@ -436,6 +440,34 @@ class AppRouter {
                 : EditUnitCustomerViewParam();
         return buildRoute(
           builder: (_) => EditUnitCustomerView(
+            param: param,
+          ),
+        );
+      case Routes.listNonProjectCustomer:
+        return buildRoute(
+          builder: (_) => const ListNonProjectCustomerView(),
+        );
+      case Routes.detailNonProjectCustomer:
+        final DetailNonProjectCustomerViewParam param =
+            settings.arguments is DetailNonProjectCustomerViewParam
+                ? settings.arguments as DetailNonProjectCustomerViewParam
+                : DetailNonProjectCustomerViewParam();
+        return buildRoute(
+          builder: (_) => DetailNonProjectCustomerView(
+            param: param,
+          ),
+        );
+      case Routes.addNonProjectCustomer:
+        return buildRoute(
+          builder: (_) => const AddNonProjectCustomerView(),
+        );
+      case Routes.editNonProjectCustomer:
+        final EditNonProjectCustomerViewParam param =
+            settings.arguments is EditNonProjectCustomerViewParam
+                ? settings.arguments as EditNonProjectCustomerViewParam
+                : EditNonProjectCustomerViewParam();
+        return buildRoute(
+          builder: (_) => EditNonProjectCustomerView(
             param: param,
           ),
         );

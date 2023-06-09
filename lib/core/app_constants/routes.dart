@@ -14,6 +14,7 @@ class Routes {
   static const String listFollowUp = 'list-follow-up';
   static const String listReminder = 'list-reminder';
   static const String listMaintenance = 'list-maintenance';
+  static const String listNonProjectCustomer = 'list-nonproject-customer';
   static const String listLog = 'list-log';
   static const String listUser = 'list-user';
   static const String listProjects = 'list-project';
@@ -22,6 +23,7 @@ class Routes {
   static const String detailUser = 'detail-user';
   static const String detailProject = 'detail-project';
   static const String detailCustomer = 'detail-customer';
+  static const String detailNonProjectCustomer = 'detail-nonproject-customer';
   static const String detailLog = 'detail-log';
   static const String detailMaintenance = 'detail-pemeliharaan';
   static const String detailHistoryMaintenance = 'detail-history-maintenance';
@@ -30,8 +32,10 @@ class Routes {
   static const String detailReminder = 'detail-reminder';
   static const String detailUnit = 'detail-unit';
   static const String addCustomer = 'add-customer';
+  static const String addNonProjectCustomer = 'add-nonproject-customer';
   static const String addUser = 'add-user';
   static const String editUser = 'edit-user';
+  static const String editNonProjectCustomer = 'edit-nonproject-customer';
   static const String addProject = 'add-project';
   static const String addPicProject = 'add-pic-project';
   static const String addUnit = 'add-unit';
