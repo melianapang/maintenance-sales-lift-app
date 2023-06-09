@@ -59,6 +59,7 @@ class _HomeViewState extends State<HomeView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Spacings.vert(12),
                         _buildProfileCard(model.profileData),
                         Spacings.vert(32),
                         Align(
@@ -207,32 +208,27 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(
-            16,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 20,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ClipOval(
-                child: Icon(
-                  PhosphorIcons.userCircle,
-                  color: MyColors.yellow01,
-                  size: 64,
-                ),
-              ),
-              Spacings.horz(10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       StringUtils.removeZeroWidthSpaces(
-                        userData?.username ?? "",
+                        "Halo, ${userData?.username ?? ""}!",
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: buildTextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
+                        fontWeight: 700,
                         fontColor: MyColors.yellow01,
                       ),
                     ),
@@ -240,7 +236,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         const Icon(
                           PhosphorIcons.userGearBold,
-                          size: 12,
+                          size: 14,
                           color: MyColors.lightBlack02,
                         ),
                         Spacings.horz(6),
@@ -249,48 +245,6 @@ class _HomeViewState extends State<HomeView> {
                             mappingRoleToString(
                               userData?.role ?? Role.Engineers,
                             ),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: buildTextStyle(
-                            fontSize: 14,
-                            fontColor: MyColors.lightBlack02,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          PhosphorIcons.phone,
-                          size: 12,
-                          color: MyColors.lightBlack02,
-                        ),
-                        Spacings.horz(6),
-                        Text(
-                          StringUtils.removeZeroWidthSpaces(
-                            userData?.phoneNumber ?? "",
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: buildTextStyle(
-                            fontSize: 14,
-                            fontColor: MyColors.lightBlack02,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          PhosphorIcons.envelopeSimple,
-                          size: 12,
-                          color: MyColors.lightBlack02,
-                        ),
-                        Spacings.horz(6),
-                        Text(
-                          StringUtils.removeZeroWidthSpaces(
-                            userData?.email ?? "",
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
