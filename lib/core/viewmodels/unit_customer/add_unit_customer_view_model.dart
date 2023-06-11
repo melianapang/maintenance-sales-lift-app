@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddUnitCustomerViewModel extends BaseViewModel {
   AddUnitCustomerViewModel({
@@ -33,14 +34,58 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   bool _isNonProjectCustomer = false;
   bool get isNonProjectCustomer => _isNonProjectCustomer;
 
+  // Dropdown related
+  int _selectedTipeUnitOption = 0;
+  int get selectedTipeUnitOption => _selectedTipeUnitOption;
+  final List<FilterOption> _tipeUnitOptions = [
+    FilterOption("Lift Barang", true),
+    FilterOption("Lift Penumpang", false),
+    FilterOption("Dumbwaiter", false),
+    FilterOption("Escalator", false),
+    FilterOption("Lift Hydraulic", false),
+    FilterOption("Lain-Lain", false),
+  ];
+  List<FilterOption> get tipeUnitOptions => _tipeUnitOptions;
+
+  int _selectedJenisUnitOption = 0;
+  int get selectedJenisUnitOption => _selectedJenisUnitOption;
+  final List<FilterOption> _jenisUnitOptions = [
+    FilterOption("MRL", true),
+    FilterOption("MR", false),
+  ];
+  List<FilterOption> get jenisUnitOptions => _jenisUnitOptions;
+  //End of Dropdown related
+
   final nameController = TextEditingController();
   final locationController = TextEditingController();
+  final jenisUnitController = TextEditingController();
+  final tipeUnitController = TextEditingController();
+  final kapasitasController = TextEditingController();
+  final speedController = TextEditingController();
+  final totalLantaiController = TextEditingController();
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
 
   bool _isLocationValid = true;
   bool get isLocationValid => _isLocationValid;
+
+  bool _isKapasitasValid = true;
+  bool get isKapasitasValid => _isKapasitasValid;
+
+  bool _isSpeedValid = true;
+  bool get isSpeedValid => _isSpeedValid;
+
+  bool _isTotalLantaiValid = true;
+  bool get isTotalLantaiValid => _isTotalLantaiValid;
+
+  String? get selectedTipeUnitString {
+    return _tipeUnitOptions[_selectedTipeUnitOption].title;
+  }
+
+  String? get selectedJenisUnitString {
+    return _jenisUnitOptions[_selectedJenisUnitOption].title;
+  }
 
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
@@ -82,6 +127,36 @@ class AddUnitCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setSelectedTipeUnit({
+    required int selectedMenu,
+  }) {
+    _selectedTipeUnitOption = selectedMenu;
+    for (int i = 0; i < _tipeUnitOptions.length; i++) {
+      if (i == selectedMenu) {
+        _tipeUnitOptions[i].isSelected = true;
+        continue;
+      }
+      _tipeUnitOptions[i].isSelected = false;
+    }
+
+    notifyListeners();
+  }
+
+  void setSelectedJenisUnit({
+    required int selectedMenu,
+  }) {
+    _selectedJenisUnitOption = selectedMenu;
+    for (int i = 0; i < _jenisUnitOptions.length; i++) {
+      if (i == selectedMenu) {
+        _jenisUnitOptions[i].isSelected = true;
+        continue;
+      }
+      _jenisUnitOptions[i].isSelected = false;
+    }
+
+    notifyListeners();
+  }
+
   void onChangedName(String value) {
     _isNameValid = value.isNotEmpty;
     notifyListeners();
@@ -89,6 +164,21 @@ class AddUnitCustomerViewModel extends BaseViewModel {
 
   void onChangedLocation(String value) {
     _isLocationValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedKapasitas(String value) {
+    _isKapasitasValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedSpeed(String value) {
+    _isSpeedValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedTotalLantaiController(String value) {
+    _isTotalLantaiValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -157,6 +247,12 @@ class AddUnitCustomerViewModel extends BaseViewModel {
           : int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: nameController.text,
       unitLocation: locationController.text,
+      // jenisUnit:
+      //     _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption,
+      // tipeUnit: _selectedTipeUnitOption,
+      // speed: speedController.text,
+      // kapasitas: kapasitasController.text,
+      // totalLantai: totalLantaiController.text,
       firstMaintenanceDate: DateTimeUtils.convertDateToString(
         date: _selectedNextMaintenanceDates.first,
         formatter: DateFormat(

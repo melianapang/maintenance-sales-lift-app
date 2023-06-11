@@ -17,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 enum CustomerType {
@@ -155,6 +156,84 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                     ),
                   ],
                   Spacings.vert(24),
+                  GestureDetector(
+                    onTap: () {
+                      _showBottomDialog(
+                        context,
+                        model,
+                        title: "Tipe Unit",
+                        listMenu: model.tipeUnitOptions,
+                        selectedMenu: model.selectedTipeUnitOption,
+                        setSelectedMenu: model.setSelectedTipeUnit,
+                      );
+                    },
+                    child: TextInput.disabled(
+                      label: "Tipe Unit",
+                      hintText: "Tipe Unit",
+                      text: model.selectedTipeUnitString,
+                      suffixIcon: const Icon(
+                        PhosphorIcons.caretDownBold,
+                        color: MyColors.lightBlack02,
+                      ),
+                    ),
+                  ),
+                  Spacings.vert(24),
+                  if (model.selectedTipeUnitOption != 3) ...[
+                    GestureDetector(
+                      onTap: () {
+                        _showBottomDialog(
+                          context,
+                          model,
+                          title: "Jenis Unit",
+                          listMenu: model.jenisUnitOptions,
+                          selectedMenu: model.selectedJenisUnitOption,
+                          setSelectedMenu: model.setSelectedJenisUnit,
+                        );
+                      },
+                      child: TextInput.disabled(
+                        label: "Jenis Unit",
+                        hintText: "Jenis Unit",
+                        text: model.selectedJenisUnitString,
+                        suffixIcon: const Icon(
+                          PhosphorIcons.caretDownBold,
+                          color: MyColors.lightBlack02,
+                        ),
+                      ),
+                    ),
+                    Spacings.vert(24),
+                  ],
+                  TextInput.editable(
+                    label: "Kapasitas / Rise",
+                    controller: model.kapasitasController,
+                    hintText: "Kapasitas / Rise",
+                    keyboardType: TextInputType.number,
+                    onChangedListener: model.onChangedKapasitas,
+                    errorText: !model.isKapasitasValid
+                        ? "Kolom ini wajib diisi."
+                        : null,
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    label: "Speed / Inclinasi",
+                    controller: model.speedController,
+                    hintText: "Speed / Inclinasi",
+                    keyboardType: TextInputType.number,
+                    onChangedListener: model.onChangedSpeed,
+                    errorText:
+                        !model.isSpeedValid ? "Kolom ini wajib diisi." : null,
+                  ),
+                  Spacings.vert(24),
+                  TextInput.editable(
+                    label: "Jumlah Lantai / Lebar Step",
+                    controller: model.totalLantaiController,
+                    keyboardType: TextInputType.number,
+                    hintText: "Jumlah Lantai / Lebar Step",
+                    onChangedListener: model.onChangedTotalLantaiController,
+                    errorText: !model.isTotalLantaiValid
+                        ? "Kolom ini wajib diisi."
+                        : null,
+                  ),
+                  Spacings.vert(24),
                   DatePickerWidget(
                     label: "Tanggal Pemeliharaan Pertama",
                     isRangeCalendar: false,
@@ -232,6 +311,64 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
               ),
             )
           : buildNoDataFoundPage(),
+    );
+  }
+
+  void _showBottomDialog(
+    BuildContext context,
+    AddUnitCustomerViewModel model, {
+    required String title,
+    required List<FilterOption> listMenu,
+    required int selectedMenu,
+    required void Function({
+      required int selectedMenu,
+    })
+        setSelectedMenu,
+  }) {
+    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    int menu = selectedMenu;
+
+    showGeneralBottomSheet(
+      context: context,
+      title: title,
+      isFlexible: true,
+      showCloseButton: false,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildMenuChoices(
+                menuLocal,
+                (int selectedIndex) {
+                  menu = selectedIndex;
+                  for (int i = 0; i < menuLocal.length; i++) {
+                    if (i == selectedIndex) {
+                      menuLocal[i].isSelected = true;
+                      continue;
+                    }
+
+                    menuLocal[i].isSelected = false;
+                  }
+                  setState(() {});
+                },
+              ),
+              Spacings.vert(32),
+              ButtonWidget(
+                buttonType: ButtonType.primary,
+                buttonSize: ButtonSize.large,
+                text: "Terapkan",
+                onTap: () {
+                  setSelectedMenu(
+                    selectedMenu: menu,
+                  );
+                  Navigator.maybePop(context);
+                },
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 
