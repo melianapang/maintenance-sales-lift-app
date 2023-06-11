@@ -221,10 +221,13 @@ class _EditProjectViewState extends State<EditProjectView> {
                     itemBuilder: (BuildContext context, int index) {
                       return CustomCardWidget(
                         cardType: CardType.listWithIcon,
-                        title: model.listPic[index].picName,
+                        title:
+                            "${model.listPic[index].picName} - ${model.listPic[index].picName}",
                         description: model.listPic[index].phoneNumber,
+                        description2: model.listPic[index].picName,
                         desc2Size: 12,
-                        titleSize: 14,
+                        descSize: 12,
+                        titleSize: 16,
                         icon: PhosphorIcons.trashBold,
                         onTap: () {
                           model.deletePicProject(index);

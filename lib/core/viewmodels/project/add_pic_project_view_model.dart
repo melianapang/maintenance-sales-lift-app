@@ -7,12 +7,20 @@ class AddPicProjectViewModel extends BaseViewModel {
 
   final namaPicController = TextEditingController();
   final phoneNumberController = TextEditingController();
+  final emailController = TextEditingController();
+  final roleController = TextEditingController();
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
 
   bool _isPhoneNumberValid = true;
   bool get isPhoneNumberValid => _isPhoneNumberValid;
+
+  bool _isEmailValid = true;
+  bool get isEmailValid => _isEmailValid;
+
+  bool _isRoleValid = true;
+  bool get isRoleValid => _isRoleValid;
 
   @override
   Future<void> initModel() async {}
@@ -24,6 +32,16 @@ class AddPicProjectViewModel extends BaseViewModel {
 
   void onChangedPhoneNumber(String value) {
     _isPhoneNumberValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedEmail(String value) {
+    _isEmailValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void onChangedRole(String value) {
+    _isRoleValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -45,6 +63,8 @@ class AddPicProjectViewModel extends BaseViewModel {
       PICProject(
         picName: namaPicController.text,
         phoneNumber: phoneNumberController.text,
+        // email: emailController.text,
+        // role: roleController.text,
       ),
     );
   }

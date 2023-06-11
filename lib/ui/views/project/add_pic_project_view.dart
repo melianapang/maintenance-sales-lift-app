@@ -62,6 +62,28 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
+                  label: "Peran PIC",
+                  controller: model.roleController,
+                  hintText: "Peran PIC",
+                  keyboardType: TextInputType.text,
+                  errorText: model.isRoleValid == false
+                      ? "Wajib diisi dengan benar"
+                      : null,
+                  onChangedListener: model.onChangedRole,
+                ),
+                Spacings.vert(24),
+                TextInput.editable(
+                  label: "Email PIC",
+                  controller: model.emailController,
+                  hintText: "Email PIC",
+                  keyboardType: TextInputType.emailAddress,
+                  errorText: model.isEmailValid == false
+                      ? "Wajib diisi dengan benar"
+                      : null,
+                  onChangedListener: model.onChangedEmail,
+                ),
+                Spacings.vert(24),
+                TextInput.editable(
                   label: "Nomor Telepon PIC",
                   controller: model.phoneNumberController,
                   hintText: "Nomor Telepon PIC",

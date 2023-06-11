@@ -202,16 +202,29 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                     children: [
                                       Text(
                                         StringUtils.removeZeroWidthSpaces(
-                                          model.projectData?.pics[index]
-                                                  .picName ??
-                                              "",
+                                          "${model.projectData?.pics[index].picName} - ${model.projectData?.pics[index].picName}",
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: buildTextStyle(
                                           fontColor: MyColors.lightBlack02,
-                                          fontSize: 14,
+                                          fontSize: 16,
                                           fontWeight: 800,
+                                        ),
+                                      ),
+                                      Spacings.vert(2),
+                                      Text(
+                                        StringUtils.removeZeroWidthSpaces(
+                                          model.projectData?.pics[index]
+                                                  .phoneNumber ??
+                                              "",
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: buildTextStyle(
+                                          fontColor: MyColors.lightBlack02,
+                                          fontSize: 14,
+                                          fontWeight: 400,
                                         ),
                                       ),
                                       Spacings.vert(2),
