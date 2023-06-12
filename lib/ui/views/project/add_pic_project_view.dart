@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_pic_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
+class AddPicProjectViewParam {
+  AddPicProjectViewParam({
+    this.listRole,
+  });
+
+  final List<String>? listRole;
+}
+
 class AddPicProjectView extends StatefulWidget {
-  const AddPicProjectView({super.key});
+  const AddPicProjectView({
+    required this.param,
+    super.key,
+  });
+
+  final AddPicProjectViewParam param;
 
   @override
   State<AddPicProjectView> createState() => _AddPicProjectViewState();
@@ -18,7 +36,9 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: AddPicProjectViewModel(),
+      model: AddPicProjectViewModel(
+        listRole: widget.param.listRole,
+      ),
       onModelReady: (AddPicProjectViewModel model) async {
         await model.initModel();
       },
@@ -61,15 +81,23 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                       : null,
                 ),
                 Spacings.vert(24),
-                TextInput.editable(
-                  label: "Peran PIC",
-                  controller: model.roleController,
-                  hintText: "Peran PIC",
-                  keyboardType: TextInputType.text,
-                  errorText: model.isRoleValid == false
-                      ? "Wajib diisi dengan benar"
-                      : null,
-                  onChangedListener: model.onChangedRole,
+                GestureDetector(
+                  onTap: () {
+                    _showAddableBottomDialog(
+                      context,
+                      model,
+                      setSelectedRole: model.setSelectedRole,
+                    );
+                  },
+                  child: TextInput.disabled(
+                    label: "Peran PIC",
+                    text: model.selectedRole,
+                    hintText: "Pilih Peran untuk PIC ini",
+                    suffixIcon: const Icon(
+                      PhosphorIcons.caretDownBold,
+                      color: MyColors.lightBlack02,
+                    ),
+                  ),
                 ),
                 Spacings.vert(24),
                 TextInput.editable(
@@ -99,6 +127,78 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
           ),
         );
       },
+    );
+  }
+
+  void _showAddableBottomDialog(
+    BuildContext context,
+    AddPicProjectViewModel model, {
+    required void Function({
+      required String selectedRole,
+    })
+        setSelectedRole,
+  }) {
+    showGeneralBottomSheet(
+      context: context,
+      title: 'Daftar Peran PIC',
+      isFlexible: false,
+      showCloseButton: false,
+      sizeToScreenRatio: 0.8,
+      child: Expanded(
+        child: StatefulBuilder(
+          builder: (context, ss) {
+            return FutureBuilder<List<String>>(
+              future: model.searchOnChanged(),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    buildSearchBarAndAddableMenu(
+                      context,
+                      isShowingAddableMenu:
+                          model.listSearchedRole?.isEmpty == true,
+                      searchController: model.searchController,
+                      textSearchOnChanged: (_) {
+                        model.isSearch = true;
+                        ss(() {});
+                      },
+                      onTapFilter: () {
+                        model.listRole?.add(model.searchController.text);
+                        setSelectedRole(
+                          selectedRole: model.searchController.text,
+                        );
+                        model.searchController.text = "";
+                        Navigator.maybePop(context);
+                      },
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: snapshot.data?.length ?? 0,
+                        separatorBuilder: (_, __) => const Divider(
+                          color: MyColors.transparent,
+                          height: 20,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return CustomCardWidget(
+                            cardType: CardType.list,
+                            title: snapshot.data?[index] ?? "",
+                            titleSize: 20,
+                            onTap: () {
+                              setSelectedRole(
+                                selectedRole: snapshot.data?[index] ?? "",
+                              );
+                              Navigator.maybePop(context);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

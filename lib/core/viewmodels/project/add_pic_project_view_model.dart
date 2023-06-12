@@ -1,14 +1,32 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 
 class AddPicProjectViewModel extends BaseViewModel {
-  AddPicProjectViewModel();
+  AddPicProjectViewModel({
+    required List<String>? listRole,
+  }) : _listRole = listRole;
+
+  bool isLoading = false;
+  bool isSearch = false;
+
+  List<String>? _listRole;
+  List<String>? get listRole => _listRole;
+
+  List<String>? _listSearchedRole;
+  List<String>? get listSearchedRole => _listSearchedRole;
+
+  String? _selectedRole;
+  String? get selectedRole => _selectedRole;
+
+  TextEditingController searchController = TextEditingController();
+  Timer? _debounce;
 
   final namaPicController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
-  final roleController = TextEditingController();
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
@@ -19,8 +37,8 @@ class AddPicProjectViewModel extends BaseViewModel {
   bool _isEmailValid = true;
   bool get isEmailValid => _isEmailValid;
 
-  bool _isRoleValid = true;
-  bool get isRoleValid => _isRoleValid;
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {}
@@ -40,9 +58,25 @@ class AddPicProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void onChangedRole(String value) {
-    _isRoleValid = value.isNotEmpty;
+  void setSelectedRole({
+    required String selectedRole,
+  }) {
+    _selectedRole = selectedRole;
     notifyListeners();
+  }
+
+  Future<List<String>> searchOnChanged() async {
+    isLoading = true;
+    if (searchController.text.isEmpty) {
+      _listSearchedRole = _listRole?.toList();
+
+      isLoading = false;
+      return _listSearchedRole ?? [];
+    }
+
+    return _listSearchedRole =
+        _listRole?.where((e) => e.contains(searchController.text)).toList() ??
+            [];
   }
 
   void sendDataBack(BuildContext context) {
@@ -64,7 +98,7 @@ class AddPicProjectViewModel extends BaseViewModel {
         picName: namaPicController.text,
         phoneNumber: phoneNumberController.text,
         email: emailController.text,
-        role: roleController.text,
+        role: _selectedRole ?? "",
       ),
     );
   }
