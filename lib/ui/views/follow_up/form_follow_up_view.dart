@@ -225,6 +225,17 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                   maxLines: 5,
                   keyboardType: TextInputType.multiline,
                 ),
+                Spacings.vert(24),
+                DatePickerWidget(
+                  label: "Tanggal Konfirmasi Selanjutnya",
+                  isRangeCalendar: false,
+                  selectedDates: model.selectedNextFollowUpDates,
+                  onSelectedDates: (DateTime start, DateTime? end) {
+                    print('$start $end');
+                    model.setSelectedNextFollowUpDates([start]);
+                  },
+                ),
+                Spacings.vert(24),
               ],
             ),
           ),

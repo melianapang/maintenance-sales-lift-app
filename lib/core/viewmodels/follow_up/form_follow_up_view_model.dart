@@ -63,6 +63,17 @@ class FormFollowUpViewModel extends BaseViewModel {
   List<FollowUpFile> get uploadedFiles => _uploadedFiles;
   //endregion
 
+  //region next followup date
+  List<DateTime> _selectedNextFollowUpDates = [
+    DateTime.now().add(
+      Duration(
+        days: 14,
+      ),
+    ),
+  ];
+  List<DateTime> get selectedNextFollowUpDates => _selectedNextFollowUpDates;
+  //endregion
+
   List<DateTime> _selectedDates = [
     DateTime.now(),
   ];
@@ -98,6 +109,11 @@ class FormFollowUpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setSelectedNextFollowUpDates(List<DateTime> value) {
+    _selectedNextFollowUpDates = value;
+    notifyListeners();
+  }
+
   void resetErrorMsg() {
     _errorMsg = null;
   }
@@ -114,6 +130,12 @@ class FormFollowUpViewModel extends BaseViewModel {
       ),
       note: noteController.text,
       documents: _uploadedFiles,
+      // nextScheduleDate: DateTimeUtils.convertDateToString(
+      //   date: _selectedDates.first,
+      //   formatter: DateFormat(
+      //     DateTimeUtils.DATE_FORMAT_3,
+      //   ),
+      // ),
     );
 
     if (response.isRight) return true;
@@ -171,6 +193,12 @@ class FormFollowUpViewModel extends BaseViewModel {
               "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
         ),
       ],
+      // nextScheduleDate: DateTimeUtils.convertDateToString(
+      //   date: _selectedDates.first,
+      //   formatter: DateFormat(
+      //     DateTimeUtils.DATE_FORMAT_3,
+      //   ),
+      // ),
     );
 
     if (response.isRight) return true;

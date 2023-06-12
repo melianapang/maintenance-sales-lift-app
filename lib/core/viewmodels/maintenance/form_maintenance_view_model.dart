@@ -60,6 +60,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
   bool get isEdit => true;
 
+  //region next maintenance date
   List<DateTime> _selectedDates = [
     DateTime.now(),
   ];
@@ -74,6 +75,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
   ];
   List<DateTime> get selectedNextMaintenanceDates =>
       _selectedNextMaintenanceDates;
+  //endregion
 
   //region gallery
   final List<GalleryData> _compressedFiles = [];
