@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/viewmodels/master_customer/list_customer_need_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/custom_base_url_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
@@ -370,8 +368,14 @@ class AppRouter {
           builder: (_) => const AddProjectView(),
         );
       case Routes.addPicProject:
+        final AddPicProjectViewParam param =
+            settings.arguments is AddPicProjectViewParam
+                ? settings.arguments as AddPicProjectViewParam
+                : AddPicProjectViewParam();
         return buildRoute(
-          builder: (_) => const AddPicProjectView(),
+          builder: (_) => AddPicProjectView(
+            param: param,
+          ),
         );
       case Routes.editProject:
         final EditProjectViewParam param =

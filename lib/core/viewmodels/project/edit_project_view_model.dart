@@ -35,6 +35,10 @@ class EditProjectViewModel extends BaseViewModel {
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
 
+  //list distinct pic role
+  List<String>? _listPICRole;
+  List<String>? get listPICRole => _listPICRole;
+
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
 
@@ -89,6 +93,7 @@ class EditProjectViewModel extends BaseViewModel {
 
     paginationControl.currentPage = 1;
     await requestGetAllCustomer();
+    await requestGetListPICRole();
 
     setBusy(false);
   }
@@ -392,6 +397,19 @@ class EditProjectViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<void> requestGetListPICRole() async {
+    final response = await _apiService.requestGetDistinctPICRoles();
+
+    if (response.isRight) {
+      if (response.right.isNotEmpty) {
+        _listPICRole = response.right;
+      }
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 
   void invokeDebouncer(Function() function) {

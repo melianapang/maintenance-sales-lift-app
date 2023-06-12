@@ -364,7 +364,13 @@ class _AddProjectViewState extends State<AddProjectView> {
     BuildContext context, {
     required AddProjectViewModel viewModel,
   }) async {
-    final result = await Navigator.pushNamed(context, Routes.addPicProject);
+    final result = await Navigator.pushNamed(
+      context,
+      Routes.addPicProject,
+      arguments: AddPicProjectViewParam(
+        listRole: viewModel.listPICRole,
+      ),
+    );
     setState(() {
       viewModel.addPicProject(result as PICProject);
     });

@@ -16,6 +16,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/add_pic_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
@@ -322,7 +323,13 @@ class _EditProjectViewState extends State<EditProjectView> {
     BuildContext context, {
     required EditProjectViewModel viewModel,
   }) async {
-    final result = await Navigator.pushNamed(context, Routes.addPicProject);
+    final result = await Navigator.pushNamed(
+      context,
+      Routes.addPicProject,
+      arguments: AddPicProjectViewParam(
+        listRole: viewModel.listPICRole,
+      ),
+    );
     setState(() {
       viewModel.addPicProject(result as PICProject);
     });
