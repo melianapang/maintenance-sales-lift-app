@@ -53,8 +53,8 @@ class UnitData {
     required this.unitId,
     required this.unitName,
     required this.unitLocation,
-    required this.projectId,
-    required this.projectName,
+    this.projectId,
+    this.projectName,
     required this.tipeUnit,
     required this.jenisUnit,
     required this.kapasitas,
@@ -77,10 +77,10 @@ class UnitData {
   final String unitLocation;
 
   @JsonKey(name: "project_id")
-  final String projectId;
+  final String? projectId;
 
   @JsonKey(name: "project_name")
-  final String projectName;
+  final String? projectName;
 
   @JsonKey(name: "unit_type")
   final String tipeUnit;

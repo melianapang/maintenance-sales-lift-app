@@ -63,8 +63,8 @@ class AddPicProjectViewModel extends BaseViewModel {
       PICProject(
         picName: namaPicController.text,
         phoneNumber: phoneNumberController.text,
-        // email: emailController.text,
-        // role: roleController.text,
+        email: emailController.text,
+        role: roleController.text,
       ),
     );
   }

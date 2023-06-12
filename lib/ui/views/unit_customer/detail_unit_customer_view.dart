@@ -169,11 +169,13 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                           text: model.unitData?.unitLocation,
                         ),
                         Spacings.vert(24),
-                        TextInput.disabled(
-                          label: "Proyek",
-                          text: model.unitData?.projectName,
-                        ),
-                        Spacings.vert(24),
+                        if (model.unitData?.projectName != null) ...[
+                          TextInput.disabled(
+                            label: "Proyek",
+                            text: model.unitData?.projectName,
+                          ),
+                          Spacings.vert(24),
+                        ],
                         TextInput.disabled(
                           label: "Tipe Unit",
                           text: model.tipeUnit,

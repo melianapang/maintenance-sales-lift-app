@@ -222,11 +222,11 @@ class _EditProjectViewState extends State<EditProjectView> {
                       return CustomCardWidget(
                         cardType: CardType.listWithIcon,
                         title:
-                            "${model.listPic[index].picName} - ${model.listPic[index].picName}",
-                        description: model.listPic[index].phoneNumber,
-                        description2: model.listPic[index].picName,
-                        desc2Size: 12,
-                        descSize: 12,
+                            "${model.listPic[index].picName} - ${model.listPic[index].role}",
+                        description: model.listPic[index].email,
+                        description2: model.listPic[index].phoneNumber,
+                        desc2Size: 14,
+                        descSize: 14,
                         titleSize: 16,
                         icon: PhosphorIcons.trashBold,
                         onTap: () {

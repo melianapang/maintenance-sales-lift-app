@@ -124,6 +124,8 @@ class EditProjectViewModel extends BaseViewModel {
             picId: e.picId,
             picName: e.picName,
             phoneNumber: e.phoneNumber,
+            email: e.email,
+            role: e.role,
           ),
         )
         .toList();
@@ -315,6 +317,8 @@ class EditProjectViewModel extends BaseViewModel {
       address: addressController.text,
       city: cityController.text,
       projectId: int.parse(_projectData?.projectId ?? "0"),
+      longitude: 0.0,
+      latitude: 0.0,
     );
 
     if (response.isRight) {

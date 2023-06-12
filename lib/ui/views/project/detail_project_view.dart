@@ -202,7 +202,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                     children: [
                                       Text(
                                         StringUtils.removeZeroWidthSpaces(
-                                          "${model.projectData?.pics[index].picName} - ${model.projectData?.pics[index].picName}",
+                                          "${model.projectData?.pics[index].picName} - ${model.projectData?.pics[index].role}",
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -216,7 +216,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                                       Text(
                                         StringUtils.removeZeroWidthSpaces(
                                           model.projectData?.pics[index]
-                                                  .phoneNumber ??
+                                                  .email ??
                                               "",
                                         ),
                                         maxLines: 2,

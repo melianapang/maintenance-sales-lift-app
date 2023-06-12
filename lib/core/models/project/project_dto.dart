@@ -103,6 +103,8 @@ class PICProject {
   PICProject({
     this.picId,
     required this.picName,
+    required this.role,
+    required this.email,
     required this.phoneNumber,
   });
 
@@ -119,6 +121,12 @@ class PICProject {
 
   @JsonKey(name: "phone_number")
   final String phoneNumber;
+
+  @JsonKey(name: "role")
+  final String role;
+
+  @JsonKey(name: "email")
+  final String email;
 }
 //endregion
 
@@ -131,6 +139,8 @@ class CreateProjectRequest {
     required this.address,
     required this.city,
     required this.customerId,
+    required this.longitude,
+    required this.latitude,
   });
 
   factory CreateProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -152,6 +162,12 @@ class CreateProjectRequest {
 
   @JsonKey(name: "customer_id")
   final int customerId;
+
+  @JsonKey(name: "longitude")
+  final double longitude;
+
+  @JsonKey(name: "latitude")
+  final double latitude;
 }
 
 @JsonSerializable()
@@ -200,6 +216,8 @@ class CreatePICProjectRequest {
     required this.projectId,
     required this.picName,
     required this.phoneNumber,
+    required this.email,
+    required this.role,
   });
 
   factory CreatePICProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -215,6 +233,12 @@ class CreatePICProjectRequest {
 
   @JsonKey(name: "phone_number")
   final String phoneNumber;
+
+  @JsonKey(name: "role")
+  final String role;
+
+  @JsonKey(name: "email")
+  final String email;
 }
 
 @JsonSerializable()
@@ -267,6 +291,8 @@ class UpdateProjectRequest {
     required this.address,
     required this.city,
     required this.customerId,
+    required this.longitude,
+    required this.latitude,
   });
 
   factory UpdateProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -288,6 +314,12 @@ class UpdateProjectRequest {
 
   @JsonKey(name: "customer_id")
   final int customerId;
+
+  @JsonKey(name: "longitude")
+  final double longitude;
+
+  @JsonKey(name: "latitude")
+  final double latitude;
 }
 
 @JsonSerializable()

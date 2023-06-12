@@ -253,9 +253,9 @@ class _AddProjectViewState extends State<AddProjectView> {
                       return CustomCardWidget(
                         cardType: CardType.listWithIcon,
                         title:
-                            "${model.listPic[index].picName} - ${model.listPic[index].picName}",
-                        description: model.listPic[index].phoneNumber,
-                        description2: model.listPic[index].picName,
+                            "${model.listPic[index].picName} - ${model.listPic[index].role}",
+                        description: model.listPic[index].email,
+                        description2: model.listPic[index].phoneNumber,
                         desc2Size: 12,
                         descSize: 12,
                         titleSize: 16,

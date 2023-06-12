@@ -242,6 +242,8 @@ class AddProjectViewModel extends BaseViewModel {
       projectNeed: _selectedKeperluanProyekOption,
       address: addressController.text,
       city: cityController.text,
+      latitude: 0.0,
+      longitude: 0.0,
     );
 
     if (response.isRight) {

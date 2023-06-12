@@ -113,9 +113,10 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    _paginationControl.currentPage = 1;
-
-    await requestGetAllProjectByCustomerId();
+    if (!_isNonProjectCustomer) {
+      _paginationControl.currentPage = 1;
+      await requestGetAllProjectByCustomerId();
+    }
 
     setBusy(false);
   }

@@ -2183,6 +2183,8 @@ class ApiService {
     required String address,
     required String city,
     required int customerId,
+    required double longitude,
+    required double latitude,
   }) async {
     try {
       final payload = CreateProjectRequest(
@@ -2191,6 +2193,8 @@ class ApiService {
         address: address,
         city: city,
         customerId: customerId,
+        longitude: longitude,
+        latitude: latitude,
       );
       final HttpResponse<dynamic> response = await api.requestCreateProject(
         payload,
@@ -2242,6 +2246,8 @@ class ApiService {
     required String city,
     required int customerId,
     required int projectId,
+    required double longitude,
+    required double latitude,
   }) async {
     try {
       final payload = UpdateProjectRequest(
@@ -2250,6 +2256,8 @@ class ApiService {
         projectNeed: projectNeed,
         address: address,
         city: city,
+        longitude: longitude,
+        latitude: latitude,
       );
 
       final HttpResponse<dynamic> response = await api.requestUpdateProject(
@@ -2305,6 +2313,8 @@ class ApiService {
             projectId: projectId,
             picName: pic.picName,
             phoneNumber: pic.phoneNumber,
+            email: pic.email,
+            role: pic.role,
           ),
         );
       }
