@@ -423,6 +423,9 @@ abstract class Api {
     @Body() CreateProjectRequest request,
   );
 
+  @GET('/api/0/Pic/get_distinct_pic_roles/')
+  Future<HttpResponse<dynamic>> requestGetDistinctPICRoles();
+
   @POST('/api/0/Pic/create_pic/')
   Future<HttpResponse<dynamic>> requestCreatePICProject(
     @Body() List<CreatePICProjectRequest> request,
@@ -2185,6 +2188,7 @@ class ApiService {
     required int customerId,
     required double longitude,
     required double latitude,
+    required String scheduleDate,
   }) async {
     try {
       final payload = CreateProjectRequest(
@@ -2195,6 +2199,7 @@ class ApiService {
         customerId: customerId,
         longitude: longitude,
         latitude: latitude,
+        scheduleDate: scheduleDate,
       );
       final HttpResponse<dynamic> response = await api.requestCreateProject(
         payload,
@@ -2301,6 +2306,27 @@ class ApiService {
   //endregion
 
   //region pic project
+  Future<Either<Failure, List<String>>> requestGetDistinctPICRoles() async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetDistinctPICRoles();
+
+      if (response.isSuccess) {
+        final ListDistinctPICRoleResponse listResponse =
+            ListDistinctPICRoleResponse.fromJson(
+          response.data,
+        );
+
+        return Right<Failure, List<String>>(listResponse.data);
+      }
+
+      return ErrorUtils<List<String>>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<List<String>>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreatePIC({
     required List<PICProject> listPic,
     required int projectId,

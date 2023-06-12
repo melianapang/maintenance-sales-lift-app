@@ -141,6 +141,7 @@ class CreateProjectRequest {
     required this.customerId,
     required this.longitude,
     required this.latitude,
+    required this.scheduleDate,
   });
 
   factory CreateProjectRequest.fromJson(Map<String, dynamic> json) =>
@@ -168,6 +169,9 @@ class CreateProjectRequest {
 
   @JsonKey(name: "latitude")
   final double latitude;
+
+  @JsonKey(name: "schedule_date")
+  final String scheduleDate;
 }
 
 @JsonSerializable()
@@ -279,6 +283,31 @@ class DeletePICProjectResponse {
 
   @JsonKey(name: "Message")
   final String message;
+}
+//endregion
+
+//region list distinct pic role
+@JsonSerializable()
+class ListDistinctPICRoleResponse {
+  ListDistinctPICRoleResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory ListDistinctPICRoleResponse.fromJson(Map<String, dynamic> json) =>
+      _$ListDistinctPICRoleResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ListDistinctPICRoleResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final List<String> data;
 }
 //endregion
 

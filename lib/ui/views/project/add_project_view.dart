@@ -20,6 +20,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
@@ -221,6 +222,16 @@ class _AddProjectViewState extends State<AddProjectView> {
                   onChangedListener: model.onChangedCity,
                   errorText:
                       !model.isCityValid ? "Kolom ini wajib diisi." : null,
+                ),
+                Spacings.vert(24),
+                DatePickerWidget(
+                  label: "Tanggal Konfirmasi Pertama",
+                  isRangeCalendar: false,
+                  selectedDates: model.selectedFirstFollowUpDates,
+                  onSelectedDates: (DateTime start, DateTime? end) {
+                    print('$start $end');
+                    model.setSelectedFirstFollowUpDates([start]);
+                  },
                 ),
                 Spacings.vert(24),
                 Text(

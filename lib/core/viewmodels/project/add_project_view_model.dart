@@ -6,8 +6,10 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
+import 'package:intl/intl.dart';
 
 class AddProjectViewModel extends BaseViewModel {
   AddProjectViewModel({
@@ -29,6 +31,10 @@ class AddProjectViewModel extends BaseViewModel {
   //region pilih customer proyek
   List<CustomerData>? _listCustomer;
   List<CustomerData>? get listCustomer => _listCustomer;
+
+  //list distinct pic role
+  List<String>? _listPICRole;
+  List<String>? get listPICRole => _listPICRole;
 
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
@@ -53,6 +59,18 @@ class AddProjectViewModel extends BaseViewModel {
 
   bool _isCityValid = true;
   bool get isCityValid => _isCityValid;
+  //endregion
+
+  //region first follow up date
+  List<DateTime> _selectedFirstFollowUpDates = [
+    DateTime.now().add(
+      Duration(
+        days: 14,
+      ),
+    ),
+  ];
+  List<DateTime> get selectedFirstFollowUpDates => _selectedFirstFollowUpDates;
+
   //endregion
 
   //region keperluan proyek
@@ -82,6 +100,7 @@ class AddProjectViewModel extends BaseViewModel {
 
     paginationControl.currentPage = 1;
     await requestGetAllCustomer();
+    await requestGetListPICRole();
 
     setBusy(false);
   }
@@ -98,6 +117,11 @@ class AddProjectViewModel extends BaseViewModel {
 
   void onChangedCity(String value) {
     _isCityValid = value.isNotEmpty;
+    notifyListeners();
+  }
+
+  void setSelectedFirstFollowUpDates(List<DateTime> value) {
+    _selectedFirstFollowUpDates = value;
     notifyListeners();
   }
 
@@ -244,6 +268,12 @@ class AddProjectViewModel extends BaseViewModel {
       city: cityController.text,
       latitude: 0.0,
       longitude: 0.0,
+      scheduleDate: DateTimeUtils.convertDateToString(
+        date: _selectedFirstFollowUpDates.first,
+        formatter: DateFormat(
+          DateTimeUtils.DATE_FORMAT_3,
+        ),
+      ),
     );
 
     if (response.isRight) {
@@ -304,6 +334,19 @@ class AddProjectViewModel extends BaseViewModel {
     _isShowNoDataFoundPage = true;
     notifyListeners();
     return [];
+  }
+
+  Future<void> requestGetListPICRole() async {
+    final response = await _apiService.requestGetDistinctPICRoles();
+
+    if (response.isRight) {
+      if (response.right.isNotEmpty) {
+        _listPICRole = response.right;
+      }
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 
   void invokeDebouncer(Function() function) {
