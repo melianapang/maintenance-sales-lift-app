@@ -109,7 +109,9 @@ class _AddUserViewState extends State<AddUserView> {
                   child: TextInput.disabled(
                     label: "Peran",
                     text: model.roleOptions
-                        .where((element) => element.isSelected)
+                        .where(
+                          (element) => element.isSelected,
+                        )
                         .first
                         .title,
                     suffixIcon: const Icon(

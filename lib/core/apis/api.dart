@@ -1565,6 +1565,11 @@ class ApiService {
     int? projectId,
     required String unitName,
     required String unitLocation,
+    int? jenisUnit,
+    required int tipeUnit,
+    required double speed,
+    required double totalLantai,
+    required double kapasitas,
     required String firstMaintenanceDate,
   }) async {
     try {
@@ -1573,6 +1578,11 @@ class ApiService {
         unitName: unitName,
         customerId: customerId,
         unitLocation: unitLocation,
+        tipeUnit: tipeUnit,
+        jenisUnit: jenisUnit,
+        kapasitas: kapasitas,
+        speed: speed,
+        totalLantai: totalLantai,
         firstMaintenanceDate: firstMaintenanceDate,
       );
       final HttpResponse<dynamic> response =
@@ -1600,6 +1610,11 @@ class ApiService {
     required int projectId,
     required String unitName,
     required String unitLocation,
+    int? jenisUnit,
+    required int tipeUnit,
+    required double speed,
+    required double totalLantai,
+    required double kapasitas,
   }) async {
     try {
       final payload = UpdateUnitRequest(
@@ -1607,6 +1622,11 @@ class ApiService {
         projectId: projectId,
         unitName: unitName,
         unitLocation: unitLocation,
+        tipeUnit: tipeUnit,
+        jenisUnit: jenisUnit,
+        kapasitas: kapasitas,
+        speed: speed,
+        totalLantai: totalLantai,
       );
       final HttpResponse<dynamic> response = await api.requestUpdateUnit(
         unitId,

@@ -1,4 +1,5 @@
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_customer_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/unit_customer/unit_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -21,6 +22,10 @@ class DetailUnitCustomerViewModel extends BaseViewModel {
 
   UnitData? _unitData;
   UnitData? get unitData => _unitData;
+
+  String? get jenisUnit => mappingJenisUnit(_unitData?.jenisUnit);
+
+  String? get tipeUnit => mappingTipeUnit(_unitData?.tipeUnit);
 
   String? _errorMsg;
   String? get errorMsg => _errorMsg;

@@ -247,12 +247,12 @@ class AddUnitCustomerViewModel extends BaseViewModel {
           : int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: nameController.text,
       unitLocation: locationController.text,
-      // jenisUnit:
-      //     _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption,
-      // tipeUnit: _selectedTipeUnitOption,
-      // speed: speedController.text,
-      // kapasitas: kapasitasController.text,
-      // totalLantai: totalLantaiController.text,
+      jenisUnit:
+          _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption + 1,
+      tipeUnit: _selectedTipeUnitOption,
+      speed: double.parse(speedController.text),
+      kapasitas: double.parse(kapasitasController.text),
+      totalLantai: double.parse(totalLantaiController.text),
       firstMaintenanceDate: DateTimeUtils.convertDateToString(
         date: _selectedNextMaintenanceDates.first,
         formatter: DateFormat(

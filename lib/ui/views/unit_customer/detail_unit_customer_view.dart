@@ -176,27 +176,31 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Tipe Unit",
-                          // text: model.unitData?.tipeUnit.toString(),
+                          text: model.tipeUnit,
+                          hintText: "Tipe Unit",
                         ),
                         Spacings.vert(24),
-                        TextInput.disabled(
-                          label: "Jenis Unit",
-                          // text: model.unitData?.jenisUnit.toString(),
-                        ),
-                        Spacings.vert(24),
+                        if (model.jenisUnit != null) ...[
+                          TextInput.disabled(
+                            label: "Jenis Unit",
+                            text: model.jenisUnit,
+                            hintText: "Jenis Unit",
+                          ),
+                          Spacings.vert(24),
+                        ],
                         TextInput.disabled(
                           label: "Kapasitas / Rise",
-                          // text: model.unitData?.kapasitas,
+                          text: model.unitData?.kapasitas.toString(),
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Speed / Inclinasi",
-                          // text: model.unitData?.speed,
+                          text: model.unitData?.speed.toString(),
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Jumlah Lantai / Lebar Step",
-                          // text: model.unitData?.totalLantai,
+                          text: model.unitData?.totalLantai.toString(),
                         ),
                         Spacings.vert(24),
                       ],

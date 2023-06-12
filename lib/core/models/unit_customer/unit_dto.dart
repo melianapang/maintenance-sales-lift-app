@@ -55,6 +55,11 @@ class UnitData {
     required this.unitLocation,
     required this.projectId,
     required this.projectName,
+    required this.tipeUnit,
+    required this.jenisUnit,
+    required this.kapasitas,
+    required this.speed,
+    required this.totalLantai,
   });
 
   factory UnitData.fromJson(Map<String, dynamic> json) =>
@@ -76,6 +81,21 @@ class UnitData {
 
   @JsonKey(name: "project_name")
   final String projectName;
+
+  @JsonKey(name: "unit_type")
+  final String tipeUnit;
+
+  @JsonKey(name: "unit_kind")
+  final String? jenisUnit;
+
+  @JsonKey(name: "capacity")
+  final String kapasitas;
+
+  @JsonKey(name: "speed")
+  final String speed;
+
+  @JsonKey(name: "step_width")
+  final String totalLantai;
 }
 //endregion
 
@@ -87,6 +107,11 @@ class CreateUnitRequest {
     this.projectId,
     required this.unitName,
     required this.unitLocation,
+    required this.tipeUnit,
+    required this.jenisUnit,
+    required this.kapasitas,
+    required this.speed,
+    required this.totalLantai,
     required this.firstMaintenanceDate,
   });
 
@@ -106,6 +131,21 @@ class CreateUnitRequest {
 
   @JsonKey(name: "unit_location")
   final String unitLocation;
+
+  @JsonKey(name: "unit_type")
+  final int tipeUnit;
+
+  @JsonKey(name: "unit_kind")
+  final int? jenisUnit;
+
+  @JsonKey(name: "capacity")
+  final double kapasitas;
+
+  @JsonKey(name: "speed")
+  final double speed;
+
+  @JsonKey(name: "step_width")
+  final double totalLantai;
 
   @JsonKey(name: "schedule_date")
   final String firstMaintenanceDate;
@@ -139,6 +179,11 @@ class UpdateUnitRequest {
     required this.projectId,
     required this.unitName,
     required this.unitLocation,
+    required this.tipeUnit,
+    required this.jenisUnit,
+    required this.kapasitas,
+    required this.speed,
+    required this.totalLantai,
   });
 
   factory UpdateUnitRequest.fromJson(Map<String, dynamic> json) =>
@@ -157,6 +202,21 @@ class UpdateUnitRequest {
 
   @JsonKey(name: "unit_location")
   final String unitLocation;
+
+  @JsonKey(name: "unit_type")
+  final int tipeUnit;
+
+  @JsonKey(name: "unit_kind")
+  final int? jenisUnit;
+
+  @JsonKey(name: "capacity")
+  final double kapasitas;
+
+  @JsonKey(name: "speed")
+  final double speed;
+
+  @JsonKey(name: "step_width")
+  final double totalLantai;
 }
 
 @JsonSerializable()

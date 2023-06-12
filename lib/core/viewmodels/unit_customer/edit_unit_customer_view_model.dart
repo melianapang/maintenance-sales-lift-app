@@ -114,8 +114,11 @@ class EditUnitCustomerViewModel extends BaseViewModel {
   }
 
   void handleAvailableData() {
-    namaUnitController.text = unitData?.unitName ?? "";
-    lokasiUnitController.text = unitData?.unitLocation ?? "";
+    namaUnitController.text = _unitData?.unitName ?? "";
+    lokasiUnitController.text = _unitData?.unitLocation ?? "";
+    kapasitasController.text = _unitData?.kapasitas ?? "";
+    speedController.text = _unitData?.speed ?? "";
+    totalLantaiController.text = _unitData?.totalLantai ?? "";
     _selectedProyek = ProjectData(
       projectId: unitData?.projectId ?? "",
       projectNeed: "",
@@ -257,12 +260,12 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       projectId: int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: namaUnitController.text,
       unitLocation: lokasiUnitController.text,
-      // jenisUnit:
-      //     _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption,
-      // tipeUnit: _selectedTipeUnitOption,
-      // speed: speedController.text,
-      // kapasitas: kapasitasController.text,
-      // totalLantai: totalLantaiController.text,
+      jenisUnit:
+          _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption,
+      tipeUnit: _selectedTipeUnitOption,
+      speed: double.parse(speedController.text),
+      kapasitas: double.parse(kapasitasController.text),
+      totalLantai: double.parse(totalLantaiController.text),
     );
 
     if (response.isRight) return true;
@@ -278,6 +281,12 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       projectId: int.parse(_selectedProyek?.projectId ?? "0"),
       unitName: namaUnitController.text,
       unitLocation: lokasiUnitController.text,
+      jenisUnit:
+          _selectedJenisUnitOption == 3 ? null : _selectedJenisUnitOption,
+      tipeUnit: _selectedTipeUnitOption,
+      speed: double.parse(speedController.text),
+      kapasitas: double.parse(kapasitasController.text),
+      totalLantai: double.parse(totalLantaiController.text),
     );
 
     if (response.isRight) return true;
