@@ -116,6 +116,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               Routes.detailProject,
                               arguments: DetailProjectViewParam(
                                 projectData: model.projectData,
+                                sourcePage: DetailProjectSourcePage
+                                    .DetailMaintenancePage,
                               ),
                             ).then((value) async {
                               if (value == null) return;

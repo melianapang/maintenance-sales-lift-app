@@ -109,6 +109,8 @@ class _ListProjectViewState extends State<ListProjectView> {
                               Routes.detailProject,
                               arguments: DetailProjectViewParam(
                                 projectData: model.listProject[index],
+                                sourcePage:
+                                    DetailProjectSourcePage.ListProjectPage,
                               ),
                             ).then(
                               (value) {

@@ -7,7 +7,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view_model.dart';
@@ -16,8 +15,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_history_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
@@ -26,12 +23,19 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+enum DetailProjectSourcePage {
+  ListProjectPage,
+  DetailMaintenancePage,
+}
+
 class DetailProjectViewParam {
   DetailProjectViewParam({
     this.projectData,
+    this.sourcePage,
   });
 
   final ProjectData? projectData;
+  final DetailProjectSourcePage? sourcePage;
 }
 
 class DetailProjectView extends StatefulWidget {
@@ -68,37 +72,40 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             title: "Data Proyek",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.editProject,
-                    arguments: EditProjectViewParam(
-                      projectData: model.projectData,
-                    ),
-                  ).then((value) {
-                    if (value == null) return;
-                    if (value == true) {
-                      model.refreshPage();
-                      model.setPreviousPageNeedRefresh(true);
+            actions: widget.param.sourcePage ==
+                    DetailProjectSourcePage.ListProjectPage
+                ? <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.editProject,
+                          arguments: EditProjectViewParam(
+                            projectData: model.projectData,
+                          ),
+                        ).then((value) {
+                          if (value == null) return;
+                          if (value == true) {
+                            model.refreshPage();
+                            model.setPreviousPageNeedRefresh(true);
 
-                      _handleErrorDialog(context, model);
-                    }
-                  });
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20.0,
-                  ),
-                  child: Icon(
-                    PhosphorIcons.pencilSimpleLineBold,
-                    color: MyColors.lightBlack02,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ],
+                            _handleErrorDialog(context, model);
+                          }
+                        });
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                        ),
+                        child: Icon(
+                          PhosphorIcons.pencilSimpleLineBold,
+                          color: MyColors.lightBlack02,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ]
+                : null,
           ),
           floatingActionButton: _buildExtendedFAB(model),
           body: Padding(
@@ -292,98 +299,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
         borderRadius: BorderRadius.circular(100),
       ),
       children: [
-        if (model.isAllowedToDeleteData)
-          SpeedDialChild(
-            child: !model.isDialChildrenVisible
-                ? const Icon(PhosphorIcons.trashBold)
-                : null,
-            backgroundColor: MyColors.yellow02,
-            foregroundColor: MyColors.white,
-            label: 'Hapus Data Proyek',
-            labelBackgroundColor: MyColors.lightBlack01,
-            labelShadow: [
-              const BoxShadow(
-                color: MyColors.transparent,
-              ),
-            ],
-            labelStyle: buildTextStyle(
-                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-            onTap: () {
-              showDialogWidget(
-                context,
-                title: "Menghapus Data Proyek",
-                description: "Anda yakin ingin menghapus Proyek ini?",
-                positiveLabel: "Iya",
-                negativeLabel: "Tidak",
-                positiveCallback: () async {
-                  await Navigator.maybePop(context);
-
-                  buildLoadingDialog(context);
-                  bool result = await model.requestDeleteProject();
-                  Navigator.pop(context);
-
-                  showDialogWidget(
-                    context,
-                    title: "Menghapus Data Proyek",
-                    isSuccessDialog: result,
-                    description: result
-                        ? "Proyek telah dihapus."
-                        : model.errorMsg ??
-                            "Proyek gagal dihapus. Coba beberapa saat lagi.",
-                    positiveLabel: "OK",
-                    positiveCallback: () {
-                      if (result) {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop(true);
-                        return;
-                      }
-
-                      model.resetErrorMsg();
-                      Navigator.maybePop(context);
-                    },
-                  );
-                },
-                negativeCallback: () {
-                  Navigator.maybePop(context);
-                },
-              );
-
-              setState() {
-                model.setDialChildrenVisible();
-              }
-            },
-          ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.bellBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Jadwalkan Pengingat',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.formSetReminder,
-              arguments: FormSetReminderViewParam(
-                source: FormSetReminderSource.ProjectPage,
-                projectData: widget.param.projectData,
-              ),
-            );
-
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
         SpeedDialChild(
           child: !model.isDialChildrenVisible
               ? const Icon(PhosphorIcons.listBulletsBold)
@@ -413,35 +328,130 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             }
           },
         ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.newspaperClippingBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Buat Laporan Konfirmasi',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () async {
-            Navigator.pushNamed(
-              context,
-              Routes.formFollowUp,
-              arguments: FormFollowUpViewParam(
-                projectData: model.projectData,
-              ),
-            );
+        if (widget.param.sourcePage ==
+            DetailProjectSourcePage.ListProjectPage) ...[
+          if (model.isAllowedToDeleteData)
+            SpeedDialChild(
+              child: !model.isDialChildrenVisible
+                  ? const Icon(PhosphorIcons.trashBold)
+                  : null,
+              backgroundColor: MyColors.yellow02,
+              foregroundColor: MyColors.white,
+              label: 'Hapus Data Proyek',
+              labelBackgroundColor: MyColors.lightBlack01,
+              labelShadow: [
+                const BoxShadow(
+                  color: MyColors.transparent,
+                ),
+              ],
+              labelStyle: buildTextStyle(
+                  fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+              onTap: () {
+                showDialogWidget(
+                  context,
+                  title: "Menghapus Data Proyek",
+                  description: "Anda yakin ingin menghapus Proyek ini?",
+                  positiveLabel: "Iya",
+                  negativeLabel: "Tidak",
+                  positiveCallback: () async {
+                    await Navigator.maybePop(context);
 
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
+                    buildLoadingDialog(context);
+                    bool result = await model.requestDeleteProject();
+                    Navigator.pop(context);
+
+                    showDialogWidget(
+                      context,
+                      title: "Menghapus Data Proyek",
+                      isSuccessDialog: result,
+                      description: result
+                          ? "Proyek telah dihapus."
+                          : model.errorMsg ??
+                              "Proyek gagal dihapus. Coba beberapa saat lagi.",
+                      positiveLabel: "OK",
+                      positiveCallback: () {
+                        if (result) {
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop(true);
+                          return;
+                        }
+
+                        model.resetErrorMsg();
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                  negativeCallback: () {
+                    Navigator.maybePop(context);
+                  },
+                );
+
+                setState() {
+                  model.setDialChildrenVisible();
+                }
+              },
+            ),
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.bellBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Jadwalkan Pengingat',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.formSetReminder,
+                arguments: FormSetReminderViewParam(
+                  source: FormSetReminderSource.ProjectPage,
+                  projectData: widget.param.projectData,
+                ),
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.newspaperClippingBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Buat Laporan Konfirmasi',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () async {
+              Navigator.pushNamed(
+                context,
+                Routes.formFollowUp,
+                arguments: FormFollowUpViewParam(
+                  projectData: model.projectData,
+                ),
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
+        ],
       ],
     );
   }
