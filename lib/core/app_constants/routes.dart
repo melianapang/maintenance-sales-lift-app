@@ -1,11 +1,9 @@
-import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
-
 class Routes {
   static const String splashScreen = 'splash-screen';
   static const String login = 'login';
   static const String home = 'home';
   static const String map = "map";
-
+  static const String projectLocation = "project-location";
   static const String editProfile = 'edit-profile';
   static const String editCustomer = 'edit-customer';
   static const String changePassword = 'change-password';
