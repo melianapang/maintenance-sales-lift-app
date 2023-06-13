@@ -74,6 +74,7 @@ class LoginViewModel extends BaseViewModel {
 
     if (response.isRight) {
       await _authenticationService.setLogin(response.right);
+      await _getApprovalNotificationBatchNumber();
       return true;
     }
     _errorMsg = response.left.message;
@@ -92,5 +93,17 @@ class LoginViewModel extends BaseViewModel {
     }
     _isUsernameValid = true;
     return null;
+  }
+
+  Future<void> _getApprovalNotificationBatchNumber() async {
+    final response =
+        await _apiService.requestGetApprovaNotificationBatchlNumber();
+
+    if (response.isRight) {
+      await _sharedPreferencesService.set(
+        SharedPrefKeys.approvalNotificationBatchNumber,
+        response.right.totalData,
+      );
+    }
   }
 }
