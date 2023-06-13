@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_pic_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -170,28 +171,40 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                         Navigator.maybePop(context);
                       },
                     ),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: snapshot.data?.length ?? 0,
-                        separatorBuilder: (_, __) => const Divider(
-                          color: MyColors.transparent,
-                          height: 20,
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return CustomCardWidget(
-                            cardType: CardType.list,
-                            title: snapshot.data?[index] ?? "",
-                            titleSize: 20,
-                            onTap: () {
-                              setSelectedRole(
-                                selectedRole: snapshot.data?[index] ?? "",
-                              );
-                              Navigator.maybePop(context);
-                            },
-                          );
-                        },
-                      ),
-                    ),
+                    snapshot.data?.isNotEmpty == true
+                        ? Expanded(
+                            child: ListView.separated(
+                              itemCount: snapshot.data?.length ?? 0,
+                              separatorBuilder: (_, __) => const Divider(
+                                color: MyColors.transparent,
+                                height: 20,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                return CustomCardWidget(
+                                  cardType: CardType.list,
+                                  title: snapshot.data?[index] ?? "",
+                                  titleSize: 20,
+                                  onTap: () {
+                                    setSelectedRole(
+                                      selectedRole: snapshot.data?[index] ?? "",
+                                    );
+                                    Navigator.maybePop(context);
+                                  },
+                                );
+                              },
+                            ),
+                          )
+                        : Expanded(
+                            child: Text(
+                              "Tidak ada data yang sesuai, bisa tambahkan data Peran dengan klik tombol (+) disamping pencarian.",
+                              textAlign: TextAlign.center,
+                              style: buildTextStyle(
+                                fontSize: 16,
+                                fontColor: MyColors.lightBlack02,
+                                fontWeight: 600,
+                              ),
+                            ),
+                          ),
                   ],
                 );
               },
