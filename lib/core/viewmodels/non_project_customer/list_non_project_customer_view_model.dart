@@ -91,7 +91,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
 
     await requestGetAllCustomerNeed();
     await requestGetAllCustomerType();
-    await requestGetAllCustomer();
+    await requestGetAllNonProjectCustomer();
     _isShowNoDataFoundPage =
         _listCustomer?.isEmpty == true || _listCustomer == null;
     notifyListeners();
@@ -219,7 +219,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
   Future<void> searchOnChanged() async {
     isLoading = true;
     if (searchController.text.isEmpty) {
-      await requestGetAllCustomer();
+      await requestGetAllNonProjectCustomer();
 
       isLoading = false;
       return;
@@ -249,7 +249,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
       return;
     }
 
-    await requestGetAllCustomer();
+    await requestGetAllNonProjectCustomer();
   }
 
   void resetPage() {
@@ -339,7 +339,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  Future<void> requestGetAllCustomer() async {
+  Future<void> requestGetAllNonProjectCustomer() async {
     if (_paginationControl.totalData != -1 &&
         _paginationControl.totalData <=
             (_paginationControl.currentPage - 1) *
@@ -347,7 +347,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
       return;
     }
 
-    final response = await _apiService.getAllCustomer(
+    final response = await _apiService.getAllNonProjectCustomer(
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
@@ -379,7 +379,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
     resetPage();
     resetFilter();
 
-    await requestGetAllCustomer();
+    await requestGetAllNonProjectCustomer();
     _isShowNoDataFoundPage =
         _listCustomer?.isEmpty == true || _listCustomer == null;
     notifyListeners();

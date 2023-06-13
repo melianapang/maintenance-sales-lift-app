@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
@@ -187,6 +186,12 @@ abstract class Api {
 
   @GET('/api/0/Customer/get_all_customers/')
   Future<HttpResponse<dynamic>> requestGetAllCustomer(
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
+  @GET('/api/0/Customer/get_all_customer_maintenance/')
+  Future<HttpResponse<dynamic>> requestGetAllNonProjectCustomer(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
@@ -1285,6 +1290,31 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, ListCustomerData>> getAllNonProjectCustomer(
+    int currentPage,
+    int pageSize,
+  ) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetAllNonProjectCustomer(
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllCustomerResponse getAllResponse =
+            GetAllCustomerResponse.fromJson(response.data);
+
+        return Right<Failure, ListCustomerData>(getAllResponse.data);
+      }
+
+      return ErrorUtils<ListCustomerData>().handleDomainError(response);
+    } catch (e) {
+      log("Sequence number error");
+      return ErrorUtils<ListCustomerData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, CustomerData>> getDetailCustomer({
     required int customerId,
   }) async {
@@ -2199,7 +2229,7 @@ class ApiService {
         customerId: customerId,
         longitude: longitude,
         latitude: latitude,
-        scheduleDate: scheduleDate,
+        // scheduleDate: scheduleDate,
       );
       final HttpResponse<dynamic> response = await api.requestCreateProject(
         payload,
