@@ -17,6 +17,8 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 class FormFollowUpViewModel extends BaseViewModel {
   FormFollowUpViewModel({
     ProjectData? projectData,
+    String? nextFollowUpDate,
+    String? followUpId,
     required DioService dioService,
     required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
@@ -28,6 +30,8 @@ class FormFollowUpViewModel extends BaseViewModel {
         ),
         _sharedPreferenceService = sharedPreferencesService,
         _projectData = projectData,
+        _followUpId = followUpId,
+        _nextFollowUpDate = nextFollowUpDate,
         _gCloudService = gCloudService,
         _remoteConfigService = remoteConfigService;
 
@@ -38,6 +42,12 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
+
+  String? _followUpId;
+  String? get followUpId => _followUpId;
+
+  String? _nextFollowUpDate;
+  String? get nextFollowUpDate => _nextFollowUpDate;
 
   //region Feature flag values
   bool _isGCloudStorageEnabled = false;
@@ -74,11 +84,6 @@ class FormFollowUpViewModel extends BaseViewModel {
   List<DateTime> get selectedNextFollowUpDates => _selectedNextFollowUpDates;
   //endregion
 
-  List<DateTime> _selectedDates = [
-    DateTime.now(),
-  ];
-  List<DateTime> get selectedDates => _selectedDates;
-
   final noteController = TextEditingController();
 
   String? _errorMsg;
@@ -89,6 +94,8 @@ class FormFollowUpViewModel extends BaseViewModel {
     setBusy(true);
     _isGCloudStorageEnabled =
         _remoteConfigService.isGCloudStorageEnabled ?? false;
+
+    await _getNextFollowUpDate();
     setBusy(false);
   }
 
@@ -104,11 +111,6 @@ class FormFollowUpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedDates(List<DateTime> value) {
-    _selectedDates = value;
-    notifyListeners();
-  }
-
   void setSelectedNextFollowUpDates(List<DateTime> value) {
     _selectedNextFollowUpDates = value;
     notifyListeners();
@@ -118,24 +120,54 @@ class FormFollowUpViewModel extends BaseViewModel {
     _errorMsg = null;
   }
 
+  Future<void> _getNextFollowUpDate() async {
+    if (_followUpId != null && _nextFollowUpDate != null) return;
+
+    final response = await _apiService.requestGetNextFollowUpDateByProjectId(
+      projectId: int.parse(projectData?.projectId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _followUpId = response.right.followUpId;
+      _nextFollowUpDate = response.right.scheduleDate;
+      return;
+    }
+
+    _errorMsg = response.left.message;
+  }
+
   Future<bool> _requestUpdateFollowUp() async {
-    final response = await _apiService.requestCreateFollowUp(
+    // final response = await _apiService.requestCreateFollowUp(
+    //   projectId: int.parse(projectData?.projectId ?? "0"),
+    //   followUpResult: _selectedHasilKonfirmasiOption,
+    //   scheduleDate: DateTimeUtils.convertDateToString(
+    //     date: _selectedDates.first,
+    //     formatter: DateFormat(
+    //       DateTimeUtils.DATE_FORMAT_3,
+    //     ),
+    //   ),
+    //   note: noteController.text,
+    //   documents: _uploadedFiles,
+    //   // nextScheduleDate: DateTimeUtils.convertDateToString(
+    //   //   date: _selectedDates.first,
+    //   //   formatter: DateFormat(
+    //   //     DateTimeUtils.DATE_FORMAT_3,
+    //   //   ),
+    //   // ),
+    // );
+
+    final response = await _apiService.requestUpdateFollowUp(
+      followUpId: int.parse(_followUpId ?? "0"),
       projectId: int.parse(projectData?.projectId ?? "0"),
       followUpResult: _selectedHasilKonfirmasiOption,
       scheduleDate: DateTimeUtils.convertDateToString(
-        date: _selectedDates.first,
+        date: _selectedNextFollowUpDates.first,
         formatter: DateFormat(
           DateTimeUtils.DATE_FORMAT_3,
         ),
       ),
       note: noteController.text,
       documents: _uploadedFiles,
-      // nextScheduleDate: DateTimeUtils.convertDateToString(
-      //   date: _selectedDates.first,
-      //   formatter: DateFormat(
-      //     DateTimeUtils.DATE_FORMAT_3,
-      //   ),
-      // ),
     );
 
     if (response.isRight) return true;
@@ -177,11 +209,12 @@ class FormFollowUpViewModel extends BaseViewModel {
   }
 
   Future<bool> _requestUpdateFollowUpDummy() async {
-    final response = await _apiService.requestCreateFollowUp(
+    final response = await _apiService.requestUpdateFollowUp(
+      followUpId: int.parse(_followUpId ?? "0"),
       projectId: int.parse(_projectData?.projectId ?? "0"),
       followUpResult: _selectedHasilKonfirmasiOption,
       scheduleDate: DateTimeUtils.convertDateToString(
-        date: _selectedDates.first,
+        date: _selectedNextFollowUpDates.first,
         formatter: DateFormat(
           DateTimeUtils.DATE_FORMAT_3,
         ),
@@ -193,12 +226,6 @@ class FormFollowUpViewModel extends BaseViewModel {
               "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
         ),
       ],
-      // nextScheduleDate: DateTimeUtils.convertDateToString(
-      //   date: _selectedDates.first,
-      //   formatter: DateFormat(
-      //     DateTimeUtils.DATE_FORMAT_3,
-      //   ),
-      // ),
     );
 
     if (response.isRight) return true;

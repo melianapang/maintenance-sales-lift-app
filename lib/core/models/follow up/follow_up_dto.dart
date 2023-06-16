@@ -52,6 +52,8 @@ class FollowUpFrontData {
     required this.customerId,
     required this.customerName,
     required this.companyName,
+    required this.followUpId,
+    required this.scheduleDate,
   });
 
   factory FollowUpFrontData.fromJson(Map<String, dynamic> json) =>
@@ -73,6 +75,12 @@ class FollowUpFrontData {
 
   @JsonKey(name: "company_name")
   final String? companyName;
+
+  @JsonKey(name: "follow_up_id")
+  final String? followUpId;
+
+  @JsonKey(name: "schedule_date")
+  final String? scheduleDate;
 }
 
 @JsonSerializable()
@@ -104,6 +112,7 @@ class UpdateFollowUpRequest {
     required this.projectId,
     required this.followUpResult,
     required this.scheduleDate,
+    required this.followUpFiles,
     required this.note,
   });
 
@@ -120,6 +129,9 @@ class UpdateFollowUpRequest {
 
   @JsonKey(name: "note")
   final String note;
+
+  @JsonKey(name: "follow_up_files")
+  final List<FollowUpFile>? followUpFiles;
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
@@ -373,5 +385,49 @@ class FollowUpFile {
 
   @JsonKey(name: "file_path")
   final String filePath;
+}
+//endregion
+
+//region get next follow up date by project id
+@JsonSerializable()
+class GetNextFollowUpDateResponse {
+  GetNextFollowUpDateResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetNextFollowUpDateResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetNextFollowUpDateResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetNextFollowUpDateResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final NextFollowUpDateData data;
+}
+
+@JsonSerializable()
+class NextFollowUpDateData {
+  NextFollowUpDateData({
+    required this.followUpId,
+    required this.scheduleDate,
+  });
+
+  factory NextFollowUpDateData.fromJson(Map<String, dynamic> json) =>
+      _$NextFollowUpDateDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NextFollowUpDateDataToJson(this);
+
+  @JsonKey(name: "follow_up_id")
+  final String followUpId;
+
+  @JsonKey(name: "schedule_date")
+  final String scheduleDate;
 }
 //endregion

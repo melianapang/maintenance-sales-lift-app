@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/form_follow_up_view_model.dart';
@@ -20,12 +21,17 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
+import 'package:intl/intl.dart';
 
 class FormFollowUpViewParam {
   FormFollowUpViewParam({
+    this.followUpId,
+    this.nextFollowUpDate,
     this.projectData,
   });
 
+  final String? followUpId;
+  final String? nextFollowUpDate;
   final ProjectData? projectData;
 }
 
@@ -49,6 +55,8 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
     return ViewModel<FormFollowUpViewModel>(
       model: FormFollowUpViewModel(
         projectData: widget.param.projectData,
+        followUpId: widget.param.followUpId,
+        nextFollowUpDate: widget.param.nextFollowUpDate,
         dioService: Provider.of<DioService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
@@ -124,14 +132,19 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
             ),
             child: Column(
               children: [
-                DatePickerWidget(
+                TextInput.disabled(
                   label: "Tanggal Konfirmasi",
-                  isRangeCalendar: false,
-                  selectedDates: model.selectedDates,
-                  onSelectedDates: (DateTime start, DateTime? end) {
-                    print('$start $end');
-                    model.setSelectedDates([start]);
-                  },
+                  hintText: "Tanggal Konfirmasi",
+                  text: DateTimeUtils.convertStringToOtherStringDateFormat(
+                    date: model.nextFollowUpDate ??
+                        DateTimeUtils.convertDateToString(
+                          date: DateTime.now(),
+                          formatter: DateFormat(
+                            DateTimeUtils.DATE_FORMAT_3,
+                          ),
+                        ),
+                    formattedString: DateTimeUtils.DATE_FORMAT_2,
+                  ),
                 ),
                 if (model.projectData?.projectName.isNotEmpty == true) ...[
                   Spacings.vert(24),

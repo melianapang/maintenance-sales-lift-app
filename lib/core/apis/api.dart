@@ -423,6 +423,11 @@ abstract class Api {
     @Query("input_search") String inputSearch,
   );
 
+  @GET('/api/0/FollowUp/get_next_follow_up_date_by_project_id/{project_id}')
+  Future<HttpResponse<dynamic>> requestGetNextFollowUpDateByProjectId(
+    @Path("project_id") int projectId,
+  );
+
   @POST('/api/0/Project/create_project')
   Future<HttpResponse<dynamic>> requestCreateProject(
     @Body() CreateProjectRequest request,
@@ -1815,6 +1820,31 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, NextFollowUpDateData>>
+      requestGetNextFollowUpDateByProjectId({
+    required int projectId,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response =
+          await api.requestGetNextFollowUpDateByProjectId(
+        projectId,
+      );
+
+      if (response.isSuccess) {
+        GetNextFollowUpDateResponse getDataResponse =
+            GetNextFollowUpDateResponse.fromJson(response.data);
+
+        return Right<Failure, NextFollowUpDateData>(
+          getDataResponse.data,
+        );
+      }
+      return ErrorUtils<NextFollowUpDateData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: ${e.toString()}");
+      return ErrorUtils<NextFollowUpDateData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateFollowUp({
     required int projectId,
     required String scheduleDate,
@@ -1856,6 +1886,7 @@ class ApiService {
     required String note,
     required int followUpResult,
     required String scheduleDate,
+    required List<FollowUpFile>? documents,
   }) async {
     try {
       final payload = UpdateFollowUpRequest(
@@ -1863,6 +1894,7 @@ class ApiService {
         followUpResult: followUpResult,
         note: note,
         scheduleDate: scheduleDate,
+        followUpFiles: documents,
       );
 
       final HttpResponse<dynamic> response = await api.requestUpdateFollowUp(
@@ -2229,7 +2261,7 @@ class ApiService {
         customerId: customerId,
         longitude: longitude,
         latitude: latitude,
-        // scheduleDate: scheduleDate,
+        scheduleDate: scheduleDate,
       );
       final HttpResponse<dynamic> response = await api.requestCreateProject(
         payload,

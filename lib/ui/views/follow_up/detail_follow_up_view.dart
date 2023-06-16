@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/detail_follow_up_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -15,7 +16,9 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/form_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
+import 'package:intl/intl.dart';
 
 class DetailFollowUpViewParam {
   DetailFollowUpViewParam({
@@ -24,6 +27,8 @@ class DetailFollowUpViewParam {
     this.customerId,
     this.customerName,
     this.companyName,
+    this.nextFollowUpDate,
+    this.followUpId,
   });
 
   final String? projectId;
@@ -31,6 +36,8 @@ class DetailFollowUpViewParam {
   final String? customerId;
   final String? customerName;
   final String? companyName;
+  final String? nextFollowUpDate;
+  final String? followUpId;
 }
 
 class DetailFollowUpView extends StatefulWidget {
@@ -55,6 +62,8 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
         customerId: widget.param.customerId,
         customerName: widget.param.customerName,
         companyName: widget.param.companyName,
+        followUpId: widget.param.followUpId,
+        nextFollowUpDate: widget.param.nextFollowUpDate,
         dioService: Provider.of<DioService>(context),
         navigationService: Provider.of<NavigationService>(context),
       ),
@@ -77,21 +86,26 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                 context,
                 Routes.formFollowUp,
                 arguments: FormFollowUpViewParam(
-                    projectData: ProjectData(
-                  projectId: model.projectId ?? "",
-                  projectName: model.projectName ?? "",
-                  projectNeed: "",
-                  customerName: model.customerName ?? "",
-                  companyName: model.companyName,
-                  city: "",
-                  address: "",
-                  pics: [],
-                  customerId: "",
-                )),
+                  followUpId: model.followUpId,
+                  nextFollowUpDate: model.nextFollowUpDate,
+                  projectData: ProjectData(
+                    projectId: model.projectId ?? "",
+                    projectName: model.projectName ?? "",
+                    projectNeed: "",
+                    customerName: model.customerName ?? "",
+                    companyName: model.companyName,
+                    city: "",
+                    address: "",
+                    pics: [],
+                    customerId: "",
+                    latitude: "0",
+                    longitude: "0",
+                  ),
+                ),
               ).then((value) {
                 if (value == null) return;
                 if (value == true) {
-                  model.requestGetHistoryFollowUp();
+                  model.refreshPage();
                   model.setPreviousPageNeedRefresh(true);
                 }
               });
@@ -112,7 +126,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                       ),
                       Spacings.vert(8),
                       Text(
-                        "${model.customerName} ${(model.companyName != "" ? " | ${model.companyName}" : "")}",
+                        "${model.customerName} ${(model.companyName?.isNotEmpty == true || model.companyName != null ? " | ${model.companyName}" : "")}",
                         style: buildTextStyle(
                           fontSize: 20,
                           fontWeight: 400,
@@ -125,6 +139,21 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                         onTap: () {},
                       ),
                       Spacings.vert(38),
+                      TextInput.disabled(
+                        label: "Jadwal Konfirmasi Selanjutnya",
+                        text:
+                            DateTimeUtils.convertStringToOtherStringDateFormat(
+                          date: model.nextFollowUpDate ??
+                              DateTimeUtils.convertDateToString(
+                                date: DateTime.now(),
+                                formatter: DateFormat(
+                                  DateTimeUtils.DATE_FORMAT_3,
+                                ),
+                              ),
+                          formattedString: DateTimeUtils.DATE_FORMAT_2,
+                        ),
+                      ),
+                      Spacings.vert(32),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(

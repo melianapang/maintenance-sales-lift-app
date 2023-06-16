@@ -17,6 +17,8 @@ class DetailFollowUpViewModel extends BaseViewModel {
     String? customerId,
     String? customerName,
     String? companyName,
+    String? followUpId,
+    String? nextFollowUpDate,
     required DioService dioService,
     required NavigationService navigationService,
   })  : _projectId = projectId,
@@ -24,6 +26,8 @@ class DetailFollowUpViewModel extends BaseViewModel {
         _companyName = companyName,
         _customerName = customerName,
         _customerId = customerId,
+        _followUpId = followUpId,
+        _nextFollowUpDate = nextFollowUpDate,
         _navigationService = navigationService,
         _apiService = ApiService(
           api: Api(
@@ -51,6 +55,12 @@ class DetailFollowUpViewModel extends BaseViewModel {
 
   String? _companyName;
   String? get companyName => _companyName;
+
+  String? _followUpId;
+  String? get followUpId => _followUpId;
+
+  String? _nextFollowUpDate;
+  String? get nextFollowUpDate => _nextFollowUpDate;
 
   List<HistoryFollowUpData> _historyData = [];
   List<HistoryFollowUpData> get historyData => _historyData;
@@ -142,9 +152,24 @@ class DetailFollowUpViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
+  Future<void> _getNextFollowUpDate() async {
+    final response = await _apiService.requestGetNextFollowUpDateByProjectId(
+      projectId: int.parse(projectId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _nextFollowUpDate = response.right.scheduleDate;
+      notifyListeners();
+      return;
+    }
+
+    _errorMsg = response.left.message;
+  }
+
   Future<void> refreshPage() async {
     setBusy(true);
     _errorMsg = null;
+    await _getNextFollowUpDate();
     await requestGetHistoryFollowUp();
     setBusy(false);
   }

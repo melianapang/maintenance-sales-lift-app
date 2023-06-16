@@ -83,7 +83,7 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                           cardType: CardType.list,
                           title: model.listFollowUp[index].projectName,
                           description:
-                              "${model.listFollowUp[index].customerName} ${(model.listFollowUp[index].companyName != "" ? " | ${model.listFollowUp[index].companyName}" : "")}",
+                              "${model.listFollowUp[index].customerName} ${(model.listFollowUp[index].companyName?.isNotEmpty == true || model.listFollowUp[index].companyName != null ? " | ${model.listFollowUp[index].companyName}" : "")}",
                           titleSize: 20,
                           descSize: 16,
                           onTap: () {
@@ -100,6 +100,10 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                                     model.listFollowUp[index].companyName,
                                 customerName:
                                     model.listFollowUp[index].customerName,
+                                nextFollowUpDate:
+                                    model.listFollowUp[index].scheduleDate,
+                                followUpId:
+                                    model.listFollowUp[index].followUpId,
                               ),
                             ).then(
                               (value) {

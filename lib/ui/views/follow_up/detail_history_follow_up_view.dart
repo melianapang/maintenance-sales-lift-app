@@ -73,7 +73,7 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                     if (model.historyData?.customerName != null ||
                         model.historyData?.companyName != null)
                       Text(
-                        "${model.historyData?.customerName} ${(model.historyData?.companyName != "" ? " | ${model.historyData?.companyName}" : "")}",
+                        "${model.historyData?.customerName} ${(model.historyData?.companyName?.isNotEmpty == true || model.historyData?.companyName != null ? " | ${model.historyData?.companyName}" : "")}",
                         style: buildTextStyle(
                           fontSize: 20,
                           fontWeight: 400,
