@@ -48,10 +48,10 @@ class _MapViewV2State extends State<MapViewV2> {
     super.initState();
     controller = MapController.withPosition(
       initPosition: GeoPoint(
-        latitude: widget.param.latitude ?? 0.0,
-        longitude: widget.param.longitude ?? 0.0,
-        // latitude: -7.2484,
-        // longitude: 112.7419,
+        // latitude: widget.param.latitude ?? 0.0,
+        // longitude: widget.param.longitude ?? 0.0,
+        latitude: -7.32149490798,
+        longitude: 112.771314374,
       ),
     );
   }
@@ -89,8 +89,8 @@ class _MapViewV2State extends State<MapViewV2> {
                 GeoPoint(
                   latitude: widget.param.latitude ?? 0.0,
                   longitude: widget.param.longitude ?? 0.0,
-                  // latitude: -7.2484,
-                  // longitude: 112.7419,
+                  // latitude: -7.32149490798,
+                  // longitude: 112.771314374,
                 ),
               ],
             ),
