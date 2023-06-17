@@ -232,6 +232,16 @@ class _EditProjectViewState extends State<EditProjectView> {
                     ),
                   ],
                 ),
+                if (model.detectedProjectAddress != null &&
+                    model.detectedProjectAddress?.isNotEmpty == true)
+                  Text(
+                    "Perkiraan alamat: ${model.detectedProjectAddress ?? ""}",
+                    style: buildTextStyle(
+                      fontSize: 14,
+                      fontColor: MyColors.lightBlack01,
+                      fontWeight: 400,
+                    ),
+                  ),
                 Spacings.vert(24),
                 Text(
                   "PIC Proyek",

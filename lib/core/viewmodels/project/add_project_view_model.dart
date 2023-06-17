@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
@@ -28,6 +29,9 @@ class AddProjectViewModel extends BaseViewModel {
 
   LatLng? _projectLocation;
   LatLng? get projectLocation => _projectLocation;
+
+  String? _detectedProjectAddress;
+  String? get detectedProjectAddress => _detectedProjectAddress;
 
   bool isLoading = false;
   bool isSearch = false;
@@ -241,8 +245,18 @@ class AddProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void pinProjectLocation(LatLng value) {
+  void pinProjectLocation(LatLng value) async {
     _projectLocation = value;
+
+    //get detected address
+    List<Placemark> locations = await placemarkFromCoordinates(
+      value.latitude,
+      value.longitude,
+      localeIdentifier: "en",
+    );
+    _detectedProjectAddress =
+        "${locations.first.street}, ${locations.first.locality}, ${locations.first.country}";
+
     notifyListeners();
   }
 

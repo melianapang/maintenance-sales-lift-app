@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -263,6 +262,16 @@ class _AddProjectViewState extends State<AddProjectView> {
                     ),
                   ],
                 ),
+                if (model.detectedProjectAddress != null &&
+                    model.detectedProjectAddress?.isNotEmpty == true)
+                  Text(
+                    "Perkiraan alamat: ${model.detectedProjectAddress ?? ""}",
+                    style: buildTextStyle(
+                      fontSize: 14,
+                      fontColor: MyColors.lightBlack01,
+                      fontWeight: 400,
+                    ),
+                  ),
                 Spacings.vert(24),
                 DatePickerWidget(
                   label: "Tanggal Konfirmasi Pertama",
