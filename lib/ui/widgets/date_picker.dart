@@ -155,22 +155,20 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               }
             }
           },
-          child: Align(
-            child: Container(
-              margin: const EdgeInsets.only(
-                left: 5,
-                top: 25,
-              ),
-              decoration: BoxDecoration(
-                color: MyColors.darkBlack02,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              width: 60,
-              height: 60,
-              child: const Icon(
-                PhosphorIcons.calendarBlankBold,
-                color: MyColors.yellow01,
-              ),
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 5,
+              top: 25,
+            ),
+            decoration: BoxDecoration(
+              color: MyColors.darkBlack02,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            width: 60,
+            height: 60,
+            child: const Icon(
+              PhosphorIcons.calendarBlankBold,
+              color: MyColors.yellow01,
             ),
           ),
         ),
