@@ -104,12 +104,6 @@ class _MapViewState extends State<MapView> {
           maxZoom: 19,
           interactiveFlags: InteractiveFlag.all,
         ),
-        nonRotatedChildren: [
-          AttributionWidget.defaultWidget(
-            source: 'OpenStreetMap contributors',
-            onSourceTapped: null,
-          ),
-        ],
         children: [
           // TileLayer(
           //   wmsOptions: WMSTileLayerOptions(
