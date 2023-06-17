@@ -129,6 +129,8 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       customerName: "",
       companyName: "",
       pics: [],
+      longitude: "0",
+      latitude: "0",
     );
   }
 

@@ -55,6 +55,8 @@ class ProjectData {
     required this.projectName,
     required this.address,
     required this.city,
+    required this.longitude,
+    required this.latitude,
     required this.customerId,
     required this.customerName,
     required this.companyName,
@@ -75,6 +77,12 @@ class ProjectData {
 
   @JsonKey(name: "project_need")
   final String projectNeed;
+
+  @JsonKey(name: "longitude")
+  final String longitude;
+
+  @JsonKey(name: "latitude")
+  final String latitude;
 
   @JsonKey(name: "customer_id")
   final String customerId;
@@ -419,4 +427,4 @@ class ProjectDetailResponse {
   @JsonKey(name: "Data")
   final ProjectData data;
 }
-//endregion j
+//endregion
