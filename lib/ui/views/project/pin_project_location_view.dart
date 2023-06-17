@@ -16,10 +16,7 @@ class PinProjectLocationView extends StatefulWidget {
 }
 
 class _PinProjectLocationViewState extends State<PinProjectLocationView> {
-  // init the position using the user location
-  final mapController = MapController.withUserPosition();
   final pickerController = PickerMapController();
-
   bool isMapReady = false;
 
   @override
@@ -69,7 +66,7 @@ class _PinProjectLocationViewState extends State<PinProjectLocationView> {
                     child: Text(
                       "Simpan",
                       style: buildTextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontColor: MyColors.greenBackgroundStatusCard,
                         fontWeight: 600,
                       ),
