@@ -8,13 +8,12 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/maintenance/detail_history_maintenance_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view_v2.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/gallery.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
@@ -123,7 +122,7 @@ class _DetailHistoryMaintenanceViewState
               Navigator.pushNamed(
                 context,
                 Routes.map,
-                arguments: MapViewParam(
+                arguments: MapViewParamV2(
                   longitude: double.parse(
                     model.historyMaintenanceData?.longitude ?? "0",
                   ),
