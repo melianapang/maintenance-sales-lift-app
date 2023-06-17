@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
@@ -24,6 +25,9 @@ class AddProjectViewModel extends BaseViewModel {
 
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
+
+  LatLng? _projectLocation;
+  LatLng? get projectLocation => _projectLocation;
 
   bool isLoading = false;
   bool isSearch = false;
@@ -237,6 +241,11 @@ class AddProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void pinProjectLocation(LatLng value) {
+    _projectLocation = value;
+    notifyListeners();
+  }
+
   bool isValid() {
     _isNameValid = nameController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
@@ -266,8 +275,8 @@ class AddProjectViewModel extends BaseViewModel {
       projectNeed: _selectedKeperluanProyekOption,
       address: addressController.text,
       city: cityController.text,
-      latitude: 0.0,
-      longitude: 0.0,
+      latitude: _projectLocation?.latitude ?? 0.0,
+      longitude: _projectLocation?.longitude ?? 0.0,
       scheduleDate: DateTimeUtils.convertDateToString(
         date: _selectedFirstFollowUpDates.first,
         formatter: DateFormat(

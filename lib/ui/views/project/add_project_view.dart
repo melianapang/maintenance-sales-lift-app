@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -224,6 +226,44 @@ class _AddProjectViewState extends State<AddProjectView> {
                       !model.isCityValid ? "Kolom ini wajib diisi." : null,
                 ),
                 Spacings.vert(24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextInput.disabled(
+                        label: "Koordinat Lokasi",
+                        hintText: "Contoh: (0.0 , 0.0)",
+                        text: model.projectLocation != null
+                            ? StringUtils.removeZeroWidthSpaces(
+                                "${model.projectLocation?.longitude ?? 0.0}, ${model.projectLocation?.latitude ?? 0.0}")
+                            : null,
+                      ),
+                    ),
+                    Spacings.horz(6),
+                    GestureDetector(
+                      onTap: () => _awaitPinProjectLocationViewResult(
+                        context,
+                        viewModel: model,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: MyColors.lightBlack01,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        width: 58,
+                        height: 58,
+                        child: const Icon(
+                          PhosphorIcons.mapPinFill,
+                          color: MyColors.yellow01,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Spacings.vert(24),
                 DatePickerWidget(
                   label: "Tanggal Konfirmasi Pertama",
                   isRangeCalendar: false,
@@ -373,6 +413,20 @@ class _AddProjectViewState extends State<AddProjectView> {
     );
     setState(() {
       viewModel.addPicProject(result as PICProject);
+    });
+  }
+
+  void _awaitPinProjectLocationViewResult(
+    BuildContext context, {
+    required AddProjectViewModel viewModel,
+  }) async {
+    final result = await Navigator.pushNamed(
+      context,
+      Routes.pinProjectLocation,
+    ) as LatLng;
+    setState(() {
+      print("POINT: ${result.longitude}, ${result.latitude}");
+      viewModel.pinProjectLocation(result);
     });
   }
 

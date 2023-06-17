@@ -11,6 +11,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/customer/edit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/export_data_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/list_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view_v2.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/add_non_project_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/detail_non_project_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/edit_non_project_customer_view.dart';
@@ -43,6 +44,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/list_project_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/pin_project_location_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/project_location_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/after_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/detail_reminder_view.dart';
@@ -315,11 +317,19 @@ class AppRouter {
           ),
         );
       case Routes.map:
-        final MapViewParam param = settings.arguments is MapViewParam
-            ? settings.arguments as MapViewParam
-            : MapViewParam();
+        // final MapViewParam param = settings.arguments is MapViewParam2
+        //     ? settings.arguments as MapViewParam
+        //     : MapViewParam();
+        // return buildRoute(
+        //   builder: (_) => MapView(
+        //     param: param,
+        //   ),
+        // );
+        final MapViewParamV2 param = settings.arguments is MapViewParamV2
+            ? settings.arguments as MapViewParamV2
+            : MapViewParamV2();
         return buildRoute(
-          builder: (_) => MapView(
+          builder: (_) => MapViewV2(
             param: param,
           ),
         );
@@ -417,6 +427,10 @@ class AppRouter {
           builder: (_) => DocumentProjectView(
             param: param,
           ),
+        );
+      case Routes.pinProjectLocation:
+        return buildRoute(
+          builder: (_) => const PinProjectLocationView(),
         );
       case Routes.listUnit:
         final ListUnitCustomerViewParam param =

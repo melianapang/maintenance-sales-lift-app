@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
@@ -39,14 +40,17 @@ class EditProjectViewModel extends BaseViewModel {
   List<String>? _listPICRole;
   List<String>? get listPICRole => _listPICRole;
 
+  CustomerData? _selectedCustomer;
+  CustomerData? get selectedCustomer => _selectedCustomer;
+
+  LatLng? _projectLocation;
+  LatLng? get projectLocation => _projectLocation;
+
   PaginationControl _paginationControl = PaginationControl();
   PaginationControl get paginationControl => _paginationControl;
 
   bool _isShowNoDataFoundPage = false;
   bool get isShowNoDataFoundPage => _isShowNoDataFoundPage;
-
-  CustomerData? _selectedCustomer;
-  CustomerData? get selectedCustomer => _selectedCustomer;
   //endregion
 
   //region TextController
@@ -246,6 +250,11 @@ class EditProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void pinProjectLocation(LatLng value) {
+    _projectLocation = value;
+    notifyListeners();
+  }
+
   bool isValid() {
     _isNameValid = nameController.text.isNotEmpty;
     _isAdressValid = addressController.text.isNotEmpty;
@@ -322,8 +331,8 @@ class EditProjectViewModel extends BaseViewModel {
       address: addressController.text,
       city: cityController.text,
       projectId: int.parse(_projectData?.projectId ?? "0"),
-      longitude: 0.0,
-      latitude: 0.0,
+      longitude: _projectLocation?.longitude ?? 0.0,
+      latitude: _projectLocation?.latitude ?? 0.0,
     );
 
     if (response.isRight) {

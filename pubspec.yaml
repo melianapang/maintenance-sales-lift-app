@@ -81,6 +81,7 @@ dependencies:
   file_picker: ^5.2.10
   firebase_remote_config: ^4.1.0
   firebase_core: ^2.11.0
+  flutter_osm_plugin: ^0.42.0
 
 dev_dependencies:
   flutter_test:

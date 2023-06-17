@@ -51,6 +51,7 @@ class Routes {
   static const String exportCustomer = 'export-customer-data';
   static const String exportMaintenance = 'export-maintenance-data';
   static const String documentProject = 'document-project';
+  static const String pinProjectLocation = 'pin-project-location';
   static const String masterCustomerMenu = 'master-customer-menu';
   static const String listCustomerNeed = 'list-customer-need';
   static const String addCustomerNeed = 'add-customer-need';
