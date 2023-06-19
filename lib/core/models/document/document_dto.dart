@@ -9,7 +9,7 @@ class CreateDocumentRequest {
     required this.fileType,
     required this.filePath,
     required this.note,
-    required this.customerId,
+    required this.projectId,
   });
 
   factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) =>
@@ -26,8 +26,8 @@ class CreateDocumentRequest {
   @JsonKey(name: "note")
   final String note;
 
-  @JsonKey(name: "customer_id")
-  final int customerId;
+  @JsonKey(name: "project_id")
+  final int projectId;
 }
 
 @JsonSerializable()
@@ -72,5 +72,49 @@ class DocumentData {
 
   @JsonKey(name: "created_at")
   final String? createdAt;
+}
+//endregion
+
+//region get all document
+@JsonSerializable()
+class GetAllDocumentResponse {
+  GetAllDocumentResponse({
+    required this.isSuccess,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetAllDocumentResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetAllDocumentResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetAllDocumentResponseToJson(this);
+
+  @JsonKey(name: "Success")
+  final bool isSuccess;
+
+  @JsonKey(name: "Message")
+  final String message;
+
+  @JsonKey(name: "Data")
+  final ListDocumentData data;
+}
+
+@JsonSerializable()
+class ListDocumentData {
+  ListDocumentData({
+    required this.totalSize,
+    required this.result,
+  });
+
+  factory ListDocumentData.fromJson(Map<String, dynamic> json) =>
+      _$ListDocumentDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ListDocumentDataToJson(this);
+
+  @JsonKey(name: "total_size")
+  final String totalSize;
+
+  @JsonKey(name: "result")
+  final List<DocumentData> result;
 }
 //endregion

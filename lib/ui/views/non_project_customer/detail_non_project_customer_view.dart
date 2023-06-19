@@ -251,42 +251,6 @@ class _DetailNonProjectCustomerViewState
             }
           },
         ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.uploadSimpleBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Unggah Dokumen',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.uploadPO,
-              arguments: UploadDocumentViewParam(
-                customerData: model.customerData,
-              ),
-            ).then((value) {
-              if (value == null) return;
-              if (value == true) {
-                model.requestGetDetailCustomer();
-                model.setPreviousPageNeedRefresh(true);
-                _handleErrorDialog(context, model);
-              }
-            });
-
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
       ],
     );
   }

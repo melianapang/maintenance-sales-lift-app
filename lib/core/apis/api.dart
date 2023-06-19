@@ -333,6 +333,13 @@ abstract class Api {
   //endregion
 
   //region document
+  @GET('/api/0//Document/get_all_documents/{project_id}')
+  Future<HttpResponse<dynamic>> requestGetAllDocuments(
+    @Path("project_id") int projectId,
+    @Query("current_page") int currentPage,
+    @Query("page_size") int pageSize,
+  );
+
   @POST('/api/0/Document/create_document')
   Future<HttpResponse<dynamic>> requestCreateDocument(
     @Body() CreateDocumentRequest request,
@@ -1915,17 +1922,42 @@ class ApiService {
   //endregion
 
   //region document
+  Future<Either<Failure, ListDocumentData>> requestGetAllDocuments({
+    required int projectId,
+    required int currentPage,
+    required int pageSize,
+  }) async {
+    try {
+      final HttpResponse<dynamic> response = await api.requestGetAllDocuments(
+        projectId,
+        currentPage,
+        pageSize,
+      );
+
+      if (response.isSuccess) {
+        GetAllDocumentResponse getAllDocResponse =
+            GetAllDocumentResponse.fromJson(response.data);
+
+        return Right<Failure, ListDocumentData>(getAllDocResponse.data);
+      }
+      return ErrorUtils<ListDocumentData>().handleDomainError(response);
+    } catch (e) {
+      log("Error: $e");
+      return ErrorUtils<ListDocumentData>().handleError(e);
+    }
+  }
+
   Future<Either<Failure, String>> requestCreateDocument({
     required int fileType,
     required String filePath,
-    required int customerId,
+    required int projectId,
     required String note,
   }) async {
     try {
       final payload = CreateDocumentRequest(
         fileType: fileType,
         filePath: filePath,
-        customerId: customerId,
+        projectId: projectId,
         note: note,
       );
       final HttpResponse<dynamic> response =

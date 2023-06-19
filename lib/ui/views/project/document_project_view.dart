@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -13,8 +13,10 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/document_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:intl/intl.dart';
 
@@ -56,7 +58,26 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
               context,
               title: "Dokumen Proyek",
               isBackEnabled: true,
+              isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             ),
+            floatingActionButton: FloatingButtonWidget(onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.uploadPO,
+                arguments: UploadDocumentViewParam(
+                  projectId: model.projectData?.projectId,
+                ),
+              ).then(
+                (value) {
+                  if (value == null) return;
+                  if (value == true) {
+                    model.resetErrorMsg();
+                    model.requestGetAllDocuments();
+                    model.setPreviousPageNeedRefresh(true);
+                  }
+                },
+              );
+            }),
             body: Padding(
               padding: PaddingUtils.getPadding(
                 context,
@@ -64,8 +85,8 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
               ),
               child: !model.busy
                   ? SingleChildScrollView(
-                      child: model.projectData?.documents?.isNotEmpty == true ||
-                              model.projectData?.documents == null
+                      child: model.listDocument?.isNotEmpty == true ||
+                              model.listDocument == null
                           ? Column(
                               children: [
                                 ..._buildDocumentList(model: model),
@@ -94,7 +115,6 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
     required DocumentProjectViewModel model,
   }) {
     return [
-      Spacings.vert(24),
       Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -115,7 +135,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
       ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: model.projectData?.documents?.length ?? 0,
+        itemCount: model.listDocument?.length ?? 0,
         separatorBuilder: (context, index) => const Divider(
           color: MyColors.lightBlack01,
           thickness: 0.4,
@@ -127,9 +147,8 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
               GestureDetector(
                 onTap: !model.busy
                     ? () async {
-                        if (model.projectData?.documents?[index].filePath
-                                .isEmpty ==
-                            true) return;
+                        if (model.listDocument?[index].filePath.isEmpty == true)
+                          return;
 
                         bool isGranted = await model.checkPermissions();
                         if (!isGranted) return;
@@ -158,7 +177,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
                 child: Text(
                   mappingCustomerFileTypeToString(
                     int.parse(
-                      model.projectData?.documents?[index].fileType ?? "3",
+                      model.listDocument?[index].fileType ?? "3",
                     ),
                   ),
                   textAlign: TextAlign.start,
@@ -173,7 +192,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
               Spacings.vert(6),
               Text(
                 'Dibuat pada tanggal: ${DateTimeUtils.convertStringToOtherStringDateFormat(
-                  date: model.projectData?.documents?[index].createdAt ??
+                  date: model.listDocument?[index].createdAt ??
                       DateTimeUtils.convertDateToString(
                         date: DateTime.now(),
                         formatter: DateFormat(

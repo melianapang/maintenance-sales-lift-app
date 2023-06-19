@@ -23,10 +23,10 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 
 class UploadDocumentViewParam {
   UploadDocumentViewParam({
-    this.customerData,
+    this.projectId,
   });
 
-  final CustomerData? customerData;
+  final String? projectId;
 }
 
 class UploadDocumentView extends StatefulWidget {
@@ -48,7 +48,7 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: UploadDocumentViewModel(
-        customerData: widget.param.customerData,
+        projectId: widget.param.projectId,
         dioService: Provider.of<DioService>(context),
         gCloudService: Provider.of<GCloudService>(context),
         remoteConfigService: Provider.of<RemoteConfigService>(context),
@@ -107,18 +107,18 @@ class _UploadDocumentViewState extends State<UploadDocumentView> {
             ),
             child: Column(
               children: [
-                TextInput.disabled(
-                  label: "Nomor Pelanggan",
-                  hintText: "Nomor Pelanggan",
-                  text: model.customerData?.customerNumber,
-                ),
-                Spacings.vert(24),
-                TextInput.disabled(
-                  label: "Nama Pelanggan",
-                  hintText: "Nama Pelanggan",
-                  text: model.customerData?.customerName,
-                ),
-                Spacings.vert(24),
+                // TextInput.disabled(
+                //   label: "Nomor Pelanggan",
+                //   hintText: "Nomor Pelanggan",
+                //   text: model.customerData?.customerNumber,
+                // ),
+                // Spacings.vert(24),
+                // TextInput.disabled(
+                //   label: "Nama Pelanggan",
+                //   hintText: "Nama Pelanggan",
+                //   text: model.customerData?.customerName,
+                // ),
+                // Spacings.vert(24),
                 GestureDetector(
                   onTap: () {
                     _showTipeDokumenBottomDialog(

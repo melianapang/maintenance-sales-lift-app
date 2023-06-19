@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
@@ -13,7 +12,7 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class UploadDocumentViewModel extends BaseViewModel {
   UploadDocumentViewModel({
-    CustomerData? customerData,
+    String? projectId,
     required DioService dioService,
     required GCloudService gCloudService,
     required RemoteConfigService remoteConfigService,
@@ -22,7 +21,7 @@ class UploadDocumentViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
-        _customerData = customerData,
+        _projectId = projectId,
         _gCloudService = gCloudService,
         _remoteConfigService = remoteConfigService;
 
@@ -30,8 +29,8 @@ class UploadDocumentViewModel extends BaseViewModel {
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 
-  final CustomerData? _customerData;
-  CustomerData? get customerData => _customerData;
+  final String? _projectId;
+  String? get projectId => _projectId;
 
   //region Feature flag values
   bool _isGCloudStorageEnabled = false;
@@ -90,7 +89,7 @@ class UploadDocumentViewModel extends BaseViewModel {
     final response = await _apiService.requestCreateDocument(
       filePath: _uploadedFilesLink.first,
       fileType: _selectedTipeDokumentOption + 1,
-      customerId: int.parse(_customerData?.customerId ?? "0"),
+      projectId: int.parse(_projectId ?? "0"),
       note: noteController.text,
     );
 
@@ -112,7 +111,7 @@ class UploadDocumentViewModel extends BaseViewModel {
         String ext = gallery.filepath.split('.').last;
 
         final response = await _gCloudService.save(
-          '${customerData?.customerId}_customer_document_$currDateString.$ext',
+          '${_projectId}_project_document_$currDateString.$ext',
           file.readAsBytesSync(),
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
@@ -134,7 +133,7 @@ class UploadDocumentViewModel extends BaseViewModel {
       //user cannot download it on 'daftar dokumen' section in detail customer view page.
       filePath: 'http://www.africau.edu/images/default/sample.pdf',
       fileType: _selectedTipeDokumentOption + 1,
-      customerId: int.parse(_customerData?.customerId ?? "0"),
+      projectId: int.parse(_projectId ?? "0"),
       note: noteController.text,
     );
 

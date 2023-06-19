@@ -1,6 +1,8 @@
 import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
@@ -26,6 +28,9 @@ class DocumentProjectViewModel extends BaseViewModel {
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
 
+  List<DocumentData>? _listDocument;
+  List<DocumentData>? get listDocument => _listDocument;
+
   //belom bener, harusnya dari customerData lgsg
   final List<String> _urlDocuments = [];
   List<String> get urlDocuments => _urlDocuments;
@@ -34,11 +39,22 @@ class DocumentProjectViewModel extends BaseViewModel {
   String? _exportedFileName;
   //endregion
 
+  PaginationControl _paginationControl = PaginationControl();
+  PaginationControl get paginationControl => _paginationControl;
+
+  bool _isPreviousPageNeedRefresh = false;
+  bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    setBusy(true);
+    _paginationControl.currentPage = 1;
+    _listDocument = _projectData?.documents;
+    setBusy(false);
+  }
 
   Future<bool> checkPermissions() async {
     return await PermissionUtils.requestPermission(
@@ -48,6 +64,11 @@ class DocumentProjectViewModel extends BaseViewModel {
 
   void resetErrorMsg() {
     _errorMsg = null;
+    _paginationControl.currentPage = 1;
+  }
+
+  void setPreviousPageNeedRefresh(bool value) {
+    _isPreviousPageNeedRefresh = value;
   }
 
   Future<void> downloadData({
@@ -55,7 +76,7 @@ class DocumentProjectViewModel extends BaseViewModel {
   }) async {
     resetErrorMsg();
 
-    String filePath = projectData?.documents?[index].filePath ?? "";
+    String filePath = _listDocument?[index].filePath ?? "";
     final fileName = filePath.split('/').last.split('?').first;
     _exportedFileName = await _downloadService.setFilePath(fileName);
 
@@ -100,5 +121,40 @@ class DocumentProjectViewModel extends BaseViewModel {
         _errorMsg = "Tidak ada ijin mengakses untuk data.";
         break;
     }
+  }
+
+  Future<void> requestGetAllDocuments() async {
+    if (_paginationControl.totalData != -1 &&
+        _paginationControl.totalData <=
+            (_paginationControl.currentPage - 1) *
+                _paginationControl.pageSize) {
+      return;
+    }
+
+    final response = await _apiService.requestGetAllDocuments(
+      projectId: int.parse(_projectData?.projectId ?? "0"),
+      currentPage: _paginationControl.currentPage,
+      pageSize: _paginationControl.pageSize,
+    );
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        if (_paginationControl.currentPage == 1) {
+          _listDocument = response.right.result;
+        } else {
+          _listDocument?.addAll(response.right.result);
+        }
+
+        _paginationControl.currentPage += 1;
+        _paginationControl.totalData = int.parse(
+          response.right.totalSize,
+        );
+
+        notifyListeners();
+      }
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 }

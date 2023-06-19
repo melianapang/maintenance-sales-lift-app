@@ -107,6 +107,7 @@ class DownloadService {
       raf.writeFromSync(response.data);
       await raf.close();
     } catch (e) {
+      print("error download: ${e}");
       return false;
     }
 

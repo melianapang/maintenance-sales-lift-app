@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
