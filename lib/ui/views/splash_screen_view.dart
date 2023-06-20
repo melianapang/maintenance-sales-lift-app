@@ -8,9 +8,11 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/splash_screen_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -42,6 +44,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
     return ViewModel(
       model: SplashScreenViewModel(
         dioService: Provider.of<DioService>(context),
+        navigationService: Provider.of<NavigationService>(context),
         authenticationService: Provider.of<AuthenticationService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
@@ -76,6 +79,25 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.only(
+              bottom: PaddingUtils.getBottomPadding(
+                context,
+                defaultPadding: 12,
+              ),
+            ),
+            child: model.packageInfo?.version != null
+                ? Text(
+                    model.packageInfo?.version ?? "0.0.0",
+                    style: buildTextStyle(
+                      fontSize: 16,
+                      fontColor: MyColors.white,
+                      fontWeight: 400,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                : null,
+          ),
           body: Container(
             width: double.infinity,
             alignment: Alignment.center,

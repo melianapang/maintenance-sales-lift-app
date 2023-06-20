@@ -1,17 +1,22 @@
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/update_apk/update_apk_view.dart';
 
 class SplashScreenViewModel extends BaseViewModel {
   SplashScreenViewModel({
     required DioService dioService,
+    required NavigationService navigationService,
     required AuthenticationService authenticationService,
     required SharedPreferencesService sharedPreferencesService,
     required OneSignalService oneSignalService,
@@ -22,6 +27,7 @@ class SplashScreenViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
+        _navigationService = navigationService,
         _authenticationService = authenticationService,
         _sharedPreferencesService = sharedPreferencesService,
         _oneSignalService = oneSignalService,
@@ -29,11 +35,15 @@ class SplashScreenViewModel extends BaseViewModel {
         _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
+  final NavigationService _navigationService;
   final AuthenticationService _authenticationService;
   final SharedPreferencesService _sharedPreferencesService;
   final OneSignalService _oneSignalService;
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
+
+  PackageInfo? _packageInfo;
+  PackageInfo? get packageInfo => _packageInfo;
 
   @override
   Future<void> initModel() async {
@@ -41,6 +51,8 @@ class SplashScreenViewModel extends BaseViewModel {
     await _oneSignalService.initOneSignal();
     await _gCloudService.initialize();
     await _remoteConfigService.initialize();
+
+    await checkAppVersion();
 
     await _getApprovalNotificationBatchNumber();
     setBusy(false);
@@ -51,6 +63,25 @@ class SplashScreenViewModel extends BaseViewModel {
       Permission.photos,
       Permission.videos,
     ]);
+  }
+
+  Future<void> checkAppVersion() async {
+    _packageInfo = await PackageInfo.fromPlatform();
+    notifyListeners();
+
+    String minVersion = _remoteConfigService.appMinVersion ?? "";
+
+    if (int.parse(_packageInfo?.buildNumber ?? "0") > int.parse(minVersion)) {
+      return;
+    }
+
+    _navigationService.popAllAndNavigateTo(
+      Routes.updateApk,
+      arguments: UpdateApkViewParam(
+        minVersion: minVersion,
+        currentVersion: _packageInfo?.buildNumber,
+      ),
+    );
   }
 
   Future<bool> isLoggedIn() async {
