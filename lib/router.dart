@@ -56,6 +56,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_vi
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/detail_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/update_apk/update_apk_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/add_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/detail_user_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/users/edit_user_view.dart';
@@ -82,6 +83,16 @@ class AppRouter {
       case Routes.splashScreen:
         return buildRoute(
           builder: (_) => const SplashScreenView(),
+        );
+      case Routes.updateApk:
+        final UpdateApkViewParam param =
+            settings.arguments is UpdateApkViewParam
+                ? settings.arguments as UpdateApkViewParam
+                : UpdateApkViewParam();
+        return buildRoute(
+          builder: (_) => UpdateApkView(
+            param: param,
+          ),
         );
       case Routes.login:
         return buildRoute(
