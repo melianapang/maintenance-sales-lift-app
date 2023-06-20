@@ -3,6 +3,7 @@ import 'package:ota_update/ota_update.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/update_apk/update_apk_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -42,25 +43,31 @@ class _UpdateApkViewState extends State<UpdateApkView> {
         model.initModel();
       },
       builder: (context, model, child) {
-        return Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (model.isUpdatingApk == null)
-                _buildUpdateApkDialog(
-                  updateNowOnTap: model.updateApk,
-                ),
-              if (model.isUpdatingApk == true)
-                ..._buildDownloadingUpdatedApk(
-                  progress: model.downloadApkEvent?.value,
-                  status: model.downloadApkEvent?.status,
-                ),
-              if (model.isUpdatingApk == false)
-                ..._buildErrorUpdateApkDialog(
-                  status: model.downloadApkEvent?.status,
-                  tryAgainOnTap: model.updateApk,
-                ),
-            ],
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+            body: Padding(
+              padding: PaddingUtils.getPadding(context, defaultPadding: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (model.isUpdatingApk == null)
+                    _buildUpdateApkDialog(
+                      updateNowOnTap: !model.busy ? model.updateApk : null,
+                    ),
+                  if (model.isUpdatingApk == true)
+                    ..._buildDownloadingUpdatedApk(
+                      progress: model.downloadApkEvent?.value,
+                      status: model.downloadApkEvent?.status,
+                    ),
+                  if (model.isUpdatingApk == false)
+                    ..._buildErrorUpdateApkDialog(
+                      status: model.downloadApkEvent?.status,
+                      tryAgainOnTap: !model.busy ? model.updateApk : null,
+                    ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -68,10 +75,9 @@ class _UpdateApkViewState extends State<UpdateApkView> {
   }
 
   Widget _buildUpdateApkDialog({
-    required VoidCallback updateNowOnTap,
+    required VoidCallback? updateNowOnTap,
   }) {
     return Card(
-      margin: const EdgeInsets.all(12),
       elevation: 2,
       shadowColor: MyColors.darkBlack02,
       color: MyColors.darkBlack02,
@@ -140,27 +146,31 @@ class _UpdateApkViewState extends State<UpdateApkView> {
           status == OtaStatus.INSTALLING) ...[
         Spacings.vert(24),
         LinearProgressIndicator(
-          value:
-              status == OtaStatus.DOWNLOADING ? double.parse(progress) : null,
+          value: status == OtaStatus.DOWNLOADING
+              ? (double.tryParse(progress) != null
+                  ? double.parse(progress) * 0.01
+                  : null)
+              : null,
           color: MyColors.yellow01,
           backgroundColor: MyColors.lightBlack02,
         ),
         Spacings.vert(12),
-        Text(
-          "$progress%",
-          style: buildTextStyle(
-            fontSize: 24,
-            fontWeight: 500,
-            fontColor: MyColors.lightBlack02,
+        if (status == OtaStatus.DOWNLOADING)
+          Text(
+            "$progress%",
+            style: buildTextStyle(
+              fontSize: 24,
+              fontWeight: 500,
+              fontColor: MyColors.lightBlack02,
+            ),
           ),
-        ),
       ],
     ];
   }
 
   List<Widget> _buildErrorUpdateApkDialog({
     required OtaStatus? status,
-    required VoidCallback tryAgainOnTap,
+    required VoidCallback? tryAgainOnTap,
   }) {
     return [
       Text(

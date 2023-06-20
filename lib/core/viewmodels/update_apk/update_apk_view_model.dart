@@ -20,9 +20,11 @@ class UpdateApkViewModel extends BaseViewModel {
   Future<void> initModel() async {}
 
   void updateApk() {
+    setBusy(true);
     _isUpdatingApk = true;
     _downloadApkEvent = null;
     tryOtaUpdate();
+    setBusy(false);
   }
 
   Future<void> tryOtaUpdate() async {
