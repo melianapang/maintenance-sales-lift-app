@@ -8,16 +8,23 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 class LoginViewModel extends BaseViewModel {
   LoginViewModel({
     required DioService dioService,
+    required DioService dioJwtService,
     required AuthenticationService authenticationService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDio(),
           ),
         ),
+        _apiJwtService = ApiService(
+          api: Api(
+            dioService.getDioJwt(),
+          ),
+        ),
         _sharedPreferencesService = SharedPreferencesService(),
         _authenticationService = authenticationService;
 
   final ApiService _apiService;
+  final ApiService _apiJwtService;
   final SharedPreferencesService _sharedPreferencesService;
   final AuthenticationService _authenticationService;
 
@@ -97,7 +104,7 @@ class LoginViewModel extends BaseViewModel {
 
   Future<void> _getApprovalNotificationBatchNumber() async {
     final response =
-        await _apiService.requestGetApprovaNotificationBatchlNumber();
+        await _apiJwtService.requestGetApprovaNotificationBatchlNumber();
 
     if (response.isRight) {
       await _sharedPreferencesService.set(

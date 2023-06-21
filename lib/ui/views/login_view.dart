@@ -27,6 +27,7 @@ class _LoginViewState extends State<LoginView> {
     return ViewModel<LoginViewModel>(
       model: LoginViewModel(
         dioService: Provider.of<DioService>(context),
+        dioJwtService: Provider.of<DioService>(context),
         authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (LoginViewModel model) async {
