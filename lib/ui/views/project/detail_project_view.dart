@@ -148,7 +148,9 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                           label: "Alamat",
                           text: model.projectData?.address,
                         ),
-                        Spacings.vert(24),
+                        Spacings.vert(6),
+                        _buildLihatLokasiProyek(model.projectData),
+                        Spacings.vert(16),
                         TextInput.disabled(
                           label: "Kota",
                           text: model.projectData?.city,
@@ -271,6 +273,30 @@ class _DetailProjectViewState extends State<DetailProjectView> {
     );
   }
 
+  Widget _buildLihatLokasiProyek(ProjectData? projectData) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: GestureDetector(
+        onTap: () => Navigator.pushNamed(
+          context,
+          Routes.projectLocation,
+          arguments: ProjectLocationViewParam(
+            projectData: projectData,
+          ),
+        ),
+        child: Text(
+          "Lihat Lokasi Proyek",
+          style: buildTextStyle(
+            fontSize: 14,
+            fontColor: MyColors.blueLihatSelengkapnya,
+            fontWeight: 500,
+            isUnderlined: true,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildExtendedFAB(DetailProjectViewModel model) {
     return SpeedDial(
       icon: PhosphorIcons.plusBold,
@@ -320,35 +346,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               context,
               Routes.documentProject,
               arguments: DocumentProjectViewwParam(
-                projectData: model.projectData,
-              ),
-            );
-
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.mapPinLineBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Lihat Lokasi Proyek',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () async {
-            Navigator.pushNamed(
-              context,
-              Routes.projectLocation,
-              arguments: ProjectLocationViewParam(
                 projectData: model.projectData,
               ),
             );
