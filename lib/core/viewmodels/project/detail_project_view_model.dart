@@ -1,5 +1,6 @@
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
@@ -28,6 +29,9 @@ class DetailProjectViewModel extends BaseViewModel {
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
 
+  CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
+
   bool _isAllowedToDeleteData = false;
   bool get isAllowedToDeleteData => _isAllowedToDeleteData;
 
@@ -50,6 +54,7 @@ class DetailProjectViewModel extends BaseViewModel {
     setBusy(true);
     _listPic.addAll(projectData?.pics ?? []);
     await _checkIsAllowedToDeleteData();
+    await _getCustomerDetail();
     setBusy(false);
   }
 
@@ -91,6 +96,19 @@ class DetailProjectViewModel extends BaseViewModel {
 
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<void> _getCustomerDetail() async {
+    final response = await _apiService.getDetailCustomer(
+      customerId: int.parse(_projectData?.customerId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _customerData = response.right;
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 
   Future<void> refreshPage() async {

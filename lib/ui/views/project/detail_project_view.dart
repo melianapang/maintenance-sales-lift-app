@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
@@ -20,6 +21,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/project/document_project_view.dart
 import 'package:rejo_jaya_sakti_apps/ui/views/project/edit_project_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/project_location_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -347,6 +349,35 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               Routes.documentProject,
               arguments: DocumentProjectViewwParam(
                 projectData: model.projectData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.listBulletsBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Daftar Unit Proyek',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.listUnit,
+              arguments: ListUnitCustomerViewParam(
+                customerData: model.customerData,
               ),
             );
 
