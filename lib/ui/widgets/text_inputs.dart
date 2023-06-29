@@ -148,6 +148,17 @@ class TextInput extends StatelessWidget {
             if (keyboardType == TextInputType.phone ||
                 keyboardType == TextInputType.number)
               FilteringTextInputFormatter.digitsOnly,
+            if (keyboardType == TextInputType.numberWithOptions(decimal: true))
+              FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+            if (keyboardType == TextInputType.numberWithOptions(decimal: true))
+              TextInputFormatter.withFunction((oldValue, newValue) {
+                try {
+                  final text = newValue.text;
+                  if (text.isNotEmpty) double.parse(text);
+                  return newValue;
+                } catch (e) {}
+                return oldValue;
+              }),
           ],
           onChanged: onChangedListener,
           style: buildTextStyle(

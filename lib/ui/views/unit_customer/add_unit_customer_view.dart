@@ -206,7 +206,8 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                     label: "Kapasitas / Rise",
                     controller: model.kapasitasController,
                     hintText: "Kapasitas / Rise",
-                    keyboardType: TextInputType.number,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     onChangedListener: model.onChangedKapasitas,
                     errorText: !model.isKapasitasValid
                         ? "Kolom ini wajib diisi."
@@ -217,7 +218,8 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                     label: "Speed / Inclinasi",
                     controller: model.speedController,
                     hintText: "Speed / Inclinasi",
-                    keyboardType: TextInputType.number,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     onChangedListener: model.onChangedSpeed,
                     errorText:
                         !model.isSpeedValid ? "Kolom ini wajib diisi." : null,
@@ -226,7 +228,8 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                   TextInput.editable(
                     label: "Jumlah Lantai / Lebar Step",
                     controller: model.totalLantaiController,
-                    keyboardType: TextInputType.number,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     hintText: "Jumlah Lantai / Lebar Step",
                     onChangedListener: model.onChangedTotalLantaiController,
                     errorText: !model.isTotalLantaiValid
