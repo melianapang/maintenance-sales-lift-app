@@ -54,7 +54,7 @@ class _ProjectLocationViewState extends State<ProjectLocationView> {
           },
           child: const Icon(
             PhosphorIcons.mapPinFill,
-            color: MyColors.darkBlack02,
+            color: MyColors.redBackgroundMaintenanceCard,
             size: 42,
           ),
         ),
@@ -86,12 +86,6 @@ class _ProjectLocationViewState extends State<ProjectLocationView> {
           maxZoom: 19,
           interactiveFlags: InteractiveFlag.all,
         ),
-        nonRotatedChildren: [
-          AttributionWidget.defaultWidget(
-            source: 'OpenStreetMap contributors',
-            onSourceTapped: null,
-          ),
-        ],
         children: [
           // TileLayer(
           //   wmsOptions: WMSTileLayerOptions(
