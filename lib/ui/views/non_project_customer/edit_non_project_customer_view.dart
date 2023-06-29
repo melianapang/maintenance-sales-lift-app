@@ -115,7 +115,7 @@ class _EditNonProjectCustomerViewState
                 backgroundColor: MyColors.darkBlack01,
                 appBar: buildDefaultAppBar(
                   context,
-                  title: "Edit Data Pelanggan Non-Proyek",
+                  title: "Edit Data Pelanggan Pemeliharaan",
                   isBackEnabled: true,
                 ),
                 bottomNavigationBar: ButtonWidget.bottomSingleButton(
@@ -131,9 +131,9 @@ class _EditNonProjectCustomerViewState
                   onTap: () async {
                     showDialogWidget(
                       context,
-                      title: "Mengubahh Data User",
+                      title: "Mengubahh Data Pelanggan Pemeliharaan",
                       description:
-                          "Apakah anda yakin ingin mengubah data user ini?",
+                          "Apakah anda yakin ingin mengubah data Pelanggan Pemeliharaan ini?",
                       positiveLabel: "Iya",
                       negativeLabel: "Tidak",
                       negativeCallback: () {
@@ -148,7 +148,7 @@ class _EditNonProjectCustomerViewState
 
                         if (!result) {
                           showDialogWidget(context,
-                              title: "Ubah Data Pelanggan Non-Proyek",
+                              title: "Ubah Data Pelanggan Pemeliharaan",
                               description: model.errorMsg ??
                                   "Perubahan data pelanggan gagal.",
                               isSuccessDialog: false,
@@ -161,7 +161,7 @@ class _EditNonProjectCustomerViewState
 
                         showDialogWidget(
                           context,
-                          title: "Ubah Data Pelanggan Non-Proyek",
+                          title: "Ubah Data Pelanggan Pemeliharaan",
                           description: model.msg ??
                               "Perubahan data pelanggan berhasil disimpan",
                           isSuccessDialog: true,

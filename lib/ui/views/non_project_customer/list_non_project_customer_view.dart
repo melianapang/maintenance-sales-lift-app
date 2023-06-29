@@ -64,7 +64,7 @@ class _ListNonProjectCustomerViewState
           ),
           appBar: buildDefaultAppBar(
             context,
-            title: "Pelanggan Tanpa Proyek",
+            title: "Pelanggan Pemeliharaan",
             isBackEnabled: true,
           ),
           body: Column(
@@ -162,7 +162,7 @@ class _ListNonProjectCustomerViewState
 
     showDialogWidget(
       context,
-      title: "Daftar Pelanggan Non-Proyek",
+      title: "Daftar Pelanggan Pemeliharaan",
       isSuccessDialog: false,
       description: model.errorMsg ??
           "Gagal mendapatkan daftar Pelanggan. \n Coba beberappa saat lagi.",

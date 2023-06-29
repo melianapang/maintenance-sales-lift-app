@@ -85,7 +85,7 @@ List<HomeItemModel> homeMenu = <HomeItemModel>[
     Routes.listFollowUp,
   ),
   HomeItemModel(
-    "Pelanggan Non-Proyek",
+    "Pelanggan Pemeliharaan",
     PhosphorIcons.usersBold,
     <Role>[
       Role.Engineers,

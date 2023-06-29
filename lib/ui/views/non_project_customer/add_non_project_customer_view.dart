@@ -97,7 +97,7 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
         return Scaffold(
           appBar: buildDefaultAppBar(
             context,
-            title: "Tambah Pelanggan Non-Proyek",
+            title: "Tambah Pelanggan Pemeliharaan",
             isBackEnabled: true,
           ),
           bottomNavigationBar: ButtonWidget.bottomSingleButton(
@@ -116,7 +116,7 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
 
               showDialogWidget(
                 context,
-                title: "Tambah Pelanggan Non-Proyek",
+                title: "Tambah Pelanggan Pemeliharaan",
                 description:
                     "Apakah anda yakin ingin menambah data pelanggan ini?",
                 positiveLabel: "Iya",

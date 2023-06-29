@@ -63,7 +63,7 @@ class _DetailNonProjectCustomerViewState
           backgroundColor: MyColors.darkBlack01,
           appBar: buildDefaultAppBar(
             context,
-            title: "Data Pelanggan Non-Proyek",
+            title: "Data Pelanggan Pemeliharaan",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: <Widget>[
@@ -262,7 +262,7 @@ class _DetailNonProjectCustomerViewState
     if (model.errorMsg == null) return;
 
     showDialogWidget(context,
-        title: "Daftar Data Pelanggan Non-Proyek",
+        title: "Daftar Data Pelanggan Pemeliharaan",
         isSuccessDialog: false,
         description: model.errorMsg ??
             "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
