@@ -218,18 +218,10 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
 
   Future<void> searchOnChanged() async {
     isLoading = true;
-    if (searchController.text.isEmpty) {
-      await requestGetAllNonProjectCustomer();
-
-      isLoading = false;
-      return;
-    }
-
     invokeDebouncer(
       () async {
         resetPage();
-        resetFilter();
-        await searchCustomer();
+        await requestGetAllNonProjectCustomer();
         isLoading = false;
       },
     );
@@ -241,11 +233,6 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
       await syncFilterCustomer();
 
       isLoading = false;
-      return;
-    }
-
-    if (searchController.text.isNotEmpty) {
-      invokeDebouncer(searchCustomer);
       return;
     }
 
@@ -348,6 +335,7 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
     }
 
     final response = await _apiService.getAllNonProjectCustomer(
+      searchController.text,
       _paginationControl.currentPage,
       _paginationControl.pageSize,
     );
@@ -385,44 +373,6 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
-  }
-
-  Future<void> searchCustomer() async {
-    if (_paginationControl.totalData != -1 &&
-        _paginationControl.totalData <=
-            (_paginationControl.currentPage - 1) *
-                _paginationControl.pageSize) {
-      return;
-    }
-
-    final response = await _apiService.searchCustomer(
-      currentPage: _paginationControl.currentPage,
-      pageSize: _paginationControl.pageSize,
-      inputUser: searchController.text,
-    );
-
-    if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listCustomer = response.right.result;
-        } else {
-          _listCustomer?.addAll(response.right.result);
-        }
-
-        _paginationControl.currentPage += 1;
-        _paginationControl.totalData = int.parse(
-          response.right.totalSize,
-        );
-      }
-      _isShowNoDataFoundPage = response.right.result.isEmpty;
-      notifyListeners();
-
-      return;
-    }
-
-    _errorMsg = response.left.message;
-    _isShowNoDataFoundPage = true;
-    notifyListeners();
   }
 
   void invokeDebouncer(Function() function) {

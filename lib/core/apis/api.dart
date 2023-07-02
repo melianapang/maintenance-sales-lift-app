@@ -192,6 +192,7 @@ abstract class Api {
 
   @GET('/api/0/Customer/get_all_customer_maintenance/')
   Future<HttpResponse<dynamic>> requestGetAllNonProjectCustomer(
+    @Query("input_search") String inputSearch,
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
@@ -1303,12 +1304,14 @@ class ApiService {
   }
 
   Future<Either<Failure, ListCustomerData>> getAllNonProjectCustomer(
+    String inputSearch,
     int currentPage,
     int pageSize,
   ) async {
     try {
       final HttpResponse<dynamic> response =
           await api.requestGetAllNonProjectCustomer(
+        inputSearch,
         currentPage,
         pageSize,
       );
