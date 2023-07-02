@@ -61,6 +61,7 @@ class ProjectData {
     required this.customerName,
     required this.companyName,
     required this.pics,
+    this.isBgRed,
     this.documents,
   });
 
@@ -98,6 +99,9 @@ class ProjectData {
 
   @JsonKey(name: "city")
   final String city;
+
+  @JsonKey(name: "is_bg_red")
+  final bool? isBgRed;
 
   @JsonKey(name: "pics")
   final List<PICProject> pics;

@@ -406,10 +406,11 @@ abstract class Api {
   //endregion
 
   //region project
-  @GET('/api/0/Project/get_all_projects/')
+  @GET('/api/0/Project/get_list_projects/')
   Future<HttpResponse<dynamic>> requestGetAllProjects(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
+    @Query("input_search") String inputSearch,
   );
 
   @GET('/api/0/Project/get_all_projects_by_customer_id/{customer_id}')
@@ -2202,11 +2203,13 @@ class ApiService {
   Future<Either<Failure, ListProjectData>> getAllProjects({
     required int currentPage,
     required int pageSize,
+    required String inputSearch,
   }) async {
     try {
       final HttpResponse<dynamic> response = await api.requestGetAllProjects(
         currentPage,
         pageSize,
+        inputSearch,
       );
 
       if (response.isSuccess) {

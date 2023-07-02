@@ -3,7 +3,10 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/list_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
@@ -13,7 +16,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/detail_project_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class ListProjectView extends StatefulWidget {
@@ -91,18 +93,8 @@ class _ListProjectViewState extends State<ListProjectView> {
                         height: 20,
                       ),
                       itemBuilder: (BuildContext context, int index) {
-                        return CustomCardWidget(
-                          cardType: CardType.list,
-                          title: model.listProject[index].projectName,
-                          description: model.listProject[index].companyName !=
-                                      null ||
-                                  model.listProject[index].companyName
-                                          ?.isNotEmpty ==
-                                      true
-                              ? "${model.listProject[index].companyName} | ${model.listProject[index].customerName}"
-                              : model.listProject[index].customerName,
-                          titleSize: 20,
-                          descSize: 16,
+                        return _buildProjectCard(
+                          projectData: model.listProject[index],
                           onTap: () {
                             Navigator.pushNamed(
                               context,
@@ -135,6 +127,77 @@ class _ListProjectViewState extends State<ListProjectView> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildProjectCard({
+    required ProjectData projectData,
+    VoidCallback? onTap,
+  }) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      elevation: 2,
+      color: projectData.isBgRed == true
+          ? MyColors.redBackgroundMaintenanceCard
+          : MyColors.darkBlack02,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          19.0,
+        ),
+      ),
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 24.0,
+            top: 14,
+            bottom: 14,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      StringUtils.removeZeroWidthSpaces(
+                        projectData.projectName,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: buildTextStyle(
+                        fontColor: projectData.isBgRed == true
+                            ? MyColors.white
+                            : MyColors.lightBlack02,
+                        fontSize: 20,
+                        fontWeight: 800,
+                      ),
+                    ),
+                    Spacings.vert(2),
+                    Text(
+                      StringUtils.removeZeroWidthSpaces(projectData
+                                      .companyName !=
+                                  null ||
+                              projectData.companyName?.isNotEmpty == true
+                          ? "${projectData.companyName} | ${projectData.customerName}"
+                          : projectData.customerName),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: buildTextStyle(
+                        fontColor: projectData.isBgRed == true
+                            ? MyColors.white
+                            : MyColors.lightBlack02,
+                        fontSize: 16,
+                        fontWeight: 400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

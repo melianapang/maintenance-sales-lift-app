@@ -57,28 +57,16 @@ class ListProjectViewModel extends BaseViewModel {
 
   Future<void> searchOnChanged() async {
     isLoading = true;
-    if (searchController.text.isEmpty) {
-      await requestGetAllProjects();
-
-      isLoading = false;
-      return;
-    }
-
     invokeDebouncer(
       () async {
         resetPage();
-        await searchProject();
+        await requestGetAllProjects();
         isLoading = false;
       },
     );
   }
 
   Future<void> onLazyLoad() async {
-    if (searchController.text.isNotEmpty) {
-      invokeDebouncer(searchProject);
-      return;
-    }
-
     await requestGetAllProjects();
   }
 
@@ -101,23 +89,25 @@ class ListProjectViewModel extends BaseViewModel {
     final response = await _apiService.getAllProjects(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
+      inputSearch: searchController.text,
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listProject = response.right.result;
-        } else {
-          _listProject.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listProject = response.right.result;
+      } else {
+        _listProject.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        notifyListeners();
       }
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty == true;
+      notifyListeners();
       return;
     }
 
@@ -134,43 +124,6 @@ class ListProjectViewModel extends BaseViewModel {
     notifyListeners();
 
     setBusy(false);
-  }
-
-  Future<void> searchProject() async {
-    if (_paginationControl.totalData != -1 &&
-        _paginationControl.totalData <=
-            (_paginationControl.currentPage - 1) *
-                _paginationControl.pageSize) {
-      return;
-    }
-
-    final response = await _apiService.searchProject(
-      currentPage: _paginationControl.currentPage,
-      pageSize: _paginationControl.pageSize,
-      inputUser: searchController.text,
-    );
-
-    if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listProject = response.right.result;
-        } else {
-          _listProject.addAll(response.right.result);
-        }
-
-        _paginationControl.currentPage += 1;
-        _paginationControl.totalData = int.parse(
-          response.right.totalSize,
-        );
-      }
-      _isShowNoDataFoundPage = response.right.result.isEmpty;
-      notifyListeners();
-      return;
-    }
-
-    _errorMsg = response.left.message;
-    _isShowNoDataFoundPage = true;
-    notifyListeners();
   }
 
   void invokeDebouncer(Function() function) {

@@ -94,6 +94,7 @@ class ExportDataMaintenanceViewModel extends BaseViewModel {
     final response = await _apiService.getAllProjects(
       currentPage: _paginationControl.currentPage,
       pageSize: _paginationControl.pageSize,
+      inputSearch: "",
     );
 
     if (response.isRight) {
