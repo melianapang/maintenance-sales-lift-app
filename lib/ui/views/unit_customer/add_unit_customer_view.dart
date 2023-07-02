@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
@@ -13,6 +14,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
@@ -29,10 +31,14 @@ class AddUnitCustomerViewParam {
   AddUnitCustomerViewParam({
     this.customerType,
     this.customerData,
+    this.projectData,
+    this.sourcePageForList,
   });
 
   CustomerType? customerType;
   CustomerData? customerData;
+  ProjectData? projectData;
+  ListUnitCustomerSourcePage? sourcePageForList;
 }
 
 class AddUnitCustomerView extends StatefulWidget {
@@ -54,6 +60,8 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
       model: AddUnitCustomerViewModel(
         customerType: widget.param.customerType,
         customerData: widget.param.customerData,
+        projectData: widget.param.projectData,
+        sourcePageForList: widget.param.sourcePageForList,
         dioService: Provider.of<DioService>(context),
       ),
       onModelReady: (AddUnitCustomerViewModel model) async {
@@ -134,7 +142,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                         ? "Kolom ini wajib diisi."
                         : null,
                   ),
-                  if (!model.isNonProjectCustomer) ...[
+                  if (model.isAllowedToChooseProject) ...[
                     Spacings.vert(24),
                     GestureDetector(
                       onTap: () {
@@ -153,6 +161,15 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
                           color: MyColors.lightBlack02,
                         ),
                       ),
+                    ),
+                  ],
+                  if (model.sourcePageForList ==
+                      ListUnitCustomerSourcePage.DetailProject) ...[
+                    Spacings.vert(24),
+                    TextInput.disabled(
+                      label: "Proyek",
+                      text: widget.param.projectData?.projectName,
+                      hintText: "Tidak ada Proyek untuk Unit ini",
                     ),
                   ],
                   Spacings.vert(24),

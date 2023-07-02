@@ -3,7 +3,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
@@ -357,35 +356,38 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             }
           },
         ),
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.listBulletsBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Daftar Unit Proyek',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.listUnit,
-              arguments: ListUnitCustomerViewParam(
-                customerData: model.customerData,
+        if (widget.param.sourcePage == DetailProjectSourcePage.ListProjectPage)
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.listBulletsBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Daftar Unit Proyek',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
               ),
-            );
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.listUnit,
+                arguments: ListUnitCustomerViewParam(
+                  sourcePage: ListUnitCustomerSourcePage.DetailProject,
+                  customerData: model.customerData,
+                  projectData: model.projectData,
+                ),
+              );
 
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
         if (widget.param.sourcePage ==
             DetailProjectSourcePage.ListProjectPage) ...[
           if (model.isAllowedToDeleteData)

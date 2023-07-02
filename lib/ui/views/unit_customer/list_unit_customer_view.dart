@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/unit_customer/list_unit_customer_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -17,13 +18,24 @@ import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/detail_unit_customer
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
+enum ListUnitCustomerSourcePage {
+  HomeMenu,
+  DetailCustomer,
+  DetailNonProjectCustomer,
+  DetailProject, // only can see list, detail, and add
+}
+
 class ListUnitCustomerViewParam {
   ListUnitCustomerViewParam({
+    this.sourcePage,
     this.customerType,
+    this.projectData,
     this.customerData,
   });
 
+  final ListUnitCustomerSourcePage? sourcePage;
   final CustomerType? customerType;
+  final ProjectData? projectData;
   final CustomerData? customerData;
 }
 
@@ -64,8 +76,10 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                 context,
                 Routes.addUnit,
                 arguments: AddUnitCustomerViewParam(
+                  sourcePageForList: widget.param.sourcePage,
                   customerType: widget.param.customerType,
                   customerData: model.customerData,
+                  projectData: widget.param.projectData,
                 ),
               ).then(
                 (value) {
@@ -111,6 +125,7 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                               arguments: DetailUnitCustomerViewParam(
                                 unitData: model.listUnit?[index],
                                 customerData: model.customerData,
+                                sourcePageForList: widget.param.sourcePage,
                               ),
                             ).then(
                               (value) {

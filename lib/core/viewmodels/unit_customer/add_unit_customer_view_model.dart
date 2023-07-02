@@ -8,12 +8,15 @@ import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 
 class AddUnitCustomerViewModel extends BaseViewModel {
   AddUnitCustomerViewModel({
     CustomerType? customerType,
     CustomerData? customerData,
+    ProjectData? projectData,
+    ListUnitCustomerSourcePage? sourcePageForList,
     required DioService dioService,
   })  : _apiService = ApiService(
           api: Api(
@@ -21,6 +24,8 @@ class AddUnitCustomerViewModel extends BaseViewModel {
           ),
         ),
         _isNonProjectCustomer = customerType == CustomerType.NonProjectCustomer,
+        _sourcePageForList = sourcePageForList,
+        _projectData = projectData,
         _customerData = customerData;
 
   final ApiService _apiService;
@@ -31,8 +36,22 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   List<ProjectData>? _listProject;
   List<ProjectData>? get listProject => _listProject;
 
+  ProjectData? _projectData;
+  ProjectData? get projectData => _projectData;
+
   bool _isNonProjectCustomer = false;
   bool get isNonProjectCustomer => _isNonProjectCustomer;
+
+  ListUnitCustomerSourcePage? _sourcePageForList;
+  ListUnitCustomerSourcePage? get sourcePageForList => _sourcePageForList;
+
+  bool get isAllowedToChooseProject {
+    if (_isNonProjectCustomer ||
+        _sourcePageForList == ListUnitCustomerSourcePage.DetailProject) {
+      return false;
+    }
+    return true;
+  }
 
   // Dropdown related
   int _selectedTipeUnitOption = 0;
@@ -113,9 +132,11 @@ class AddUnitCustomerViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
 
-    if (!_isNonProjectCustomer) {
+    if (isAllowedToChooseProject) {
       _paginationControl.currentPage = 1;
       await requestGetAllProjectByCustomerId();
+    } else if (_sourcePageForList == ListUnitCustomerSourcePage.DetailProject) {
+      _selectedProyek = _projectData;
     }
 
     setBusy(false);

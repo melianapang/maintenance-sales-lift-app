@@ -13,19 +13,22 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/edit_unit_customer_view.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
-import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 
 class DetailUnitCustomerViewParam {
   DetailUnitCustomerViewParam({
     this.customerData,
     this.unitData,
+    this.sourcePageForList,
   });
 
   final CustomerData? customerData;
   final UnitData? unitData;
+  final ListUnitCustomerSourcePage? sourcePageForList;
+  //when the sourcepage of list page is detail project, then disable the edit and delete button
 }
 
 class DetailUnitCustomerView extends StatefulWidget {
@@ -61,93 +64,99 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
             title: "Data Unit",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.editUnit,
-                    arguments: EditUnitCustomerViewParam(
-                      unitData: model.unitData,
-                      customerData: widget.param.customerData,
+            actions: widget.param.sourcePageForList !=
+                    ListUnitCustomerSourcePage.DetailProject
+                ? <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.editUnit,
+                          arguments: EditUnitCustomerViewParam(
+                            unitData: model.unitData,
+                            customerData: widget.param.customerData,
+                          ),
+                        ).then(
+                          (value) {
+                            if (value == null) return;
+                            if (value == true) {
+                              model.refreshPage();
+                              model.setPreviousPageNeedRefresh(true);
+                              _handleErrorDialog(context, model);
+                            }
+                          },
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                        ),
+                        child: Icon(
+                          PhosphorIcons.pencilSimpleLineBold,
+                          color: MyColors.lightBlack02,
+                          size: 16,
+                        ),
+                      ),
                     ),
-                  ).then(
-                    (value) {
-                      if (value == null) return;
-                      if (value == true) {
-                        model.refreshPage();
-                        model.setPreviousPageNeedRefresh(true);
-                        _handleErrorDialog(context, model);
-                      }
-                    },
-                  );
-                },
-                child: const Padding(
+                  ]
+                : null,
+          ),
+          bottomNavigationBar: widget.param.sourcePageForList !=
+                  ListUnitCustomerSourcePage.DetailProject
+              ? ButtonWidget.bottomSingleButton(
+                  buttonType: ButtonType.primary,
                   padding: EdgeInsets.only(
-                    right: 20.0,
+                    bottom: PaddingUtils.getBottomPadding(
+                      context,
+                      defaultPadding: 12,
+                    ),
+                    left: 24.0,
+                    right: 24.0,
                   ),
-                  child: Icon(
-                    PhosphorIcons.pencilSimpleLineBold,
-                    color: MyColors.lightBlack02,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: ButtonWidget.bottomSingleButton(
-            buttonType: ButtonType.primary,
-            padding: EdgeInsets.only(
-              bottom: PaddingUtils.getBottomPadding(
-                context,
-                defaultPadding: 12,
-              ),
-              left: 24.0,
-              right: 24.0,
-            ),
-            onTap: () {
-              showDialogWidget(
-                context,
-                title: "Menghapus Data Unit",
-                description: "Anda yakin ingin menghapus Unit ini?",
-                positiveLabel: "Iya",
-                negativeLabel: "Tidak",
-                positiveCallback: () async {
-                  await Navigator.maybePop(context);
+                  onTap: () {
+                    showDialogWidget(
+                      context,
+                      title: "Menghapus Data Unit",
+                      description: "Anda yakin ingin menghapus Unit ini?",
+                      positiveLabel: "Iya",
+                      negativeLabel: "Tidak",
+                      positiveCallback: () async {
+                        await Navigator.maybePop(context);
 
-                  buildLoadingDialog(context);
-                  bool result = await model.requestDeleteUnit();
-                  Navigator.pop(context);
+                        buildLoadingDialog(context);
+                        bool result = await model.requestDeleteUnit();
+                        Navigator.pop(context);
 
-                  showDialogWidget(
-                    context,
-                    title: "Menghapus Data Unit",
-                    description: result
-                        ? "Unit telah berhasil dihapus."
-                        : model.errorMsg ??
-                            "Unit gagal dihapus. Coba beberapa saat lagi.",
-                    isSuccessDialog: result,
-                    positiveLabel: "OK",
-                    positiveCallback: () {
-                      if (result) {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop(true);
-                        return;
-                      }
+                        showDialogWidget(
+                          context,
+                          title: "Menghapus Data Unit",
+                          description: result
+                              ? "Unit telah berhasil dihapus."
+                              : model.errorMsg ??
+                                  "Unit gagal dihapus. Coba beberapa saat lagi.",
+                          isSuccessDialog: result,
+                          positiveLabel: "OK",
+                          positiveCallback: () {
+                            if (result) {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop(true);
+                              return;
+                            }
 
-                      model.resetErrorMsg();
-                      Navigator.maybePop(context);
-                    },
-                  );
-                },
-                negativeCallback: () {
-                  Navigator.maybePop(context);
-                },
-              );
-            },
-            text: 'Hapus Unit',
-          ),
+                            model.resetErrorMsg();
+                            Navigator.maybePop(context);
+                          },
+                        );
+                      },
+                      negativeCallback: () {
+                        Navigator.maybePop(context);
+                      },
+                    );
+                  },
+                  text: 'Hapus Unit',
+                )
+              : null,
           body: Padding(
             padding: const EdgeInsets.only(
               right: 24.0,
