@@ -69,20 +69,21 @@ class ListUnitCustomerViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listUnit = response.right.result;
-        } else {
-          _listUnit?.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listUnit = response.right.result;
+      } else {
+        _listUnit?.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        notifyListeners();
       }
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty;
+      notifyListeners();
       return;
     }
 

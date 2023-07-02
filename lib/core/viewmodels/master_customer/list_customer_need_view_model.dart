@@ -91,13 +91,13 @@ class ListCustomerNeedViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty == true) {
-        if (_paginationControl.currentPage == 1) {
-          _listCustomerNeed = response.right.result;
-        } else {
-          _listCustomerNeed?.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listCustomerNeed = response.right.result;
+      } else {
+        _listCustomerNeed?.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty == true) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,

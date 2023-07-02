@@ -225,21 +225,20 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listProject = response.right.result;
-        } else {
-          _listProject?.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listProject = response.right.result;
+      } else {
+        _listProject?.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
       }
-      _isShowNoDataFoundPage = response.right.result.isEmpty == true ||
-          _listProject?.isEmpty == true ||
-          _listProject == null;
+
+      _isShowNoDataFoundPage = response.right.result.isEmpty == true;
 
       notifyListeners();
       return;

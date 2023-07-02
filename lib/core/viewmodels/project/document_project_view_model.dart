@@ -138,20 +138,19 @@ class DocumentProjectViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
+      if (_paginationControl.currentPage == 1) {
+        _listDocument = response.right.result;
+      } else {
+        _listDocument?.addAll(response.right.result);
+      }
       if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listDocument = response.right.result;
-        } else {
-          _listDocument?.addAll(response.right.result);
-        }
-
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
-
-        notifyListeners();
       }
+
+      notifyListeners();
       return;
     }
 

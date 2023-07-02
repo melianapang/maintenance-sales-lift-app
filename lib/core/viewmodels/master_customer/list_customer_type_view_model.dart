@@ -91,13 +91,13 @@ class ListCustomerTypeViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty == true) {
-        if (_paginationControl.currentPage == 1) {
-          _listCustomerType = response.right.result;
-        } else {
-          _listCustomerType?.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listCustomerType = response.right.result;
+      } else {
+        _listCustomerType?.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty == true) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,

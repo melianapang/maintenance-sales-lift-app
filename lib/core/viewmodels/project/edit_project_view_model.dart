@@ -306,18 +306,19 @@ class EditProjectViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        if (_paginationControl.currentPage == 1) {
-          _listCustomer = response.right.result;
-        } else {
-          _listCustomer?.addAll(response.right.result);
-        }
+      if (_paginationControl.currentPage == 1) {
+        _listCustomer = response.right.result;
+      } else {
+        _listCustomer?.addAll(response.right.result);
+      }
 
+      if (response.right.result.isNotEmpty) {
         _paginationControl.currentPage += 1;
         _paginationControl.totalData = int.parse(
           response.right.totalSize,
         );
       }
+
       _isShowNoDataFoundPage = response.right.result.isEmpty;
       notifyListeners();
 
