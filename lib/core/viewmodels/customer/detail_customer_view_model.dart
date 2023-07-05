@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dar
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:collection/collection.dart';
 
 class DetailCustomerViewModel extends BaseViewModel {
   DetailCustomerViewModel({
@@ -41,11 +42,15 @@ class DetailCustomerViewModel extends BaseViewModel {
   //endregion
 
   //(dynamic values from API)
-  String selectedCustomerNeedFilterName = "";
+  String _selectedCustomerNeedFilterName = "";
+  String get selectedCustomerNeedFilterName => _selectedCustomerNeedFilterName;
+
   List<CustomerNeedData>? _listCustomerNeed;
   List<CustomerNeedData>? get listCustomerNeed => _listCustomerNeed;
 
-  String selectedCustomerTypeFilterName = "";
+  String _selectedCustomerTypeFilterName = "";
+  String get selectedCustomerTypeFilterName => _selectedCustomerTypeFilterName;
+
   List<CustomerTypeData>? _listCustomerType;
   List<CustomerTypeData>? get listCustomerType => _listCustomerType;
   // End of Dropdown related
@@ -58,22 +63,26 @@ class DetailCustomerViewModel extends BaseViewModel {
     setBusy(true);
     await requestGetAllCustomerNeed();
     await requestGetAllCustomerType();
-    handleDynamicData();
+    _handleDynamicCustomerNeedData();
+    _handleDynamicCustomerTypeData();
     setBusy(false);
   }
 
-  void handleDynamicData() {
-    selectedCustomerNeedFilterName = _listCustomerNeed
-            ?.firstWhere(
+  void _handleDynamicCustomerNeedData() {
+    _selectedCustomerNeedFilterName = _listCustomerNeed
+            ?.firstWhereOrNull(
               (element) => element.customerNeedId == customerData?.customerNeed,
             )
-            .customerNeedName ??
+            ?.customerNeedName ??
         "";
-    selectedCustomerTypeFilterName = _listCustomerType
-            ?.firstWhere(
+  }
+
+  void _handleDynamicCustomerTypeData() {
+    _selectedCustomerTypeFilterName = _listCustomerType
+            ?.firstWhereOrNull(
               (element) => element.customerTypeId == customerData?.customerType,
             )
-            .customerTypeName ??
+            ?.customerTypeName ??
         "";
   }
 
@@ -113,7 +122,8 @@ class DetailCustomerViewModel extends BaseViewModel {
 
     if (response.isRight) {
       _customerData = response.right;
-      handleDynamicData();
+      _handleDynamicCustomerNeedData();
+      _handleDynamicCustomerTypeData();
       notifyListeners();
       setBusy(false);
       return;
