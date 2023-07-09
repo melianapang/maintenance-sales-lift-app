@@ -1,11 +1,13 @@
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 
 class DetailProjectViewModel extends BaseViewModel {
   DetailProjectViewModel({
@@ -28,6 +30,9 @@ class DetailProjectViewModel extends BaseViewModel {
 
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
+
+  StatusCardType _statusCardType = StatusCardType.Pending;
+  StatusCardType get statusCardType => _statusCardType;
 
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
@@ -55,6 +60,7 @@ class DetailProjectViewModel extends BaseViewModel {
     _listPic.addAll(projectData?.pics ?? []);
     await _checkIsAllowedToDeleteData();
     await _getCustomerDetail();
+    setStatusCard();
     setBusy(false);
   }
 
@@ -65,6 +71,21 @@ class DetailProjectViewModel extends BaseViewModel {
   Future<void> _checkIsAllowedToDeleteData() async {
     _isAllowedToDeleteData =
         await _authenticationService.getUserRole() == Role.SuperAdmin;
+  }
+
+  void setStatusCard() {
+    if (_projectData == null) return;
+
+    int status = int.parse(_projectData?.status ?? "0");
+    if (status == FollowUpStatus.Loss.index) {
+      _statusCardType = StatusCardType.Loss;
+    } else if (status == FollowUpStatus.Hot.index) {
+      _statusCardType = StatusCardType.Hot;
+    } else if (status == FollowUpStatus.Win.index) {
+      _statusCardType = StatusCardType.Confirmed;
+    } else {
+      _statusCardType = StatusCardType.Pending;
+    }
   }
 
   void setDialChildrenVisible() {

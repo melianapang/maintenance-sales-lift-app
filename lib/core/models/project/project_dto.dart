@@ -53,6 +53,7 @@ class ProjectData {
     required this.projectId,
     required this.projectNeed,
     required this.projectName,
+    required this.status,
     required this.address,
     required this.city,
     required this.longitude,
@@ -78,6 +79,9 @@ class ProjectData {
 
   @JsonKey(name: "project_need")
   final String projectNeed;
+
+  @JsonKey(name: "status")
+  final String? status;
 
   @JsonKey(name: "longitude")
   final String longitude;

@@ -22,6 +22,7 @@ import 'package:rejo_jaya_sakti_apps/ui/views/project/project_location_view.dart
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/form_set_reminder_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -136,6 +137,11 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                             fontWeight: 400,
                             fontColor: MyColors.lightBlack02,
                           ),
+                        ),
+                        Spacings.vert(12),
+                        StatusCardWidget(
+                          cardType: model.statusCardType,
+                          onTap: () {},
                         ),
                         Spacings.vert(35),
                         TextInput.disabled(
