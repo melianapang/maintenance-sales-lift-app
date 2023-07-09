@@ -134,67 +134,70 @@ class _ListProjectViewState extends State<ListProjectView> {
     required ProjectData projectData,
     VoidCallback? onTap,
   }) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      elevation: 2,
-      color: projectData.isBgRed == true
-          ? MyColors.redBackgroundMaintenanceCard
-          : MyColors.darkBlack02,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          19.0,
-        ),
-      ),
-      child: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 24.0,
-            top: 14,
-            bottom: 14,
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        elevation: 2,
+        color: projectData.isBgRed == true
+            ? MyColors.redBackgroundMaintenanceCard
+            : MyColors.darkBlack02,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            19.0,
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      StringUtils.removeZeroWidthSpaces(
-                        projectData.projectName,
+        ),
+        child: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 24.0,
+              top: 14,
+              bottom: 14,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        StringUtils.removeZeroWidthSpaces(
+                          projectData.projectName,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: buildTextStyle(
+                          fontColor: projectData.isBgRed == true
+                              ? MyColors.white
+                              : MyColors.lightBlack02,
+                          fontSize: 20,
+                          fontWeight: 800,
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: buildTextStyle(
-                        fontColor: projectData.isBgRed == true
-                            ? MyColors.white
-                            : MyColors.lightBlack02,
-                        fontSize: 20,
-                        fontWeight: 800,
+                      Spacings.vert(2),
+                      Text(
+                        StringUtils.removeZeroWidthSpaces(projectData
+                                        .companyName !=
+                                    null ||
+                                projectData.companyName?.isNotEmpty == true
+                            ? "${projectData.companyName} | ${projectData.customerName}"
+                            : projectData.customerName),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: buildTextStyle(
+                          fontColor: projectData.isBgRed == true
+                              ? MyColors.white
+                              : MyColors.lightBlack02,
+                          fontSize: 16,
+                          fontWeight: 400,
+                        ),
                       ),
-                    ),
-                    Spacings.vert(2),
-                    Text(
-                      StringUtils.removeZeroWidthSpaces(projectData
-                                      .companyName !=
-                                  null ||
-                              projectData.companyName?.isNotEmpty == true
-                          ? "${projectData.companyName} | ${projectData.customerName}"
-                          : projectData.customerName),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: buildTextStyle(
-                        fontColor: projectData.isBgRed == true
-                            ? MyColors.white
-                            : MyColors.lightBlack02,
-                        fontSize: 16,
-                        fontWeight: 400,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
