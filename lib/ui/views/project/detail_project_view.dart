@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -7,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/detail_project_view_model.dart';
@@ -291,13 +293,20 @@ class _DetailProjectViewState extends State<DetailProjectView> {
     return Align(
       alignment: Alignment.centerLeft,
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(
-          context,
-          Routes.projectLocation,
-          arguments: ProjectLocationViewParam(
-            projectData: projectData,
-          ),
-        ),
+        onTap: () async {
+          bool isGranted = await PermissionUtils.requestPermission(
+            Permission.location,
+          );
+
+          if (!isGranted) return;
+          Navigator.pushNamed(
+            context,
+            Routes.projectLocation,
+            arguments: ProjectLocationViewParam(
+              projectData: projectData,
+            ),
+          );
+        },
         child: Text(
           "Lihat Lokasi Proyek",
           style: buildTextStyle(
