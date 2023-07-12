@@ -109,7 +109,12 @@ Widget buildSearchBarAndAddableMenu(
   VoidCallback? onTapFilter,
 }) {
   return Container(
-    margin: const EdgeInsets.all(20),
+    margin: const EdgeInsets.fromLTRB(
+      20,
+      0,
+      20,
+      20,
+    ),
     child: Row(
       children: [
         Expanded(
