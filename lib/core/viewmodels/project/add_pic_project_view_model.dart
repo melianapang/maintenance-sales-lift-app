@@ -74,9 +74,11 @@ class AddPicProjectViewModel extends BaseViewModel {
       return _listSearchedRole ?? [];
     }
 
-    return _listSearchedRole =
-        _listRole?.where((e) => e.contains(searchController.text)).toList() ??
-            [];
+    return _listSearchedRole = _listRole
+            ?.where((e) =>
+                e.toLowerCase().contains(searchController.text.toLowerCase()))
+            .toList() ??
+        [];
   }
 
   void sendDataBack(BuildContext context) {
