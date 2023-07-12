@@ -281,6 +281,13 @@ class _DetailProjectViewState extends State<DetailProjectView> {
   }
 
   Widget _buildLihatLokasiProyek(ProjectData? projectData) {
+    if (projectData?.latitude.isEmpty == true ||
+        projectData?.longitude.isEmpty == true) return Spacings.vert(0);
+
+    if (projectData?.latitude == "0" || projectData?.longitude == "0") {
+      return Spacings.vert(0);
+    }
+
     return Align(
       alignment: Alignment.centerLeft,
       child: GestureDetector(
