@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/string_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_pic_project_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -164,10 +165,12 @@ class _AddPicProjectViewState extends State<AddPicProjectView> {
                         ss(() {});
                       },
                       onTapFilter: () {
-                        model.listRole?.add(model.searchController.text);
-                        setSelectedRole(
-                          selectedRole: model.searchController.text,
+                        String role =
+                            StringUtils.replaceUnderscoreToSpaceAndTitleCase(
+                          model.searchController.text,
                         );
+                        model.listRole?.add(role);
+                        setSelectedRole(selectedRole: role);
                         model.searchController.text = "";
                         Navigator.maybePop(context);
                       },
