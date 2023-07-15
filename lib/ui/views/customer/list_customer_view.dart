@@ -108,7 +108,8 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                     selectedKebutuhanPelanggan:
                         model.selectedCustomerNeedFilter,
                     selectedSort: model.selectedSortOption,
-                    terapkanCallback: model.terapkanFilter,
+                    terapkanCallback: model.terapkanFilterMenu,
+                    resetFilterCallback: model.resetFilterMenu,
                   );
                 },
               ),

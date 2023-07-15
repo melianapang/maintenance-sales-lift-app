@@ -46,33 +46,33 @@ class ListCustomerViewModel extends BaseViewModel {
   // Filter related
   bool _isFilterActivated = false;
 
-  int _selectedSumberDataOption = 0;
-  int get selectedSumberDataOption => _selectedSumberDataOption;
+  int? _selectedSumberDataOption;
+  int? get selectedSumberDataOption => _selectedSumberDataOption;
   final List<FilterOption> _sumberDataOptions = [
-    FilterOption("Lead", true),
+    FilterOption("Lead", false),
     FilterOption("Non-Leads", false),
   ];
   List<FilterOption> get sumberDataOptions => _sumberDataOptions;
 
-  int _selectedSortOption = 0;
-  int get selectedSortOption => _selectedSortOption;
+  int? _selectedSortOption;
+  int? get selectedSortOption => _selectedSortOption;
   final List<FilterOption> _sortOptions = [
-    FilterOption("Ascending", true),
+    FilterOption("Ascending", false),
     FilterOption("Descending", false),
   ];
   List<FilterOption> get sortOptions => _sortOptions;
   // End of filter related
 
   //Filter Dynamic (values from API) related
-  int _selectedCustomerNeedFilter = 0;
-  int get selectedCustomerNeedFilter => _selectedCustomerNeedFilter;
+  int? _selectedCustomerNeedFilter;
+  int? get selectedCustomerNeedFilter => _selectedCustomerNeedFilter;
 
   List<CustomerNeedData>? _listCustomerNeed;
   List<CustomerNeedData>? get listCustomerNeed => _listCustomerNeed;
   List<FilterOptionDynamic> customerNeedFilterOptions = [];
 
-  int _selectedCustomerTypeFilter = 0;
-  int get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
+  int? _selectedCustomerTypeFilter;
+  int? get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
 
   List<CustomerTypeData>? _listCustomerType;
   List<CustomerTypeData>? get listCustomerType => _listCustomerType;
@@ -120,12 +120,10 @@ class ListCustomerViewModel extends BaseViewModel {
           (e) => FilterOptionDynamic(
             e.customerTypeId,
             e.customerTypeName,
-            values.first == e,
+            false,
           ),
         )
         .toList();
-
-    _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
   }
 
   void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {
@@ -136,19 +134,17 @@ class ListCustomerViewModel extends BaseViewModel {
           (e) => FilterOptionDynamic(
             e.customerNeedId,
             e.customerNeedName,
-            values.first == e,
+            false,
           ),
         )
         .toList();
-
-    _selectedCustomerNeedFilter = int.parse(values.first.customerNeedId);
   }
 
-  void terapkanFilter({
-    required int selectedPelanggan,
-    required int selectedSumberData,
-    required int selectedKebutuhanPelanggan,
-    required int selectedSort,
+  void terapkanFilterMenu({
+    required int? selectedPelanggan,
+    required int? selectedSumberData,
+    required int? selectedKebutuhanPelanggan,
+    required int? selectedSort,
     bool needSync = true,
   }) {
     _selectedCustomerTypeFilter = selectedPelanggan;
@@ -201,17 +197,24 @@ class ListCustomerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetFilterMenu() {
+    resetFilter();
+    resetPage();
+    resetSearchBar();
+    requestGetAllCustomer();
+  }
+
   void resetSearchBar() {
     searchController.text = "";
   }
 
   void resetFilter() {
     _isFilterActivated = false;
-    terapkanFilter(
-      selectedKebutuhanPelanggan: 0,
-      selectedPelanggan: 0,
-      selectedSort: 0,
-      selectedSumberData: 0,
+    terapkanFilterMenu(
+      selectedKebutuhanPelanggan: null,
+      selectedPelanggan: null,
+      selectedSort: null,
+      selectedSumberData: null,
       needSync: false,
     );
   }

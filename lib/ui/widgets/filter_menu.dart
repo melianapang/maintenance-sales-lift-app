@@ -137,32 +137,33 @@ void showCustomerFilterMenu(
   required List<FilterOption> listSumberDataMenu,
   required List<FilterOptionDynamic> listKebutuhanPelanggan,
   required List<FilterOption> listSortMenu,
-  required int selectedPelanggan,
-  required int selectedSumberData,
-  required int selectedKebutuhanPelanggan,
-  required int selectedSort,
+  required int? selectedPelanggan,
+  required int? selectedSumberData,
+  required int? selectedKebutuhanPelanggan,
+  required int? selectedSort,
   required void Function({
-    required int selectedPelanggan,
-    required int selectedSumberData,
-    required int selectedKebutuhanPelanggan,
-    required int selectedSort,
+    required int? selectedPelanggan,
+    required int? selectedSumberData,
+    required int? selectedKebutuhanPelanggan,
+    required int? selectedSort,
   })
       terapkanCallback,
+  required void Function() resetFilterCallback,
 }) {
   final List<FilterOptionDynamic> tipePelangganLocal =
       convertToNewListForFilterDynamic(listPelangganMenu);
-  int tipePelanggan = selectedPelanggan;
+  int? tipePelanggan = selectedPelanggan;
 
   final List<FilterOption> sumberDataLocal =
       convertToNewList(listSumberDataMenu);
-  int sumberData = selectedSumberData;
+  int? sumberData = selectedSumberData;
 
   final List<FilterOptionDynamic> kebutuhanPelangganLocal =
       convertToNewListForFilterDynamic(listKebutuhanPelanggan);
-  int kebutuhanPelanggan = selectedKebutuhanPelanggan;
+  int? kebutuhanPelanggan = selectedKebutuhanPelanggan;
 
   final List<FilterOption> sortLocal = convertToNewList(listSortMenu);
-  int sort = selectedSort;
+  int? sort = selectedSort;
 
   showGeneralBottomSheet(
     context: context,
@@ -285,6 +286,16 @@ void showCustomerFilterMenu(
                   selectedKebutuhanPelanggan: kebutuhanPelanggan,
                   selectedSort: sort,
                 );
+                Navigator.maybePop(context);
+              },
+            ),
+            Spacings.vert(10),
+            ButtonWidget(
+              buttonType: ButtonType.secondary,
+              buttonSize: ButtonSize.large,
+              text: "Reset Filter",
+              onTap: () {
+                resetFilterCallback();
                 Navigator.maybePop(context);
               },
             )

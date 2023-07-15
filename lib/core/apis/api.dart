@@ -213,10 +213,10 @@ abstract class Api {
   Future<HttpResponse<dynamic>> requestFilterCustomer(
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
-    @Query("customer_type") int customerType,
-    @Query("data_source") int dataSource,
-    @Query("customer_need") int customerNeed,
-    @Query("sort_by") int sortBy,
+    @Query("customer_type") int? customerType,
+    @Query("data_source") int? dataSource,
+    @Query("customer_need") int? customerNeed,
+    @Query("sort_by") int? sortBy,
   );
   //endregion
 
@@ -1107,12 +1107,13 @@ class ApiService {
 
   //region customer
   Future<Either<Failure, ListCustomerData>> requestFilterCustomer(
-      int currentPage,
-      int pageSize,
-      int customerType,
-      int dataSource,
-      int customerNeed,
-      int sortBy) async {
+    int currentPage,
+    int pageSize,
+    int? customerType,
+    int? dataSource,
+    int? customerNeed,
+    int? sortBy,
+  ) async {
     try {
       final HttpResponse<dynamic> response = await api.requestFilterCustomer(
         currentPage,
