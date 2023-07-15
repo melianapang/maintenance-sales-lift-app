@@ -150,7 +150,8 @@ class _ListProjectViewState extends State<ListProjectView> {
         child: SizedBox(
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 24.0,
+              left: 20.0,
+              right: 14,
               top: 14,
               bottom: 14,
             ),
@@ -193,21 +194,23 @@ class _ListProjectViewState extends State<ListProjectView> {
                           fontWeight: 400,
                         ),
                       ),
-                      Spacings.vert(2),
-                      Text(
-                        StringUtils.removeZeroWidthSpaces(
-                          projectData.pics.join(", "),
+                      if (projectData.pics.isNotEmpty) ...[
+                        Spacings.vert(2),
+                        Text(
+                          StringUtils.removeZeroWidthSpaces(
+                            projectData.pics.map((e) => e.picName).join(", "),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: buildTextStyle(
+                            fontColor: projectData.isBgRed == true
+                                ? MyColors.white
+                                : MyColors.lightBlack02,
+                            fontSize: 16,
+                            fontWeight: 400,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: buildTextStyle(
-                          fontColor: projectData.isBgRed == true
-                              ? MyColors.white
-                              : MyColors.lightBlack02,
-                          fontSize: 16,
-                          fontWeight: 400,
-                        ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
