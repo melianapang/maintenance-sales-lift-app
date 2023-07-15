@@ -193,6 +193,21 @@ class _ListProjectViewState extends State<ListProjectView> {
                           fontWeight: 400,
                         ),
                       ),
+                      Spacings.vert(2),
+                      Text(
+                        StringUtils.removeZeroWidthSpaces(
+                          projectData.pics.join(", "),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: buildTextStyle(
+                          fontColor: projectData.isBgRed == true
+                              ? MyColors.white
+                              : MyColors.lightBlack02,
+                          fontSize: 16,
+                          fontWeight: 400,
+                        ),
+                      ),
                     ],
                   ),
                 ),
