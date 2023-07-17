@@ -35,10 +35,6 @@ class UpdateApkViewModel extends BaseViewModel {
       OtaUpdate()
           .execute(
         "${EnvConstants.baseURL}/api/0/Apk/download_apk/",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $jwtToken',
-        },
         destinationFilename: 'rejo_jaya_sakti.apk',
       )
           .listen(
