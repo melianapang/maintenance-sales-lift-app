@@ -87,6 +87,8 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                 searchController: model.searchController,
                 isFilterShown: true,
                 onTapFilter: () {
+                  if (model.busy) return;
+
                   showMaintenanceFilterMenu(
                     context,
                     listMaintenanceStatusMenu: model.maintenanceStatusOptions,

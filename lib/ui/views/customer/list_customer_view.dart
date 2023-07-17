@@ -97,6 +97,8 @@ class _ListCustomerViewState extends State<ListCustomerView> {
                 searchController: model.searchController,
                 isFilterShown: true,
                 onTapFilter: () {
+                  if (model.busy) return;
+
                   showCustomerFilterMenu(
                     context,
                     listPelangganMenu: model.customerTypeFilterOptions,
