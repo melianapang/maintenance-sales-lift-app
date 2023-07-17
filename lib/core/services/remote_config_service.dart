@@ -2,7 +2,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class RemoteConfigService {
   RemoteConfigService();
-  static const String _minVersionBuildNumberKey = 'min_version_build_number';
+  static const String _appMinVersion = 'min_version';
   static const String _latestVersionKey = 'latest_version';
 
   // feature flags
@@ -46,7 +46,7 @@ class RemoteConfigService {
   // }
 
   String? get appMinVersion => _remoteConfig.getString(
-        _minVersionBuildNumberKey,
+        _appMinVersion,
       );
 
   // String? get appLatestVersion => _remoteConfig.getString(

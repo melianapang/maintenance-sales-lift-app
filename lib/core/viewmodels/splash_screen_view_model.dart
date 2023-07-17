@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/app_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/update_apk/update_apk_view.dart';
@@ -42,9 +43,6 @@ class SplashScreenViewModel extends BaseViewModel {
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 
-  PackageInfo? _packageInfo;
-  PackageInfo? get packageInfo => _packageInfo;
-
   @override
   Future<void> initModel() async {
     setBusy(true);
@@ -53,7 +51,6 @@ class SplashScreenViewModel extends BaseViewModel {
     await _remoteConfigService.initialize();
 
     await checkAppVersion();
-
     await _getApprovalNotificationBatchNumber();
     setBusy(false);
 
@@ -66,20 +63,20 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future<void> checkAppVersion() async {
-    _packageInfo = await PackageInfo.fromPlatform();
-    notifyListeners();
-
     String minVersion = _remoteConfigService.appMinVersion ?? "";
 
-    if (int.parse(_packageInfo?.buildNumber ?? "0") > int.parse(minVersion)) {
-      return;
-    }
+    bool isUpdateRequied = await AppUtils.hasToUpdateApp(
+      requiredVersion: minVersion,
+    );
 
+    if (!isUpdateRequied) return;
+
+    final packageInfo = await PackageInfo.fromPlatform();
     _navigationService.popAllAndNavigateTo(
       Routes.updateApk,
       arguments: UpdateApkViewParam(
         minVersion: minVersion,
-        currentVersion: _packageInfo?.buildNumber,
+        currentVersion: packageInfo.version,
       ),
     );
   }
@@ -89,6 +86,8 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future<void> _getApprovalNotificationBatchNumber() async {
+    if (!await isLoggedIn()) return;
+
     final response =
         await _apiService.requestGetApprovaNotificationBatchlNumber();
 
