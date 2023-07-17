@@ -143,10 +143,12 @@ class EditProjectViewModel extends BaseViewModel {
         )
         .toList();
 
-    _projectLocation = LatLng(
-      double.parse(_projectData?.latitude ?? "0.0"),
-      double.parse(_projectData?.longitude ?? "0.0"),
-    );
+    if (_projectData?.latitude != null && _projectData?.longitude != null) {
+      _projectLocation = LatLng(
+        double.parse(_projectData?.latitude ?? "0.0"),
+        double.parse(_projectData?.longitude ?? "0.0"),
+      );
+    }
   }
 
   void onChangedName(String value) {
@@ -281,7 +283,11 @@ class EditProjectViewModel extends BaseViewModel {
     _isCustomerValid = _selectedCustomer != null;
     notifyListeners();
 
-    return _isNameValid && _isAdressValid && _isCityValid && _isCustomerValid;
+    return _isNameValid &&
+        _isAdressValid &&
+        _isCityValid &&
+        _isCustomerValid &&
+        _projectLocation != null;
   }
 
   void resetErrorMsg() {

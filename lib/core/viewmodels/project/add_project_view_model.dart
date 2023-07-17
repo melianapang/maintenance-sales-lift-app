@@ -264,7 +264,10 @@ class AddProjectViewModel extends BaseViewModel {
     _isCityValid = cityController.text.isNotEmpty;
     notifyListeners();
 
-    return _isNameValid && _isAdressValid && _isCityValid;
+    return _isNameValid &&
+        _isAdressValid &&
+        _isCityValid &&
+        _projectLocation != null;
   }
 
   void resetErrorMsg() {
