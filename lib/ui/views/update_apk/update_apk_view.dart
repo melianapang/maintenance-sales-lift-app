@@ -106,7 +106,7 @@ class _UpdateApkViewState extends State<UpdateApkView> {
             ),
             Spacings.vert(12),
             Text(
-              "Aplikasi yang berjalan saat ini perlu diperbarui. Anda harus mengunduh aplikasi terbaru untuk melanjutkan aktivitas pada aplikasi ini.\n\n Versi anda saat ini: ${widget.param.currentVersion} \n Minimum Aplikasi Versi: ${widget.param.minVersion}",
+              "Aplikasi yang berjalan saat ini perlu diperbarui. Anda harus mengunduh aplikasi terbaru untuk melanjutkan aktivitas pada aplikasi ini.\n\n Versi anda saat ini: ${widget.param.currentVersion} \n Versi Minimum Aplikasi : ${widget.param.minVersion}",
               textAlign: TextAlign.center,
               style: buildTextStyle(
                 fontSize: 16,
