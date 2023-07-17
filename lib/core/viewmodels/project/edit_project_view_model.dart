@@ -142,6 +142,11 @@ class EditProjectViewModel extends BaseViewModel {
           ),
         )
         .toList();
+
+    _projectLocation = LatLng(
+      double.parse(_projectData?.latitude ?? "0.0"),
+      double.parse(_projectData?.longitude ?? "0.0"),
+    );
   }
 
   void onChangedName(String value) {
