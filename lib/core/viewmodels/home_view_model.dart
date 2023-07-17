@@ -1,3 +1,4 @@
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/home_item_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
@@ -27,6 +28,9 @@ class HomeViewModel extends BaseViewModel {
   ProfileData? _profileData;
   ProfileData? get profileData => _profileData;
 
+  PackageInfo? _packageInfo;
+  PackageInfo? get packageInfo => _packageInfo;
+
   int? _approvalNumbers;
   int? get approvalNumbers => _approvalNumbers;
 
@@ -39,6 +43,7 @@ class HomeViewModel extends BaseViewModel {
     _approvalNumbers = await _sharedPreferencesService.get(
       SharedPrefKeys.approvalNotificationBatchNumber,
     );
+    await _getPackageInfo;
     setBusy(false);
   }
 
@@ -68,5 +73,9 @@ class HomeViewModel extends BaseViewModel {
       );
       notifyListeners();
     }
+  }
+
+  Future<void> _getPackageInfo() async {
+    _packageInfo = await PackageInfo.fromPlatform();
   }
 }

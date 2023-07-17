@@ -183,6 +183,19 @@ class _HomeViewState extends State<HomeView> {
                             );
                           },
                         ),
+                        Spacings.vert(14),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "App Version: ${model.packageInfo?.version ?? "1.0.0"}",
+                            textAlign: TextAlign.center,
+                            style: buildTextStyle(
+                              fontSize: 14,
+                              fontColor: MyColors.darkBlack02,
+                              fontWeight: 400,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
