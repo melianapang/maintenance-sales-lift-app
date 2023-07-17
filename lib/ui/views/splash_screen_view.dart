@@ -79,25 +79,6 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
-          bottomNavigationBar: Padding(
-            padding: EdgeInsets.only(
-              bottom: PaddingUtils.getBottomPadding(
-                context,
-                defaultPadding: 12,
-              ),
-            ),
-            child: model.packageInfo?.version != null
-                ? Text(
-                    model.packageInfo?.version ?? "0.0.0",
-                    style: buildTextStyle(
-                      fontSize: 16,
-                      fontColor: MyColors.white,
-                      fontWeight: 400,
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                : null,
-          ),
           body: Container(
             width: double.infinity,
             alignment: Alignment.center,
