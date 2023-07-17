@@ -76,7 +76,7 @@ class DetailProjectViewModel extends BaseViewModel {
   void setStatusCard() {
     if (_projectData == null) return;
 
-    int status = int.parse(_projectData?.status ?? "0");
+    int status = int.parse(_projectData?.lastFollowUpResult ?? "-1");
     if (status == FollowUpStatus.Loss.index) {
       _statusCardType = StatusCardType.Loss;
     } else if (status == FollowUpStatus.Hot.index) {

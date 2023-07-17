@@ -100,7 +100,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                     customerId: "",
                     latitude: "0",
                     longitude: "0",
-                    status: "0",
+                    lastFollowUpResult: "-1",
                   ),
                 ),
               ).then((value) {

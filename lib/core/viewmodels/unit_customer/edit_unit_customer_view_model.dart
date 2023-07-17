@@ -131,7 +131,7 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       pics: [],
       longitude: "0",
       latitude: "0",
-      status: "0",
+      lastFollowUpResult: "-1",
     );
   }
 
