@@ -175,7 +175,7 @@ class _DetailHistoryMaintenanceViewState
                   ),
                   Spacings.vert(35),
                   StatusCardWidget(
-                    cardType: StatusCardType.Confirmed,
+                    cardType: model.statusCardType,
                     onTap: () {},
                   ),
                   Spacings.vert(35),
