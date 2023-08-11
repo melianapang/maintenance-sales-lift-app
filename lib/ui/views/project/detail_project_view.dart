@@ -132,15 +132,18 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                             fontColor: MyColors.yellow01,
                           ),
                         ),
-                        Text(
-                          model.projectData?.customerName ?? "",
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontWeight: 400,
-                            fontColor: MyColors.lightBlack02,
+                        Spacings.vert(8),
+                        if (model.isAllowedToSeeConfidentialInfo) ...[
+                          Text(
+                            model.projectData?.customerName ?? "",
+                            style: buildTextStyle(
+                              fontSize: 20,
+                              fontWeight: 400,
+                              fontColor: MyColors.lightBlack02,
+                            ),
                           ),
-                        ),
-                        Spacings.vert(12),
+                          Spacings.vert(12),
+                        ],
                         StatusCardWidget(
                           cardType: model.statusCardType,
                           onTap: () {},
@@ -153,121 +156,127 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                           ),
                         ),
                         Spacings.vert(24),
-                        TextInput.disabled(
-                          label: "Alamat",
-                          text: model.projectData?.address,
-                        ),
-                        Spacings.vert(6),
-                        _buildLihatLokasiProyek(model.projectData),
-                        Spacings.vert(16),
+                        if (model.isAllowedToSeeConfidentialInfo) ...[
+                          TextInput.disabled(
+                            label: "Alamat",
+                            text: model.projectData?.address,
+                          ),
+                          Spacings.vert(6),
+                          _buildLihatLokasiProyek(model.projectData),
+                          Spacings.vert(16),
+                        ],
                         TextInput.disabled(
                           label: "Kota",
                           text: model.projectData?.city,
                         ),
                         Spacings.vert(12),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "PIC Proyek",
-                            style: buildTextStyle(
-                              fontSize: 18,
-                              fontColor: MyColors.yellow01,
-                              fontWeight: 700,
-                            ),
-                          ),
-                        ),
-                        Spacings.vert(12),
-                        if (model.listPic.isEmpty)
+                        if (model.isAllowedToSeeConfidentialInfo) ...[
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Belum ada data PIC untuk proyek ini.",
+                              "PIC Proyek",
                               style: buildTextStyle(
-                                fontSize: 16,
-                                fontColor: MyColors.lightBlack02.withOpacity(
-                                  0.5,
-                                ),
-                                fontWeight: 300,
+                                fontSize: 18,
+                                fontColor: MyColors.yellow01,
+                                fontWeight: 700,
                               ),
                             ),
                           ),
-                        if (model.listPic.isNotEmpty)
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: model.projectData?.pics.length ?? 0,
-                            separatorBuilder: (context, index) => const Divider(
-                              color: MyColors.transparent,
+                          Spacings.vert(12),
+                          if (model.listPic.isEmpty)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Belum ada data PIC untuk proyek ini.",
+                                style: buildTextStyle(
+                                  fontSize: 16,
+                                  fontColor: MyColors.lightBlack02.withOpacity(
+                                    0.5,
+                                  ),
+                                  fontWeight: 300,
+                                ),
+                              ),
                             ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                elevation: 2,
-                                color: MyColors.darkBlack02,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    19.0,
+                          if (model.listPic.isNotEmpty)
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: model.projectData?.pics.length ?? 0,
+                              separatorBuilder: (context, index) =>
+                                  const Divider(
+                                color: MyColors.transparent,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  elevation: 2,
+                                  color: MyColors.darkBlack02,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      19.0,
+                                    ),
                                   ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 24.0,
-                                    top: 14,
-                                    bottom: 14,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 24.0,
+                                      top: 14,
+                                      bottom: 14,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          StringUtils.removeZeroWidthSpaces(
+                                            "${model.projectData?.pics[index].picName} - ${model.projectData?.pics[index].role}",
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: buildTextStyle(
+                                            fontColor: MyColors.lightBlack02,
+                                            fontSize: 16,
+                                            fontWeight: 800,
+                                          ),
+                                        ),
+                                        Spacings.vert(2),
+                                        Text(
+                                          StringUtils.removeZeroWidthSpaces(
+                                            model.projectData?.pics[index]
+                                                    .email ??
+                                                "",
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: buildTextStyle(
+                                            fontColor: MyColors.lightBlack02,
+                                            fontSize: 14,
+                                            fontWeight: 400,
+                                          ),
+                                        ),
+                                        Spacings.vert(2),
+                                        Text(
+                                          StringUtils.removeZeroWidthSpaces(
+                                            model.projectData?.pics[index]
+                                                    .phoneNumber ??
+                                                "",
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: buildTextStyle(
+                                            fontColor: MyColors.lightBlack02,
+                                            fontSize: 14,
+                                            fontWeight: 400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        StringUtils.removeZeroWidthSpaces(
-                                          "${model.projectData?.pics[index].picName} - ${model.projectData?.pics[index].role}",
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: buildTextStyle(
-                                          fontColor: MyColors.lightBlack02,
-                                          fontSize: 16,
-                                          fontWeight: 800,
-                                        ),
-                                      ),
-                                      Spacings.vert(2),
-                                      Text(
-                                        StringUtils.removeZeroWidthSpaces(
-                                          model.projectData?.pics[index]
-                                                  .email ??
-                                              "",
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: buildTextStyle(
-                                          fontColor: MyColors.lightBlack02,
-                                          fontSize: 14,
-                                          fontWeight: 400,
-                                        ),
-                                      ),
-                                      Spacings.vert(2),
-                                      Text(
-                                        StringUtils.removeZeroWidthSpaces(
-                                          model.projectData?.pics[index]
-                                                  .phoneNumber ??
-                                              "",
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: buildTextStyle(
-                                          fontColor: MyColors.lightBlack02,
-                                          fontSize: 14,
-                                          fontWeight: 400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        Spacings.vert(24),
+                                );
+                              },
+                            ),
+                          Spacings.vert(24),
+                        ],
                       ],
                     ),
                   )

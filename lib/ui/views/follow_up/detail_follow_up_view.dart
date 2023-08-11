@@ -92,6 +92,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                     projectId: model.projectId ?? "",
                     projectName: model.projectName ?? "",
                     projectNeed: "",
+                    salesOwnedId: "",
                     customerName: model.customerName ?? "",
                     companyName: model.companyName,
                     city: "",

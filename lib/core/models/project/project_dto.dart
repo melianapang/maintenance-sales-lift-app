@@ -53,6 +53,7 @@ class ProjectData {
     required this.projectId,
     required this.projectNeed,
     required this.projectName,
+    required this.salesOwnedId,
     required this.lastFollowUpResult,
     required this.address,
     required this.city,
@@ -79,6 +80,9 @@ class ProjectData {
 
   @JsonKey(name: "project_need")
   final String projectNeed;
+
+  @JsonKey(name: "user_owned_id")
+  final String salesOwnedId;
 
   @JsonKey(name: "last_follow_up_result")
   final String? lastFollowUpResult;

@@ -40,6 +40,9 @@ class DetailProjectViewModel extends BaseViewModel {
   bool _isAllowedToDeleteData = false;
   bool get isAllowedToDeleteData => _isAllowedToDeleteData;
 
+  bool _isAllowedToSeeConfidentialInfo = false;
+  bool get isAllowedToSeeConfidentialInfo => _isAllowedToSeeConfidentialInfo;
+
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
 
@@ -58,6 +61,7 @@ class DetailProjectViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     _listPic.addAll(projectData?.pics ?? []);
+    await _setIsAllowedToSeeProjectInfo();
     await _checkIsAllowedToDeleteData();
     await _getCustomerDetail();
     setStatusCard();
@@ -94,6 +98,15 @@ class DetailProjectViewModel extends BaseViewModel {
 
   void resetErrorMsg() {
     _errorMsg = null;
+  }
+
+  Future<void> _setIsAllowedToSeeProjectInfo() async {
+    Role userRole = await _authenticationService.getUserRole();
+    String userId = await _authenticationService.getUserId();
+
+    _isAllowedToSeeConfidentialInfo = userRole == Role.SuperAdmin ||
+        userRole == Role.Admin ||
+        (userRole == Role.Sales && userId == _projectData?.salesOwnedId);
   }
 
   Future<void> requestGetDetailProject() async {

@@ -123,6 +123,7 @@ class EditUnitCustomerViewModel extends BaseViewModel {
       projectId: unitData?.projectId ?? "",
       projectNeed: "",
       projectName: unitData?.projectName ?? "",
+      salesOwnedId: "",
       address: "",
       city: "",
       customerId: "",
