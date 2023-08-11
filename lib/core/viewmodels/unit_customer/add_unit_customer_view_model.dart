@@ -62,6 +62,7 @@ class AddUnitCustomerViewModel extends BaseViewModel {
     FilterOption("Dumbwaiter", false),
     FilterOption("Escalator", false),
     FilterOption("Lift Hydraulic", false),
+    FilterOption("Lift Traction Backpack", false),
     FilterOption("Lain-Lain", false),
   ];
   List<FilterOption> get tipeUnitOptions => _tipeUnitOptions;

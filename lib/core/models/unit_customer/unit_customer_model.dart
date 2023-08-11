@@ -25,6 +25,8 @@ String? mappingTipeUnit(String? value) {
     case "4":
       return "Lift Hydraulic";
     case "5":
+      return "Lift Traction Backpack";
+    case "6":
     default:
       return "Lain-Lain";
   }
