@@ -120,6 +120,8 @@ class EditUnitCustomerViewModel extends BaseViewModel {
     kapasitasController.text = _unitData?.kapasitas ?? "";
     speedController.text = _unitData?.speed ?? "";
     totalLantaiController.text = _unitData?.totalLantai ?? "";
+    setSelectedJenisUnit(selectedMenu: int.parse(_unitData?.jenisUnit ?? "0"));
+    setSelectedTipeUnit(selectedMenu: int.parse(_unitData?.tipeUnit ?? "0"));
     _selectedProyek = ProjectData(
       projectId: unitData?.projectId ?? "",
       projectNeed: "",
