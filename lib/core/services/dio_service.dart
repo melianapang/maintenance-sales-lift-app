@@ -84,6 +84,14 @@ class DioService {
       )
       ..interceptors.add(
         InterceptorsWrapper(
+          onError: (e, handler) async {
+            if (e.response == null) return;
+
+            bool isLoggedIn = await _authenticationService.isLoggedIn();
+            if (e.response?.statusCode == 401 && isLoggedIn) {
+              _authenticationService.logout();
+            }
+          },
           onRequest: (
             RequestOptions option,
             RequestInterceptorHandler handler,
