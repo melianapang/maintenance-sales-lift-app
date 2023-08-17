@@ -29,8 +29,8 @@ class GCloudService {
     );
 
     // Instantiate objects to cloud storage
-    var storage = Storage(client, 'My First Project');
-    var bucket = storage.bucket('test-lift');
+    var storage = Storage(client, 'Rejo Jaya Sakti');
+    var bucket = storage.bucket('rejo_jaya_sakti_dev');
 
     // Save to bucket
     final timestamp = DateTime.now().millisecondsSinceEpoch;
