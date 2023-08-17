@@ -137,25 +137,6 @@ class FormFollowUpViewModel extends BaseViewModel {
   }
 
   Future<bool> _requestUpdateFollowUp() async {
-    // final response = await _apiService.requestCreateFollowUp(
-    //   projectId: int.parse(projectData?.projectId ?? "0"),
-    //   followUpResult: _selectedHasilKonfirmasiOption,
-    //   scheduleDate: DateTimeUtils.convertDateToString(
-    //     date: _selectedDates.first,
-    //     formatter: DateFormat(
-    //       DateTimeUtils.DATE_FORMAT_3,
-    //     ),
-    //   ),
-    //   note: noteController.text,
-    //   documents: _uploadedFiles,
-    //   // nextScheduleDate: DateTimeUtils.convertDateToString(
-    //   //   date: _selectedDates.first,
-    //   //   formatter: DateFormat(
-    //   //     DateTimeUtils.DATE_FORMAT_3,
-    //   //   ),
-    //   // ),
-    // );
-
     final response = await _apiService.requestUpdateFollowUp(
       followUpId: int.parse(_followUpId ?? "0"),
       projectId: int.parse(projectData?.projectId ?? "0"),
@@ -186,9 +167,10 @@ class FormFollowUpViewModel extends BaseViewModel {
       for (GalleryData gallery in galleryData) {
         File file = File(gallery.filepath);
         String ext = gallery.filepath.split('.').last;
+        int index = galleryData.indexOf(gallery);
 
         final response = await _gCloudService.save(
-          '${_projectData?.projectId}_follow_up_data_$currDateString.$ext',
+          '${_projectData?.projectId}_follow_up_data_${currDateString}_$index.$ext',
           file.readAsBytesSync(),
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
@@ -198,7 +180,7 @@ class FormFollowUpViewModel extends BaseViewModel {
         _uploadedFiles.add(
           FollowUpFile(
             filePath:
-                "${EnvConstants.baseGCloudPublicUrl}${_projectData?.projectId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}.$ext",
+                "${EnvConstants.baseGCloudPublicUrl}${_projectData?.projectId}_follow_up_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}_$index.$ext",
           ),
         );
         print("LINK UPLOADED SERVER: ${gallery.filepath}");

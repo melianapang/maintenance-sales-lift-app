@@ -157,7 +157,22 @@ class UpdateFollowUpResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final List<String> data;
+  final FollowUpIdData data;
+}
+
+@JsonSerializable()
+class FollowUpIdData {
+  FollowUpIdData({
+    required this.followUpId,
+  });
+
+  factory FollowUpIdData.fromJson(Map<String, dynamic> json) =>
+      _$FollowUpIdDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FollowUpIdDataToJson(this);
+
+  @JsonKey(name: "follow_up_id")
+  final int followUpId;
 }
 
 //region detail FollowUp

@@ -159,6 +159,7 @@ class DetailFollowUpViewModel extends BaseViewModel {
 
     if (response.isRight) {
       _nextFollowUpDate = response.right.scheduleDate;
+      _followUpId = response.right.followUpId;
       notifyListeners();
       return;
     }
