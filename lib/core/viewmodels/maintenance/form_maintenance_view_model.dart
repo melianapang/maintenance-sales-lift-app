@@ -186,7 +186,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
         // Upload to Google cloud
         final response = await _gCloudService.save(
-          '${maintenanceData?.maintenanceId}_maintenance_data_$currDateString$nFile.$ext',
+          '${maintenanceData?.maintenanceId}_maintenance_data_${currDateString}_$nFile.$ext',
           file.readAsBytesSync(),
         );
         print("LINK GCLOUD: ${response?.downloadLink}");
@@ -195,7 +195,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
           File thumbnailFile = File(gallery.thumbnailPath ?? "");
           // Upload to Google cloud for thumbnail video
           final response = await _gCloudService.save(
-            '${maintenanceData?.maintenanceId}_maintenance_data_$currDateString${nFile}_thumbnail.jpg',
+            '${maintenanceData?.maintenanceId}_maintenance_data_${currDateString}_${nFile}_thumbnail.jpg',
             thumbnailFile.readAsBytesSync(),
           );
           print("LINK GCLOUD THUMBNAIL VIDEO: ${response?.downloadLink}");
@@ -204,7 +204,7 @@ class FormMaintenanceViewModel extends BaseViewModel {
         //Save the link that will be sent to api
         //We wont be used the downloadLink, because we only need to show the photo/ video to the user. No need to download it.
         final gCloudFileName =
-            "${EnvConstants.baseGCloudPublicUrl}${maintenanceData?.maintenanceId}_maintenance_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}$nFile";
+            "${EnvConstants.baseGCloudPublicUrl}${maintenanceData?.maintenanceId}_maintenance_data_${currDateString.replaceAll(' ', '%20').replaceAll(':', '%3A')}_$nFile";
 
         _uploadedFiles.add(
           MaintenanceFile(
