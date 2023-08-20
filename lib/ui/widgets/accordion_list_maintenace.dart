@@ -17,12 +17,14 @@ class AccordionListMaintenanceWidget extends StatefulWidget {
     required this.isRedStatus,
     required this.isFilterOffOrFilterNotMaintenance,
     required this.listUnitsMaintenances,
+    required this.refreshPageCallback,
   });
 
   final String title;
   final bool isRedStatus;
   final bool isFilterOffOrFilterNotMaintenance;
   final List<MaintenanceData> listUnitsMaintenances;
+  final VoidCallback refreshPageCallback;
 
   @override
   State<AccordionListMaintenanceWidget> createState() =>
@@ -159,7 +161,10 @@ class _AccordionListMaintenanceWidgetState
                                   maintenanceData:
                                       widget.listUnitsMaintenances[index],
                                 ),
-                              );
+                              ).then((value) {
+                                if (value == null || value == false) return;
+                                widget.refreshPageCallback;
+                              });
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(

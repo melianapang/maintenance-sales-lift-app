@@ -122,6 +122,7 @@ class _ListMaintenanceViewState extends State<ListMaintenanceView> {
                         listUnitsMaintenances:
                             model.listMaintenance?[index].unitMaintenaces ??
                                 <MaintenanceData>[],
+                        refreshPageCallback: model.refreshPage,
                       );
                     },
                   ),
