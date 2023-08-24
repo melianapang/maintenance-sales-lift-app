@@ -31,8 +31,8 @@ class HomeViewModel extends BaseViewModel {
   PackageInfo? _packageInfo;
   PackageInfo? get packageInfo => _packageInfo;
 
-  int? _approvalNumbers;
-  int? get approvalNumbers => _approvalNumbers;
+  int _approvalNumbers = 0;
+  int get approvalNumbers => _approvalNumbers;
 
   @override
   Future<void> initModel() async {

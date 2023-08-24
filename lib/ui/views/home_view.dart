@@ -312,9 +312,7 @@ class _HomeViewState extends State<HomeView> {
         mainAxisExtent: 130,
       ),
       itemBuilder: (context, index) {
-        if (data[index].title == "Permohonan" &&
-            model != null &&
-            model.approvalNumbers != null) {
+        if (data[index].title == "Permohonan" && model != null) {
           return Stack(
             children: [
               CustomCardWidget(
@@ -332,30 +330,31 @@ class _HomeViewState extends State<HomeView> {
                   });
                 },
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: MyColors.red,
-                    borderRadius: BorderRadius.circular(
-                      100,
+              if (model.approvalNumbers > 0)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
                     ),
-                  ),
-                  child: Text(
-                    model.approvalNumbers.toString(),
-                    style: buildTextStyle(
-                      fontSize: 14,
-                      fontColor: MyColors.white,
-                      fontWeight: 600,
+                    decoration: BoxDecoration(
+                      color: MyColors.red,
+                      borderRadius: BorderRadius.circular(
+                        100,
+                      ),
+                    ),
+                    child: Text(
+                      model.approvalNumbers.toString(),
+                      style: buildTextStyle(
+                        fontSize: 14,
+                        fontColor: MyColors.white,
+                        fontWeight: 600,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           );
         }
