@@ -535,7 +535,13 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                 arguments: FormFollowUpViewParam(
                   projectData: model.projectData,
                 ),
-              );
+              ).then((value) {
+                if (value == null) return;
+                if (value == true) {
+                  model.refreshPage();
+                  model.setPreviousPageNeedRefresh(true);
+                }
+              });
 
               setState() {
                 model.setDialChildrenVisible();
