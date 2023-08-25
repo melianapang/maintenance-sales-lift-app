@@ -309,9 +309,9 @@ abstract class Api {
     @Path("follow_up_id") int followUpId,
   );
 
-  @GET('/api/0/FollowUp/get_history_follow_ups/{customer_id}')
+  @GET('/api/0/FollowUp/get_history_follow_ups/{project_id}')
   Future<HttpResponse<dynamic>> requestGetAllHistoryFollowUp(
-    @Path("customer_id") String customerId,
+    @Path("project_id") String customerId,
   );
 
   @GET('/api/0/FollowUp/search_follow_up/')
