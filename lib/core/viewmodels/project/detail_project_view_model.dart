@@ -149,6 +149,7 @@ class DetailProjectViewModel extends BaseViewModel {
     setBusy(true);
     resetErrorMsg();
     await requestGetDetailProject();
+    setStatusCard();
     notifyListeners();
     setBusy(false);
   }
