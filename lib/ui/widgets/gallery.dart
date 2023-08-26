@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/files_compression_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
+import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/image_detail_view.dart';
 import 'package:video_compress/video_compress.dart';
 
@@ -253,6 +254,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
 
   Future<void> _onTapAddGallery(
     BuildContext context, {
+    required bool isFromCamera,
     required GalleryType galleryType,
     void Function(
       GalleryData? compressedFile,
@@ -287,13 +289,21 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
       return;
     }
 
-    //pick file (image / photo)
+    //pick file (image / video)
     final _picker = ImagePicker();
     final XFile? file;
-    if (galleryType == GalleryType.PHOTO) {
-      file = await _picker.pickImage(source: ImageSource.gallery);
+    if (!isFromCamera) {
+      if (galleryType == GalleryType.PHOTO) {
+        file = await _picker.pickImage(source: ImageSource.gallery);
+      } else {
+        file = await _picker.pickVideo(source: ImageSource.gallery);
+      }
     } else {
-      file = await _picker.pickVideo(source: ImageSource.gallery);
+      if (galleryType == GalleryType.PHOTO) {
+        file = await _picker.pickImage(source: ImageSource.camera);
+      } else {
+        file = await _picker.pickVideo(source: ImageSource.camera);
+      }
     }
 
     //compress file
@@ -348,7 +358,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
 
   Widget _buildAddGallery(BuildContext context) {
     return GestureDetector(
-      onTap: () => _onTapAddGallery(
+      onTap: () => _showSelectFileFromDialog(
         context,
         galleryType: widget.galleryType,
         callbackCompressedFiles: widget.callbackCompressedFiles,
@@ -378,6 +388,120 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
         ),
       ),
     );
+  }
+
+  Future _showSelectFileFromDialog(
+    BuildContext context, {
+    required GalleryType galleryType,
+    void Function(
+      GalleryData? compressedFile,
+      bool isCompressing,
+    )?
+        callbackCompressedFiles,
+  }) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Container(
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Pilih file dari:',
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontWeight: 500,
+                      fontColor: MyColors.darkBlack01,
+                    ),
+                  ),
+                  Spacings.vert(8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          _onTapAddGallery(
+                            context,
+                            isFromCamera: false,
+                            galleryType: widget.galleryType,
+                            callbackCompressedFiles:
+                                widget.callbackCompressedFiles,
+                          );
+                        },
+                        child: Card(
+                            elevation: 5,
+                            color: MyColors.yellow01,
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    PhosphorIcons.imageSquareFill,
+                                    color: MyColors.darkBlack01,
+                                    size: 24,
+                                  ),
+                                  Spacings.vert(6),
+                                  Text(
+                                    'Gallery',
+                                    style: buildTextStyle(
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      fontColor: MyColors.darkBlack01,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          _onTapAddGallery(
+                            context,
+                            isFromCamera: true,
+                            galleryType: widget.galleryType,
+                            callbackCompressedFiles:
+                                widget.callbackCompressedFiles,
+                          );
+                        },
+                        child: Card(
+                            elevation: 5,
+                            color: MyColors.yellow01,
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    PhosphorIcons.cameraFill,
+                                    color: MyColors.darkBlack01,
+                                    size: 24,
+                                  ),
+                                  Spacings.vert(6),
+                                  Text(
+                                    'Camera',
+                                    style: buildTextStyle(
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      fontColor: MyColors.darkBlack01,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   int get _galleryThumbnailsLength => widget.isCRUD
