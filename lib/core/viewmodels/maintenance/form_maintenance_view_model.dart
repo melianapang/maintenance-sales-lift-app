@@ -49,11 +49,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
   final noteController = TextEditingController();
 
   // Filter related
-  int _selectedHasilMaintenanceOption = 0;
+  int _selectedHasilMaintenanceOption = 1;
   int get selectedHasilMaintenanceOption => _selectedHasilMaintenanceOption;
   final List<FilterOption> _hasilMaintenanceOption = [
-    FilterOption("Batal/Gagal", true),
-    FilterOption("Berhasil", false),
+    FilterOption("Batal/Gagal", false),
+    FilterOption("Berhasil", true),
   ];
   List<FilterOption> get hasilMaintenanceOption => _hasilMaintenanceOption;
   // End of filter related
