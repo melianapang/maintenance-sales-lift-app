@@ -137,6 +137,17 @@ class FormMaintenanceViewModel extends BaseViewModel {
     _errorMsg = null;
   }
 
+  void _checkNewMaintenanceDate() {
+    if (maintenanceData?.scheduleDate == null) return;
+
+    DateTime currFollowUpDate = DateTimeUtils.convertStringToDate(
+        formattedDateString: maintenanceData?.scheduleDate ?? "");
+    if (_selectedNextMaintenanceDates.first.isBefore(currFollowUpDate)) {
+      _errorMsg =
+          "Tanggal pemeliharaan selanjutnya harus setelah tanggal pemeliharaan sekarang";
+    }
+  }
+
   Future<bool> _requestUpdateMaintenanceData() async {
     Position? position = await LocationUtils.getCurrentPosition();
     if (position == null) {
@@ -296,6 +307,8 @@ class FormMaintenanceViewModel extends BaseViewModel {
       return await _requestUpdateMaintenanceDataDummy();
     }
 
+    _checkNewMaintenanceDate();
+    if (_errorMsg != null) return false;
     await _saveGalleryToCloud();
     if (_errorMsg != null) return false;
 
