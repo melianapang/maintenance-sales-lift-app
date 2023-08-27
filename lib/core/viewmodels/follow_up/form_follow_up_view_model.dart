@@ -136,6 +136,17 @@ class FormFollowUpViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
+  void _checkNewFollowUpDate() {
+    if (_nextFollowUpDate == null) return;
+
+    DateTime currFollowUpDate = DateTimeUtils.convertStringToDate(
+        formattedDateString: _nextFollowUpDate ?? "");
+    if (_selectedNextFollowUpDates.first.isBefore(currFollowUpDate)) {
+      _errorMsg =
+          "Tanggal konfirmasi selanjutnya harus setelah tanggal konfirmasi sekarang";
+    }
+  }
+
   Future<bool> _requestUpdateFollowUp() async {
     final response = await _apiService.requestUpdateFollowUp(
       followUpId: int.parse(_followUpId ?? "0"),
@@ -222,6 +233,9 @@ class FormFollowUpViewModel extends BaseViewModel {
     if (!_isGCloudStorageEnabled) {
       return await _requestUpdateFollowUpDummy();
     }
+
+    _checkNewFollowUpDate();
+    if (_errorMsg != null) return false;
 
     await _saveGalleryToCloud();
     if (_errorMsg != null) return false;
