@@ -288,7 +288,7 @@ class AddNonProjectCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         List<CustomerNeedData> tempList = response.right.result
-            .where((element) => element.isActive == 1)
+            .where((element) => element.isActive == "1")
             .toList();
         _listCustomerNeed = tempList;
         convertCustomerNeedDataToFilterData(tempList);
@@ -309,7 +309,7 @@ class AddNonProjectCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         List<CustomerTypeData> tempList = response.right.result
-            .where((element) => element.isActive == 1)
+            .where((element) => element.isActive == "1")
             .toList();
         _listCustomerType = tempList;
         convertCustomerTypeDataToFilterData(tempList);

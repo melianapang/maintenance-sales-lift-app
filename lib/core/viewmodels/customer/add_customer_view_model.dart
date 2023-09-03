@@ -38,6 +38,9 @@ class AddCustomerViewModel extends BaseViewModel {
   int _selectedCustomerTypeFilter = 0;
   int get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
 
+  String _selectedCustomerTypeFilterStr = "";
+  String get selectedCustomerTypeFilterStr => _selectedCustomerTypeFilterStr;
+
   List<CustomerTypeData>? _listCustomerType;
   List<CustomerTypeData>? get listCustomerType => _listCustomerType;
   List<FilterOptionDynamic> customerTypeFilterOptions = [];
@@ -167,6 +170,7 @@ class AddCustomerViewModel extends BaseViewModel {
     for (FilterOptionDynamic menu in customerTypeFilterOptions) {
       if (int.parse(menu.idFilter) == selectedMenu) {
         menu.isSelected = true;
+        _selectedCustomerTypeFilterStr = menu.title;
         continue;
       }
       menu.isSelected = false;
@@ -204,6 +208,7 @@ class AddCustomerViewModel extends BaseViewModel {
         .toList();
 
     _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
+    _selectedCustomerTypeFilterStr = values.first.customerTypeName;
   }
 
   void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {
@@ -288,7 +293,7 @@ class AddCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty) {
         List<CustomerNeedData> tempList = response.right.result
-            .where((element) => element.isActive == 1)
+            .where((element) => element.isActive == "1")
             .toList();
         _listCustomerNeed = tempList;
         convertCustomerNeedDataToFilterData(tempList);
@@ -309,7 +314,7 @@ class AddCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         List<CustomerTypeData> tempList = response.right.result
-            .where((element) => element.isActive == 1)
+            .where((element) => element.isActive == "1")
             .toList();
         _listCustomerType = tempList;
         convertCustomerTypeDataToFilterData(tempList);

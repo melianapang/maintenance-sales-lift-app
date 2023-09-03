@@ -93,7 +93,7 @@ class ListCustomerTypeViewModel extends BaseViewModel {
     if (response.isRight) {
       List<CustomerTypeData> tempList = response.right.result;
       if (tempList.isNotEmpty) {
-        tempList.where((element) => element.isActive == 1).toList();
+        tempList.where((element) => element.isActive == "1").toList();
       }
 
       if (_paginationControl.currentPage == 1) {

@@ -65,7 +65,7 @@ class CustomerNeedData {
   final String customerNeedName;
 
   @JsonKey(name: "is_active")
-  final int isActive;
+  final String isActive;
 }
 //endregion
 

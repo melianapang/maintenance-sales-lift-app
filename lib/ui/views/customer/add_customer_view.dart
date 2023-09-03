@@ -214,7 +214,8 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                               : null,
                         ),
                         Spacings.vert(24),
-                        if (model.selectedCustomerTypeFilter == 1) ...[
+                        if (model.selectedCustomerTypeFilterStr ==
+                            "Perusahaan") ...[
                           TextInput.editable(
                             label: "Nama Perusahaan",
                             hintText: "Nama Perusahaan",
