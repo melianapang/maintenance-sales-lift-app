@@ -50,6 +50,7 @@ class CustomerTypeData {
   CustomerTypeData({
     required this.customerTypeId,
     required this.customerTypeName,
+    required this.isActive,
   });
 
   factory CustomerTypeData.fromJson(Map<String, dynamic> json) =>
@@ -62,6 +63,9 @@ class CustomerTypeData {
 
   @JsonKey(name: "customer_type_name")
   final String customerTypeName;
+
+  @JsonKey(name: "is_active")
+  final int isActive;
 }
 //endregion
 

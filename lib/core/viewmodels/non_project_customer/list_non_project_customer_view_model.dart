@@ -257,8 +257,11 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
 
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
-        _listCustomerNeed = response.right.result;
-        convertCustomerNeedDataToFilterData(response.right.result);
+        List<CustomerNeedData> tempList = response.right.result
+            .where((element) => element.isActive == 1)
+            .toList();
+        _listCustomerNeed = tempList;
+        convertCustomerNeedDataToFilterData(tempList);
       }
 
       _isShowNoDataFoundPage = response.right.result.isEmpty;
@@ -277,8 +280,11 @@ class ListNonProjectCustomerViewModel extends BaseViewModel {
 
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
-        _listCustomerType = response.right.result;
-        convertCustomerTypeDataToFilterData(response.right.result);
+        List<CustomerTypeData> tempList = response.right.result
+            .where((element) => element.isActive == 1)
+            .toList();
+        _listCustomerType = tempList;
+        convertCustomerTypeDataToFilterData(tempList);
       }
 
       _isShowNoDataFoundPage = response.right.result.isEmpty;

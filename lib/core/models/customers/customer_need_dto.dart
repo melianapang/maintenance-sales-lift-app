@@ -50,6 +50,7 @@ class CustomerNeedData {
   CustomerNeedData({
     required this.customerNeedId,
     required this.customerNeedName,
+    required this.isActive,
   });
 
   factory CustomerNeedData.fromJson(Map<String, dynamic> json) =>
@@ -62,6 +63,9 @@ class CustomerNeedData {
 
   @JsonKey(name: "customer_need_name")
   final String customerNeedName;
+
+  @JsonKey(name: "is_active")
+  final int isActive;
 }
 //endregion
 
