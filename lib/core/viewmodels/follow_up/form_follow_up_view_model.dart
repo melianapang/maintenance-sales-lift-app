@@ -116,6 +116,10 @@ class FormFollowUpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void addNewGalleryData(GalleryData compressedFile) {
+    _galleryData.add(compressedFile);
+  }
+
   void resetErrorMsg() {
     _errorMsg = null;
   }
@@ -170,15 +174,17 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   Future<void> _saveGalleryToCloud() async {
     try {
+      if (_galleryData.isEmpty) return;
+
       final currDateString = DateTimeUtils.convertDateToString(
         date: DateTime.now(),
         formatter: DateFormat(DateTimeUtils.DATE_FORMAT_3),
       );
 
-      for (GalleryData gallery in galleryData) {
+      for (GalleryData gallery in _galleryData) {
         File file = File(gallery.filepath);
         String ext = gallery.filepath.split('.').last;
-        int index = galleryData.indexOf(gallery);
+        int index = _galleryData.indexOf(gallery);
 
         final response = await _gCloudService.save(
           '${_projectData?.projectId}_follow_up_data_${currDateString}_$index.$ext',

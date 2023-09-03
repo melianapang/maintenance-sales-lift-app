@@ -199,7 +199,7 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
 
                     Navigator.pop(context);
                     if (compressedFile != null) {
-                      model.galleryData.add(compressedFile);
+                      model.addNewGalleryData(compressedFile);
                       setState(() {});
 
                       //scroll to last index of bukti foto
