@@ -234,8 +234,8 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                               : null,
                         ),
                         Spacings.vert(24),
-                        if (model.customerData?.companyName?.isNotEmpty ==
-                            true) ...[
+                        if (model.selectedCustomerTypeFilterStr ==
+                            "Perusahaan") ...[
                           TextInput.editable(
                             controller: model.namaPerusahaanController,
                             label: "Nama Perusahaan",

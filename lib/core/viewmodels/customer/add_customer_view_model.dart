@@ -171,6 +171,7 @@ class AddCustomerViewModel extends BaseViewModel {
       if (int.parse(menu.idFilter) == selectedMenu) {
         menu.isSelected = true;
         _selectedCustomerTypeFilterStr = menu.title;
+        notifyListeners();
         continue;
       }
       menu.isSelected = false;
@@ -209,6 +210,7 @@ class AddCustomerViewModel extends BaseViewModel {
 
     _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
     _selectedCustomerTypeFilterStr = values.first.customerTypeName;
+    notifyListeners();
   }
 
   void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {

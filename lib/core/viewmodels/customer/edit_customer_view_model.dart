@@ -73,6 +73,9 @@ class EditCustomerViewModel extends BaseViewModel {
   int _selectedCustomerTypeFilter = 0;
   int get selectedCustomerTypeFilter => _selectedCustomerTypeFilter;
 
+  String _selectedCustomerTypeFilterStr = "";
+  String get selectedCustomerTypeFilterStr => _selectedCustomerTypeFilterStr;
+
   List<CustomerTypeData>? _listCustomerType;
   List<CustomerTypeData>? get listCustomerType => _listCustomerType;
   List<FilterOptionDynamic> customerTypeFilterOptions = [];
@@ -188,6 +191,8 @@ class EditCustomerViewModel extends BaseViewModel {
     for (FilterOptionDynamic menu in customerTypeFilterOptions) {
       if (int.parse(menu.idFilter) == selectedMenu) {
         menu.isSelected = true;
+        _selectedCustomerTypeFilterStr = menu.title;
+        notifyListeners();
         continue;
       }
       menu.isSelected = false;
@@ -263,6 +268,8 @@ class EditCustomerViewModel extends BaseViewModel {
         .toList();
 
     _selectedCustomerTypeFilter = int.parse(values.first.customerTypeId);
+    _selectedCustomerTypeFilterStr = values.first.customerTypeName;
+    notifyListeners();
   }
 
   void convertCustomerNeedDataToFilterData(List<CustomerNeedData> values) {
