@@ -103,6 +103,12 @@ class _EditProfileViewState extends State<EditProfileView> {
               ),
               child: Column(
                 children: [
+                  TextInput.disabled(
+                    label: "Username",
+                    text: model.profileData?.username ?? "",
+                    hintText: "Username",
+                  ),
+                  Spacings.vert(24),
                   TextInput.editable(
                     controller: model.namaLengkapController,
                     label: "Nama",
@@ -111,17 +117,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     onChangedListener: model.onChangedName,
                     errorText:
                         !model.isNameValid ? "Kolom ini wajib diisi." : null,
-                  ),
-                  Spacings.vert(24),
-                  TextInput.editable(
-                    controller: model.usernameController,
-                    label: "Username",
-                    hintText: "Username",
-                    keyboardType: TextInputType.name,
-                    onChangedListener: model.onChangedUsername,
-                    errorText: !model.isUsernameValid
-                        ? "Kolom ini wajib diisi."
-                        : null,
                   ),
                   Spacings.vert(24),
                   TextInput.editable(
