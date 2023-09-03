@@ -4,6 +4,7 @@ import 'package:alice_lightweight/core/alice_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
@@ -85,11 +86,16 @@ class DioService {
       ..interceptors.add(
         InterceptorsWrapper(
           onError: (e, handler) async {
-            if (e.response == null) return;
-
             bool isLoggedIn = await _authenticationService.isLoggedIn();
             if (e.response?.statusCode == 401 && isLoggedIn) {
               _authenticationService.logout();
+            } else {
+              handler.next(
+                DioError(
+                  requestOptions: RequestOptions(path: ""),
+                  error: e,
+                ),
+              );
             }
           },
           onRequest: (
