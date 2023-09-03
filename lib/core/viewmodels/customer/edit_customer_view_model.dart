@@ -322,7 +322,9 @@ class EditCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         List<CustomerNeedData> tempList = response.right.result
-            .where((element) => element.isActive == "1")
+            .where((element) =>
+                element.isActive == "1" ||
+                element.customerNeedId == _customerData?.customerNeed)
             .toList();
         _listCustomerNeed = tempList;
         convertCustomerNeedDataToFilterData(tempList);
@@ -342,7 +344,9 @@ class EditCustomerViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         List<CustomerTypeData> tempList = response.right.result
-            .where((element) => element.isActive == "1")
+            .where((element) =>
+                element.isActive == "1" ||
+                element.customerTypeId == _customerData?.customerType)
             .toList();
         _listCustomerType = tempList;
         convertCustomerTypeDataToFilterData(tempList);
