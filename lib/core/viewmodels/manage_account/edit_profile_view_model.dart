@@ -23,6 +23,7 @@ class EditProfileViewModel extends BaseViewModel {
   final SharedPreferencesService _sharedPreferencesService;
 
   final ProfileData? _profileData;
+  ProfileData? get profileData => _profileData;
 
   final namaLengkapController = TextEditingController();
   final usernameController = TextEditingController();
@@ -33,9 +34,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   bool _isNameValid = true;
   bool get isNameValid => _isNameValid;
-
-  bool _isUsernameValid = true;
-  bool get isUsernameValid => _isUsernameValid;
 
   bool _isAdressValid = true;
   bool get isAdressValid => _isAdressValid;
@@ -61,7 +59,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   void handleExistingData() {
     namaLengkapController.text = _profileData?.name ?? "";
-    usernameController.text = _profileData?.username ?? "";
     phoneNumberController.text = _profileData?.phoneNumber ?? "";
     alamatController.text = _profileData?.address ?? "";
     kotaController.text = _profileData?.city ?? "";
@@ -70,11 +67,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   void onChangedName(String value) {
     _isNameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedUsername(String value) {
-    _isUsernameValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -121,7 +113,7 @@ class EditProfileViewModel extends BaseViewModel {
     await _sharedPreferencesService.set(
       SharedPrefKeys.profileData,
       ProfileData(
-        username: usernameController.text,
+        username: _profileData?.username ?? "",
         name: namaLengkapController.text,
         email: emailController.text,
         phoneNumber: phoneNumberController.text,
