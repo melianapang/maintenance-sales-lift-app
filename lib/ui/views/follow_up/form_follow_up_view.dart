@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/follow_up/form_follow_up_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -190,6 +191,12 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                       return;
                     }
 
+                    if (model.galleryData.length >= 10) {
+                      SnackbarUtils.showSimpleSnackbar(
+                          text: 'Anda hanya bisa menambahkan MAKS 10 foto.');
+                      return;
+                    }
+
                     Navigator.pop(context);
                     if (compressedFile != null) {
                       model.galleryData.add(compressedFile);
@@ -206,6 +213,8 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                     }
                   },
                   callbackDeleteAddedGallery: (data) {
+                    if (model.galleryData.isEmpty) return;
+
                     model.galleryData.remove(data);
 
                     setState(() {});
