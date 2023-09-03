@@ -47,6 +47,12 @@ class DetailUserViewModel extends BaseViewModel {
   Future<void> _checkIsAllowedToDeleteAndEditUser() async {
     Role role = await _authenticationService.getUserRole();
     Role dataRole = mappingStringToRole(_userData?.roleName ?? "Teknisi");
+
+    if (_userData?.userId == "1") {
+      _isAllowedToDeleteEditUser = false;
+      return;
+    }
+
     _isAllowedToDeleteEditUser =
         (dataRole != Role.SuperAdmin && role == Role.Admin) ||
             role == Role.SuperAdmin;
