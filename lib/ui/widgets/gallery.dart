@@ -358,11 +358,23 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
 
   Widget _buildAddGallery(BuildContext context) {
     return GestureDetector(
-      onTap: () => _showSelectFileFromDialog(
-        context,
-        galleryType: widget.galleryType,
-        callbackCompressedFiles: widget.callbackCompressedFiles,
-      ),
+      onTap: () {
+        if (widget.galleryType == GalleryType.PDF) {
+          _onTapAddGallery(
+            context,
+            isFromCamera: false,
+            galleryType: widget.galleryType,
+            callbackCompressedFiles: widget.callbackCompressedFiles,
+          );
+          return;
+        }
+
+        _showSelectFileFromDialog(
+          context,
+          galleryType: widget.galleryType,
+          callbackCompressedFiles: widget.callbackCompressedFiles,
+        );
+      },
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.only(
