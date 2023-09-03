@@ -358,67 +358,6 @@ class _DetailProjectViewState extends State<DetailProjectView> {
         borderRadius: BorderRadius.circular(100),
       ),
       children: [
-        SpeedDialChild(
-          child: !model.isDialChildrenVisible
-              ? const Icon(PhosphorIcons.listBulletsBold)
-              : null,
-          backgroundColor: MyColors.yellow02,
-          foregroundColor: MyColors.white,
-          label: 'Dokumen Proyek',
-          labelBackgroundColor: MyColors.lightBlack01,
-          labelShadow: [
-            const BoxShadow(
-              color: MyColors.transparent,
-            ),
-          ],
-          labelStyle: buildTextStyle(
-              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.documentProject,
-              arguments: DocumentProjectViewwParam(
-                projectData: model.projectData,
-              ),
-            );
-
-            setState() {
-              model.setDialChildrenVisible();
-            }
-          },
-        ),
-        if (widget.param.sourcePage == DetailProjectSourcePage.ListProjectPage)
-          SpeedDialChild(
-            child: !model.isDialChildrenVisible
-                ? const Icon(PhosphorIcons.listBulletsBold)
-                : null,
-            backgroundColor: MyColors.yellow02,
-            foregroundColor: MyColors.white,
-            label: 'Daftar Unit Proyek',
-            labelBackgroundColor: MyColors.lightBlack01,
-            labelShadow: [
-              const BoxShadow(
-                color: MyColors.transparent,
-              ),
-            ],
-            labelStyle: buildTextStyle(
-                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                Routes.listUnit,
-                arguments: ListUnitCustomerViewParam(
-                  sourcePage: ListUnitCustomerSourcePage.DetailProject,
-                  customerData: model.customerData,
-                  projectData: model.projectData,
-                ),
-              );
-
-              setState() {
-                model.setDialChildrenVisible();
-              }
-            },
-          ),
         if (widget.param.sourcePage ==
             DetailProjectSourcePage.ListProjectPage) ...[
           if (model.isAllowedToDeleteData)
@@ -426,7 +365,7 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               child: !model.isDialChildrenVisible
                   ? const Icon(PhosphorIcons.trashBold)
                   : null,
-              backgroundColor: MyColors.yellow02,
+              backgroundColor: MyColors.redFontStatusCard,
               foregroundColor: MyColors.white,
               label: 'Hapus Data Proyek',
               labelBackgroundColor: MyColors.lightBlack01,
@@ -549,6 +488,67 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             },
           ),
         ],
+        SpeedDialChild(
+          child: !model.isDialChildrenVisible
+              ? const Icon(PhosphorIcons.listBulletsBold)
+              : null,
+          backgroundColor: MyColors.yellow02,
+          foregroundColor: MyColors.white,
+          label: 'Dokumen Proyek',
+          labelBackgroundColor: MyColors.lightBlack01,
+          labelShadow: [
+            const BoxShadow(
+              color: MyColors.transparent,
+            ),
+          ],
+          labelStyle: buildTextStyle(
+              fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.documentProject,
+              arguments: DocumentProjectViewwParam(
+                projectData: model.projectData,
+              ),
+            );
+
+            setState() {
+              model.setDialChildrenVisible();
+            }
+          },
+        ),
+        if (widget.param.sourcePage == DetailProjectSourcePage.ListProjectPage)
+          SpeedDialChild(
+            child: !model.isDialChildrenVisible
+                ? const Icon(PhosphorIcons.listBulletsBold)
+                : null,
+            backgroundColor: MyColors.yellow02,
+            foregroundColor: MyColors.white,
+            label: 'Daftar Unit Proyek',
+            labelBackgroundColor: MyColors.lightBlack01,
+            labelShadow: [
+              const BoxShadow(
+                color: MyColors.transparent,
+              ),
+            ],
+            labelStyle: buildTextStyle(
+                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.listUnit,
+                arguments: ListUnitCustomerViewParam(
+                  sourcePage: ListUnitCustomerSourcePage.DetailProject,
+                  customerData: model.customerData,
+                  projectData: model.projectData,
+                ),
+              );
+
+              setState() {
+                model.setDialChildrenVisible();
+              }
+            },
+          ),
       ],
     );
   }
