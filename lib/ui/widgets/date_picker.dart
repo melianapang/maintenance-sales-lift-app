@@ -77,8 +77,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         fontColor: MyColors.lightBlack02,
         fontWeight: 800,
       ),
-      centerAlignModePickerButton: true,
-      customModePickerButtonIcon: const SizedBox(),
+      currentDate: _selectedDates.first,
+      centerAlignModePicker: true,
+      customModePickerIcon: const SizedBox(),
       selectedDayTextStyle: dayTextStyle.copyWith(
         color: MyColors.darkBlack01,
       ),
@@ -140,7 +141,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               config: config,
               dialogSize: const Size(325, 400),
               borderRadius: BorderRadius.circular(15),
-              initialValue: _selectedDates,
+              // initialValue: _selectedDates,
               dialogBackgroundColor: MyColors.lightBlack01,
             );
             if (values != null) {
