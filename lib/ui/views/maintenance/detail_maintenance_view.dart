@@ -139,7 +139,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             ),
                           ),
                         ),
-                        if (model.maintenanceData?.companyName != null) ...[
+                        if (model.maintenanceData?.companyName?.isEmpty ==
+                            false) ...[
                           Spacings.vert(4),
                           Text(
                             model.maintenanceData?.companyName ?? "",
@@ -150,7 +151,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             ),
                           ),
                         ],
-                        Spacings.vert(24),
+                        Spacings.vert(20),
                         StatusCardWidget(
                           cardType: model.statusCardType,
                           onTap: () {},
@@ -307,6 +308,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                 if (value == null) return;
                 if (value == true) {
                   model.refreshPage();
+                  model.setPreviousPageNeedRefresh(true);
 
                   _handleErrorDialog(context, model);
                 }
@@ -338,13 +340,14 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               context,
               Routes.formMaintenance,
               arguments: FormMaintenanceViewParam(
-                maintenanceData: widget.param.maintenanceData,
+                maintenanceData: model.maintenanceData,
               ),
             ).then(
-              (value) {
+              (value) async {
                 if (value == null) return;
                 if (value == true) {
-                  Navigator.of(context)..pop(true);
+                  await model.refreshPage();
+                  model.setPreviousPageNeedRefresh(true);
                 }
               },
             );
@@ -375,7 +378,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
               Routes.formSetReminder,
               arguments: FormSetReminderViewParam(
                 source: FormSetReminderSource.MaintenancePage,
-                maintenanceData: widget.param.maintenanceData,
+                maintenanceData: model.maintenanceData,
               ),
             );
 

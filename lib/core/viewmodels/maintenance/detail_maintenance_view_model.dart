@@ -210,8 +210,15 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   Future<void> refreshPage() async {
     setBusy(true);
-    resetErrorMsg();
-    await requestGetDetailMaintenance();
-    setBusy(false);
+    //kalau gak di delay, response datanya blm ke refresh
+    Future.delayed(const Duration(seconds: 3), () async {
+      resetErrorMsg();
+      await requestGetDetailMaintenance();
+      await requestGetHistoryMaintenance();
+      await isUserAllowedToEditMaintenance();
+      setStatusCard();
+      notifyListeners();
+      setBusy(false);
+    });
   }
 }
