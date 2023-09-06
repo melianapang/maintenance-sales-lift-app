@@ -9,29 +9,33 @@ import 'package:retrofit/dio.dart';
 
 class ErrorUtils<T> {
   Left<Failure, T> handleError(Object error) {
-    if (error is DioError) {
+    if (error is DioException) {
       String message = "";
       switch (error.type) {
-        case DioErrorType.connectTimeout:
-        case DioErrorType.receiveTimeout:
-        case DioErrorType.sendTimeout:
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.receiveTimeout:
+        case DioExceptionType.sendTimeout:
           message = 'Tolong cek koneksi internet anda lagi.';
           break;
-        case DioErrorType.other:
-          if (error.message.contains("Network is unreachable")) {
+        case DioExceptionType.unknown:
+          if (error.message?.contains("Network is unreachable") == true) {
             message = 'Tolong cek koneksi internet anda lagi.';
             break;
-          } else if (error.message.contains("SocketException")) {
+          } else if (error.message?.contains("SocketException") == true) {
             message =
                 'Koneksi Server sedang bermasalah. Coba beberapa saat lagi.';
             break;
           }
-          message = error.message;
+          message = error.message ?? "";
           break;
-        case DioErrorType.response:
-          message = error.message;
+        case DioExceptionType.badResponse:
+          message = error.message ?? "";
           break;
-        case DioErrorType.cancel:
+        case DioExceptionType.cancel:
+          break;
+        case DioExceptionType.badCertificate:
+          break;
+        case DioExceptionType.connectionError:
           break;
       }
       log('Failure: ${error.type.toString()}');

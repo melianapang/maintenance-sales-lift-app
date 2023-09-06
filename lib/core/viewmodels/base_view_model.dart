@@ -46,19 +46,29 @@ abstract class BaseViewModel extends ChangeNotifier {
   void mappingDioError(DioError dioError) {
     const String connectionFailedLabel = 'Koneksi sedang bermasalah';
     switch (dioError.type) {
-      case DioErrorType.connectTimeout:
-      case DioErrorType.receiveTimeout:
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
         errorMessage = 'Koneksi Time Out';
         break;
-      case DioErrorType.cancel:
-      case DioErrorType.other:
+      case DioExceptionType.cancel:
+      case DioExceptionType.unknown:
         errorMessage = connectionFailedLabel;
         break;
-      case DioErrorType.response:
+      case DioExceptionType.badCertificate:
 
         /// need to mapping error
         errorMessage = connectionFailedLabel;
+        break;
+      case DioExceptionType.connectionTimeout:
+        break;
+      case DioExceptionType.badCertificate:
+        break;
+      case DioExceptionType.badResponse:
+        break;
+      case DioExceptionType.connectionError:
+        break;
+      case DioExceptionType.unknown:
         break;
     }
   }
