@@ -8,7 +8,7 @@ import 'package:video_compress/video_compress.dart';
 
 class FilesCompressionUtils {
   //compress image
-  static Future<File> compressAndGetFileImage(XFile file) async {
+  static Future<XFile> compressAndGetFileImage(XFile file) async {
     final absolutePath =
         await LecleFlutterAbsolutePath.getAbsolutePath(uri: file.path) ??
             file.path;
@@ -20,15 +20,16 @@ class FilesCompressionUtils {
     final targetPath =
         '${splitted}_compressed${absolutePath.substring(lastIdxPath)}';
 
-    File? result = await FlutterImageCompress.compressAndGetFile(
+    XFile? result = await FlutterImageCompress.compressAndGetFile(
       absolutePath,
       targetPath,
       quality: 50,
       format: _getCompressFormat(absolutePath),
     );
 
-    print("after image compression: ${result?.lengthSync()}");
-    return result ?? File(targetPath);
+    final File finalFile = File(result?.path ?? "");
+    print("after image compression: ${finalFile.lengthSync()}");
+    return result ?? XFile(targetPath);
   }
 
   //compress video

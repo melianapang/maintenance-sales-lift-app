@@ -259,8 +259,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     void Function(
       GalleryData? compressedFile,
       bool isCompressing,
-    )?
-        callbackCompressedFiles,
+    )? callbackCompressedFiles,
   }) async {
     //pick pdf
     if (galleryType == GalleryType.PDF) {
@@ -308,7 +307,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
 
     //compress file
     if (file != null) {
-      File? compressedImage;
+      XFile? compressedImage;
       MediaInfo? compressedVideo;
       GalleryData? compressedFile;
 
@@ -408,8 +407,7 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     void Function(
       GalleryData? compressedFile,
       bool isCompressing,
-    )?
-        callbackCompressedFiles,
+    )? callbackCompressedFiles,
   }) {
     return showDialog(
         context: context,
