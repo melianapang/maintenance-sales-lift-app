@@ -150,13 +150,14 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                   text: model.maintenanceData?.customerName,
                 ),
                 Spacings.vert(24),
-                if (model.maintenanceData?.companyName?.isNotEmpty == true)
+                if (model.maintenanceData?.companyName?.isNotEmpty == true) ...[
                   TextInput.disabled(
                     label: "Nama Perusahaan",
                     hintText: "Nama Perusahaan",
                     text: model.maintenanceData?.companyName,
                   ),
-                Spacings.vert(24),
+                  Spacings.vert(24),
+                ],
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
