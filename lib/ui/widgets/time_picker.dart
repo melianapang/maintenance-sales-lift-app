@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as DPP;
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -48,10 +49,10 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         ),
         GestureDetector(
           onTap: () async {
-            DatePicker.showPicker(
+            DPP.DatePicker.showPicker(
               context,
               showTitleActions: true,
-              theme: DatePickerTheme(
+              theme: DPP.DatePickerTheme(
                 backgroundColor: MyColors.darkBlack02,
                 itemStyle: buildTextStyle(
                   fontSize: 16,
@@ -76,9 +77,9 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                 });
               },
               pickerModel: CustomPicker(
-                currentTime: DateTime.now(),
+                currentTime: _dateTime,
               ),
-              locale: LocaleType.id,
+              locale: DPP.LocaleType.id,
             );
           },
           child: Container(
@@ -104,17 +105,17 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   }
 }
 
-class CustomPicker extends CommonPickerModel {
+class CustomPicker extends DPP.CommonPickerModel {
   String digits(int value, int length) {
     return '$value'.padLeft(length, "0");
   }
 
-  CustomPicker({DateTime? currentTime, LocaleType? locale})
+  CustomPicker({DateTime? currentTime, DPP.LocaleType? locale})
       : super(locale: locale) {
     this.currentTime = currentTime ?? DateTime.now();
-    this.setLeftIndex(this.currentTime.hour);
-    this.setMiddleIndex(this.currentTime.minute);
-    this.setRightIndex(this.currentTime.second);
+    setLeftIndex(this.currentTime.hour);
+    setMiddleIndex(this.currentTime.minute);
+    setRightIndex(this.currentTime.second);
   }
 
   @override

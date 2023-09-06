@@ -5,8 +5,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/notification/local_push_notif_payload.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/local_notification_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/notification_handler_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
@@ -16,11 +19,13 @@ import 'package:intl/intl.dart';
 
 class FormSetReminderViewModel extends BaseViewModel {
   FormSetReminderViewModel({
+    required LocalNotificationService localNotificationService,
     required OneSignalService oneSignalService,
     required DioService dioService,
     ProjectData? projectData,
     MaintenanceData? maintenanceData,
-  })  : _oneSignalService = oneSignalService,
+  })  : _localNotificationService = localNotificationService,
+        _oneSignalService = oneSignalService,
         _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
@@ -29,6 +34,7 @@ class FormSetReminderViewModel extends BaseViewModel {
         _projectData = projectData,
         _maintenanceData = maintenanceData;
 
+  final LocalNotificationService _localNotificationService;
   final OneSignalService _oneSignalService;
   final ApiService _apiService;
 
@@ -71,7 +77,9 @@ class FormSetReminderViewModel extends BaseViewModel {
   List<FilterOption> get setReminderForOption => _setReminderForOption;
   // End of filter related
 
-  DateTime _selectedTime = DateTime.now();
+  DateTime _selectedTime = DateTime.now().add(const Duration(
+    minutes: 5,
+  ));
   DateTime get selectedTime => _selectedTime;
 
   List<DateTime> _selectedDates = [
@@ -131,7 +139,24 @@ class FormSetReminderViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  bool get isValidToCreateReminder {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selectedDate = DateTime(_selectedDates.first.year,
+        _selectedDates.first.month, _selectedDates.first.day);
+    if (selectedDate == today &&
+        (_selectedTime.isAtSameMomentAs(now) || _selectedTime.isBefore(now))) {
+      return false;
+    }
+    return true;
+  }
+
   Future<bool> requestCreateReminder() async {
+    if (!isValidToCreateReminder) {
+      _errorMsg = "Jadwal Pengingat harus lebih dari waktu saat ini.";
+      return false;
+    }
+
     bool isGranted = await PermissionUtils.requestPermission(
       Permission.notification,
     );
@@ -173,13 +198,43 @@ class FormSetReminderViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      bool isSucceed = await requestSetReminderToOneSignal(
+      // bool isSucceed = await requestSetReminderToOneSignal(
+      //   reminderId: response.right,
+      // );
+      // return isSucceed;
+      return setLocalScheduledNotification(
         reminderId: response.right,
       );
-      return isSucceed;
     }
+
     _errorMsg = response.left.message;
     return false;
+  }
+
+  Future<bool> setLocalScheduledNotification({
+    required String reminderId,
+  }) async {
+    String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
+
+    String dateStr = DateTimeUtils.convertDateToString(
+      date: selectedDates.first,
+      formatter: DateFormat('yyyy-MM-dd'),
+    );
+
+    await _localNotificationService.createScheduledNotification(
+      description: descriptionController.text,
+      date: _selectedDates.first,
+      time: _selectedTime,
+      type: NotifMessageType.FollowUp,
+      payload: LocalPushNotifPayload(
+        date: dateStr,
+        time: timeStr,
+        description: descriptionController.text,
+        note: noteController.text,
+        reminderId: reminderId,
+      ),
+    );
+    return true;
   }
 
   Future<bool> requestSetReminderToOneSignal(
@@ -193,20 +248,20 @@ class FormSetReminderViewModel extends BaseViewModel {
     );
 
     final DateTime reminderSetAt = DateTime.parse("$dateStr $timeStr");
-
-    final response = await _oneSignalService.postNotification(
-      description: descriptionController.text,
-      note: noteController.text,
-      date: reminderSetAt,
-      time: timeStr,
-      reminderId: reminderId,
-    );
-
-    if (response.isRight) {
-      return true;
-    }
-
-    _errorMsg = response.left.message;
     return false;
+    // final response = await _oneSignalService.postNotification(
+    //   description: descriptionController.text,
+    //   note: noteController.text,
+    //   date: reminderSetAt,
+    //   time: timeStr,
+    //   reminderId: reminderId,
+    // );
+
+    // if (response.isRight) {
+    //   return true;
+    // }
+
+    // _errorMsg = response.left.message;
+    // return false;
   }
 }

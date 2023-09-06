@@ -5,6 +5,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/local_notification_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
@@ -20,6 +21,7 @@ class SplashScreenViewModel extends BaseViewModel {
     required NavigationService navigationService,
     required AuthenticationService authenticationService,
     required SharedPreferencesService sharedPreferencesService,
+    required LocalNotificationService localNotificationService,
     required OneSignalService oneSignalService,
     required GCloudService gCloudService,
     required RemoteConfigService remoteConfigService,
@@ -31,6 +33,7 @@ class SplashScreenViewModel extends BaseViewModel {
         _navigationService = navigationService,
         _authenticationService = authenticationService,
         _sharedPreferencesService = sharedPreferencesService,
+        _localNotificationService = localNotificationService,
         _oneSignalService = oneSignalService,
         _gCloudService = gCloudService,
         _remoteConfigService = remoteConfigService;
@@ -39,6 +42,7 @@ class SplashScreenViewModel extends BaseViewModel {
   final NavigationService _navigationService;
   final AuthenticationService _authenticationService;
   final SharedPreferencesService _sharedPreferencesService;
+  final LocalNotificationService _localNotificationService;
   final OneSignalService _oneSignalService;
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
@@ -46,6 +50,7 @@ class SplashScreenViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    await _localNotificationService.initialize();
     await _oneSignalService.initOneSignal();
     await _gCloudService.initialize();
     await _remoteConfigService.initialize();

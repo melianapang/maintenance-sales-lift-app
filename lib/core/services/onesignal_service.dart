@@ -23,7 +23,10 @@ class OneSignalService {
 
   Future<String> initOneSignal() async {
     final completer = Completer<String>();
-    await OneSignal.shared.setAppId("5819ec6f-0196-4e71-b042-49478c0ed81e");
+    OneSignal.initialize("5819ec6f-0196-4e71-b042-49478c0ed81e");
+    OneSignal.Notifications.requestPermission(true);
+
+    // await OneSignal.shared.setAppId("5819ec6f-0196-4e71-b042-49478c0ed81e");
 
     // We will update this once he logged in and goes to dashboard.
     //updateUserProfile(osUserID);
@@ -32,7 +35,7 @@ class OneSignalService {
     // OneSignPreferences.setOnesignalUserId(osUserID);
 
     await _setOneSignalConfiguration().then((value) {
-      _initOneSignalListener();
+      _initOneSignalListener2();
       completer.complete("Succeed");
     });
 
@@ -40,144 +43,186 @@ class OneSignalService {
   }
 
   Future<void> _setOneSignalConfiguration() async {
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    await OneSignal.shared.disablePush(false);
-    await OneSignal.shared.setRequiresUserPrivacyConsent(false);
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    // await OneSignal.Debug.disablePush(false);
+    // await OneSignal.shared.setRequiresUserPrivacyConsent(false);
   }
 
-  void _initOneSignalListener() {
-    // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt.
-    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared
-        .promptUserForPushNotificationPermission(
-          fallbackToSettings: true,
-        )
-        .then(
-          (accepted) => print("Accepted OneSignal permission: $accepted"),
-        );
-
-    OneSignal.shared.setOnWillDisplayInAppMessageHandler((message) {
-      print("ON WILL DISPLAY IN APP MESSAGE ${message.messageId}");
+  void _initOneSignalListener2() {
+    OneSignal.User.pushSubscription.addObserver((state) {
+      print(state.current.jsonRepresentation());
     });
 
-    OneSignal.shared.setOnDidDisplayInAppMessageHandler((message) {
-      print("ON DID DISPLAY IN APP MESSAGE ${message.messageId}");
+    OneSignal.Notifications.addPermissionObserver((state) {
+      print("Has permission " + state.toString());
     });
 
-    OneSignal.shared.setOnWillDismissInAppMessageHandler((message) {
-      print("ON WILL DISMISS IN APP MESSAGE ${message.messageId}");
+    OneSignal.Notifications.addClickListener((event) {
+      print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
     });
 
-    OneSignal.shared.setOnDidDismissInAppMessageHandler((message) {
-      print("ON DID DISMISS IN APP MESSAGE ${message.messageId}");
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      /// preventDefault to not display the notification
+      event.preventDefault();
+
+      /// Do async work
+
+      /// notification.display() to display after preventing default
+      event.notification.display();
     });
 
-    OneSignal.shared.setNotificationWillShowInForegroundHandler(
-        (OSNotificationReceivedEvent event) {
-      // Will be called whenever a notification is received in foreground
-      // Display Notification, pass null param for not displaying the notification
-      // event.complete(event.notification);
-      print('FOREGROUND HANDLER CALLED WITH: ${event}');
-
-      /// Display Notification, send null to not display
-      // event.complete(null);
-      event.complete(event.notification);
+    OneSignal.InAppMessages.addClickListener((event) {
+      print(
+          "In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
     });
-
-    OneSignal.shared
-        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
-      print("SUBSCRIPTION STATE CHANGED: ${changes.jsonRepresentation()}");
-
-      String onesignalUserId = changes.to.userId ?? "";
+    OneSignal.InAppMessages.addWillDisplayListener((event) {
+      print("ON WILL DISPLAY IN APP MESSAGE ${event.message.messageId}");
     });
-
-    OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
-      // Will be called whenever the permission changes
-      // (ie. user taps Allow on the permission prompt in iOS)
-      print("PERMISSION STATE CHANGED: ${changes.jsonRepresentation()}");
+    OneSignal.InAppMessages.addDidDisplayListener((event) {
+      print("ON DID DISPLAY IN APP MESSAGE ${event.message.messageId}");
     });
-
-    _handleNotificationActions();
+    OneSignal.InAppMessages.addWillDismissListener((event) {
+      print("ON WILL DISMISS IN APP MESSAGE ${event.message.messageId}");
+    });
+    OneSignal.InAppMessages.addDidDismissListener((event) {
+      print("ON DID DISMISS IN APP MESSAGE ${event.message.messageId}");
+    });
   }
+
+  // void _initOneSignalListener() {
+  //   // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt.
+  //   // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  //   OneSignal.shared
+  //       .promptUserForPushNotificationPermission(
+  //         fallbackToSettings: true,
+  //       )
+  //       .then(
+  //         (accepted) => print("Accepted OneSignal permission: $accepted"),
+  //       );
+
+  //   OneSignal.shared.setOnWillDisplayInAppMessageHandler((message) {
+  //     print("ON WILL DISPLAY IN APP MESSAGE ${message.messageId}");
+  //   });
+
+  //   OneSignal.shared.setOnDidDisplayInAppMessageHandler((message) {
+  //     print("ON DID DISPLAY IN APP MESSAGE ${message.messageId}");
+  //   });
+
+  //   OneSignal.shared.setOnWillDismissInAppMessageHandler((message) {
+  //     print("ON WILL DISMISS IN APP MESSAGE ${message.messageId}");
+  //   });
+
+  //   OneSignal.shared.setOnDidDismissInAppMessageHandler((message) {
+  //     print("ON DID DISMISS IN APP MESSAGE ${message.messageId}");
+  //   });
+
+  //   OneSignal.shared.setNotificationWillShowInForegroundHandler(
+  //       (OSNotificationReceivedEvent event) {
+  //     // Will be called whenever a notification is received in foreground
+  //     // Display Notification, pass null param for not displaying the notification
+  //     // event.complete(event.notification);
+  //     print('FOREGROUND HANDLER CALLED WITH: ${event}');
+
+  //     /// Display Notification, send null to not display
+  //     // event.complete(null);
+  //     event.complete(event.notification);
+  //   });
+
+  //   OneSignal.shared
+  //       .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+  //     print("SUBSCRIPTION STATE CHANGED: ${changes.jsonRepresentation()}");
+
+  //     String onesignalUserId = changes.to.userId ?? "";
+  //   });
+
+  //   OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+  //     // Will be called whenever the permission changes
+  //     // (ie. user taps Allow on the permission prompt in iOS)
+  //     print("PERMISSION STATE CHANGED: ${changes.jsonRepresentation()}");
+  //   });
+
+  //   _handleNotificationActions();
+  // }
 
   void _handleNotificationActions() {
-    OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      // Will be called whenever a notification is opened/button pressed.
-      print('NOTIFICATION OPENED HANDLER CALLED WITH: ${result}');
-      print("ID BUTTON ACTIONS: ${result.action?.actionId}");
+    // OneSignal.shared
+    //     .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    //   // Will be called whenever a notification is opened/button pressed.
+    //   print('NOTIFICATION OPENED HANDLER CALLED WITH: ${result}');
+    //   print("ID BUTTON ACTIONS: ${result.action?.actionId}");
 
-      Map<String, dynamic>? data = result.notification.additionalData;
-      switch (result.action?.type) {
-        case OSNotificationActionType.opened:
-          _openNotificationHandler(data);
-          break;
+    //   Map<String, dynamic>? data = result.notification.additionalData;
+    //   switch (result.action?.type) {
+    //     case OSNotificationActionType.opened:
+    //       _openNotificationHandler(data);
+    //       break;
 
-        case OSNotificationActionType.actionTaken:
-          switch (result.action?.actionId) {
-            case "positiveButton":
-              _openNotificationHandler(data);
-              break;
+    //     case OSNotificationActionType.actionTaken:
+    //       switch (result.action?.actionId) {
+    //         case "positiveButton":
+    //           _openNotificationHandler(data);
+    //           break;
 
-            case "negativeButton":
-              _setSnoozeReminder(data);
-              break;
-          }
-      }
-    });
+    //         case "negativeButton":
+    //           _setSnoozeReminder(data);
+    //           break;
+    //       }
+    //   }
+    // });
   }
 
-  Future<Either<Failure, bool>> postNotification({
-    required String description,
-    required String time,
-    required DateTime date,
-    required String note,
-    required String reminderId,
-  }) async {
-    /// Get the Onesignal userId and update that into the firebase.
-    /// So, that it can be used to send Notifications to users later.̥
-    var deviceState = await OneSignal.shared.getDeviceState();
+  // Future<Either<Failure, bool>> postNotification({
+  //   required String description,
+  //   required String time,
+  //   required DateTime date,
+  //   required String note,
+  //   required String reminderId,
+  // }) async {
+  //   /// Get the Onesignal userId and update that into the firebase.
+  //   /// So, that it can be used to send Notifications to users later.̥
 
-    if (deviceState == null || deviceState.userId == null) {
-      return ErrorUtils<bool>().handleError("User ID tidak ada.");
-    }
+  //   var deviceState = await OneSignal.User.getDeviceState();
 
-    var playerId = deviceState.userId!;
+  //   if (deviceState == null || deviceState.userId == null) {
+  //     return ErrorUtils<bool>().handleError("User ID tidak ada.");
+  //   }
 
-    var imgUrlString = "assets/images/logo_pt_rejo.png";
-    // "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg";
+  //   var playerId = deviceState.userId!;
 
-    try {
-      var notification = OSCreateNotification(
-        playerIds: [playerId],
-        heading: "PT REJO JAYA SAKTI",
-        content: "Mengingatkan anda untuk $description",
-        androidSmallIcon: imgUrlString,
-        additionalData: {
-          "date": DateTimeUtils.convertDateToString(
-            date: date,
-            formatter: DateFormat('dd MMM yyyy'),
-          ),
-          "time": time,
-          "note": note,
-          "description": description,
-          "reminderId": reminderId,
-        },
-        sendAfter: date.toUtc(),
-        buttons: [
-          OSActionButton(id: "positiveButton", text: "Ya, buka Catatan."),
-          OSActionButton(id: "negativeButton", text: "Lewatkan")
-        ],
-      );
+  //   var imgUrlString = "assets/images/logo_pt_rejo.png";
+  //   // "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg";
 
-      await OneSignal.shared.postNotification(notification);
+  //   try {
+  //     var notification = OSCreateNotification(
+  //       playerIds: [playerId],
+  //       heading: "PT REJO JAYA SAKTI",
+  //       content: "Mengingatkan anda untuk $description",
+  //       androidSmallIcon: imgUrlString,
+  //       additionalData: {
+  //         "date": DateTimeUtils.convertDateToString(
+  //           date: date,
+  //           formatter: DateFormat('dd MMM yyyy'),
+  //         ),
+  //         "time": time,
+  //         "note": note,
+  //         "description": description,
+  //         "reminderId": reminderId,
+  //       },
+  //       sendAfter: date.toUtc(),
+  //       buttons: [
+  //         OSActionButton(id: "positiveButton", text: "Ya, buka Catatan."),
+  //         OSActionButton(id: "negativeButton", text: "Lewatkan")
+  //       ],
+  //     );
 
-      return const Right<Failure, bool>(true);
-    } catch (e) {
-      log("Error: ${e.toString()}");
-      return ErrorUtils<bool>().handleError(e);
-    }
-  }
+  //     await OneSignal.shared.postNotification(notification);
+
+  //     return const Right<Failure, bool>(true);
+  //   } catch (e) {
+  //     log("Error: ${e.toString()}");
+  //     return ErrorUtils<bool>().handleError(e);
+  //   }
+  // }
 
   Future<void> postScheduledNotification({
     required String description,
@@ -185,11 +230,10 @@ class OneSignalService {
   }) async {
     /// Get the Onesignal userId and update that into the firebase.
     /// So, that it can be used to send Notifications to users later.̥
-    var deviceState = await OneSignal.shared.getDeviceState();
 
-    if (deviceState == null || deviceState.userId == null) return;
+    var playerId = OneSignal.User.pushSubscription.id;
 
-    var playerId = deviceState.userId!;
+    if (playerId == null) return;
 
     var imgUrlString =
         "http://cdn1-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-2.jpg";
@@ -247,12 +291,12 @@ class OneSignalService {
       ),
     );
 
-    await postNotification(
-      description: data?["description"],
-      time: data?["time"],
-      date: snoozeUntil,
-      note: data?["note"],
-      reminderId: data?["reminderId"],
-    );
+    // await postNotification(
+    //   description: data?["description"],
+    //   time: data?["time"],
+    //   date: snoozeUntil,
+    //   note: data?["note"],
+    //   reminderId: data?["reminderId"],
+    // );
   }
 }

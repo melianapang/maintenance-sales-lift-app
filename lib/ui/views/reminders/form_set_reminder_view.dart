@@ -7,6 +7,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/local_notification_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -57,6 +58,8 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
     return ViewModel<FormSetReminderViewModel>(
       model: FormSetReminderViewModel(
         dioService: Provider.of<DioService>(context),
+        localNotificationService:
+            Provider.of<LocalNotificationService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         projectData: widget.param.projectData,
         maintenanceData: widget.param.maintenanceData,

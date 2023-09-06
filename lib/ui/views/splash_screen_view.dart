@@ -8,6 +8,7 @@ import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/local_notification_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
@@ -48,6 +49,8 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         authenticationService: Provider.of<AuthenticationService>(context),
         sharedPreferencesService:
             Provider.of<SharedPreferencesService>(context),
+        localNotificationService:
+            Provider.of<LocalNotificationService>(context),
         oneSignalService: Provider.of<OneSignalService>(context),
         gCloudService: Provider.of<GCloudService>(context),
         remoteConfigService: Provider.of<RemoteConfigService>(context),
