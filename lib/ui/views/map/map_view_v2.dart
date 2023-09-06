@@ -41,20 +41,14 @@ class MapViewV2 extends StatefulWidget {
 }
 
 class _MapViewV2State extends State<MapViewV2> {
-  late MapController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = MapController.withPosition(
-      initPosition: GeoPoint(
-        // latitude: widget.param.latitude ?? 0.0,
-        // longitude: widget.param.longitude ?? 0.0,
-        latitude: -7.32149490798,
-        longitude: 112.771314374,
-      ),
-    );
-  }
+  final MapController controller = MapController.withPosition(
+    initPosition: GeoPoint(
+      // latitude: widget.param.latitude ?? 0.0,
+      // longitude: widget.param.longitude ?? 0.0,
+      latitude: -7.32149490798,
+      longitude: 112.771314374,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -73,28 +67,32 @@ class _MapViewV2State extends State<MapViewV2> {
         child: OSMFlutter(
           controller: controller,
           mapIsLoading: buildLoadingPage(),
-          initZoom: 18,
-          minZoomLevel: 10,
-          staticPoints: [
-            StaticPositionGeoPoint(
-              "position",
-              const MarkerIcon(
-                icon: Icon(
-                  PhosphorIcons.mapPinFill,
-                  color: MyColors.redBackgroundMaintenanceCard,
-                  size: 150,
-                ),
-              ),
-              [
-                GeoPoint(
-                  latitude: widget.param.latitude ?? 0.0,
-                  longitude: widget.param.longitude ?? 0.0,
-                  // latitude: -7.32149490798,
-                  // longitude: 112.771314374,
-                ),
-              ],
+          osmOption: OSMOption(
+            zoomOption: const ZoomOption(
+              initZoom: 18,
+              minZoomLevel: 10,
             ),
-          ],
+            staticPoints: [
+              StaticPositionGeoPoint(
+                "position",
+                const MarkerIcon(
+                  icon: Icon(
+                    PhosphorIcons.mapPinFill,
+                    color: MyColors.redBackgroundMaintenanceCard,
+                    size: 150,
+                  ),
+                ),
+                [
+                  GeoPoint(
+                    latitude: widget.param.latitude ?? 0.0,
+                    longitude: widget.param.longitude ?? 0.0,
+                    // latitude: -7.32149490798,
+                    // longitude: 112.771314374,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
