@@ -11,6 +11,8 @@ class ErrorUtils<T> {
       String message = "";
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
+          message = error.message ?? "Koneksi Server sedang bermasalah.";
+          break;
         case DioExceptionType.receiveTimeout:
         case DioExceptionType.sendTimeout:
           message = 'Tolong cek koneksi internet anda lagi.';

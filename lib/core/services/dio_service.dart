@@ -89,8 +89,9 @@ class DioService {
               _authenticationService.logout();
             } else {
               handler.next(
-                DioError(
+                DioException(
                   requestOptions: RequestOptions(path: ""),
+                  type: e.type,
                   error: e,
                 ),
               );
