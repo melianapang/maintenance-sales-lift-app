@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
@@ -9,6 +10,7 @@ import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/location_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
 import 'package:intl/intl.dart';
@@ -126,6 +128,10 @@ class AddProjectViewModel extends BaseViewModel {
   void onChangedCity(String value) {
     _isCityValid = value.isNotEmpty;
     notifyListeners();
+  }
+
+  Future<Position?> getCurrentPosition() async {
+    return await LocationUtils.getCurrentPosition();
   }
 
   void setSelectedFirstFollowUpDates(List<DateTime> value) {

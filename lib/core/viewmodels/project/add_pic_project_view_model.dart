@@ -22,7 +22,6 @@ class AddPicProjectViewModel extends BaseViewModel {
   String? get selectedRole => _selectedRole;
 
   TextEditingController searchController = TextEditingController();
-  Timer? _debounce;
 
   final namaPicController = TextEditingController();
   final phoneNumberController = TextEditingController();

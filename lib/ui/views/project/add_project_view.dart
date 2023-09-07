@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -19,6 +19,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/project/pin_project_location_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
@@ -359,8 +360,7 @@ class _AddProjectViewState extends State<AddProjectView> {
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     final List<FilterOption> menuLocal = convertToNewList(listMenu);
     int menu = selectedMenu;
@@ -429,9 +429,14 @@ class _AddProjectViewState extends State<AddProjectView> {
     BuildContext context, {
     required AddProjectViewModel viewModel,
   }) async {
+    Position? currPosition = await viewModel.getCurrentPosition();
+    // ignore: use_build_context_synchronously
     final result = await Navigator.pushNamed(
       context,
       Routes.pinProjectLocation,
+      arguments: PinProjectLocationViewParam(
+        longLat: currPosition,
+      ),
     ) as LatLng;
     setState(() {
       print("POINT: ${result.longitude}, ${result.latitude}");
@@ -444,8 +449,7 @@ class _AddProjectViewState extends State<AddProjectView> {
     AddProjectViewModel model, {
     required void Function({
       required int selectedIndex,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     showGeneralBottomSheet(
       context: context,
