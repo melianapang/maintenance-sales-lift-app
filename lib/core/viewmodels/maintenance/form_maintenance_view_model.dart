@@ -33,6 +33,9 @@ class FormMaintenanceViewModel extends BaseViewModel {
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 
+  int? _newMaintenanceId;
+  int? get newMaintenanceId => _newMaintenanceId;
+
   MaintenanceData? _maintenanceData;
   MaintenanceData? get maintenanceData => _maintenanceData;
 
@@ -168,7 +171,10 @@ class FormMaintenanceViewModel extends BaseViewModel {
       lastMaintenanceResult: (_selectedHasilMaintenanceOption + 1).toString(),
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      _newMaintenanceId = response.right;
+      return true;
+    }
 
     _errorMsg = response.left.message;
     return false;
@@ -309,5 +315,14 @@ class FormMaintenanceViewModel extends BaseViewModel {
     if (_errorMsg != null) return false;
 
     return await _requestUpdateMaintenanceData();
+  }
+
+  void sendDataBack(BuildContext context) {
+    if (_newMaintenanceId == null) return;
+
+    Navigator.pop(
+      context,
+      _newMaintenanceId,
+    );
   }
 }

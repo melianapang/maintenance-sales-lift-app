@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
@@ -157,6 +156,24 @@ class DetailMaintenanceViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
+  Future<void> requestGetDetailMaintenanceWithNewMaintenanceId(
+    int newMaintenanceId,
+  ) async {
+    final response = await _apiService.requestMaintenaceDetail(
+      maintenanceId: int.parse(
+        newMaintenanceId.toString(),
+      ),
+    );
+
+    if (response.isRight) {
+      _maintenanceData = response.right;
+      notifyListeners();
+      return;
+    }
+
+    _errorMsg = response.left.message;
+  }
+
   Future<bool> requestGetProjectData() async {
     final response = await _apiService.requestDetailProject(
       projectId: int.parse(_maintenanceData?.projectId ?? "0"),
@@ -210,15 +227,26 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   Future<void> refreshPage() async {
     setBusy(true);
-    //kalau gak di delay, response datanya blm ke refresh
-    Future.delayed(const Duration(seconds: 3), () async {
-      resetErrorMsg();
-      await requestGetDetailMaintenance();
-      await requestGetHistoryMaintenance();
-      await isUserAllowedToEditMaintenance();
-      setStatusCard();
-      notifyListeners();
-      setBusy(false);
-    });
+    resetErrorMsg();
+    await requestGetDetailMaintenance();
+    await requestGetHistoryMaintenance();
+    await isUserAllowedToEditMaintenance();
+    setStatusCard();
+    notifyListeners();
+    setBusy(false);
+  }
+
+  Future<void> refreshPageAfterUpdateFormMaintenance(
+    int newMaintenanceId,
+  ) async {
+    setBusy(true);
+    resetErrorMsg();
+    await requestGetDetailMaintenanceWithNewMaintenanceId(
+      newMaintenanceId,
+    );
+    await requestGetHistoryMaintenance();
+    setStatusCard();
+    notifyListeners();
+    setBusy(false);
   }
 }

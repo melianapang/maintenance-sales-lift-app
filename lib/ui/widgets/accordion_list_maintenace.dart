@@ -163,7 +163,7 @@ class _AccordionListMaintenanceWidgetState
                                 ),
                               ).then((value) {
                                 if (value == null || value == false) return;
-                                widget.refreshPageCallback;
+                                widget.refreshPageCallback.call();
                               });
                             },
                             child: Container(

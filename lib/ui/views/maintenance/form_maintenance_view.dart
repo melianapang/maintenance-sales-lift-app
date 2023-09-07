@@ -111,9 +111,8 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                     positiveLabel: "Ok",
                     positiveCallback: () {
                       if (result) {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop(true);
+                        Navigator.pop(context);
+                        model.sendDataBack(context);
                         return;
                       }
 

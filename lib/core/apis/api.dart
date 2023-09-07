@@ -2100,7 +2100,7 @@ class ApiService {
     }
   }
 
-  Future<Either<Failure, bool>> requestUpdateMaintenace({
+  Future<Either<Failure, int>> requestUpdateMaintenace({
     required int maintenanceId,
     required int unitId,
     required double longitude,
@@ -2129,13 +2129,18 @@ class ApiService {
       );
 
       if (response.isSuccess) {
-        return const Right<Failure, bool>(true);
+        UpdateMaintenanceResponse updateMaintenanceResponse =
+            UpdateMaintenanceResponse.fromJson(response.data);
+
+        return Right<Failure, int>(
+          updateMaintenanceResponse.data.maintenanceId,
+        );
       }
 
-      return ErrorUtils<bool>().handleDomainError(response);
+      return ErrorUtils<int>().handleDomainError(response);
     } catch (e) {
       log("Error: $e");
-      return ErrorUtils<bool>().handleError(e);
+      return ErrorUtils<int>().handleError(e);
     }
   }
 

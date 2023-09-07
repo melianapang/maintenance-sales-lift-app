@@ -336,21 +336,7 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
           labelStyle: buildTextStyle(
               fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
           onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.formMaintenance,
-              arguments: FormMaintenanceViewParam(
-                maintenanceData: model.maintenanceData,
-              ),
-            ).then(
-              (value) async {
-                if (value == null) return;
-                if (value == true) {
-                  await model.refreshPage();
-                  model.setPreviousPageNeedRefresh(true);
-                }
-              },
-            );
+            _awaitFormMaintenanceViewResult(context, viewModel: model);
 
             setState() {
               model.setDialChildrenVisible();
@@ -389,6 +375,24 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
         ),
       ],
     );
+  }
+
+  void _awaitFormMaintenanceViewResult(
+    BuildContext context, {
+    required DetailMaintenanceViewModel viewModel,
+  }) async {
+    final result = await Navigator.pushNamed(
+      context,
+      Routes.formMaintenance,
+      arguments: FormMaintenanceViewParam(
+        maintenanceData: viewModel.maintenanceData,
+      ),
+    );
+    setState(() {
+      if (result == null) return;
+      viewModel.setPreviousPageNeedRefresh(true);
+      viewModel.refreshPageAfterUpdateFormMaintenance(result as int);
+    });
   }
 
   void _handleErrorDialog(

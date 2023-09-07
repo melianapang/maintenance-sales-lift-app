@@ -242,7 +242,22 @@ class UpdateMaintenanceResponse {
   final String message;
 
   @JsonKey(name: "Data")
-  final List<String> data;
+  final NewMaintenanceIdData data;
+}
+
+@JsonSerializable()
+class NewMaintenanceIdData {
+  NewMaintenanceIdData({
+    required this.maintenanceId,
+  });
+
+  factory NewMaintenanceIdData.fromJson(Map<String, dynamic> json) =>
+      _$NewMaintenanceIdDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NewMaintenanceIdDataToJson(this);
+
+  @JsonKey(name: "maintenance_id")
+  final int maintenanceId;
 }
 
 //region detail maintenance
