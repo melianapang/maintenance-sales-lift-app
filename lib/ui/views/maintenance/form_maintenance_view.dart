@@ -6,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dar
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
@@ -54,8 +53,6 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
       model: FormMaintenanceViewModel(
         maintenanceData: widget.param.maintenanceData,
         dioService: Provider.of<DioService>(context),
-        sharedPreferencesService:
-            Provider.of<SharedPreferencesService>(context),
         gCloudService: Provider.of<GCloudService>(context),
         remoteConfigService: Provider.of<RemoteConfigService>(context),
       ),

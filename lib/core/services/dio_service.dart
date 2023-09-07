@@ -4,11 +4,9 @@ import 'package:alice_lightweight/core/alice_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/utils/error_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/global_config_service.dart';
-import 'package:rxdart/subjects.dart';
 
 class DioService {
   DioService({

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/profile/profile_data_model.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/custom_base_url_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/detail_approval_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/approval/list_approval_view.dart';
@@ -34,7 +32,6 @@ import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/list_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/change_password_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/manage_account/edit_profile_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/map/map_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_need/list_customer_need_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/customer_type/list_customer_type_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/master_customer/master_customer_menu_view.dart';
@@ -99,17 +96,6 @@ class AppRouter {
           builder: (_) => const LoginView(),
         );
       case Routes.home:
-        final ProfileData param = settings.arguments is ProfileData
-            ? settings.arguments as ProfileData
-            : ProfileData(
-                username: '',
-                name: '',
-                phoneNumber: '',
-                email: '',
-                address: '',
-                city: '',
-                role: Role.Admin,
-              );
         return buildRoute(
           builder: (_) => const HomeView(),
         );
@@ -440,8 +426,14 @@ class AppRouter {
           ),
         );
       case Routes.pinProjectLocation:
+        final PinProjectLocationViewParam param =
+            settings.arguments is PinProjectLocationViewParam
+                ? settings.arguments as PinProjectLocationViewParam
+                : PinProjectLocationViewParam();
         return buildRoute(
-          builder: (_) => const PinProjectLocationView(),
+          builder: (_) => PinProjectLocationView(
+            param: param,
+          ),
         );
       case Routes.listUnit:
         final ListUnitCustomerViewParam param =

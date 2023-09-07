@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/notification/local_push_notif_payload.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/notification_handler_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;

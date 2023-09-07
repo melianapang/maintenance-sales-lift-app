@@ -14,7 +14,6 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/accordion_list_maintenace.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import '../../widgets/filter_menu.dart';
 

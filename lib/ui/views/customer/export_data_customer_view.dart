@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
@@ -28,7 +27,6 @@ class _ExportDataCustomerViewState extends State<ExportDataCustomerView> {
   Widget build(BuildContext context) {
     return ViewModel(
       model: ExportDataCustomerViewModel(
-        dioService: Provider.of<DioService>(context),
         downloadService: Provider.of<DownloadService>(context),
       ),
       onModelReady: (ExportDataCustomerViewModel model) async {

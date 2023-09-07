@@ -1,7 +1,5 @@
 import 'package:open_filex/open_filex.dart';
-import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/download_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -9,16 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 class ExportDataCustomerViewModel extends BaseViewModel {
   ExportDataCustomerViewModel({
-    required DioService dioService,
     required DownloadService downloadService,
-  })  : _downloadService = downloadService,
-        _apiService = ApiService(
-          api: Api(
-            dioService.getDioJwt(),
-          ),
-        );
+  }) : _downloadService = downloadService;
 
-  final ApiService _apiService;
   final DownloadService _downloadService;
 
   bool _isAllowedToOpenPage = false;

@@ -14,14 +14,11 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/customer/upload_document_view.dart';
-import 'package:rejo_jaya_sakti_apps/ui/views/follow_up/detail_follow_up_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/non_project_customer/edit_non_project_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
-import 'package:intl/intl.dart';
 
 class DetailNonProjectCustomerViewParam {
   DetailNonProjectCustomerViewParam({

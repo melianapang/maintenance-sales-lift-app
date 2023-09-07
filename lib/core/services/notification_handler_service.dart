@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/notification/local_push_notif_payload.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/local_notification_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/reminders/open_notification_reminder_view.dart';
 
@@ -11,14 +9,14 @@ class NotificationHandlerService {
   NotificationHandlerService({
     required NavigationService navigationService,
     // required DeepLinkService deepLinkService,
-    required AuthenticationService authenticationService,
-  })  : _navigationService = navigationService,
-        // _deepLinkService = deepLinkService,
-        _authenticationService = authenticationService;
+    //required AuthenticationService authenticationService,
+  }) : _navigationService = navigationService;
+  // _deepLinkService = deepLinkService,
+  //_authenticationService = authenticationService;
 
   final NavigationService _navigationService;
   // final DeepLinkService _deepLinkService;
-  final AuthenticationService _authenticationService;
+  //final AuthenticationService _authenticationService;
 
   Map<String, dynamic> extractDataFromFCM(Map<String, dynamic> message) {
     // if (Platform.isIOS) return Map<String, dynamic>.from(message);
@@ -76,12 +74,10 @@ class NotificationHandlerService {
 
     switch (type) {
       case NotifMessageType.Deeplink:
-        final Map<String, dynamic> payload =
-            json.decode(data['payload'] ?? '{}');
-        final String deeplinkString =
-            data['deeplink'] ?? payload['deeplink'] ?? '';
+        //final Map<String, dynamic> payload = json.decode(data['payload'] ?? '{}');
+        //final String deeplinkString = data['deeplink'] ?? payload['deeplink'] ?? '';
 
-        final Uri deepLink = Uri.parse(deeplinkString);
+        //final Uri deepLink = Uri.parse(deeplinkString);
         // _dynamicLinkService.handleDeepLink(deepLink);
         break;
       case NotifMessageType.Maintenance:

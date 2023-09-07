@@ -3,7 +3,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/non_project_customer/edit_non_project_customer_view_model.dart';
@@ -48,8 +47,7 @@ class _EditNonProjectCustomerViewState
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     final List<FilterOptionDynamic> menuLocal =
         convertToNewListForFilterDynamic(listMenu);
@@ -104,7 +102,6 @@ class _EditNonProjectCustomerViewState
       model: EditNonProjectCustomerViewModel(
         dioService: Provider.of<DioService>(context),
         customerData: widget.param.customerData,
-        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (EditNonProjectCustomerViewModel model) async {
         await model.initModel();

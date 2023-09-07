@@ -94,7 +94,7 @@ class _AccordionListMaintenanceWidgetState
                           setState(() {});
                         });
                       }
-                      PageStorage.of(context)?.writeState(
+                      PageStorage.of(context).writeState(
                         context,
                         isExpanded,
                       );

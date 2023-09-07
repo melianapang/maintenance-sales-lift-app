@@ -3,7 +3,6 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 class RemoteConfigService {
   RemoteConfigService();
   static const String _appMinVersion = 'min_version';
-  static const String _latestVersionKey = 'latest_version';
 
   // feature flags
   static const String _gCloudStorage = 'gcloud_storage_ff';

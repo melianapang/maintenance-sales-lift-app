@@ -111,7 +111,7 @@ List<SingleChildWidget> dependentProviders = [
         notificationHandlerService ??
         NotificationHandlerService(
           navigationService: navigationService,
-          authenticationService: authenticationService,
+          //authenticationService: authenticationService,
         ),
   ),
   ProxyProvider<NotificationHandlerService, LocalNotificationService>(

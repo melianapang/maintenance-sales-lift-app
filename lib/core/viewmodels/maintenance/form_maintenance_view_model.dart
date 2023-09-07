@@ -9,7 +9,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dar
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/location_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
@@ -19,7 +18,6 @@ class FormMaintenanceViewModel extends BaseViewModel {
   FormMaintenanceViewModel({
     MaintenanceData? maintenanceData,
     required DioService dioService,
-    required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
     required RemoteConfigService remoteConfigService,
   })  : _apiService = ApiService(
@@ -28,12 +26,10 @@ class FormMaintenanceViewModel extends BaseViewModel {
           ),
         ),
         _maintenanceData = maintenanceData,
-        _sharedPreferenceService = sharedPreferencesService,
         _gCloudService = gCloudService,
         _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
-  final SharedPreferencesService _sharedPreferenceService;
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 

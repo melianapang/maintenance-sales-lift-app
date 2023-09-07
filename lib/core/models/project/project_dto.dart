@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/document/document_dto.dart';
 

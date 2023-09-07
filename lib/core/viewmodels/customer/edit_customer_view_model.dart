@@ -3,7 +3,6 @@ import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -12,17 +11,14 @@ class EditCustomerViewModel extends BaseViewModel {
   EditCustomerViewModel({
     CustomerData? customerData,
     required DioService dioService,
-    required AuthenticationService authenticationService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
-        _authenticationService = authenticationService,
         _customerData = customerData;
 
   final ApiService _apiService;
-  final AuthenticationService _authenticationService;
 
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
