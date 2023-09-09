@@ -268,7 +268,11 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
   }) async {
     //pick pdf
     if (galleryType == GalleryType.PDF) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ["pdf"],
+        allowCompression: true,
+      );
 
       if (result != null) {
         PlatformFile file = result.files.first;
