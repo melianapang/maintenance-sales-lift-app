@@ -124,7 +124,14 @@ class FormFollowUpViewModel extends BaseViewModel {
   }
 
   Future<void> _getNextFollowUpDate() async {
-    if (_followUpId != null && _nextFollowUpDate != null) return;
+    if (_followUpId != null && _nextFollowUpDate != null) {
+      setSelectedNextFollowUpDates([
+        DateTimeUtils.convertStringToDate(
+                formattedDateString: _nextFollowUpDate!)
+            .add(const Duration(days: 7))
+      ]);
+      return;
+    }
 
     final response = await _apiService.requestGetNextFollowUpDateByProjectId(
       projectId: int.parse(projectData?.projectId ?? "0"),
@@ -133,6 +140,11 @@ class FormFollowUpViewModel extends BaseViewModel {
     if (response.isRight) {
       _followUpId = response.right.followUpId;
       _nextFollowUpDate = response.right.scheduleDate;
+      setSelectedNextFollowUpDates([
+        DateTimeUtils.convertStringToDate(
+                formattedDateString: response.right.scheduleDate)
+            .add(const Duration(days: 7))
+      ]);
       return;
     }
 
