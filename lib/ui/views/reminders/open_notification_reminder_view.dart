@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/reminders/open_notification_reminder_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
@@ -112,7 +111,13 @@ class OpenNotificationReminderView extends StatelessWidget {
                         TextInput.disabled(
                           label: "Tanggal Pengingat",
                           hintText: "Tanggal Pengingat",
-                          text: model.param?.date,
+                          text: model.param?.date != null
+                              ? DateTimeUtils
+                                  .convertStringToOtherStringDateFormat(
+                                  date: model.param!.date,
+                                  formattedString: DateTimeUtils.DATE_FORMAT_2,
+                                )
+                              : "",
                         ),
                         Spacings.vert(24),
                         TextInput.disabled(
