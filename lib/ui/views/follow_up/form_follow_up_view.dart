@@ -94,6 +94,8 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 positiveCallback: () async {
                   Navigator.pop(context);
 
+                  if (model.busy) return;
+
                   buildLoadingDialog(context);
                   bool result = await model.requestSaveFollowUpData();
                   Navigator.pop(context);

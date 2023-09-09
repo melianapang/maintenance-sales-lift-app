@@ -177,9 +177,13 @@ class FormFollowUpViewModel extends BaseViewModel {
       documents: _uploadedFiles,
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      setBusy(false);
+      return true;
+    }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 
@@ -238,13 +242,18 @@ class FormFollowUpViewModel extends BaseViewModel {
       ],
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      setBusy(false);
+      return true;
+    }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 
   Future<bool> requestSaveFollowUpData() async {
+    setBusy(true);
     _errorMsg = null;
 
     if (!_isGCloudStorageEnabled) {
@@ -252,10 +261,16 @@ class FormFollowUpViewModel extends BaseViewModel {
     }
 
     _checkNewFollowUpDate();
-    if (_errorMsg != null) return false;
+    if (_errorMsg != null) {
+      setBusy(false);
+      return false;
+    }
 
     await _saveGalleryToCloud();
-    if (_errorMsg != null) return false;
+    if (_errorMsg != null) {
+      setBusy(false);
+      return false;
+    }
 
     return await _requestUpdateFollowUp();
   }
