@@ -96,6 +96,8 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
+                  if (model.busy) return;
+
                   buildLoadingDialog(context);
                   bool result = await model.requestSaveMaintenanceData();
                   Navigator.pop(context);

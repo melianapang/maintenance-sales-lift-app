@@ -193,10 +193,12 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
     if (response.isRight) {
       _newMaintenanceId = response.right;
+      setBusy(false);
       return true;
     }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 
@@ -316,13 +318,18 @@ class FormMaintenanceViewModel extends BaseViewModel {
       ],
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      setBusy(false);
+      return true;
+    }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 
   Future<bool> requestSaveMaintenanceData() async {
+    setBusy(true);
     _errorMsg = null;
 
     if (!_isGCloudStorageEnabled) {
@@ -330,9 +337,16 @@ class FormMaintenanceViewModel extends BaseViewModel {
     }
 
     _checkNewMaintenanceDate();
-    if (_errorMsg != null) return false;
+    if (_errorMsg != null) {
+      setBusy(false);
+      return false;
+    }
+
     await _saveGalleryToCloud();
-    if (_errorMsg != null) return false;
+    if (_errorMsg != null) {
+      setBusy(false);
+      return false;
+    }
 
     return await _requestUpdateMaintenanceData();
   }
