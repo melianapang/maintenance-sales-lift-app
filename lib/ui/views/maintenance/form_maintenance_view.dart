@@ -212,6 +212,7 @@ class _FormMaintenanceViewState extends State<FormMaintenanceView> {
                 GalleryThumbnailWidget(
                   galleryData: model.getVideosData(),
                   scrollController: buktiVideoController,
+                  isShowingAddGalleryWidget: !model.isReachingMaxTotalVideoData,
                   galleryType: GalleryType.VIDEO,
                   isCRUD: model.isEdit,
                   callbackCompressedFiles: (compressedFile, isCompressing) {

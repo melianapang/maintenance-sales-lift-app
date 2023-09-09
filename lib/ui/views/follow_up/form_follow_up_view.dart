@@ -6,7 +6,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/snackbars_utils.dart';
@@ -59,8 +58,6 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
         followUpId: widget.param.followUpId,
         nextFollowUpDate: widget.param.nextFollowUpDate,
         dioService: Provider.of<DioService>(context),
-        sharedPreferencesService:
-            Provider.of<SharedPreferencesService>(context),
         gCloudService: Provider.of<GCloudService>(context),
         remoteConfigService: Provider.of<RemoteConfigService>(context),
       ),
@@ -184,6 +181,8 @@ class _FormFollowUpViewState extends State<FormFollowUpView> {
                 GalleryThumbnailWidget(
                   galleryData: model.galleryData,
                   galleryType: GalleryType.PHOTO,
+                  isShowingAddGalleryWidget:
+                      !model.isReachingMaxTotalGalleryData,
                   scrollController: buktiFotoController,
                   callbackCompressedFiles: (compressedFile, isCompressing) {
                     if (isCompressing) {

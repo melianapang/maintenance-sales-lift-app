@@ -82,6 +82,9 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
   List<MaintenanceFile> _uploadedFiles = [];
   List<MaintenanceFile> get uploadedFiles => _uploadedFiles;
+
+  //max 1 data video
+  bool get isReachingMaxTotalVideoData => getVideosData().isNotEmpty;
   //endregion
 
   String? _errorMsg;
@@ -109,6 +112,11 @@ class FormMaintenanceViewModel extends BaseViewModel {
 
   void addCompressedFile(GalleryData value) {
     _compressedFiles.add(value);
+
+    if (value.galleryType == GalleryType.VIDEO) {
+      //to update data isReachingMaxTotalVideoData
+      notifyListeners();
+    }
   }
 
   void removeCompressedFile(GalleryData data) {

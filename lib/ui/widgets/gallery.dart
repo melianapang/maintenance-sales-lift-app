@@ -20,6 +20,7 @@ class GalleryThumbnailWidget extends StatefulWidget {
     this.scrollController,
     this.callbackCompressedFiles,
     this.callbackDeleteAddedGallery,
+    this.isShowingAddGalleryWidget = true,
     this.initialIndex = 0,
     this.isCRUD = true,
     super.key,
@@ -33,6 +34,7 @@ class GalleryThumbnailWidget extends StatefulWidget {
     bool isCompressing,
   )? callbackCompressedFiles;
   final void Function(GalleryData data)? callbackDeleteAddedGallery;
+  final bool isShowingAddGalleryWidget;
   final int initialIndex;
   final bool isCRUD;
 
@@ -53,6 +55,9 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
         itemBuilder: (BuildContext context, int index) {
           if (widget.isCRUD) {
             if (index == widget.galleryData.length) {
+              if (!widget.isShowingAddGalleryWidget) {
+                return Container();
+              }
               return _buildAddGallery(context);
             }
             return _buildGalleryThumbnail(

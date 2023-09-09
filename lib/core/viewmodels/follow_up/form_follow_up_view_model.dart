@@ -9,7 +9,6 @@ import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/gcloud_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -20,7 +19,6 @@ class FormFollowUpViewModel extends BaseViewModel {
     String? nextFollowUpDate,
     String? followUpId,
     required DioService dioService,
-    required SharedPreferencesService sharedPreferencesService,
     required GCloudService gCloudService,
     required RemoteConfigService remoteConfigService,
   })  : _apiService = ApiService(
@@ -28,7 +26,6 @@ class FormFollowUpViewModel extends BaseViewModel {
             dioService.getDioJwt(),
           ),
         ),
-        _sharedPreferenceService = sharedPreferencesService,
         _projectData = projectData,
         _followUpId = followUpId,
         _nextFollowUpDate = nextFollowUpDate,
@@ -36,7 +33,6 @@ class FormFollowUpViewModel extends BaseViewModel {
         _remoteConfigService = remoteConfigService;
 
   final ApiService _apiService;
-  final SharedPreferencesService _sharedPreferenceService;
   final GCloudService _gCloudService;
   final RemoteConfigService _remoteConfigService;
 
@@ -71,6 +67,8 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   List<FollowUpFile> _uploadedFiles = [];
   List<FollowUpFile> get uploadedFiles => _uploadedFiles;
+
+  bool get isReachingMaxTotalGalleryData => _galleryData.length >= 10;
   //endregion
 
   //region next followup date
@@ -118,6 +116,7 @@ class FormFollowUpViewModel extends BaseViewModel {
 
   void addNewGalleryData(GalleryData compressedFile) {
     _galleryData.add(compressedFile);
+    notifyListeners();
   }
 
   void resetErrorMsg() {
