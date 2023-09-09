@@ -5,11 +5,10 @@ String mappingCustomerFileTypeToString(int value) {
     case 2:
       return "Quotation";
     case 3:
-      return "Dokumen Perjanjian Kerja Sama/Kwitansi";
+      return "Dokumen Perjanjian Kerja Sama";
     case 4:
-      return "Konfirmasi";
     default:
-      return "Berkas Pelanggan";
+      return "Lainnya";
   }
 }
 

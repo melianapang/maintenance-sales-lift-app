@@ -44,6 +44,7 @@ class UploadDocumentViewModel extends BaseViewModel {
     FilterOption("Purchase Order", true),
     FilterOption("Quotation", false),
     FilterOption("Dokumen Perjanjian Kerja Sama", false),
+    FilterOption("Lainnya", false),
   ];
   List<FilterOption> get tipeDokumentOption => _tipeDokumentOption;
 

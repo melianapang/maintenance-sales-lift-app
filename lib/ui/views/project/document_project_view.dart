@@ -177,7 +177,7 @@ class _DocumentProjectViewState extends State<DocumentProjectView> {
                 child: Text(
                   mappingCustomerFileTypeToString(
                     int.parse(
-                      model.listDocument?[index].fileType ?? "3",
+                      model.listDocument?[index].fileType ?? "4",
                     ),
                   ),
                   textAlign: TextAlign.start,
