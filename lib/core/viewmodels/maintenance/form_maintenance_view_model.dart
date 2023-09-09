@@ -93,9 +93,21 @@ class FormMaintenanceViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+    _setInitNextMaintenanceDate();
     _isGCloudStorageEnabled =
         _remoteConfigService.isGCloudStorageEnabled ?? false;
     setBusy(false);
+  }
+
+  void _setInitNextMaintenanceDate() {
+    if (_maintenanceData?.scheduleDate != null ||
+        _maintenanceData?.scheduleDate.isNotEmpty == true) {
+      setSelectedNextMaintenanceDates([
+        DateTimeUtils.convertStringToDate(
+                formattedDateString: _maintenanceData!.scheduleDate)
+            .add(const Duration(days: 7))
+      ]);
+    }
   }
 
   List<GalleryData> getPhotosData() {
