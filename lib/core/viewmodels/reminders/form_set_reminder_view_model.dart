@@ -151,8 +151,11 @@ class FormSetReminderViewModel extends BaseViewModel {
   }
 
   Future<bool> requestCreateReminder() async {
+    setBusy(true);
+
     if (!isValidToCreateReminder) {
       _errorMsg = "Jadwal Pengingat harus lebih dari waktu saat ini.";
+      setBusy(false);
       return false;
     }
 
@@ -163,6 +166,7 @@ class FormSetReminderViewModel extends BaseViewModel {
     if (!isGranted) {
       _errorMsg = "Tolong ijinkan aplikasi mengakses notifikasi";
       _isNotificationPermissionGrantedBefore = false;
+      setBusy(false);
       return false;
     }
 
@@ -207,33 +211,42 @@ class FormSetReminderViewModel extends BaseViewModel {
     }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 
   Future<bool> setLocalScheduledNotification({
     required String reminderId,
   }) async {
-    String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
+    try {
+      String timeStr = DateTimeUtils.convertHmsTimeToString(_selectedTime);
 
-    String dateStr = DateTimeUtils.convertDateToString(
-      date: selectedDates.first,
-      formatter: DateFormat('yyyy-MM-dd'),
-    );
+      String dateStr = DateTimeUtils.convertDateToString(
+        date: selectedDates.first,
+        formatter: DateFormat('yyyy-MM-dd'),
+      );
 
-    await _localNotificationService.createScheduledNotification(
-      description: descriptionController.text,
-      date: _selectedDates.first,
-      time: _selectedTime,
-      type: NotifMessageType.FollowUp,
-      payload: LocalPushNotifPayload(
-        date: dateStr,
-        time: timeStr,
+      await _localNotificationService.createScheduledNotification(
         description: descriptionController.text,
-        note: noteController.text,
-        reminderId: reminderId,
-      ),
-    );
-    return true;
+        date: _selectedDates.first,
+        time: _selectedTime,
+        type: NotifMessageType.FollowUp,
+        payload: LocalPushNotifPayload(
+          date: dateStr,
+          time: timeStr,
+          description: descriptionController.text,
+          note: noteController.text,
+          reminderId: reminderId,
+        ),
+      );
+
+      setBusy(false);
+      return true;
+    } catch (e) {
+      _errorMsg = "$e";
+      setBusy(false);
+      return false;
+    }
   }
 
   Future<bool> requestSetReminderToOneSignal(

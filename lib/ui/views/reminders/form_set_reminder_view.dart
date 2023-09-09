@@ -89,6 +89,8 @@ class _FormSetReminderViewState extends State<FormSetReminderView> {
               print(
                   "save: ${model.selectedTime.toString()} -- ${model.selectedDates.toString()}");
 
+              if (model.busy) return;
+
               buildLoadingDialog(context);
               bool result = await model.requestCreateReminder();
               Navigator.pop(context);
