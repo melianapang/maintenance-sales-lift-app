@@ -93,7 +93,8 @@ class ListCustomerNeedViewModel extends BaseViewModel {
     if (response.isRight) {
       List<CustomerNeedData> tempList = response.right.result;
       if (tempList.isNotEmpty) {
-        tempList.where((element) => element.isActive == "1").toList();
+        tempList =
+            tempList.where((element) => element.isActive == "1").toList();
       }
 
       if (_paginationControl.currentPage == 1) {
