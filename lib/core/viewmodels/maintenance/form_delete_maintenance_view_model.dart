@@ -55,10 +55,13 @@ class FormDeleteMaintenanceViewModel extends BaseViewModel {
   }
 
   Future<bool> requestDeleteMaintenanceDate() async {
+    setBusy(true);
+
     String reason = mappingSelectedReasonOption();
     if (reason.isEmpty) {
       _errorMsg =
           "Alasan tidak boleh kosong. Wajib memilih salah satu alasan atau menulis alasannya.";
+      setBusy(false);
       return false;
     }
 
@@ -67,9 +70,13 @@ class FormDeleteMaintenanceViewModel extends BaseViewModel {
       reason: reason,
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      setBusy(false);
+      return true;
+    }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 }
