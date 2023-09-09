@@ -79,6 +79,8 @@ class _FormChangeMaintenanceDateState
                 positiveCallback: () async {
                   await Navigator.maybePop(context);
 
+                  if (model.busy) return;
+
                   buildLoadingDialog(context);
                   bool result = await model.requestChangeMaintenanceDate();
                   Navigator.pop(context);

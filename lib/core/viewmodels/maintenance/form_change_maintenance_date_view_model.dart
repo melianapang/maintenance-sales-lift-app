@@ -47,9 +47,11 @@ class FormChangeMaintenanceDateViewModel extends BaseViewModel {
   }
 
   Future<bool> requestChangeMaintenanceDate() async {
+    setBusy(true);
     if (!DateTimeUtils.isDateAfterToday(_selectedNextMaintenanceDates.first)) {
       _errorMsg =
           "Tidak bisa mengubah jadwal dengan tanggal yang sudah berlalu";
+      setBusy(false);
       return false;
     }
 
@@ -61,9 +63,13 @@ class FormChangeMaintenanceDateViewModel extends BaseViewModel {
       ),
     );
 
-    if (response.isRight) return true;
+    if (response.isRight) {
+      setBusy(false);
+      return true;
+    }
 
     _errorMsg = response.left.message;
+    setBusy(false);
     return false;
   }
 }
