@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
-import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_type_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
@@ -22,6 +21,9 @@ class AddCustomerViewModel extends BaseViewModel {
 
   final ApiService _apiService;
   final AuthenticationService _authenticationService;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   bool _isSumberDataFieldVisible = true;
   bool get isSumberDataFieldVisible => _isSumberDataFieldVisible;
@@ -258,10 +260,13 @@ class AddCustomerViewModel extends BaseViewModel {
     _errorMsg = null;
   }
 
-  Future<CustomerData?> requestCreateCustomer() async {
+  Future<bool> requestCreateCustomer() async {
+    _isLoading = true;
+
     if (!isValid()) {
       _errorMsg = "Isi semua data dengan benar.";
-      return null;
+      _isLoading = false;
+      return false;
     }
 
     final response = await _apiService.requestCreateCustomer(
@@ -279,11 +284,13 @@ class AddCustomerViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      return response.right.data.customerData;
+      _isLoading = false;
+      return true;
     }
 
     _errorMsg = response.left.message;
-    return null;
+    _isLoading = false;
+    return false;
   }
 
   Future<bool> requestGetAllCustomerNeed() async {
