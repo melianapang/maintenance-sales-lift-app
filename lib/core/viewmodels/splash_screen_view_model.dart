@@ -51,7 +51,7 @@ class SplashScreenViewModel extends BaseViewModel {
   Future<void> initModel() async {
     setBusy(true);
     await _localNotificationService.initialize();
-    await _oneSignalService.initOneSignal();
+    //await _oneSignalService.initOneSignal();
     await _gCloudService.initialize();
     await _remoteConfigService.initialize();
 
