@@ -178,12 +178,12 @@ class _ListProjectViewState extends State<ListProjectView> {
                       ),
                       Spacings.vert(2),
                       Text(
-                        StringUtils.removeZeroWidthSpaces(projectData
-                                        .companyName !=
-                                    null ||
-                                projectData.companyName?.isNotEmpty == true
-                            ? "${projectData.companyName} | ${projectData.customerName}"
-                            : projectData.customerName),
+                        StringUtils.removeZeroWidthSpaces(
+                          projectData.companyName != null &&
+                                  projectData.companyName?.isNotEmpty == true
+                              ? "${projectData.companyName} | ${projectData.customerName}"
+                              : projectData.customerName,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: buildTextStyle(
