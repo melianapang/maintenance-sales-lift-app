@@ -437,8 +437,10 @@ class _AddProjectViewState extends State<AddProjectView> {
       arguments: PinProjectLocationViewParam(
         longLat: currPosition,
       ),
-    ) as LatLng;
+    ) as LatLng?;
     setState(() {
+      if (result == null) return;
+
       print("POINT: ${result.longitude}, ${result.latitude}");
       viewModel.pinProjectLocation(result);
     });

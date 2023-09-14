@@ -398,9 +398,11 @@ class _EditProjectViewState extends State<EditProjectView> {
       arguments: PinProjectLocationViewParam(
         longLat: currPosition,
       ),
-    );
+    ) as LatLng?;
     setState(() {
-      viewModel.pinProjectLocation(result as LatLng);
+      if (result == null) return;
+
+      viewModel.pinProjectLocation(result);
     });
   }
 

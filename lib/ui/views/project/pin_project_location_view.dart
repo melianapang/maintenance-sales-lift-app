@@ -5,7 +5,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 
 class PinProjectLocationViewParam {
   PinProjectLocationViewParam({
@@ -27,7 +26,8 @@ class PinProjectLocationView extends StatefulWidget {
   State<PinProjectLocationView> createState() => _PinProjectLocationViewState();
 }
 
-class _PinProjectLocationViewState extends State<PinProjectLocationView> {
+class _PinProjectLocationViewState extends State<PinProjectLocationView>
+    with OSMMixinObserver, TickerProviderStateMixin {
   // final pickerController = PickerMapController(
   //   initMapWithUserPosition: const UserTrackingOption(enableTracking: true),
   //   initPosition: GeoPoint(latitude: -7.250445, longitude: 112.768845),
@@ -48,6 +48,15 @@ class _PinProjectLocationViewState extends State<PinProjectLocationView> {
         longitude: widget.param.longLat?.longitude ?? 0,
       ),
     );
+    controller.addObserver(this);
+  }
+
+  @override
+  Future<void> mapIsReady(bool isReady) async {
+    if (isReady) {
+      isMapReady = isReady;
+      setState(() {});
+    }
   }
 
   @override
@@ -106,7 +115,13 @@ class _PinProjectLocationViewState extends State<PinProjectLocationView> {
           ),
           enableRotationByGesture: true,
         ),
-        mapIsLoading: buildLoadingPage(),
+        mapIsLoading: const Center(
+          child: CircularProgressIndicator.adaptive(
+            valueColor: AlwaysStoppedAnimation<Color>(
+              MyColors.yellow01,
+            ),
+          ),
+        ),
         onMapIsReady: (bool isReady) {
           if (!isReady) return;
 
