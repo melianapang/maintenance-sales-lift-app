@@ -20,7 +20,6 @@ import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/add_unit_customer_vi
 import 'package:rejo_jaya_sakti_apps/ui/views/unit_customer/list_unit_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
-import 'package:intl/intl.dart';
 
 class DetailCustomerViewParam {
   DetailCustomerViewParam({
@@ -131,9 +130,10 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                         ),
                         Spacings.vert(35),
                         TextInput.disabled(
-                            label: "Sumber Data",
-                            hintText: 'Sumber Data',
-                            text: model.customerData?.dataSource ?? ""),
+                          label: "Sumber Data",
+                          hintText: 'Sumber Data',
+                          text: model.customerData?.dataSource ?? "",
+                        ),
                         Spacings.vert(24),
                         TextInput.disabled(
                           label: "Nomor Pelanggan",
