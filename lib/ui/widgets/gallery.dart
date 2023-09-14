@@ -257,121 +257,12 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
     );
   }
 
-  Future<void> _onTapAddGallery(
-    BuildContext context, {
-    required bool isFromCamera,
-    required GalleryType galleryType,
-    void Function(
-      GalleryData? compressedFile,
-      bool isCompressing,
-    )? callbackCompressedFiles,
-  }) async {
-    //pick pdf
-    if (galleryType == GalleryType.PDF) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ["pdf"],
-        allowCompression: true,
-      );
-
-      if (result != null) {
-        PlatformFile file = result.files.first;
-
-        print(file.name);
-        print(file.bytes);
-        print(file.size);
-        print(file.extension);
-        print(file.path);
-
-        if (callbackCompressedFiles != null) {
-          callbackCompressedFiles(
-            GalleryData(
-              galleryType: GalleryType.PDF,
-              filepath: file.path ?? "",
-              isGalleryPicked: true,
-            ),
-            false,
-          );
-        }
-      }
-      return;
-    }
-
-    //pick file (image / video)
-    final _picker = ImagePicker();
-    final XFile? file;
-    if (!isFromCamera) {
-      if (galleryType == GalleryType.PHOTO) {
-        file = await _picker.pickImage(source: ImageSource.gallery);
-      } else {
-        file = await _picker.pickVideo(source: ImageSource.gallery);
-      }
-    } else {
-      if (galleryType == GalleryType.PHOTO) {
-        file = await _picker.pickImage(source: ImageSource.camera);
-      } else {
-        file = await _picker.pickVideo(source: ImageSource.camera);
-      }
-    }
-
-    //compress file
-    if (file != null) {
-      XFile? compressedImage;
-      MediaInfo? compressedVideo;
-      GalleryData? compressedFile;
-
-      //loading state
-      if (callbackCompressedFiles != null) {
-        callbackCompressedFiles(
-          null,
-          true,
-        );
-      }
-
-      //start compressing
-      if (galleryType == GalleryType.PHOTO) {
-        compressedImage = await FilesCompressionUtils.compressAndGetFileImage(
-          file,
-        );
-        compressedFile = GalleryData(
-          galleryType: GalleryType.PHOTO,
-          filepath: compressedImage.path,
-          isGalleryPicked: true,
-        );
-      } else {
-        compressedVideo = await FilesCompressionUtils.compressAndGetFileVideo(
-          file,
-        );
-        final File thumbnailFile =
-            await FilesCompressionUtils.generateVideoThumbnail(
-          compressedVideo.path ?? "",
-        );
-        compressedFile = GalleryData(
-          galleryType: GalleryType.VIDEO,
-          filepath: compressedVideo.path ?? '',
-          thumbnailPath: thumbnailFile.path,
-          isGalleryPicked: true,
-        );
-      }
-
-      //finish compressing
-      if (callbackCompressedFiles != null) {
-        callbackCompressedFiles(
-          compressedFile,
-          false,
-        );
-      }
-    }
-  }
-
   Widget _buildAddGallery(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (widget.galleryType == GalleryType.PDF) {
-          _onTapAddGallery(
+          _onTapAddPdf(
             context,
-            isFromCamera: false,
-            galleryType: widget.galleryType,
             callbackCompressedFiles: widget.callbackCompressedFiles,
           );
           return;
@@ -445,9 +336,9 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          _onTapAddGallery(
+
+                          _onTapAddPhotoVideoFromGallery(
                             context,
-                            isFromCamera: false,
                             galleryType: widget.galleryType,
                             callbackCompressedFiles:
                                 widget.callbackCompressedFiles,
@@ -481,9 +372,8 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          _onTapAddGallery(
+                          _onTapAddPhotoVideoFromCamera(
                             context,
-                            isFromCamera: true,
                             galleryType: widget.galleryType,
                             callbackCompressedFiles:
                                 widget.callbackCompressedFiles,
@@ -521,6 +411,177 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
             ),
           );
         });
+  }
+
+  Future<void> _onTapAddPdf(
+    BuildContext context, {
+    void Function(
+      GalleryData? compressedFile,
+      bool isCompressing,
+    )? callbackCompressedFiles,
+  }) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ["pdf"],
+      allowCompression: true,
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+
+      print(file.name);
+      print(file.bytes);
+      print(file.size);
+      print(file.extension);
+      print(file.path);
+
+      if (callbackCompressedFiles != null) {
+        callbackCompressedFiles(
+          GalleryData(
+            galleryType: GalleryType.PDF,
+            filepath: file.path ?? "",
+            isGalleryPicked: true,
+          ),
+          false,
+        );
+      }
+    }
+  }
+
+  Future<void> _onTapAddPhotoVideoFromGallery(
+    BuildContext context, {
+    required GalleryType galleryType,
+    void Function(
+      GalleryData? compressedFile,
+      bool isCompressing,
+    )? callbackCompressedFiles,
+  }) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions:
+          galleryType == GalleryType.PHOTO ? ["jpg", "jpeg", "png"] : ["mp4"],
+      allowCompression: true,
+    );
+
+    //compress file
+    if (result != null && result.files.first.path != null) {
+      PlatformFile fileResult = result.files.first;
+      final XFile file = XFile(fileResult.path ?? "");
+
+      XFile? compressedImage;
+      MediaInfo? compressedVideo;
+      GalleryData? compressedFile;
+
+      //loading state
+      if (callbackCompressedFiles != null) {
+        callbackCompressedFiles(
+          null,
+          true,
+        );
+      }
+
+      //start compressing
+      if (galleryType == GalleryType.PHOTO) {
+        compressedImage = await FilesCompressionUtils.compressAndGetFileImage(
+          file,
+        );
+        compressedFile = GalleryData(
+          galleryType: GalleryType.PHOTO,
+          filepath: compressedImage.path,
+          isGalleryPicked: true,
+        );
+      } else {
+        compressedVideo = await FilesCompressionUtils.compressAndGetFileVideo(
+          file,
+        );
+        final File thumbnailFile =
+            await FilesCompressionUtils.generateVideoThumbnail(
+          compressedVideo.path ?? "",
+        );
+        compressedFile = GalleryData(
+          galleryType: GalleryType.VIDEO,
+          filepath: compressedVideo.path ?? '',
+          thumbnailPath: thumbnailFile.path,
+          isGalleryPicked: true,
+        );
+      }
+
+      //finish compressing
+      if (callbackCompressedFiles != null) {
+        callbackCompressedFiles(
+          compressedFile,
+          false,
+        );
+      }
+    }
+  }
+
+  Future<void> _onTapAddPhotoVideoFromCamera(
+    BuildContext context, {
+    required GalleryType galleryType,
+    void Function(
+      GalleryData? compressedFile,
+      bool isCompressing,
+    )? callbackCompressedFiles,
+  }) async {
+    //pick file (image / video)
+    final _picker = ImagePicker();
+    final XFile? file;
+
+    if (galleryType == GalleryType.PHOTO) {
+      file = await _picker.pickImage(source: ImageSource.camera);
+    } else {
+      file = await _picker.pickVideo(source: ImageSource.camera);
+    }
+
+    //compress file
+    if (file != null) {
+      XFile? compressedImage;
+      MediaInfo? compressedVideo;
+      GalleryData? compressedFile;
+
+      //loading state
+      if (callbackCompressedFiles != null) {
+        callbackCompressedFiles(
+          null,
+          true,
+        );
+      }
+
+      //start compressing
+      if (galleryType == GalleryType.PHOTO) {
+        compressedImage = await FilesCompressionUtils.compressAndGetFileImage(
+          file,
+        );
+        compressedFile = GalleryData(
+          galleryType: GalleryType.PHOTO,
+          filepath: compressedImage.path,
+          isGalleryPicked: true,
+        );
+      } else {
+        compressedVideo = await FilesCompressionUtils.compressAndGetFileVideo(
+          file,
+        );
+        final File thumbnailFile =
+            await FilesCompressionUtils.generateVideoThumbnail(
+          compressedVideo.path ?? "",
+        );
+        compressedFile = GalleryData(
+          galleryType: GalleryType.VIDEO,
+          filepath: compressedVideo.path ?? '',
+          thumbnailPath: thumbnailFile.path,
+          isGalleryPicked: true,
+        );
+      }
+
+      //finish compressing
+      if (callbackCompressedFiles != null) {
+        callbackCompressedFiles(
+          compressedFile,
+          false,
+        );
+      }
+    }
   }
 
   int get _galleryThumbnailsLength => widget.isCRUD
