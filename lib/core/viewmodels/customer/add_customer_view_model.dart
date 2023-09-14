@@ -274,7 +274,7 @@ class AddCustomerViewModel extends BaseViewModel {
       customerNumber: customerNumberController.text,
       customerType: _selectedCustomerTypeFilter,
       customerNeed: _selectedCustomerNeedFilter.toString(),
-      isLead: isSumberDataFieldVisible ? "1" : "0",
+      isLead: _isSumberDataFieldVisible ? "1" : "0",
       dataSource: sumberDataController.text,
       email: emailController.text,
       companyName: companyNameController.text,
