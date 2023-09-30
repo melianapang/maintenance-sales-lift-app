@@ -21,7 +21,7 @@ class AliceService {
 
     _aliceCore = AliceCore(
       navigatorKey,
-      true,
+      false,
     );
 
     if (enableAlice) {
