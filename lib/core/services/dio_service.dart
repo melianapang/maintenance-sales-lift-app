@@ -87,14 +87,13 @@ class DioService {
             bool isLoggedIn = await _authenticationService.isLoggedIn();
             if (e.response?.statusCode == 401 && isLoggedIn) {
               _authenticationService.logout();
+              return;
+            }
+
+            if (e.response != null) {
+              handler.resolve(e.response!);
             } else {
-              handler.next(
-                DioException(
-                  requestOptions: RequestOptions(path: ""),
-                  type: e.type,
-                  error: e,
-                ),
-              );
+              handler.next(e);
             }
           },
           onRequest: (
