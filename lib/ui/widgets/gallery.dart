@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/gallery_data_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/files_compression_utils.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/image_detail_view.dart';
@@ -524,6 +526,10 @@ class _GalleryThumbnailWidgetState extends State<GalleryThumbnailWidget> {
       bool isCompressing,
     )? callbackCompressedFiles,
   }) async {
+    //request permission camera
+    bool isGranted = await PermissionUtils.requestPermission(Permission.camera);
+    if (!isGranted) return;
+
     //pick file (image / video)
     final _picker = ImagePicker();
     final XFile? file;
