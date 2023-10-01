@@ -152,96 +152,8 @@ class _AccordionListMaintenanceWidgetState
                           height: 10,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.detailMaintenance,
-                                arguments: DetailMaintenanceViewParam(
-                                  maintenanceData:
-                                      widget.listUnitsMaintenances[index],
-                                ),
-                              ).then((value) {
-                                if (value == null || value == false) return;
-                                widget.refreshPageCallback.call();
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                                horizontal: 24,
-                              ),
-                              decoration: BoxDecoration(
-                                color: getBackgroundUnitColor(
-                                    widget.listUnitsMaintenances[index]),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    StringUtils.removeZeroWidthSpaces(
-                                      widget.listUnitsMaintenances[index]
-                                          .unitName,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: buildTextStyle(
-                                      fontColor: MyColors.white,
-                                      fontSize: 18,
-                                      fontWeight: 400,
-                                      isUnderlined: true,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${widget.isFilterOffOrFilterNotMaintenance ? "Status Terakhir" : "Status"}: ${mappingStringNumerictoString(
-                                      widget.isFilterOffOrFilterNotMaintenance
-                                          ? widget.listUnitsMaintenances[index]
-                                                  .lastMaintenanceResult ??
-                                              "0"
-                                          : widget.listUnitsMaintenances[index]
-                                              .maintenanceResult,
-                                    )}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: buildTextStyle(
-                                      fontColor: MyColors.white,
-                                      fontSize: 16,
-                                      fontWeight: 400,
-                                    ),
-                                  ),
-                                  Text(
-                                    StringUtils.removeZeroWidthSpaces(
-                                      DateTimeUtils
-                                          .convertStringToOtherStringDateFormat(
-                                        date: widget
-                                            .listUnitsMaintenances[index]
-                                            .scheduleDate,
-                                        formattedString:
-                                            DateTimeUtils.DATE_FORMAT_2,
-                                      ),
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: buildTextStyle(
-                                      fontColor: widget.isRedStatus ||
-                                              widget
-                                                      .listUnitsMaintenances[
-                                                          index]
-                                                      .maintenanceResult ==
-                                                  "0"
-                                          ? MyColors.white
-                                          : MyColors.greenFontStatusCard,
-                                      fontSize: 16,
-                                      fontWeight: 400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return _buildUnitCard(
+                              widget.listUnitsMaintenances[index]);
                         },
                       ),
                     ),
@@ -250,6 +162,85 @@ class _AccordionListMaintenanceWidgetState
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUnitCard(MaintenanceData maintenanceData) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          Routes.detailMaintenance,
+          arguments: DetailMaintenanceViewParam(
+            maintenanceData: maintenanceData,
+          ),
+        ).then((value) {
+          if (value == null || value == false) return;
+          widget.refreshPageCallback.call();
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 24,
+        ),
+        decoration: BoxDecoration(
+          color: getBackgroundUnitColor(maintenanceData),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(16),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              StringUtils.removeZeroWidthSpaces(
+                maintenanceData.unitName,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: buildTextStyle(
+                fontColor: MyColors.white,
+                fontSize: 18,
+                fontWeight: 400,
+                isUnderlined: true,
+              ),
+            ),
+            Text(
+              "${widget.isFilterOffOrFilterNotMaintenance ? "Status Terakhir" : "Status"}: ${mappingStringNumerictoString(
+                widget.isFilterOffOrFilterNotMaintenance
+                    ? maintenanceData.lastMaintenanceResult ?? "0"
+                    : maintenanceData.maintenanceResult,
+              )}",
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: buildTextStyle(
+                fontColor: MyColors.white,
+                fontSize: 16,
+                fontWeight: 400,
+              ),
+            ),
+            Text(
+              StringUtils.removeZeroWidthSpaces(
+                DateTimeUtils.convertStringToOtherStringDateFormat(
+                  date: maintenanceData.scheduleDate,
+                  formattedString: DateTimeUtils.DATE_FORMAT_2,
+                ),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: buildTextStyle(
+                fontColor: widget.isRedStatus ||
+                        maintenanceData.maintenanceResult == "0"
+                    ? MyColors.white
+                    : MyColors.greenFontStatusCard,
+                fontSize: 16,
+                fontWeight: 400,
+              ),
+            ),
+          ],
         ),
       ),
     );
