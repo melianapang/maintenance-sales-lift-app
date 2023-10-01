@@ -25,6 +25,9 @@ class DetailCustomerViewModel extends BaseViewModel {
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
 
+  bool _isShowingSumberData = false;
+  bool get isShowingSumberData => _isShowingSumberData;
+
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
@@ -60,10 +63,15 @@ class DetailCustomerViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
+
+    _isShowingSumberData = customerData?.dataSource.isNotEmpty == true &&
+        customerData?.dataSource != null;
+
     await requestGetAllCustomerNeed();
     await requestGetAllCustomerType();
     _handleDynamicCustomerNeedData();
     _handleDynamicCustomerTypeData();
+
     setBusy(false);
   }
 

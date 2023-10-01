@@ -129,12 +129,14 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                           ),
                         ),
                         Spacings.vert(35),
-                        TextInput.disabled(
-                          label: "Sumber Data",
-                          hintText: 'Sumber Data',
-                          text: model.customerData?.dataSource ?? "",
-                        ),
-                        Spacings.vert(24),
+                        if (model.isShowingSumberData) ...[
+                          TextInput.disabled(
+                            label: "Sumber Data",
+                            hintText: 'Sumber Data',
+                            text: model.customerData?.dataSource ?? "",
+                          ),
+                          Spacings.vert(24),
+                        ],
                         TextInput.disabled(
                           label: "Nomor Pelanggan",
                           hintText: "Nomor Pelanggan",
