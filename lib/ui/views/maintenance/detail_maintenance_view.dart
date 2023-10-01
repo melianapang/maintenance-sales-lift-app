@@ -90,6 +90,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                             fontWeight: 800,
                             fontColor: MyColors.yellow01,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         GestureDetector(
                           onTap: () async {
@@ -137,6 +139,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               fontColor: MyColors.blueLihatSelengkapnya,
                               isUnderlined: true,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         if (model.maintenanceData?.companyName?.isEmpty ==
@@ -149,6 +153,8 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                               fontWeight: 400,
                               fontColor: MyColors.lightBlack02,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                         Spacings.vert(20),

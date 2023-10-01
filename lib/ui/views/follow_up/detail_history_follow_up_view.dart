@@ -69,6 +69,8 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                         fontWeight: 800,
                         fontColor: MyColors.yellow01,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     if (model.historyData?.customerName != null ||
                         model.historyData?.companyName != null)
@@ -79,6 +81,8 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                           fontWeight: 400,
                           fontColor: MyColors.lightBlack02,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     Spacings.vert(35),
                     StatusCardWidget(

@@ -131,6 +131,8 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                             fontWeight: 800,
                             fontColor: MyColors.yellow01,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         Spacings.vert(8),
                         if (model.isAllowedToSeeConfidentialInfo) ...[
@@ -141,6 +143,8 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                               fontWeight: 400,
                               fontColor: MyColors.lightBlack02,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Spacings.vert(12),
                         ],

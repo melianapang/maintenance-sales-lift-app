@@ -116,22 +116,28 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                     children: [
-                      Text(
-                        model.projectName ?? "",
-                        style: buildTextStyle(
-                          fontSize: 26,
-                          fontWeight: 800,
-                          fontColor: MyColors.yellow01,
+                      if (model.projectName?.isNotEmpty == true &&
+                          model.projectName != null)
+                        Text(
+                          model.projectName ?? "",
+                          style: buildTextStyle(
+                            fontSize: 26,
+                            fontWeight: 800,
+                            fontColor: MyColors.yellow01,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
                       Spacings.vert(8),
                       Text(
-                        "${model.customerName} ${(model.companyName?.isNotEmpty == true || model.companyName != null ? " | ${model.companyName}" : "")}",
+                        "${model.customerName} ${(model.companyName?.isNotEmpty == true && model.companyName != null ? " | ${model.companyName}" : "")}",
                         style: buildTextStyle(
                           fontSize: 20,
                           fontWeight: 400,
                           fontColor: MyColors.lightBlack02,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Spacings.vert(24),
                       StatusCardWidget(

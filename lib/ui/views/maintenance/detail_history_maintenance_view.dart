@@ -45,51 +45,6 @@ class _DetailHistoryMaintenanceViewState
     extends State<DetailHistoryMaintenanceView> {
   final ScrollController scrollController = ScrollController();
 
-  List<GalleryData> galleryData = [
-    GalleryData(
-      filepath:
-          "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://www.rollingstone.com/wp-content/uploads/2019/12/TaylorSwiftTimIngham.jpg?w=1581&h=1054&crop=1",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png/220px-191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://i.guim.co.uk/img/media/a48e88b98455a5b118d3c1d34870a1d3aaa1b5c6/0_41_3322_1994/master/3322.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=b95f25e4e31f132166006345fd87b5ae",
-      galleryType: GalleryType.PHOTO,
-    ),
-    GalleryData(
-      filepath:
-          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
-      galleryType: GalleryType.PHOTO,
-    ),
-  ];
-
-  List<GalleryData> videoData = [
-    GalleryData(
-      filepath:
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-      thumbnailPath:
-          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
-      galleryType: GalleryType.VIDEO,
-    ),
-    GalleryData(
-      filepath:
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-      thumbnailPath:
-          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
-      galleryType: GalleryType.VIDEO,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ViewModel(
@@ -164,6 +119,8 @@ class _DetailHistoryMaintenanceViewState
                       fontWeight: 800,
                       fontColor: MyColors.yellow01,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     model.historyMaintenanceData?.customerName ?? "",
@@ -172,6 +129,8 @@ class _DetailHistoryMaintenanceViewState
                       fontWeight: 400,
                       fontColor: MyColors.lightBlack02,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Spacings.vert(35),
                   StatusCardWidget(
@@ -296,4 +255,49 @@ class _DetailHistoryMaintenanceViewState
       },
     );
   }
+
+  List<GalleryData> galleryData = [
+    GalleryData(
+      filepath:
+          "https://media1.popsugar-assets.com/files/thumbor/0ebv7kCHr0T-_O3RfQuBoYmUg1k/475x60:1974x1559/fit-in/500x500/filters:format_auto-!!-:strip_icc-!!-/2019/09/09/023/n/1922398/9f849ffa5d76e13d154137.01128738_/i/Taylor-Swift.jpg",
+      galleryType: GalleryType.PHOTO,
+    ),
+    GalleryData(
+      filepath:
+          "https://www.rollingstone.com/wp-content/uploads/2019/12/TaylorSwiftTimIngham.jpg?w=1581&h=1054&crop=1",
+      galleryType: GalleryType.PHOTO,
+    ),
+    GalleryData(
+      filepath:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png/220px-191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png",
+      galleryType: GalleryType.PHOTO,
+    ),
+    GalleryData(
+      filepath:
+          "https://i.guim.co.uk/img/media/a48e88b98455a5b118d3c1d34870a1d3aaa1b5c6/0_41_3322_1994/master/3322.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=b95f25e4e31f132166006345fd87b5ae",
+      galleryType: GalleryType.PHOTO,
+    ),
+    GalleryData(
+      filepath:
+          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+      galleryType: GalleryType.PHOTO,
+    ),
+  ];
+
+  List<GalleryData> videoData = [
+    GalleryData(
+      filepath:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      thumbnailPath:
+          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+      galleryType: GalleryType.VIDEO,
+    ),
+    GalleryData(
+      filepath:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      thumbnailPath:
+          "https://media.glamour.com/photos/618e9260d0013b8dece7e9d8/master/w_2560%2Cc_limit/GettyImages-1236509084.jpg",
+      galleryType: GalleryType.VIDEO,
+    ),
+  ];
 }
