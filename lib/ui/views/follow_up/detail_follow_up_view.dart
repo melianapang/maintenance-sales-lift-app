@@ -81,8 +81,8 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
           floatingActionButton: FloatingButtonWidget(
-            onTap: () {
-              Navigator.pushNamed(
+            onTap: () async {
+              final dynamic result = await Navigator.pushNamed(
                 context,
                 Routes.formFollowUp,
                 arguments: FormFollowUpViewParam(
@@ -104,13 +104,11 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
                     lastFollowUpResult: "-1",
                   ),
                 ),
-              ).then((value) {
-                if (value == null) return;
-                if (value == true) {
-                  model.refreshPage();
-                  model.setPreviousPageNeedRefresh(true);
-                }
-              });
+              );
+
+              if (result == null || result == false) return;
+              model.refreshPage();
+              model.setPreviousPageNeedRefresh(true);
             },
           ),
           body: !model.busy
