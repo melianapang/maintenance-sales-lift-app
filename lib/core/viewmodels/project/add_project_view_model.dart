@@ -212,13 +212,6 @@ class AddProjectViewModel extends BaseViewModel {
     _errorMsg = response.left.message;
   }
 
-  void setSelectedCustomerByIndex({
-    required int selectedIndex,
-  }) {
-    _selectedCustomer = _listCustomer?[selectedIndex];
-    notifyListeners();
-  }
-
   void setSelectedCustomer(CustomerData data) {
     _selectedCustomer = data;
     notifyListeners();

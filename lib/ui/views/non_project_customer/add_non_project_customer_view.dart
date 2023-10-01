@@ -33,8 +33,7 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     final List<FilterOptionDynamic> menuLocal =
         convertToNewListForFilterDynamic(listMenu);
@@ -49,6 +48,7 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
         builder: (context, setState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               buildMenuDynamicChoices(
                 menuLocal,

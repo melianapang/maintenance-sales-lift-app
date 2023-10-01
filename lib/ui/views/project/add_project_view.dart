@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
@@ -16,12 +15,11 @@ import 'package:rejo_jaya_sakti_apps/core/viewmodels/project/add_project_view_mo
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/no_data_found_page.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/search_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/project/pin_project_location_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/buttons.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/cards.dart';
+import 'package:rejo_jaya_sakti_apps/ui/widgets/choose_customer_bottom_sheet.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/date_picker.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/dialogs.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/filter_menu.dart';
@@ -144,7 +142,6 @@ class _AddProjectViewState extends State<AddProjectView> {
                     _showPilihCustomerBottomDialog(
                       context,
                       model,
-                      setSelectedMenu: model.setSelectedCustomerByIndex,
                     );
                   },
                   child: TextInput.disabled(
@@ -447,75 +444,18 @@ class _AddProjectViewState extends State<AddProjectView> {
   }
 
   void _showPilihCustomerBottomDialog(
-    BuildContext context,
-    AddProjectViewModel model, {
-    required void Function({
-      required int selectedIndex,
-    }) setSelectedMenu,
-  }) {
+      BuildContext context, AddProjectViewModel model) {
     showGeneralBottomSheet(
       context: context,
       title: 'Daftar Pelanggan',
       isFlexible: false,
       showCloseButton: false,
       sizeToScreenRatio: 0.8,
-      child: Expanded(
-        child: StatefulBuilder(
-          builder: (context, ss) {
-            return FutureBuilder<List<CustomerData>>(
-              future: model.searchOnChanged(),
-              builder: (context, snapshot) {
-                return Column(
-                  children: [
-                    buildSearchBar(
-                      context,
-                      isFilterShown: false,
-                      searchController: model.searchController,
-                      textSearchOnChanged: (_) {
-                        model.isSearch = true;
-                        ss(() {});
-                      },
-                    ),
-                    if (!model.isShowNoDataFoundPage && !model.isLoading)
-                      Expanded(
-                        child: LazyLoadScrollView(
-                          onEndOfPage: () {
-                            model.isSearch = false;
-                            ss(() {});
-                          },
-                          child: ListView.separated(
-                            itemCount: snapshot.data?.length ?? 0,
-                            separatorBuilder: (_, __) => const Divider(
-                              color: MyColors.transparent,
-                              height: 20,
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return CustomCardWidget(
-                                cardType: CardType.list,
-                                title: snapshot.data?[index].customerName ?? "",
-                                description: snapshot.data?[index].companyName,
-                                desc2Size: 16,
-                                titleSize: 20,
-                                onTap: () {
-                                  setSelectedMenu(
-                                    selectedIndex: index,
-                                  );
-                                  Navigator.maybePop(context);
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    if (model.isShowNoDataFoundPage && !model.isLoading)
-                      buildNoDataFoundPage(),
-                    if (model.isLoading) buildLoadingPage(),
-                  ],
-                );
-              },
-            );
-          },
-        ),
+      child: ChooseCustomerBottomSheet(
+        selectedCustomerCallback: ((CustomerData? customerData) {
+          if (customerData == null) return;
+          model.setSelectedCustomer(customerData);
+        }),
       ),
     );
   }

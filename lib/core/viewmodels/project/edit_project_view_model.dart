@@ -168,6 +168,11 @@ class EditProjectViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setSelectedCustomer(CustomerData data) {
+    _selectedCustomer = data;
+    notifyListeners();
+  }
+
   Future<Position?> getCurrentPosition() async {
     return await LocationUtils.getCurrentPosition();
   }
@@ -233,13 +238,6 @@ class EditProjectViewModel extends BaseViewModel {
     }
 
     _errorMsg = response.left.message;
-  }
-
-  void setSelectedCustomer({
-    required int selectedIndex,
-  }) {
-    _selectedCustomer = _listCustomer?[selectedIndex];
-    notifyListeners();
   }
 
   void setSelectedKeperluanProyek({

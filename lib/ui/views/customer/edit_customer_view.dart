@@ -37,63 +37,6 @@ class EditCustomerView extends StatefulWidget {
 }
 
 class _EditCustomerViewState extends State<EditCustomerView> {
-  void _showBottomFilterDialog(
-    BuildContext context,
-    String title,
-    EditCustomerViewModel model, {
-    required List<FilterOptionDynamic> listMenu,
-    required int selectedMenu,
-    required void Function({
-      required int selectedMenu,
-    }) setSelectedMenu,
-  }) {
-    final List<FilterOptionDynamic> menuLocal =
-        convertToNewListForFilterDynamic(listMenu);
-    int menu = selectedMenu;
-
-    showGeneralBottomSheet(
-      context: context,
-      title: title,
-      isFlexible: true,
-      showCloseButton: false,
-      child: StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildMenuDynamicChoices(
-                menuLocal,
-                (int selectedIdFilter) {
-                  menu = selectedIdFilter;
-                  for (FilterOptionDynamic menu in menuLocal) {
-                    if (int.parse(menu.idFilter) == selectedIdFilter) {
-                      menu.isSelected = true;
-                      continue;
-                    }
-                    menu.isSelected = false;
-                  }
-                  setState(() {});
-                },
-              ),
-              Spacings.vert(32),
-              ButtonWidget(
-                buttonType: ButtonType.primary,
-                buttonSize: ButtonSize.large,
-                text: "Terapkan",
-                onTap: () {
-                  setSelectedMenu(
-                    selectedMenu: menu,
-                  );
-                  Navigator.maybePop(context);
-                },
-              )
-            ],
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ViewModel(
@@ -313,6 +256,64 @@ class _EditCustomerViewState extends State<EditCustomerView> {
               )
             : buildLoadingPage();
       },
+    );
+  }
+
+  void _showBottomFilterDialog(
+    BuildContext context,
+    String title,
+    EditCustomerViewModel model, {
+    required List<FilterOptionDynamic> listMenu,
+    required int selectedMenu,
+    required void Function({
+      required int selectedMenu,
+    }) setSelectedMenu,
+  }) {
+    final List<FilterOptionDynamic> menuLocal =
+        convertToNewListForFilterDynamic(listMenu);
+    int menu = selectedMenu;
+
+    showGeneralBottomSheet(
+      context: context,
+      title: title,
+      isFlexible: true,
+      showCloseButton: false,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildMenuDynamicChoices(
+                menuLocal,
+                (int selectedIdFilter) {
+                  menu = selectedIdFilter;
+                  for (FilterOptionDynamic menu in menuLocal) {
+                    if (int.parse(menu.idFilter) == selectedIdFilter) {
+                      menu.isSelected = true;
+                      continue;
+                    }
+                    menu.isSelected = false;
+                  }
+                  setState(() {});
+                },
+              ),
+              Spacings.vert(32),
+              ButtonWidget(
+                buttonType: ButtonType.primary,
+                buttonSize: ButtonSize.large,
+                text: "Terapkan",
+                onTap: () {
+                  setSelectedMenu(
+                    selectedMenu: menu,
+                  );
+                  Navigator.maybePop(context);
+                },
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }

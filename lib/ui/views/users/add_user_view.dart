@@ -175,8 +175,7 @@ class _AddUserViewState extends State<AddUserView> {
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     final List<FilterOption> menuLocal = convertToNewList(listMenu);
     int menu = selectedMenu;
@@ -190,6 +189,7 @@ class _AddUserViewState extends State<AddUserView> {
         builder: (context, setState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               buildMenuChoices(
                 menuLocal,

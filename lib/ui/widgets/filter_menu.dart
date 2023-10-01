@@ -146,8 +146,7 @@ void showCustomerFilterMenu(
     required int? selectedSumberData,
     required int? selectedKebutuhanPelanggan,
     required int? selectedSort,
-  })
-      terapkanCallback,
+  }) terapkanCallback,
   required void Function() resetFilterCallback,
 }) {
   final List<FilterOptionDynamic> tipePelangganLocal =
@@ -174,6 +173,7 @@ void showCustomerFilterMenu(
       builder: (context, setState) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Tipe Pelanggan",
@@ -316,8 +316,7 @@ void showMaintenanceFilterMenu(
   required void Function({
     required int selectedMaintenanceStatus,
     required int selectedSort,
-  })
-      terapkanCallback,
+  }) terapkanCallback,
 }) {
   final List<FilterOption> maintenanceStatusLocal =
       convertToNewList(listMaintenanceStatusMenu);
@@ -335,6 +334,7 @@ void showMaintenanceFilterMenu(
       builder: (context, setState) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Status Pemeliharaan",
@@ -412,8 +412,7 @@ void showUserFilterMenu(
   required int selectedRole,
   required void Function({
     required int selectedRole,
-  })
-      terapkanCallback,
+  }) terapkanCallback,
 }) {
   final List<FilterOption> roleLocal = convertToNewList(listRole);
   int role = selectedRole;
@@ -427,6 +426,7 @@ void showUserFilterMenu(
       builder: (context, setState) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Peran",

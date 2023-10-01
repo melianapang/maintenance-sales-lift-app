@@ -278,8 +278,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
     AddUnitCustomerViewModel model, {
     required void Function({
       required int selectedIndex,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     showGeneralBottomSheet(
       context: context,
@@ -342,8 +341,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
-    })
-        setSelectedMenu,
+    }) setSelectedMenu,
   }) {
     final List<FilterOption> menuLocal = convertToNewList(listMenu);
     int menu = selectedMenu;
@@ -356,6 +354,7 @@ class _AddUnitCustomerViewState extends State<AddUnitCustomerView> {
       child: StatefulBuilder(
         builder: (context, setState) {
           return Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildMenuChoices(

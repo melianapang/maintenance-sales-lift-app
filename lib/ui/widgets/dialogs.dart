@@ -112,7 +112,9 @@ Future<dynamic> showGeneralBottomSheet({
                       ),
                     ],
                     Spacings.vert(24),
-                    child,
+                    Flexible(
+                      child: child,
+                    ),
                   ],
                 ),
               ),

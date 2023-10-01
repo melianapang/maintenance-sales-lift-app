@@ -62,6 +62,7 @@ class _EditNonProjectCustomerViewState
         builder: (context, setState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               buildMenuDynamicChoices(
                 menuLocal,

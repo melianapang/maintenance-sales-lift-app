@@ -187,6 +187,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: StatefulBuilder(
         builder: (context, setState) {
           return Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildMenuChoices(
