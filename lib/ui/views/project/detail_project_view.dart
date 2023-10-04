@@ -78,7 +78,8 @@ class _DetailProjectViewState extends State<DetailProjectView> {
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
             actions: widget.param.sourcePage ==
-                    DetailProjectSourcePage.ListProjectPage
+                        DetailProjectSourcePage.ListProjectPage &&
+                    model.isAllowedToSeeConfidentialInfo
                 ? <Widget>[
                     GestureDetector(
                       onTap: () {
@@ -160,15 +161,13 @@ class _DetailProjectViewState extends State<DetailProjectView> {
                           ),
                         ),
                         Spacings.vert(24),
-                        if (model.isAllowedToSeeConfidentialInfo) ...[
-                          TextInput.disabled(
-                            label: "Alamat",
-                            text: model.projectData?.address,
-                          ),
-                          Spacings.vert(6),
-                          _buildLihatLokasiProyek(model.projectData),
-                          Spacings.vert(16),
-                        ],
+                        TextInput.disabled(
+                          label: "Alamat",
+                          text: model.projectData?.address,
+                        ),
+                        Spacings.vert(6),
+                        _buildLihatLokasiProyek(model.projectData),
+                        Spacings.vert(16),
                         TextInput.disabled(
                           label: "Kota",
                           text: model.projectData?.city,
@@ -456,41 +455,42 @@ class _DetailProjectViewState extends State<DetailProjectView> {
               }
             },
           ),
-          SpeedDialChild(
-            child: !model.isDialChildrenVisible
-                ? const Icon(PhosphorIcons.newspaperClippingBold)
-                : null,
-            backgroundColor: MyColors.yellow02,
-            foregroundColor: MyColors.white,
-            label: 'Buat Laporan Konfirmasi',
-            labelBackgroundColor: MyColors.lightBlack01,
-            labelShadow: [
-              const BoxShadow(
-                color: MyColors.transparent,
-              ),
-            ],
-            labelStyle: buildTextStyle(
-                fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
-            onTap: () async {
-              Navigator.pushNamed(
-                context,
-                Routes.formFollowUp,
-                arguments: FormFollowUpViewParam(
-                  projectData: model.projectData,
+          if (model.isAllowedToSeeConfidentialInfo)
+            SpeedDialChild(
+              child: !model.isDialChildrenVisible
+                  ? const Icon(PhosphorIcons.newspaperClippingBold)
+                  : null,
+              backgroundColor: MyColors.yellow02,
+              foregroundColor: MyColors.white,
+              label: 'Buat Laporan Konfirmasi',
+              labelBackgroundColor: MyColors.lightBlack01,
+              labelShadow: [
+                const BoxShadow(
+                  color: MyColors.transparent,
                 ),
-              ).then((value) {
-                if (value == null) return;
-                if (value == true) {
-                  model.refreshPage();
-                  model.setPreviousPageNeedRefresh(true);
-                }
-              });
+              ],
+              labelStyle: buildTextStyle(
+                  fontSize: 14, fontWeight: 500, fontColor: MyColors.white),
+              onTap: () async {
+                Navigator.pushNamed(
+                  context,
+                  Routes.formFollowUp,
+                  arguments: FormFollowUpViewParam(
+                    projectData: model.projectData,
+                  ),
+                ).then((value) {
+                  if (value == null) return;
+                  if (value == true) {
+                    model.refreshPage();
+                    model.setPreviousPageNeedRefresh(true);
+                  }
+                });
 
-              setState() {
-                model.setDialChildrenVisible();
-              }
-            },
-          ),
+                setState() {
+                  model.setDialChildrenVisible();
+                }
+              },
+            ),
         ],
         SpeedDialChild(
           child: !model.isDialChildrenVisible

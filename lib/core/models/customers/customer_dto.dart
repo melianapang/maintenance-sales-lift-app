@@ -140,6 +140,7 @@ class CustomerData {
     required this.status,
     required this.isLead,
     required this.dataSource,
+    required this.salesOwnedId,
     this.note,
   });
 
@@ -183,6 +184,9 @@ class CustomerData {
 
   @JsonKey(name: "note")
   final String? note;
+
+  @JsonKey(name: "sales_owned_id")
+  final String salesOwnedId;
 
   @JsonKey(name: "status")
   final String status;

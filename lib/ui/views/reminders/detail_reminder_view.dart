@@ -83,6 +83,7 @@ class _DetailReminderViewState extends State<DetailReminderView> {
                           projectName: model.reminderData?.projectName ?? "",
                           customerName: model.followUpData?.customerName ?? "",
                           companyName: model.followUpData?.companyName ?? "",
+                          salesOwnedId: model.followUpData?.salesOwnedId ?? "",
                         ),
                       );
                     } else {

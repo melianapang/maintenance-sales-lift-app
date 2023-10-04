@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -21,15 +22,15 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/timeline.dart';
 import 'package:intl/intl.dart';
 
 class DetailFollowUpViewParam {
-  DetailFollowUpViewParam({
-    this.projectId,
-    this.projectName,
-    this.customerId,
-    this.customerName,
-    this.companyName,
-    this.nextFollowUpDate,
-    this.followUpId,
-  });
+  DetailFollowUpViewParam(
+      {this.projectId,
+      this.projectName,
+      this.customerId,
+      this.customerName,
+      this.companyName,
+      this.nextFollowUpDate,
+      this.followUpId,
+      this.salesOwnedId});
 
   final String? projectId;
   final String? projectName;
@@ -38,6 +39,7 @@ class DetailFollowUpViewParam {
   final String? companyName;
   final String? nextFollowUpDate;
   final String? followUpId;
+  final String? salesOwnedId;
 }
 
 class DetailFollowUpView extends StatefulWidget {
@@ -66,6 +68,7 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
         nextFollowUpDate: widget.param.nextFollowUpDate,
         dioService: Provider.of<DioService>(context),
         navigationService: Provider.of<NavigationService>(context),
+        authenticationService: Provider.of<AuthenticationService>(context),
       ),
       onModelReady: (DetailFollowUpViewModel model) async {
         await model.initModel();
@@ -80,37 +83,39 @@ class _DetailFollowUpViewState extends State<DetailFollowUpView> {
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
           ),
-          floatingActionButton: FloatingButtonWidget(
-            onTap: () async {
-              final dynamic result = await Navigator.pushNamed(
-                context,
-                Routes.formFollowUp,
-                arguments: FormFollowUpViewParam(
-                  followUpId: model.followUpId,
-                  nextFollowUpDate: model.nextFollowUpDate,
-                  projectData: ProjectData(
-                    projectId: model.projectId ?? "",
-                    projectName: model.projectName ?? "",
-                    projectNeed: "",
-                    salesOwnedId: "",
-                    customerName: model.customerName ?? "",
-                    companyName: model.companyName,
-                    city: "",
-                    address: "",
-                    pics: [],
-                    customerId: "",
-                    latitude: "0",
-                    longitude: "0",
-                    lastFollowUpResult: "-1",
-                  ),
-                ),
-              );
+          floatingActionButton: model.isAllowedToEditConfidentialInfo
+              ? FloatingButtonWidget(
+                  onTap: () async {
+                    final dynamic result = await Navigator.pushNamed(
+                      context,
+                      Routes.formFollowUp,
+                      arguments: FormFollowUpViewParam(
+                        followUpId: model.followUpId,
+                        nextFollowUpDate: model.nextFollowUpDate,
+                        projectData: ProjectData(
+                          projectId: model.projectId ?? "",
+                          projectName: model.projectName ?? "",
+                          projectNeed: "",
+                          salesOwnedId: "",
+                          customerName: model.customerName ?? "",
+                          companyName: model.companyName,
+                          city: "",
+                          address: "",
+                          pics: [],
+                          customerId: "",
+                          latitude: "0",
+                          longitude: "0",
+                          lastFollowUpResult: "-1",
+                        ),
+                      ),
+                    );
 
-              if (result == null || result == false) return;
-              model.refreshPage();
-              model.setPreviousPageNeedRefresh(true);
-            },
-          ),
+                    if (result == null || result == false) return;
+                    model.refreshPage();
+                    model.setPreviousPageNeedRefresh(true);
+                  },
+                )
+              : null,
           body: !model.busy
               ? SingleChildScrollView(
                   padding: const EdgeInsets.all(24.0),

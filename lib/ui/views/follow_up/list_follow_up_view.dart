@@ -104,6 +104,8 @@ class _ListFollowUpViewState extends State<ListFollowUpView> {
                                     model.listFollowUp[index].scheduleDate,
                                 followUpId:
                                     model.listFollowUp[index].followUpId,
+                                salesOwnedId:
+                                    model.listFollowUp[index].salesOwnedId,
                               ),
                             ).then(
                               (value) {

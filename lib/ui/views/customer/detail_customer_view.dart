@@ -272,6 +272,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                 customerId: model.customerData?.customerId,
                 companyName: model.customerData?.companyName,
                 customerName: model.customerData?.customerName,
+                salesOwnedId: model.customerData?.salesOwnedId,
               ),
             );
 

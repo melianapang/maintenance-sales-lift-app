@@ -126,6 +126,7 @@ class EditProjectViewModel extends BaseViewModel {
       phoneNumber: "phoneNumber",
       email: "email",
       status: "status",
+      salesOwnedId: _projectData?.salesOwnedId ?? "",
     );
 
     setSelectedKeperluanProyek(

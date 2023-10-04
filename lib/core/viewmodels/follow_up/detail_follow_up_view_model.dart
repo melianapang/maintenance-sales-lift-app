@@ -2,6 +2,8 @@ import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_result.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
+import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/date_time_utils.dart';
@@ -19,24 +21,29 @@ class DetailFollowUpViewModel extends BaseViewModel {
     String? companyName,
     String? followUpId,
     String? nextFollowUpDate,
+    String? salesOwnedId,
     required DioService dioService,
     required NavigationService navigationService,
+    required AuthenticationService authenticationService,
   })  : _projectId = projectId,
         _projectName = projectName,
         _companyName = companyName,
         _customerName = customerName,
         _customerId = customerId,
         _followUpId = followUpId,
+        _salesOwnedId = salesOwnedId,
         _nextFollowUpDate = nextFollowUpDate,
         _navigationService = navigationService,
         _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
-        );
+        ),
+        _authenticationService = authenticationService;
 
   final ApiService _apiService;
   final NavigationService _navigationService;
+  AuthenticationService _authenticationService;
 
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
@@ -59,6 +66,9 @@ class DetailFollowUpViewModel extends BaseViewModel {
   String? _followUpId;
   String? get followUpId => _followUpId;
 
+  String? _salesOwnedId;
+  String? get salesOwnedId => _salesOwnedId;
+
   String? _nextFollowUpDate;
   String? get nextFollowUpDate => _nextFollowUpDate;
 
@@ -71,12 +81,16 @@ class DetailFollowUpViewModel extends BaseViewModel {
   StatusCardType _statusCardType = StatusCardType.InProgress;
   StatusCardType get statusCardType => _statusCardType;
 
+  bool _isAllowedToEditConfidentialInfo = false;
+  bool get isAllowedToEditConfidentialInfo => _isAllowedToEditConfidentialInfo;
+
   String? _errorMsg;
   String? get errorMsg => _errorMsg;
 
   @override
   Future<void> initModel() async {
     setBusy(true);
+    await _setIsAllowedToSeeProjectInfo();
     await requestGetHistoryFollowUp();
     setBusy(false);
   }
@@ -104,6 +118,15 @@ class DetailFollowUpViewModel extends BaseViewModel {
       default:
         _statusCardType = StatusCardType.InProgress;
     }
+  }
+
+  Future<void> _setIsAllowedToSeeProjectInfo() async {
+    Role userRole = await _authenticationService.getUserRole();
+    String userId = await _authenticationService.getUserId();
+
+    _isAllowedToEditConfidentialInfo = userRole == Role.SuperAdmin ||
+        userRole == Role.Admin ||
+        (userRole == Role.Sales && userId == salesOwnedId);
   }
 
   void _mappingToTimelineData() {

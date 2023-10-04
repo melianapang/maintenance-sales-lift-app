@@ -53,6 +53,7 @@ class FollowUpFrontData {
     required this.customerName,
     required this.companyName,
     required this.followUpId,
+    required this.salesOwnedId,
     required this.scheduleDate,
   });
 
@@ -78,6 +79,9 @@ class FollowUpFrontData {
 
   @JsonKey(name: "follow_up_id")
   final String? followUpId;
+
+  @JsonKey(name: "user_owned_id")
+  final String? salesOwnedId;
 
   @JsonKey(name: "schedule_date")
   final String? scheduleDate;
@@ -201,17 +205,17 @@ class FollowUpDetailResponse {
 
 @JsonSerializable()
 class DetailFollowUpData {
-  DetailFollowUpData({
-    required this.followUpId,
-    required this.projectId,
-    required this.projectName,
-    required this.customerName,
-    required this.companyName,
-    required this.followUpResult,
-    required this.scheduleDate,
-    required this.note,
-    required this.followUpFiles,
-  });
+  DetailFollowUpData(
+      {required this.followUpId,
+      required this.projectId,
+      required this.projectName,
+      required this.customerName,
+      required this.companyName,
+      required this.followUpResult,
+      required this.scheduleDate,
+      required this.note,
+      required this.followUpFiles,
+      required this.salesOwnedId});
 
   factory DetailFollowUpData.fromJson(Map<String, dynamic> json) =>
       _$DetailFollowUpDataFromJson(json);
@@ -241,6 +245,9 @@ class DetailFollowUpData {
 
   @JsonKey(name: "schedule_date")
   final String scheduleDate;
+
+  @JsonKey(name: "sales_owned_id")
+  final String salesOwnedId;
 
   @JsonKey(name: "follow_up_files")
   final List<FollowUpFile>? followUpFiles;
