@@ -26,7 +26,6 @@ class EditProfileViewModel extends BaseViewModel {
   ProfileData? get profileData => _profileData;
 
   final namaLengkapController = TextEditingController();
-  final usernameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final alamatController = TextEditingController();
   final kotaController = TextEditingController();
@@ -137,7 +136,7 @@ class EditProfileViewModel extends BaseViewModel {
       //default if null: Role.Engineer
       idRole: (_profileData?.role.index ?? 3) + 1,
       name: namaLengkapController.text,
-      username: usernameController.text,
+      username: _profileData?.username ?? "",
       phoneNumber: phoneNumberController.text,
       address: alamatController.text,
       city: kotaController.text,
