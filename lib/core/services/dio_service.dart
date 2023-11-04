@@ -36,6 +36,8 @@ class DioService {
     return Dio()
       ..options.baseUrl = _customBaseURL ?? EnvConstants.baseURL
       ..options.connectTimeout = const Duration(milliseconds: _timeOut)
+      ..options.sendTimeout = const Duration(milliseconds: _timeOut)
+      ..options.receiveTimeout = const Duration(milliseconds: _timeOut)
       ..interceptors.addAll(<Interceptor>[
         PrettyDioLogger(
           requestHeader: true,
@@ -95,6 +97,7 @@ class DioService {
             } else {
               handler.next(e);
             }
+            throw e;
           },
           onRequest: (
             RequestOptions option,

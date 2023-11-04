@@ -32,9 +32,7 @@ class ErrorUtils<T> {
           message = error.message ?? "";
           break;
         case DioExceptionType.cancel:
-          break;
         case DioExceptionType.badCertificate:
-          break;
         case DioExceptionType.connectionError:
           break;
       }
