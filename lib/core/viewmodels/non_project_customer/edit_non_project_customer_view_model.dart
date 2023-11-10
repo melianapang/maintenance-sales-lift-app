@@ -28,7 +28,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
 
   // TextEditingController
   final sumberDataController = TextEditingController();
-  final nomorPelangganController = TextEditingController();
   final namaPelangganController = TextEditingController();
   final namaPerusahaanController = TextEditingController();
   final phoneNumberController = TextEditingController();
@@ -41,9 +40,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
 
   bool _isCustomerNameValid = true;
   bool get isCustomerNameValid => _isCustomerNameValid;
-
-  bool _isCustomerNumberValid = true;
-  bool get isCustomerNumberValid => _isCustomerNumberValid;
 
   bool _isCompanyNameValid = true;
   bool get isCompanyNameValid => _isCompanyNameValid;
@@ -113,7 +109,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
     if (_customerData != null) {
       _handleAvailableData();
       sumberDataController.text = _customerData?.dataSource ?? "";
-      nomorPelangganController.text = _customerData?.customerNumber ?? "";
       namaPelangganController.text = _customerData?.customerName ?? "";
       namaPerusahaanController.text = _customerData?.companyName ?? "";
       phoneNumberController.text = _customerData?.phoneNumber ?? "";
@@ -149,11 +144,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
 
   void onChangedCustomerName(String value) {
     _isCustomerNameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedCustomerNumber(String value) {
-    _isCustomerNumberValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -220,7 +210,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
     final response = await _apiService.requestUpdateCustomer(
       customerId: int.parse(_customerData?.customerId ?? "0"),
       nama: namaPelangganController.text,
-      customerNumber: nomorPelangganController.text,
       customerNeed: _selectedCustomerNeedFilter.toString(),
       email: emailController.text,
       phoneNumber: phoneNumberController.text,
@@ -279,7 +268,6 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
 
   bool _isValid() {
     _isCustomerNameValid = namaPelangganController.text.isNotEmpty;
-    _isCustomerNumberValid = nomorPelangganController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
@@ -290,14 +278,12 @@ class EditNonProjectCustomerViewModel extends BaseViewModel {
 
     if (selectedCustomerTypeFilter == 1) {
       return _isCustomerNameValid &&
-          _isCustomerNumberValid &&
           _isEmailValid &&
           _isPhoneNumberValid &&
           _isCityValid;
     }
 
     return _isCustomerNameValid &&
-        _isCustomerNumberValid &&
         _isEmailValid &&
         _isPhoneNumberValid &&
         _isCityValid;

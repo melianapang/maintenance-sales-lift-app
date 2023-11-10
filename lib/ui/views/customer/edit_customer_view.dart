@@ -154,14 +154,10 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           ),
                         ),
                         Spacings.vert(24),
-                        TextInput.editable(
-                          controller: model.nomorPelangganController,
+                        TextInput.disabled(
                           label: "Nomor Pelanggan",
+                          text: model.customerData?.customerNumber,
                           hintText: "Nomor Pelanggan",
-                          onChangedListener: model.onChangedCustomerNumber,
-                          errorText: !model.isCustomerNumberValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(

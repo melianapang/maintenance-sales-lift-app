@@ -8,7 +8,6 @@ class UpdateCustomerRequest {
   UpdateCustomerRequest({
     required this.customerName,
     required this.customerType,
-    required this.customerNumber,
     required this.customerNeed,
     required this.dataSource,
     required this.isLead,
@@ -30,9 +29,6 @@ class UpdateCustomerRequest {
 
   @JsonKey(name: "customer_type")
   final int customerType;
-
-  @JsonKey(name: "customer_number")
-  final String customerNumber;
 
   @JsonKey(name: "customer_need")
   final String customerNeed;
@@ -199,7 +195,6 @@ class CreateCustomerRequest {
   CreateCustomerRequest({
     required this.customerName,
     required this.customerType,
-    required this.customerNumber,
     required this.customerNeed,
     required this.isLead,
     required this.dataSource,
@@ -221,9 +216,6 @@ class CreateCustomerRequest {
 
   @JsonKey(name: "customer_type")
   final int customerType;
-
-  @JsonKey(name: "customer_number")
-  final String customerNumber;
 
   @JsonKey(name: "customer_need")
   final String customerNeed;

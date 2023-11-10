@@ -214,14 +214,10 @@ class _EditNonProjectCustomerViewState
                           ),
                         ),
                         Spacings.vert(24),
-                        TextInput.editable(
-                          controller: model.nomorPelangganController,
+                        TextInput.disabled(
                           label: "Nomor Pelanggan",
                           hintText: "Nomor Pelanggan",
-                          onChangedListener: model.onChangedCustomerNumber,
-                          errorText: !model.isCustomerNumberValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
+                          text: model.customerData?.customerNumber,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(

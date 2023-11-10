@@ -196,16 +196,6 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
-                          label: "Nomor Pelanggan",
-                          hintText: "Nomor Pelanggan",
-                          controller: model.customerNumberController,
-                          onChangedListener: model.onChangedCustomerNumber,
-                          errorText: !model.isCustomerNumberValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
-                        ),
-                        Spacings.vert(24),
-                        TextInput.editable(
                           label: "Nama Pelanggan",
                           hintText: "Nama Pelanggan",
                           controller: model.customerNameController,

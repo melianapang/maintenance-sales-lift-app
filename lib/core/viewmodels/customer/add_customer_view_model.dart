@@ -51,7 +51,6 @@ class AddCustomerViewModel extends BaseViewModel {
   //region TextController
   final sumberDataController = TextEditingController();
   final customerNameController = TextEditingController();
-  final customerNumberController = TextEditingController();
   final companyNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
@@ -63,9 +62,6 @@ class AddCustomerViewModel extends BaseViewModel {
 
   bool _isCustomerNameValid = true;
   bool get isCustomerNameValid => _isCustomerNameValid;
-
-  bool _isCustomerNumberValid = true;
-  bool get isCustomerNumberValid => _isCustomerNumberValid;
 
   bool _isCompanyNameValid = true;
   bool get isCompanyNameValid => _isCompanyNameValid;
@@ -137,11 +133,6 @@ class AddCustomerViewModel extends BaseViewModel {
 
   void onChangedCustomerName(String value) {
     _isCustomerNameValid = value.isNotEmpty;
-    notifyListeners();
-  }
-
-  void onChangedCustomerNumber(String value) {
-    _isCustomerNumberValid = value.isNotEmpty;
     notifyListeners();
   }
 
@@ -233,7 +224,6 @@ class AddCustomerViewModel extends BaseViewModel {
 
   bool isValid() {
     _isCustomerNameValid = customerNameController.text.isNotEmpty;
-    _isCustomerNumberValid = customerNumberController.text.isNotEmpty;
     _isEmailValid = emailController.text.isNotEmpty;
     _isPhoneNumberValid = phoneNumberController.text.isNotEmpty;
     _isCityValid = cityController.text.isNotEmpty;
@@ -244,14 +234,12 @@ class AddCustomerViewModel extends BaseViewModel {
 
     if (selectedCustomerTypeFilter == 1) {
       return _isCustomerNameValid &&
-          _isCustomerNumberValid &&
           _isEmailValid &&
           _isPhoneNumberValid &&
           _isCityValid;
     }
 
     return _isCustomerNameValid &&
-        _isCustomerNumberValid &&
         _isEmailValid &&
         _isPhoneNumberValid &&
         _isCityValid;
@@ -272,7 +260,6 @@ class AddCustomerViewModel extends BaseViewModel {
 
     final response = await _apiService.requestCreateCustomer(
       nama: customerNameController.text,
-      customerNumber: customerNumberController.text,
       customerType: _selectedCustomerTypeFilter,
       customerNeed: _selectedCustomerNeedFilter.toString(),
       isLead: _isSumberDataFieldVisible ? "1" : "0",

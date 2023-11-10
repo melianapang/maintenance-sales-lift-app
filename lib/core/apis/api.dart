@@ -1165,7 +1165,6 @@ class ApiService {
 
   Future<Either<Failure, CreateCustomerResponse>> requestCreateCustomer({
     required String nama,
-    required String customerNumber,
     required int customerType,
     required String customerNeed,
     required String isLead,
@@ -1179,7 +1178,6 @@ class ApiService {
     try {
       final payload = CreateCustomerRequest(
         customerName: nama,
-        customerNumber: customerNumber,
         customerType: customerType,
         customerNeed: customerNeed,
         isLead: isLead,
@@ -1235,7 +1233,6 @@ class ApiService {
 
   Future<Either<Failure, String>> requestUpdateCustomer({
     required String nama,
-    required String customerNumber,
     required int customerType,
     required int customerId,
     required int isLead,
@@ -1250,7 +1247,6 @@ class ApiService {
     try {
       final payload = UpdateCustomerRequest(
         customerName: nama,
-        customerNumber: customerNumber,
         customerType: customerType,
         customerNeed: customerNeed,
         email: email,
