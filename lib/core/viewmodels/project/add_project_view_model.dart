@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,6 +24,9 @@ class AddProjectViewModel extends BaseViewModel {
         );
 
   final ApiService _apiService;
+
+  bool? _isPicSameWithCustomer;
+  bool? get isPicSameWithCustomer => _isPicSameWithCustomer;
 
   List<PICProject> _listPic = [];
   List<PICProject> get listPic => _listPic;
@@ -74,7 +76,7 @@ class AddProjectViewModel extends BaseViewModel {
   //region first follow up date
   List<DateTime> _selectedFirstFollowUpDates = [
     DateTime.now().add(
-      Duration(
+      const Duration(
         days: 14,
       ),
     ),
@@ -214,6 +216,18 @@ class AddProjectViewModel extends BaseViewModel {
 
   void setSelectedCustomer(CustomerData data) {
     _selectedCustomer = data;
+
+    //add customer data to list pic if haven't added yet
+    if (_isPicSameWithCustomer == true && listPic.isEmpty) {
+      addPicProject(
+        PICProject(
+          picName: _selectedCustomer?.customerName ?? "",
+          role: 'Owner',
+          email: _selectedCustomer?.email ?? "",
+          phoneNumber: _selectedCustomer?.phoneNumber ?? "",
+        ),
+      );
+    }
     notifyListeners();
   }
 
@@ -229,6 +243,23 @@ class AddProjectViewModel extends BaseViewModel {
       _keperluanProyekOptions[i].isSelected = false;
     }
 
+    notifyListeners();
+  }
+
+  void setIsPicSameWithCustomer(bool value) {
+    _isPicSameWithCustomer = value;
+
+    //add customer data to list pic if haven't added yet
+    if (value && _selectedCustomer != null) {
+      addPicProject(
+        PICProject(
+          picName: _selectedCustomer?.customerName ?? "",
+          role: 'Owner',
+          email: _selectedCustomer?.email ?? "",
+          phoneNumber: _selectedCustomer?.phoneNumber ?? "",
+        ),
+      );
+    }
     notifyListeners();
   }
 

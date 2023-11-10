@@ -317,20 +317,24 @@ class _AddProjectViewState extends State<AddProjectView> {
                         desc2Size: 12,
                         descSize: 12,
                         titleSize: 16,
-                        icon: PhosphorIcons.trashBold,
+                        icon: model.isPicSameWithCustomer == true
+                            ? null
+                            : PhosphorIcons.trashBold,
                         onTap: () {
+                          if (model.isPicSameWithCustomer == true) return;
                           model.deletePicProject(index);
                         },
                       );
                     },
                   ),
                 Spacings.vert(12),
-                if (model.listPic.length < 5)
+                if (model.listPic.length < 5 &&
+                    model.isPicSameWithCustomer != true)
                   GestureDetector(
-                    onTap: () => _awaitAddPicProjectViewResult(
-                      context,
-                      viewModel: model,
-                    ),
+                    onTap: () {
+                      if (model.isPicSameWithCustomer == true) return;
+                      _showAddPicFromDialog(context, model: model);
+                    },
                     child: Text(
                       'Tambahkan PIC Proyek',
                       textAlign: TextAlign.start,
@@ -406,6 +410,67 @@ class _AddProjectViewState extends State<AddProjectView> {
     );
   }
 
+  Future _showAddPicFromDialog(
+    BuildContext context, {
+    required AddProjectViewModel model,
+  }) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              height: 180,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'PIC Proyek',
+                    style: buildTextStyle(
+                      fontSize: 18,
+                      fontWeight: 500,
+                      fontColor: MyColors.darkBlack01,
+                    ),
+                  ),
+                  Spacings.vert(18),
+                  Column(
+                    children: [
+                      ButtonWidget(
+                        buttonType: ButtonType.primary,
+                        buttonSize: ButtonSize.medium,
+                        text: 'PIC sama dengan Pelanggan',
+                        onTap: () {
+                          Navigator.pop(context);
+                          model.setIsPicSameWithCustomer(true);
+                        },
+                      ),
+                      Spacings.vert(8),
+                      ButtonWidget(
+                        buttonType: ButtonType.secondary,
+                        buttonSize: ButtonSize.medium,
+                        text: 'Tambah Data PIC Baru',
+                        onTap: () {
+                          Navigator.pop(context);
+                          model.setIsPicSameWithCustomer(true);
+
+                          _awaitAddPicProjectViewResult(
+                            context,
+                            viewModel: model,
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void _awaitAddPicProjectViewResult(
     BuildContext context, {
     required AddProjectViewModel viewModel,
@@ -418,6 +483,7 @@ class _AddProjectViewState extends State<AddProjectView> {
       ),
     );
     setState(() {
+      if (viewModel.isPicSameWithCustomer == true) return;
       viewModel.addPicProject(result as PICProject);
     });
   }
