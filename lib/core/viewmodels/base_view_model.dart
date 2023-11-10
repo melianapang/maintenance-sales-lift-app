@@ -43,7 +43,7 @@ abstract class BaseViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  void mappingDioError(DioError dioError) {
+  void mappingDioError(DioException dioError) {
     const String connectionFailedLabel = 'Koneksi sedang bermasalah';
     switch (dioError.type) {
       case DioExceptionType.connectionTimeout:
@@ -60,15 +60,9 @@ abstract class BaseViewModel extends ChangeNotifier {
         /// need to mapping error
         errorMessage = connectionFailedLabel;
         break;
-      case DioExceptionType.connectionTimeout:
-        break;
-      case DioExceptionType.badCertificate:
-        break;
       case DioExceptionType.badResponse:
         break;
       case DioExceptionType.connectionError:
-        break;
-      case DioExceptionType.unknown:
         break;
     }
   }

@@ -163,6 +163,8 @@ class _DetailHistoryMaintenanceViewState
                     label: "Catatan",
                     hintText: "Tidak ada catatan...",
                     text: model.historyMaintenanceData?.note,
+                    maxLines: 5,
+                    keyboardType: TextInputType.multiline,
                   ),
                   Spacings.vert(24),
                   Align(

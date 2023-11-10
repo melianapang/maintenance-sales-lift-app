@@ -142,6 +142,8 @@ class _DetailReminderViewState extends State<DetailReminderView> {
                           label: "Catatan",
                           hintText: "Catatan pengingat anda.",
                           text: model.reminderData?.remindedNote,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
                         ),
                         Spacings.vert(24),
                       ],

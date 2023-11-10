@@ -120,14 +120,15 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(
-                          model.customerData?.companyName ?? "",
-                          style: buildTextStyle(
-                            fontSize: 20,
-                            fontWeight: 400,
-                            fontColor: MyColors.lightBlack02,
+                        if (model.customerData?.companyName?.isNotEmpty == true)
+                          Text(
+                            model.customerData?.companyName ?? "",
+                            style: buildTextStyle(
+                              fontSize: 20,
+                              fontWeight: 400,
+                              fontColor: MyColors.lightBlack02,
+                            ),
                           ),
-                        ),
                         Spacings.vert(35),
                         if (model.isShowingSumberData) ...[
                           TextInput.disabled(
@@ -175,6 +176,8 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
                           label: "Catatan",
                           hintText: "Catatan mengenai pelanggan...",
                           text: model.customerData?.note,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
                         ),
                       ],
                     ),

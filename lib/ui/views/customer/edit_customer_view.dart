@@ -244,6 +244,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
                           label: "Catatan",
                           hintText: "Tulis catatanmu disini...",
                           keyboardType: TextInputType.multiline,
+                          maxLines: 5,
                         ),
                       ],
                     ),

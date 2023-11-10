@@ -108,6 +108,8 @@ class _DetailHistoryFollowUpViewState extends State<DetailHistoryFollowUpView> {
                       label: "Catatan",
                       hintText: "Catatan Riwayat Konfirmasi",
                       text: model.historyData?.note ?? "",
+                      maxLines: 5,
+                      keyboardType: TextInputType.multiline,
                     ),
                     Spacings.vert(24),
                     Align(

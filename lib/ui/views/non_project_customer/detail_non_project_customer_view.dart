@@ -173,6 +173,8 @@ class _DetailNonProjectCustomerViewState
                           label: "Catatan",
                           hintText: "Catatan mengenai pelanggan...",
                           text: model.customerData?.note,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
                         ),
                       ],
                     ),

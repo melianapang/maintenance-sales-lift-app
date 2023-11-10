@@ -136,6 +136,8 @@ class OpenNotificationReminderView extends StatelessWidget {
                           label: "Catatan",
                           hintText: "Tidak ada Catatan Pengingat",
                           text: model.param?.note,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
                         ),
                       ],
                     ),

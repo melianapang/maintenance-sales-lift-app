@@ -13,6 +13,8 @@ class TextInput extends StatelessWidget {
     Widget? suffixIcon,
     Color? backgroundColor = MyColors.darkBlack02,
     Widget? actionWidget,
+    int? maxLines,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     final controller = TextEditingController();
     controller.text = text ?? '';
@@ -25,6 +27,8 @@ class TextInput extends StatelessWidget {
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       actionWidget: actionWidget,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
     );
   }
 
