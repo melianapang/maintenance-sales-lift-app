@@ -53,7 +53,21 @@ class _AddCustomerViewState extends State<AddCustomerView> {
             buttonType: ButtonType.primary,
             onTap: () async {
               bool isValid = model.isValid();
-              if (!isValid) return;
+              if (!isValid) {
+                showDialogWidget(
+                  context,
+                  title: "Tambah Pelanggan",
+                  description:
+                      "Isi semua data dengan benar. \n Untuk email dan nomor telepon bisa isi salah satu atau keduanya.",
+                  isSuccessDialog: false,
+                  positiveLabel: "OK",
+                  positiveCallback: () {
+                    model.resetErrorMsg();
+                    Navigator.pop(context);
+                  },
+                );
+                return;
+              }
 
               showDialogWidget(
                 context,
