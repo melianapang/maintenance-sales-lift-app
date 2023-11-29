@@ -49,10 +49,10 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     Image.asset(
                       'assets/images/logo_pt_rejo.png',
-                      width: 150,
-                      height: 150,
+                      width: 130,
+                      height: 130,
                     ),
-                    Spacings.vert(32),
+                    Spacings.vert(48),
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(

@@ -12,10 +12,8 @@ import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/onesignal_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/remote_config_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/shared_preferences_service.dart';
-import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/splash_screen_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/view_model.dart';
-import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
@@ -80,29 +78,11 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: MyColors.darkBlack01,
-          body: Container(
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage(
-                    'assets/images/logo_pt_rejo.png',
-                  ),
-                  width: 200,
-                  height: 200,
-                ),
-                Spacings.vert(18),
-                Text(
-                  "PT REJO JAYA SAKTI",
-                  style: buildTextStyle(
-                    fontSize: 24,
-                    fontWeight: 800,
-                    fontColor: MyColors.lightBlack02,
-                  ),
-                ),
-              ],
+          body: Center(
+            child: Image.asset(
+              'assets/images/logo_pt_rejo_with_name.png',
+              width: 300,
+              height: 300,
             ),
           ),
         );
