@@ -329,7 +329,9 @@ class EditProjectViewModel extends BaseViewModel {
         )
         .toList();
 
-    _selectedKeperluanProyekOption = int.parse(values.first.customerNeedId);
+    _selectedKeperluanProyekOption = int.parse(
+      _projectData?.projectNeed ?? values.first.customerNeedId,
+    );
   }
 
   Future<bool> requestGetAllProjectNeed() async {
