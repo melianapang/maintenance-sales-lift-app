@@ -30,7 +30,7 @@ class GCloudService {
 
     // Instantiate objects to cloud storage
     var storage = Storage(client, 'Rejo Jaya Sakti');
-    var bucket = storage.bucket('rejo_jaya_sakti_dev');
+    var bucket = storage.bucket('bucket_rejo_jaya_sakti_app');
 
     // Save to bucket
     final timestamp = DateTime.now().millisecondsSinceEpoch;
