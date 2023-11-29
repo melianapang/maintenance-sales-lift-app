@@ -158,17 +158,16 @@ class _EditProjectViewState extends State<EditProjectView> {
                     _showKeperluanProyekBottomDialog(
                       context,
                       model,
-                      listMenu: model.keperluanProyekOptions,
+                      title: "Keperluan Proyek",
+                      listMenu: model.keperluanProyekFilterOptions,
                       selectedMenu: model.selectedKeperluanProyekOption,
                       setSelectedMenu: model.setSelectedKeperluanProyek,
                     );
                   },
                   child: TextInput.disabled(
                     label: "Keperluan Proyek",
-                    text: model.keperluanProyekOptions
-                        .where((element) => element.isSelected)
-                        .first
-                        .title,
+                    hintText: "Keperluan Proyek",
+                    text: model.customerNeed,
                     suffixIcon: const Icon(
                       PhosphorIcons.caretDownBold,
                       color: MyColors.lightBlack02,
@@ -314,36 +313,38 @@ class _EditProjectViewState extends State<EditProjectView> {
   void _showKeperluanProyekBottomDialog(
     BuildContext context,
     EditProjectViewModel model, {
-    required List<FilterOption> listMenu,
+    required String title,
+    required List<FilterOptionDynamic> listMenu,
     required int selectedMenu,
     required void Function({
       required int selectedMenu,
     }) setSelectedMenu,
   }) {
-    final List<FilterOption> menuLocal = convertToNewList(listMenu);
+    final List<FilterOptionDynamic> menuLocal =
+        convertToNewListForFilterDynamic(listMenu);
     int menu = selectedMenu;
 
     showGeneralBottomSheet(
       context: context,
-      title: 'Keperluan Proyek',
+      title: title,
       isFlexible: true,
       showCloseButton: false,
       child: StatefulBuilder(
         builder: (context, setState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              buildMenuChoices(
+              buildMenuDynamicChoices(
                 menuLocal,
-                (int selectedIndex) {
-                  menu = selectedIndex;
-                  for (int i = 0; i < menuLocal.length; i++) {
-                    if (i == selectedIndex) {
-                      menuLocal[i].isSelected = true;
+                (int selectedIdFilter) {
+                  menu = selectedIdFilter;
+                  for (FilterOptionDynamic menu in menuLocal) {
+                    if (int.parse(menu.idFilter) == selectedIdFilter) {
+                      menu.isSelected = true;
                       continue;
                     }
-
-                    menuLocal[i].isSelected = false;
+                    menu.isSelected = false;
                   }
                   setState(() {});
                 },

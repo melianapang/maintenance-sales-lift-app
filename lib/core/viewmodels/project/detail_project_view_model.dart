@@ -1,6 +1,7 @@
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/follow%20up/follow_up_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/role/role_model.dart';
@@ -37,6 +38,14 @@ class DetailProjectViewModel extends BaseViewModel {
   CustomerData? _customerData;
   CustomerData? get customerData => _customerData;
 
+  //(dynamic values from API)
+  String _selectedKeperluanProyekFilterName = "";
+  String get selectedKeperluanProyekFilterName =>
+      _selectedKeperluanProyekFilterName;
+
+  List<CustomerNeedData>? _listKeperluanProyek;
+  List<CustomerNeedData>? get listKeperluanProyek => _listKeperluanProyek;
+
   bool _isAllowedToDeleteData = false;
   bool get isAllowedToDeleteData => _isAllowedToDeleteData;
 
@@ -64,6 +73,9 @@ class DetailProjectViewModel extends BaseViewModel {
     await _setIsAllowedToSeeProjectInfo();
     await _checkIsAllowedToDeleteData();
     await _getCustomerDetail();
+
+    await requestGetAllProjectNeed();
+    _handleDynamicProjectNeedData();
     setStatusCard();
     setBusy(false);
   }
@@ -98,6 +110,30 @@ class DetailProjectViewModel extends BaseViewModel {
 
   void resetErrorMsg() {
     _errorMsg = null;
+  }
+
+  void _handleDynamicProjectNeedData() {
+    _selectedKeperluanProyekFilterName = _listKeperluanProyek
+            ?.firstWhere(
+              (element) => element.customerNeedId == projectData?.projectNeed,
+            )
+            .customerNeedName ??
+        "";
+  }
+
+  Future<void> requestGetAllProjectNeed() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerNeedWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty == true) {
+        _listKeperluanProyek = response.right.result;
+      }
+      return;
+    }
+
+    _errorMsg = response.left.message;
   }
 
   Future<void> _setIsAllowedToSeeProjectInfo() async {
@@ -149,6 +185,7 @@ class DetailProjectViewModel extends BaseViewModel {
     setBusy(true);
     resetErrorMsg();
     await requestGetDetailProject();
+    _handleDynamicProjectNeedData();
     setStatusCard();
     notifyListeners();
     setBusy(false);

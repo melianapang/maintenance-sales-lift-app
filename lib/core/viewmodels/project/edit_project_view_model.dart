@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_need_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/pagination_control_model.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
@@ -80,13 +81,20 @@ class EditProjectViewModel extends BaseViewModel {
   //region keperluan proyek
   int _selectedKeperluanProyekOption = 0;
   int get selectedKeperluanProyekOption => _selectedKeperluanProyekOption;
-  final List<FilterOption> _keperluanProyekOptions = [
-    FilterOption("Lift", true),
-    FilterOption("Elevator", false),
-    FilterOption("Lift dan Elevator", false),
-    FilterOption("Lainnya", false),
-  ];
-  List<FilterOption> get keperluanProyekOptions => _keperluanProyekOptions;
+  List<CustomerNeedData>? _keperluanProyekOptions;
+  List<CustomerNeedData>? get keperluanProyekOptions => _keperluanProyekOptions;
+  List<FilterOptionDynamic> keperluanProyekFilterOptions = [];
+
+  String get customerNeed {
+    if (keperluanProyekFilterOptions.isEmpty) return "";
+
+    final int index = keperluanProyekFilterOptions.indexWhere((element) =>
+        int.parse(element.idFilter) == _selectedKeperluanProyekOption);
+    if (index > -1) {
+      return keperluanProyekFilterOptions[index].title;
+    }
+    return "";
+  }
   //endregion
 
   TextEditingController searchController = TextEditingController();
@@ -102,6 +110,7 @@ class EditProjectViewModel extends BaseViewModel {
     _handleAvailableData();
 
     paginationControl.currentPage = 1;
+    await requestGetAllProjectNeed();
     await requestGetAllCustomer();
     await requestGetListPICRole();
 
@@ -245,12 +254,12 @@ class EditProjectViewModel extends BaseViewModel {
     required int selectedMenu,
   }) {
     _selectedKeperluanProyekOption = selectedMenu;
-    for (int i = 0; i < _keperluanProyekOptions.length; i++) {
-      if (i == selectedMenu) {
-        _keperluanProyekOptions[i].isSelected = true;
+    for (FilterOptionDynamic menu in keperluanProyekFilterOptions) {
+      if (int.parse(menu.idFilter) == selectedMenu) {
+        menu.isSelected = true;
         continue;
       }
-      _keperluanProyekOptions[i].isSelected = false;
+      menu.isSelected = false;
     }
 
     notifyListeners();
@@ -305,6 +314,43 @@ class EditProjectViewModel extends BaseViewModel {
 
     _paginationControl.currentPage = 1;
     _paginationControl.totalData = -1;
+  }
+
+  void convertProjectNeedDataToFilterData(List<CustomerNeedData> values) {
+    if (values.isEmpty) return;
+
+    keperluanProyekFilterOptions = values
+        .map(
+          (e) => FilterOptionDynamic(
+            e.customerNeedId,
+            e.customerNeedName,
+            values.first == e,
+          ),
+        )
+        .toList();
+
+    _selectedKeperluanProyekOption = int.parse(values.first.customerNeedId);
+  }
+
+  Future<bool> requestGetAllProjectNeed() async {
+    _errorMsg = null;
+
+    final response = await _apiService.getAllCustomerNeedWithoutPagination();
+
+    if (response.isRight) {
+      if (response.right.result.isNotEmpty) {
+        List<CustomerNeedData> tempList = response.right.result
+            .where((element) => element.isActive == "1")
+            .toList();
+        _keperluanProyekOptions = tempList;
+        convertProjectNeedDataToFilterData(tempList);
+      }
+      notifyListeners();
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
   }
 
   Future<List<CustomerData>> searchCustomer() async {
