@@ -200,20 +200,14 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                           keyboardType: TextInputType.number,
                           controller: model.phoneNumberController,
                           onChangedListener: model.onChangedPhoneNumber,
-                          errorText: !model.isPhoneNumberValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
                           label: "Email",
-                          hintText: "pelanggan@gmail.com",
+                          hintText: "email@email.com",
                           keyboardType: TextInputType.emailAddress,
                           controller: model.emailController,
                           onChangedListener: model.onChangedEmail,
-                          errorText: !model.isEmailValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(

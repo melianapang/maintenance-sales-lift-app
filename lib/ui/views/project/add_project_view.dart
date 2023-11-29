@@ -260,6 +260,15 @@ class _AddProjectViewState extends State<AddProjectView> {
                     ),
                   ],
                 ),
+                Spacings.vert(4),
+                Text(
+                  "Opsional",
+                  style: buildTextStyle(
+                    fontSize: 8,
+                    fontColor: MyColors.lightBlack02,
+                    fontWeight: 400,
+                  ),
+                ),
                 if (model.detectedProjectAddress != null &&
                     model.detectedProjectAddress?.isNotEmpty == true)
                   Text(

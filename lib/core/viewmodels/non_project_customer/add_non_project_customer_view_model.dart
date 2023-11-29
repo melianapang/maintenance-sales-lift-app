@@ -224,14 +224,14 @@ class AddNonProjectCustomerViewModel extends BaseViewModel {
 
     if (selectedCustomerTypeFilter == 1) {
       return _isCustomerNameValid &&
-          _isEmailValid &&
-          _isPhoneNumberValid &&
+          (_isEmailValid ||
+          _isPhoneNumberValid) &&
           _isCityValid;
     }
 
     return _isCustomerNameValid &&
-        _isEmailValid &&
-        _isPhoneNumberValid &&
+          (_isEmailValid ||
+          _isPhoneNumberValid) &&
         _isCityValid;
   }
 
@@ -241,7 +241,7 @@ class AddNonProjectCustomerViewModel extends BaseViewModel {
 
   Future<CustomerData?> requestCreateCustomer() async {
     if (!isValid()) {
-      _errorMsg = "Isi semua data dengan benar.";
+      _errorMsg = "Isi semua data dengan benar.  \n Untuk email dan nomor telepon bisa isi salah satu atau keduanya.";
       return null;
     }
 

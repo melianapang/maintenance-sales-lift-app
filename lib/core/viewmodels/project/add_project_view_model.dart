@@ -296,8 +296,7 @@ class AddProjectViewModel extends BaseViewModel {
 
     return _isNameValid &&
         _isAdressValid &&
-        _isCityValid &&
-        _projectLocation != null;
+        _isCityValid;
   }
 
   void resetErrorMsg() {

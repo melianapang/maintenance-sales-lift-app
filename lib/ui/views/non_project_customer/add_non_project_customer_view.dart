@@ -256,9 +256,6 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
                           keyboardType: TextInputType.number,
                           controller: model.phoneNumberController,
                           onChangedListener: model.onChangedPhoneNumber,
-                          errorText: !model.isPhoneNumberValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(
@@ -267,9 +264,6 @@ class _AddNonProjectCustomerViewState extends State<AddNonProjectCustomerView> {
                           keyboardType: TextInputType.emailAddress,
                           controller: model.emailController,
                           onChangedListener: model.onChangedEmail,
-                          errorText: !model.isEmailValid
-                              ? "Kolom ini wajib diisi."
-                              : null,
                         ),
                         Spacings.vert(24),
                         TextInput.editable(

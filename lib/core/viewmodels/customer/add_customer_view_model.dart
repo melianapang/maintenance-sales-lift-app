@@ -234,14 +234,14 @@ class AddCustomerViewModel extends BaseViewModel {
 
     if (selectedCustomerTypeFilter == 1) {
       return _isCustomerNameValid &&
-          _isEmailValid &&
-          _isPhoneNumberValid &&
+          (_isEmailValid ||
+          _isPhoneNumberValid) &&
           _isCityValid;
     }
 
     return _isCustomerNameValid &&
-        _isEmailValid &&
-        _isPhoneNumberValid &&
+       (_isEmailValid ||
+          _isPhoneNumberValid) &&
         _isCityValid;
   }
 
@@ -253,7 +253,7 @@ class AddCustomerViewModel extends BaseViewModel {
     _isLoading = true;
 
     if (!isValid()) {
-      _errorMsg = "Isi semua data dengan benar.";
+      _errorMsg = "Isi semua data dengan benar. \n Untuk email dan nomor telepon bisa isi salah satu atau keduanya.";
       _isLoading = false;
       return null;
     }
