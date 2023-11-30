@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ota_update/ota_update.dart';
-import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/padding_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/utilities/text_styles.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/update_apk/update_apk_view_model.dart';
@@ -36,9 +34,7 @@ class _UpdateApkViewState extends State<UpdateApkView> {
   @override
   Widget build(BuildContext context) {
     return ViewModel(
-      model: UpdateApkViewModel(
-        authenticationService: Provider.of<AuthenticationService>(context),
-      ),
+      model: UpdateApkViewModel(),
       onModelReady: (UpdateApkViewModel model) {
         model.initModel();
       },
@@ -133,9 +129,33 @@ class _UpdateApkViewState extends State<UpdateApkView> {
   }) {
     if (progress == null || status == null) return [];
 
+    String statusLabel = "";
+    switch (status) {
+      case OtaStatus.DOWNLOADING:
+        statusLabel = "Mengunduh...";
+        break;
+      case OtaStatus.INSTALLING:
+        statusLabel = "Memasang...";
+        break;
+      case OtaStatus.CHECKSUM_ERROR:
+        statusLabel = "Oops! Gagal mengunduh (CORRUPTED FILE)";
+        break;
+      case OtaStatus.DOWNLOAD_ERROR:
+        statusLabel = "Oops! Berkas tidak dapat diunduh. \n ($progress)";
+        break;
+      case OtaStatus.INTERNAL_ERROR:
+        statusLabel = "Oops! Gagal mengunduh. Internal Error! \n ($progress)";
+        break;
+      case OtaStatus.PERMISSION_NOT_GRANTED_ERROR:
+        statusLabel = "Oops! Tidak ada ijin. Gagal mengunduh.";
+        break;
+      case OtaStatus.ALREADY_RUNNING_ERROR:
+      default:
+    }
+
     return [
       Text(
-        status == OtaStatus.DOWNLOADING ? "Mengunduh..." : "Memasang...",
+        statusLabel,
         style: buildTextStyle(
           fontSize: 24,
           fontWeight: 500,

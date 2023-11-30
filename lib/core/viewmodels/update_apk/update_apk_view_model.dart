@@ -1,14 +1,11 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/env.dart';
-import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
+import 'package:rejo_jaya_sakti_apps/core/utilities/permission_utils.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:ota_update/ota_update.dart';
 
 class UpdateApkViewModel extends BaseViewModel {
-  UpdateApkViewModel({
-    required AuthenticationService authenticationService,
-  }) : _authenticationService = authenticationService;
-
-  final AuthenticationService _authenticationService;
+  UpdateApkViewModel();
 
   bool? _isUpdatingApk;
   bool? get isUpdatingApk => _isUpdatingApk;
@@ -17,20 +14,51 @@ class UpdateApkViewModel extends BaseViewModel {
   OtaEvent? get downloadApkEvent => _downloadApkEvent;
 
   @override
-  Future<void> initModel() async {}
+  Future<void> initModel() async {
+    bool isAllowedToUpdate = await _checkPermissionsToAllowedUpdate();
+    if (!isAllowedToUpdate) {
+      await _requestPermissionToDownloadApk();
+    }
+  }
 
-  void updateApk() {
+  void updateApk() async {
+    if (_isUpdatingApk == true) return;
+
+    bool isAllowedToUpdate = await _checkPermissionsToAllowedUpdate();
+    if (!isAllowedToUpdate) {
+      bool isPermissionGranted = await _requestPermissionToDownloadApk();
+      if (!isPermissionGranted) {
+        return;
+      }
+    }
+
     setBusy(true);
     _isUpdatingApk = true;
     _downloadApkEvent = null;
     tryOtaUpdate();
+
     setBusy(false);
+  }
+
+  Future<bool> _checkPermissionsToAllowedUpdate() async {
+    return await PermissionUtils.requestPermissions(listPermission: [
+      Permission.storage,
+      Permission.photos,
+      Permission.videos,
+    ]);
+  }
+
+  Future<bool> _requestPermissionToDownloadApk() async {
+    return await PermissionUtils.requestPermissions(listPermission: [
+      Permission.notification,
+      Permission.storage,
+      Permission.photos,
+      Permission.videos,
+    ]);
   }
 
   Future<void> tryOtaUpdate() async {
     try {
-      final jwtToken = await _authenticationService.getJwtToken();
-
       print('ABI Platform: ${await OtaUpdate().getAbi()}');
       OtaUpdate()
           .execute(
