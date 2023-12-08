@@ -43,7 +43,7 @@ class HomeViewModel extends BaseViewModel {
     _approvalNumbers = await _sharedPreferencesService.get(
       SharedPrefKeys.approvalNotificationBatchNumber,
     );
-    await _getPackageInfo;
+    await _getPackageInfo();
     setBusy(false);
   }
 
@@ -77,5 +77,6 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> _getPackageInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();
+    notifyListeners();
   }
 }

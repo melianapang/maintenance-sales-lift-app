@@ -199,7 +199,7 @@ class _HomeViewState extends State<HomeView> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "App Version: ${model.packageInfo?.version ?? "1.0.0"}",
+                          "App Version: ${model.packageInfo?.version}",
                           textAlign: TextAlign.center,
                           style: buildTextStyle(
                             fontSize: 14,
