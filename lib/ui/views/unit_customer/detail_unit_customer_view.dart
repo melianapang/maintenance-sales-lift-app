@@ -64,99 +64,93 @@ class _DetailUnitCustomerViewState extends State<DetailUnitCustomerView> {
             title: "Data Unit",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
-            actions: widget.param.sourcePageForList !=
-                    ListUnitCustomerSourcePage.DetailProject
-                ? <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.editUnit,
-                          arguments: EditUnitCustomerViewParam(
-                            unitData: model.unitData,
-                            customerData: widget.param.customerData,
-                          ),
-                        ).then(
-                          (value) {
-                            if (value == null) return;
-                            if (value == true) {
-                              model.refreshPage();
-                              model.setPreviousPageNeedRefresh(true);
-                              _handleErrorDialog(context, model);
-                            }
-                          },
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(
-                          right: 20.0,
-                        ),
-                        child: Icon(
-                          PhosphorIcons.pencilSimpleLineBold,
-                          color: MyColors.lightBlack02,
-                          size: 16,
-                        ),
-                      ),
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.editUnit,
+                    arguments: EditUnitCustomerViewParam(
+                      unitData: model.unitData,
+                      customerData: widget.param.customerData,
                     ),
-                  ]
-                : null,
-          ),
-          bottomNavigationBar: widget.param.sourcePageForList !=
-                  ListUnitCustomerSourcePage.DetailProject
-              ? ButtonWidget.bottomSingleButton(
-                  buttonType: ButtonType.primary,
+                  ).then(
+                    (value) {
+                      if (value == null) return;
+                      if (value == true) {
+                        model.refreshPage();
+                        model.setPreviousPageNeedRefresh(true);
+                        _handleErrorDialog(context, model);
+                      }
+                    },
+                  );
+                },
+                child: const Padding(
                   padding: EdgeInsets.only(
-                    bottom: PaddingUtils.getBottomPadding(
-                      context,
-                      defaultPadding: 12,
-                    ),
-                    left: 24.0,
-                    right: 24.0,
+                    right: 20.0,
                   ),
-                  onTap: () {
-                    showDialogWidget(
-                      context,
-                      title: "Menghapus Data Unit",
-                      description: "Anda yakin ingin menghapus Unit ini?",
-                      positiveLabel: "Iya",
-                      negativeLabel: "Tidak",
-                      positiveCallback: () async {
-                        await Navigator.maybePop(context);
+                  child: Icon(
+                    PhosphorIcons.pencilSimpleLineBold,
+                    color: MyColors.lightBlack02,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: ButtonWidget.bottomSingleButton(
+            buttonType: ButtonType.primary,
+            padding: EdgeInsets.only(
+              bottom: PaddingUtils.getBottomPadding(
+                context,
+                defaultPadding: 12,
+              ),
+              left: 24.0,
+              right: 24.0,
+            ),
+            onTap: () {
+              showDialogWidget(
+                context,
+                title: "Menghapus Data Unit",
+                description: "Anda yakin ingin menghapus Unit ini?",
+                positiveLabel: "Iya",
+                negativeLabel: "Tidak",
+                positiveCallback: () async {
+                  await Navigator.maybePop(context);
 
-                        buildLoadingDialog(context);
-                        bool result = await model.requestDeleteUnit();
-                        Navigator.pop(context);
+                  buildLoadingDialog(context);
+                  bool result = await model.requestDeleteUnit();
+                  Navigator.pop(context);
 
-                        showDialogWidget(
-                          context,
-                          title: "Menghapus Data Unit",
-                          description: result
-                              ? "Unit telah berhasil dihapus."
-                              : model.errorMsg ??
-                                  "Unit gagal dihapus. Coba beberapa saat lagi.",
-                          isSuccessDialog: result,
-                          positiveLabel: "OK",
-                          positiveCallback: () {
-                            if (result) {
-                              Navigator.of(context)
-                                ..pop()
-                                ..pop(true);
-                              return;
-                            }
+                  showDialogWidget(
+                    context,
+                    title: "Menghapus Data Unit",
+                    description: result
+                        ? "Unit telah berhasil dihapus."
+                        : model.errorMsg ??
+                            "Unit gagal dihapus. Coba beberapa saat lagi.",
+                    isSuccessDialog: result,
+                    positiveLabel: "OK",
+                    positiveCallback: () {
+                      if (result) {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop(true);
+                        return;
+                      }
 
-                            model.resetErrorMsg();
-                            Navigator.maybePop(context);
-                          },
-                        );
-                      },
-                      negativeCallback: () {
-                        Navigator.maybePop(context);
-                      },
-                    );
-                  },
-                  text: 'Hapus Unit',
-                )
-              : null,
+                      model.resetErrorMsg();
+                      Navigator.maybePop(context);
+                    },
+                  );
+                },
+                negativeCallback: () {
+                  Navigator.maybePop(context);
+                },
+              );
+            },
+            text: 'Hapus Unit',
+          ),
           body: Padding(
             padding: const EdgeInsets.only(
               right: 24.0,
