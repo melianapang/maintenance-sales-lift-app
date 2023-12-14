@@ -9,6 +9,7 @@ import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/viewmodels/base_view_model.dart';
 import 'package:rejo_jaya_sakti_apps/ui/widgets/status_card.dart';
+import 'package:collection/collection.dart';
 
 class DetailProjectViewModel extends BaseViewModel {
   DetailProjectViewModel({
@@ -24,7 +25,7 @@ class DetailProjectViewModel extends BaseViewModel {
         _authenticationService = authenticationService;
 
   final ApiService _apiService;
-  AuthenticationService _authenticationService;
+  final AuthenticationService _authenticationService;
 
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;
@@ -43,8 +44,8 @@ class DetailProjectViewModel extends BaseViewModel {
   String get selectedKeperluanProyekFilterName =>
       _selectedKeperluanProyekFilterName;
 
-  List<CustomerNeedData>? _listKeperluanProyek;
-  List<CustomerNeedData>? get listKeperluanProyek => _listKeperluanProyek;
+  List<CustomerNeedData> _listKeperluanProyek = [];
+  List<CustomerNeedData> get listKeperluanProyek => _listKeperluanProyek;
 
   bool _isAllowedToDeleteData = false;
   bool get isAllowedToDeleteData => _isAllowedToDeleteData;
@@ -112,7 +113,7 @@ class DetailProjectViewModel extends BaseViewModel {
   }
 
   void _handleDynamicProjectNeedData() {
-    CustomerNeedData? data = _listKeperluanProyek?.firstWhere(
+    CustomerNeedData? data = _listKeperluanProyek.firstWhereOrNull(
         (element) => element.customerNeedId == projectData?.projectNeed);
     _selectedKeperluanProyekFilterName =
         data?.customerNeedName ?? "Data tidak ditemukan";
