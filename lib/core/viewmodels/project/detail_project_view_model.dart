@@ -75,7 +75,6 @@ class DetailProjectViewModel extends BaseViewModel {
     await _getCustomerDetail();
 
     await requestGetAllProjectNeed();
-    _handleDynamicProjectNeedData();
     setStatusCard();
     setBusy(false);
   }
@@ -113,12 +112,10 @@ class DetailProjectViewModel extends BaseViewModel {
   }
 
   void _handleDynamicProjectNeedData() {
-    _selectedKeperluanProyekFilterName = _listKeperluanProyek
-            ?.firstWhere(
-              (element) => element.customerNeedId == projectData?.projectNeed,
-            )
-            .customerNeedName ??
-        "";
+    CustomerNeedData? data = _listKeperluanProyek?.firstWhere(
+        (element) => element.customerNeedId == projectData?.projectNeed);
+    _selectedKeperluanProyekFilterName =
+        data?.customerNeedName ?? "Data tidak ditemukan";
   }
 
   Future<void> requestGetAllProjectNeed() async {
@@ -129,6 +126,7 @@ class DetailProjectViewModel extends BaseViewModel {
     if (response.isRight) {
       if (response.right.result.isNotEmpty == true) {
         _listKeperluanProyek = response.right.result;
+        _handleDynamicProjectNeedData();
       }
       return;
     }
