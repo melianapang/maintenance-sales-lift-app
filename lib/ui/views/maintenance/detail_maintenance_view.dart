@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/colors.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/authentication_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/dio_service.dart';
 import 'package:rejo_jaya_sakti_apps/core/services/navigation_service.dart';
@@ -16,6 +17,7 @@ import 'package:rejo_jaya_sakti_apps/ui/shared/app_bars.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/floating_button.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/loading.dart';
 import 'package:rejo_jaya_sakti_apps/ui/shared/spacings.dart';
+import 'package:rejo_jaya_sakti_apps/ui/views/customer/detail_customer_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_change_maintenance_date_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_delete_maintenance_view.dart';
 import 'package:rejo_jaya_sakti_apps/ui/views/maintenance/form_maintenance_view.dart';
@@ -36,7 +38,7 @@ class DetailMaintenanceViewParam {
 }
 
 class DetailMaintenanceView extends StatefulWidget {
-  DetailMaintenanceView({
+  const DetailMaintenanceView({
     required this.param,
     super.key,
   });
@@ -93,56 +95,117 @@ class _DetailMaintenanceViewState extends State<DetailMaintenanceView> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            buildLoadingDialog(context);
-                            bool isSucceed =
-                                await model.requestGetProjectData();
-                            Navigator.pop(context);
+                        if (model.maintenanceData?.maintenanceDataType ==
+                            MaintenanceDataType.project)
+                          GestureDetector(
+                            onTap: () async {
+                              buildLoadingDialog(context);
+                              bool isSucceed =
+                                  await model.requestGetProjectData();
+                              Navigator.pop(context);
 
-                            if (!isSucceed) {
-                              showDialogWidget(
-                                context,
-                                title: "Data Proyek",
-                                isSuccessDialog: false,
-                                description: model.errorMsg ??
-                                    "Gagal mendapatkan Data Proyek. \n Coba beberappa saat lagi.",
-                                positiveLabel: "Okay",
-                                positiveCallback: () => Navigator.pop(context),
-                              );
-                              return;
-                            }
-
-                            Navigator.pushNamed(
-                              context,
-                              Routes.detailProject,
-                              arguments: DetailProjectViewParam(
-                                projectData: model.projectData,
-                                sourcePage: DetailProjectSourcePage
-                                    .DetailMaintenancePage,
-                              ),
-                            ).then((value) async {
-                              if (value == null) return;
-                              if (value == true) {
-                                await model.refreshPage();
-                                model.setPreviousPageNeedRefresh(true);
-
-                                _handleErrorDialog(context, model);
+                              if (!isSucceed) {
+                                showDialogWidget(
+                                  context,
+                                  title: "Data Proyek",
+                                  isSuccessDialog: false,
+                                  description: model.errorMsg ??
+                                      "Gagal mendapatkan Data Proyek. \n Coba beberappa saat lagi.",
+                                  positiveLabel: "Okay",
+                                  positiveCallback: () =>
+                                      Navigator.pop(context),
+                                );
+                                return;
                               }
-                            });
-                          },
-                          child: Text(
-                            model.maintenanceData?.projectName ?? "",
-                            style: buildTextStyle(
-                              fontSize: 24,
-                              fontWeight: 700,
-                              fontColor: MyColors.blueLihatSelengkapnya,
-                              isUnderlined: true,
+
+                              Navigator.pushNamed(
+                                context,
+                                Routes.detailProject,
+                                arguments: DetailProjectViewParam(
+                                  projectData: model.projectData,
+                                  sourcePage: DetailProjectSourcePage
+                                      .DetailMaintenancePage,
+                                ),
+                              ).then((value) async {
+                                if (value == null) return;
+                                if (value == true) {
+                                  await model.refreshPage();
+                                  model.setPreviousPageNeedRefresh(true);
+
+                                  _handleErrorDialog(context, model);
+                                }
+                              });
+                            },
+                            child: Text(
+                              model.maintenanceData?.projectName ?? "",
+                              style: buildTextStyle(
+                                fontSize: 24,
+                                fontWeight: 700,
+                                fontColor: MyColors.blueLihatSelengkapnya,
+                                isUnderlined: true,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
+                        if (model.maintenanceData?.maintenanceDataType ==
+                            MaintenanceDataType.customer)
+                          GestureDetector(
+                            onTap: () async {
+                              buildLoadingDialog(context);
+                              bool isSucceed =
+                                  await model.requestGetCustomerData();
+
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              Navigator.pop(context);
+                              if (!isSucceed) {
+                                showDialogWidget(
+                                  context,
+                                  title: "Data Pelanggan",
+                                  isSuccessDialog: false,
+                                  description: model.errorMsg ??
+                                      "Gagal mendapatkan Data Pelanggan. \n Coba beberappa saat lagi.",
+                                  positiveLabel: "Okay",
+                                  positiveCallback: () =>
+                                      Navigator.pop(context),
+                                );
+                                return;
+                              }
+
+                              Navigator.pushNamed(
+                                context,
+                                Routes.detailCustomer,
+                                arguments: DetailCustomerViewParam(
+                                  customerData: model.customerData,
+                                  showEditAndOtherMenus: false,
+                                ),
+                              ).then((value) async {
+                                if (value == null) return;
+                                if (value == true) {
+                                  await model.refreshPage();
+                                  model.setPreviousPageNeedRefresh(true);
+                                  if (!context.mounted) {
+                                    return;
+                                  }
+                                  _handleErrorDialog(context, model);
+                                }
+                              });
+                            },
+                            child: Text(
+                              model.maintenanceData?.projectName ?? "",
+                              style: buildTextStyle(
+                                fontSize: 24,
+                                fontWeight: 700,
+                                fontColor: MyColors.blueLihatSelengkapnya,
+                                isUnderlined: true,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         if (model.maintenanceData?.companyName?.isEmpty ==
                             false) ...[
                           Spacings.vert(4),

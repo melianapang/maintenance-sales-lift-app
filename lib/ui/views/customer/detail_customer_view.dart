@@ -24,9 +24,11 @@ import 'package:rejo_jaya_sakti_apps/ui/widgets/text_inputs.dart';
 class DetailCustomerViewParam {
   DetailCustomerViewParam({
     this.customerData,
+    this.showEditAndOtherMenus = true,
   });
 
   final CustomerData? customerData;
+  final bool showEditAndOtherMenus;
 }
 
 class DetailCustomerView extends StatefulWidget {
@@ -50,6 +52,7 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
       model: DetailCustomerViewModel(
         dioService: Provider.of<DioService>(context),
         customerData: widget.param.customerData,
+        showEditAndOtherMenus: widget.param.showEditAndOtherMenus,
       ),
       onModelReady: (DetailCustomerViewModel model) async {
         await model.initModel();
@@ -62,40 +65,44 @@ class _DetailCustomerViewState extends State<DetailCustomerView> {
             title: "Data Pelanggan",
             isBackEnabled: true,
             isPreviousPageNeedRefresh: model.isPreviousPageNeedRefresh,
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.editCustomer,
-                    arguments: EditCustomerViewParam(
-                      customerData: model.customerData,
+            actions: model.showEditAndOtherMenus
+                ? <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.editCustomer,
+                          arguments: EditCustomerViewParam(
+                            customerData: model.customerData,
+                          ),
+                        ).then(
+                          (value) async {
+                            if (value == null) return;
+                            if (value == true) {
+                              await model.refreshPage();
+                              model.setPreviousPageNeedRefresh(true);
+                              if (!context.mounted) return;
+                              _handleErrorDialog(context, model);
+                            }
+                          },
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                        ),
+                        child: Icon(
+                          PhosphorIcons.pencilSimpleLineBold,
+                          color: MyColors.lightBlack02,
+                          size: 16,
+                        ),
+                      ),
                     ),
-                  ).then(
-                    (value) async {
-                      if (value == null) return;
-                      if (value == true) {
-                        await model.refreshPage();
-                        model.setPreviousPageNeedRefresh(true);
-                        _handleErrorDialog(context, model);
-                      }
-                    },
-                  );
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20.0,
-                  ),
-                  child: Icon(
-                    PhosphorIcons.pencilSimpleLineBold,
-                    color: MyColors.lightBlack02,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ],
+                  ]
+                : null,
           ),
-          floatingActionButton: _buildExtendedFAB(model),
+          floatingActionButton:
+              model.showEditAndOtherMenus ? _buildExtendedFAB(model) : null,
           body: Padding(
             padding: const EdgeInsets.only(
               right: 24.0,

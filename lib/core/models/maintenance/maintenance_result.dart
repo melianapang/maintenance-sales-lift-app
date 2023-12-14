@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 enum MaintenanceStatus {
   DELETED,
   NOT_MAINTENANCED,
@@ -48,4 +50,29 @@ String mappingStringNumerictoString(String value) {
     default:
       return "Belum Pemeliharaan";
   }
+}
+
+enum MaintenanceDataType {
+  @JsonValue('CUST')
+  customer,
+  @JsonValue('PROJ')
+  project,
+}
+
+extension PartOrKomponenTypeExt on MaintenanceDataType {
+  static const Map<MaintenanceDataType, String> labels =
+      <MaintenanceDataType, String>{
+    MaintenanceDataType.customer: "Customer",
+    MaintenanceDataType.project: "Project",
+  };
+
+  String get label => labels[this]!;
+
+  static const Map<MaintenanceDataType, String> localeKeys =
+      <MaintenanceDataType, String>{
+    MaintenanceDataType.customer: "CUST",
+    MaintenanceDataType.project: "PROJ",
+  };
+
+  String get localeKey => localeKeys[this]!;
 }

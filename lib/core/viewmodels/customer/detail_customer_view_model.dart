@@ -12,15 +12,20 @@ import 'package:collection/collection.dart';
 class DetailCustomerViewModel extends BaseViewModel {
   DetailCustomerViewModel({
     CustomerData? customerData,
+    required bool showEditAndOtherMenus,
     required DioService dioService,
   })  : _apiService = ApiService(
           api: Api(
             dioService.getDioJwt(),
           ),
         ),
-        _customerData = customerData;
+        _customerData = customerData,
+        _showEditAndOtherMenus = showEditAndOtherMenus;
 
   final ApiService _apiService;
+
+  bool _showEditAndOtherMenus = true;
+  bool get showEditAndOtherMenus => _showEditAndOtherMenus;
 
   bool _isPreviousPageNeedRefresh = false;
   bool get isPreviousPageNeedRefresh => _isPreviousPageNeedRefresh;

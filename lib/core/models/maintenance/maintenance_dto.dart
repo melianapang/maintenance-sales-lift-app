@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 
 part 'maintenance_dto.g.dart';
 
@@ -77,6 +78,7 @@ class MaintenanceData {
     required this.companyName,
     required this.projectId,
     required this.projectName,
+    this.maintenanceDataType = MaintenanceDataType.customer,
     required this.unitId,
     required this.unitName,
     required this.unitLocation,
@@ -116,6 +118,9 @@ class MaintenanceData {
 
   @JsonKey(name: "project_name")
   final String projectName;
+
+  @JsonKey(name: "type")
+  final MaintenanceDataType maintenanceDataType;
 
   @JsonKey(name: "latitude")
   final String? latitude;

@@ -1,6 +1,7 @@
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rejo_jaya_sakti_apps/core/apis/api.dart';
 import 'package:rejo_jaya_sakti_apps/core/app_constants/routes.dart';
+import 'package:rejo_jaya_sakti_apps/core/models/customers/customer_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_dto.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/maintenance/maintenance_result.dart';
 import 'package:rejo_jaya_sakti_apps/core/models/project/project_dto.dart';
@@ -49,6 +50,9 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
   ProjectData? _projectData;
   ProjectData? get projectData => _projectData;
+
+  CustomerData? _customerData;
+  CustomerData? get customerData => _customerData;
 
   StatusCardType _statusCardType = StatusCardType.Pending;
   StatusCardType get statusCardType => _statusCardType;
@@ -181,6 +185,20 @@ class DetailMaintenanceViewModel extends BaseViewModel {
 
     if (response.isRight) {
       _projectData = response.right;
+      return true;
+    }
+
+    _errorMsg = response.left.message;
+    return false;
+  }
+
+  Future<bool> requestGetCustomerData() async {
+    final response = await _apiService.getDetailCustomer(
+      customerId: int.parse(_maintenanceData?.projectId ?? "0"),
+    );
+
+    if (response.isRight) {
+      _customerData = response.right;
       return true;
     }
 
