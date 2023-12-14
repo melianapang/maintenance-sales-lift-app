@@ -149,24 +149,27 @@ class _EditUnitCustomerViewState extends State<EditUnitCustomerView> {
                               : null,
                         ),
                         Spacings.vert(24),
-                        GestureDetector(
-                          onTap: () {
-                            _showPilihProyekBottomDialog(
-                              context,
-                              model,
-                              setSelectedMenu: model.setSelectedProyek,
-                            );
-                          },
-                          child: TextInput.disabled(
-                            label: "Proyek Unit",
-                            text: model.selectedProyek?.projectName,
-                            hintText: "Pilih Proyek untuk Unit ini",
-                            suffixIcon: const Icon(
-                              PhosphorIcons.caretDownBold,
-                              color: MyColors.lightBlack02,
+                        if (model.selectedProyek?.projectId.isNotEmpty ==
+                                true ||
+                            model.unitData?.projectId?.isNotEmpty == true)
+                          GestureDetector(
+                            onTap: () {
+                              _showPilihProyekBottomDialog(
+                                context,
+                                model,
+                                setSelectedMenu: model.setSelectedProyek,
+                              );
+                            },
+                            child: TextInput.disabled(
+                              label: "Proyek Unit",
+                              text: model.selectedProyek?.projectName,
+                              hintText: "Pilih Proyek untuk Unit ini",
+                              suffixIcon: const Icon(
+                                PhosphorIcons.caretDownBold,
+                                color: MyColors.lightBlack02,
+                              ),
                             ),
                           ),
-                        ),
                         Spacings.vert(24),
                         GestureDetector(
                           onTap: () {
