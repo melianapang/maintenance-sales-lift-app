@@ -78,7 +78,7 @@ class MaintenanceData {
     required this.companyName,
     required this.projectId,
     required this.projectName,
-    this.maintenanceDataType = MaintenanceDataType.customer,
+    required this.maintenanceDataType,
     required this.unitId,
     required this.unitName,
     required this.unitLocation,
