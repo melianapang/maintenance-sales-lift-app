@@ -64,15 +64,8 @@ class ListMaintenanceViewModel extends BaseViewModel {
   @override
   Future<void> initModel() async {
     setBusy(true);
-
     await requestGetAllMaintenance();
-
-    _isShowNoDataFoundPage =
-        _listMaintenance?.isEmpty == true || _listMaintenance == null;
-    notifyListeners();
-
     _isAllowedToExportData = await isUserAllowedToExportData();
-
     setBusy(false);
   }
 
@@ -153,10 +146,10 @@ class ListMaintenanceViewModel extends BaseViewModel {
     );
 
     if (response.isRight) {
-      if (response.right.result.isNotEmpty) {
-        _listMaintenance = response.right.result;
-        notifyListeners();
-      }
+      _listMaintenance = response.right.result;
+      _isShowNoDataFoundPage =
+          _listMaintenance?.isEmpty == true || _listMaintenance == null;
+      notifyListeners();
       return;
     }
 
@@ -165,15 +158,9 @@ class ListMaintenanceViewModel extends BaseViewModel {
 
   Future<void> refreshPage() async {
     setBusy(true);
-
     resetPage();
     resetFilter();
-
     await requestGetAllMaintenance();
-    _isShowNoDataFoundPage =
-        _listMaintenance?.isEmpty == true || _listMaintenance == null;
-    notifyListeners();
-
     setBusy(false);
   }
 
