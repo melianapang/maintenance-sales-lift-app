@@ -268,9 +268,10 @@ abstract class Api {
     @Query("input_search") String inputSearch,
   );
 
-  @GET('/api/0/Unit/get_all_units/{customer_id}')
+  @GET('/api/0/Unit/get_all_units/{customer_id}/{type}')
   Future<HttpResponse<dynamic>> requestGetAllUnitByCustomer(
     @Path("customer_id") int customerId,
+    @Path("type") String type,
     @Query("current_page") int currentPage,
     @Query("page_size") int pageSize,
   );
@@ -1556,6 +1557,7 @@ class ApiService {
   //region unit
   Future<Either<Failure, ListUnitData>> getAllUnitByCustomer({
     required int customerId,
+    required String type,
     required int currentPage,
     required int pageSize,
   }) async {
@@ -1563,6 +1565,7 @@ class ApiService {
       final HttpResponse<dynamic> response =
           await api.requestGetAllUnitByCustomer(
         customerId,
+        type,
         currentPage,
         pageSize,
       );

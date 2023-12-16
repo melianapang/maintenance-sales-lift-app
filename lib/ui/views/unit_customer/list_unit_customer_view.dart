@@ -57,7 +57,9 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
     return ViewModel<ListUnitCustomerViewModel>(
       model: ListUnitCustomerViewModel(
         dioService: Provider.of<DioService>(context),
+        projectData: widget.param.projectData,
         customerData: widget.param.customerData,
+        sourcePage: widget.param.sourcePage,
       ),
       onModelReady: (ListUnitCustomerViewModel model) async {
         await model.initModel();
@@ -79,7 +81,7 @@ class _ListUnitCustomerViewState extends State<ListUnitCustomerView> {
                   sourcePageForList: widget.param.sourcePage,
                   customerType: widget.param.customerType,
                   customerData: model.customerData,
-                  projectData: widget.param.projectData,
+                  projectData: model.projectData,
                 ),
               ).then(
                 (value) {
