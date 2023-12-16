@@ -15,6 +15,7 @@ class ListUnitCustomerViewModel extends BaseViewModel {
     ListUnitCustomerSourcePage? sourcePage,
     required DioService dioService,
   })  : _customerData = customerData,
+        _projectData = projectData,
         _sourcePage = sourcePage,
         _apiService = ApiService(
           api: Api(
